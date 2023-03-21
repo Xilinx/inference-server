@@ -23,8 +23,11 @@
 #include "amdinfer/clients/native.hpp"
 #include "amdinfer/core/data_types.hpp"
 #include "amdinfer/core/exceptions.hpp"
+#include "amdinfer/core/inference_request.hpp"
+#include "amdinfer/core/inference_response.hpp"
+#include "amdinfer/core/model_metadata.hpp"
 #include "amdinfer/core/parameters.hpp"
-#include "amdinfer/core/predict_api.hpp"
+#include "amdinfer/core/server_metadata.hpp"
 #include "amdinfer/declarations.hpp"
 #include "amdinfer/servers/server.hpp"
 // IWYU pragma: end_exports

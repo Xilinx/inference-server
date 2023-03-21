@@ -25,6 +25,8 @@
 
 namespace amdinfer {
 
+class WorkerInfo;
+
 /**
  * @brief The Batch is what the batcher produces and pushes to the workers. It
  * represents the requests, the buffers associated with the request and other

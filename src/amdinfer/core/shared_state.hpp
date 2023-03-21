@@ -26,8 +26,9 @@
 #include <vector>      // for vector
 
 #include "amdinfer/core/endpoints.hpp"         // for Endpoints
+#include "amdinfer/core/model_metadata.hpp"    // for ModelMetadata
 #include "amdinfer/core/model_repository.hpp"  // for ModelRepository
-#include "amdinfer/core/predict_api.hpp"       // for ModelMetadata, ServerM...
+#include "amdinfer/core/server_metadata.hpp"   // for ServerMetadata
 #include "amdinfer/declarations.hpp"           // for Kernels
 
 namespace amdinfer {
@@ -37,9 +38,10 @@ class ParameterMap;
 
 class SharedState {
  public:
-  void modelLoad(const std::string& model, ParameterMap* parameters);
+  void modelLoad(const std::string& model, const ParameterMap& parameters);
   void modelUnload(const std::string& model);
-  std::string workerLoad(const std::string& worker, ParameterMap* parameters);
+  std::string workerLoad(const std::string& worker,
+                         const ParameterMap& parameters);
   void workerUnload(const std::string& worker);
 
   static ServerMetadata serverMetadata();

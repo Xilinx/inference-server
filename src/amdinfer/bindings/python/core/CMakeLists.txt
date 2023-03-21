@@ -13,7 +13,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set(derived_targets predict_api data_types exceptions)
+set(derived_targets
+    inference_request
+    inference_response
+    model_metadata
+    parameters
+    server_metadata
+    data_types
+    exceptions
+    tensor
+    inference_tensor
+)
 
 amdinfer_add_targets(targets target_objects "" "${derived_targets}" _py)
 

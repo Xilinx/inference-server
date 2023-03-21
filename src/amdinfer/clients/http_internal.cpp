@@ -36,27 +36,30 @@
 #include <utility>      // for move
 #include <variant>      // for visit
 
-#include "amdinfer/buffers/buffer.hpp"             // for Buffer
-#include "amdinfer/core/data_types.hpp"            // for DataType, mapTypeToStr
-#include "amdinfer/core/exceptions.hpp"            // invalid_argument
-#include "amdinfer/core/predict_api_internal.hpp"  // for InferenceRequestOutput
-#include "amdinfer/observation/logging.hpp"        // for Logger
-#include "amdinfer/util/traits.hpp"                // IWYU pragma: keep
-#include "half/half.hpp"                           // for half
+#include "amdinfer/buffers/buffer.hpp"           // for Buffer
+#include "amdinfer/core/data_types.hpp"          // for DataType, mapTypeToStr
+#include "amdinfer/core/exceptions.hpp"          // invalid_argument
+#include "amdinfer/core/inference_request.hpp"   // for InferenceRequest
+#include "amdinfer/core/inference_response.hpp"  // for InferenceResponse
+#include "amdinfer/core/model_metadata.hpp"      // for ModelMetadata
+#include "amdinfer/core/request_container.hpp"   // for InferenceRequestOutput
+#include "amdinfer/observation/logging.hpp"      // for Logger
+#include "amdinfer/util/traits.hpp"              // IWYU pragma: keep
+#include "half/half.hpp"                         // for half
 
 namespace amdinfer {
 
-ParameterMapPtr mapJsonToParameters(Json::Value json) {
-  auto parameters = std::make_shared<ParameterMap>();
+ParameterMap mapJsonToParameters(Json::Value json) {
+  ParameterMap parameters;
   for (auto const &id : json.getMemberNames()) {
     if (json[id].isString()) {
-      parameters->put(id, json[id].asString());
+      parameters.put(id, json[id].asString());
     } else if (json[id].isBool()) {
-      parameters->put(id, json[id].asBool());
+      parameters.put(id, json[id].asBool());
     } else if (json[id].isUInt()) {
-      parameters->put(id, json[id].asInt());
+      parameters.put(id, json[id].asInt());
     } else if (json[id].isDouble()) {
-      parameters->put(id, json[id].asDouble());
+      parameters.put(id, json[id].asDouble());
     } else {
       throw invalid_argument("Unknown parameter type, skipping");
     }
@@ -74,10 +77,10 @@ struct Overloaded : Ts... {
 template <class... Ts>
 Overloaded(Ts...) -> Overloaded<Ts...>;
 
-Json::Value mapParametersToJson(ParameterMap *parameters) {
+Json::Value mapParametersToJson(const ParameterMap &parameters) {
   Json::Value json = Json::objectValue;
 
-  for (const auto &parameter : *parameters) {
+  for (const auto &parameter : parameters) {
     const auto &key = parameter.first;
     const auto &value = parameter.second;
     std::visit(Overloaded{[&](bool arg) { json[key] = arg; },
@@ -145,20 +148,16 @@ InferenceResponse mapJsonToResponse(Json::Value *json) {
 Json::Value mapRequestToJson(const InferenceRequest &request) {
   Json::Value json;
   json["id"] = request.getID();
-  auto *parameters = request.getParameters();
-  json["parameters"] =
-    parameters != nullptr ? mapParametersToJson(parameters) : Json::objectValue;
+  const auto &parameters = request.getParameters();
+  json["parameters"] = mapParametersToJson(parameters);
   json["inputs"] = Json::arrayValue;
   const auto &inputs = request.getInputs();
   for (const auto &input : inputs) {
     Json::Value json_input;
     json_input["name"] = input.getName();
     json_input["datatype"] = input.getDatatype().str();
+    json_input["parameters"] = mapParametersToJson(input.getParameters());
     json_input["shape"] = Json::arrayValue;
-    parameters = request.getParameters();
-    json_input["parameters"] = parameters != nullptr
-                                 ? mapParametersToJson(parameters)
-                                 : Json::objectValue;
     for (const auto &index : input.getShape()) {
       json_input["shape"].append(static_cast<Json::UInt64>(index));
     }
@@ -186,7 +185,7 @@ void propagate(drogon::HttpResponse *resp, const StringMap &context) {
 Json::Value modelMetadataTensorToJson(const ModelMetadataTensor &metadata) {
   Json::Value ret;
   ret["name"] = metadata.getName();
-  ret["datatype"] = metadata.getDataType().str();
+  ret["datatype"] = metadata.getDatatype().str();
   ret["shape"] = Json::arrayValue;
   for (const auto &index : metadata.getShape()) {
     ret["shape"].append(static_cast<Json::UInt64>(index));
@@ -219,9 +218,8 @@ ModelMetadata mapJsonToModelMetadata(const Json::Value *json) {
     for (const auto &index : input["shape"]) {
       shape.push_back(index.asInt());
     }
-    metadata.addInputTensor(input["name"].asString(),
-                            DataType(input["datatype"].asString().c_str()),
-                            shape);
+    metadata.addInputTensor(input["name"].asString(), shape,
+                            DataType(input["datatype"].asString().c_str()));
   }
   for (const auto &output : json->get("outputs", Json::arrayValue)) {
     std::vector<int> shape;
@@ -229,9 +227,8 @@ ModelMetadata mapJsonToModelMetadata(const Json::Value *json) {
     for (const auto &index : output["shape"]) {
       shape.push_back(index.asInt());
     }
-    metadata.addOutputTensor(output["name"].asString(),
-                             DataType(output["datatype"].asString().c_str()),
-                             shape);
+    metadata.addOutputTensor(output["name"].asString(), shape,
+                             DataType(output["datatype"].asString().c_str()));
   }
   return metadata;
 }

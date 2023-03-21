@@ -36,21 +36,23 @@
 #include <utility>        // for move
 #include <vector>         // for vector
 
-#include "amdinfer/buffers/buffer.hpp"             // for Buffer
-#include "amdinfer/build_options.hpp"              // for AMDINFER_ENABLE_LOG...
-#include "amdinfer/clients/grpc_internal.hpp"      // for mapProtoToParameters
-#include "amdinfer/core/data_types.hpp"            // for DataType, DataType:...
-#include "amdinfer/core/exceptions.hpp"            // for invalid_argument
-#include "amdinfer/core/parameters.hpp"            // for ParameterMap
-#include "amdinfer/core/predict_api_internal.hpp"  // for InferenceRequestInput
-#include "amdinfer/core/shared_state.hpp"          // for SharedState
-#include "amdinfer/declarations.hpp"               // for BufferRawPtrs, Infe...
-#include "amdinfer/observation/observer.hpp"       // for Logger, Loggers
-#include "amdinfer/util/containers.hpp"            // for containerProduct
-#include "amdinfer/util/string.hpp"                // for toLower
-#include "amdinfer/util/traits.hpp"                // IWYU pragma: keep
-#include "predict_api.grpc.pb.h"                   // for GRPCInferenceServic...
-#include "predict_api.pb.h"                        // for InferTensorContents
+#include "amdinfer/buffers/buffer.hpp"           // for Buffer
+#include "amdinfer/build_options.hpp"            // for AMDINFER_ENABLE_LOG...
+#include "amdinfer/clients/grpc_internal.hpp"    // for mapProtoToParameters
+#include "amdinfer/core/data_types.hpp"          // for DataType, DataType:...
+#include "amdinfer/core/exceptions.hpp"          // for invalid_argument
+#include "amdinfer/core/inference_request.hpp"   // for InferenceRequest
+#include "amdinfer/core/inference_response.hpp"  // for InferenceResponse
+#include "amdinfer/core/parameters.hpp"          // for ParameterMap
+#include "amdinfer/core/request_container.hpp"   // for RequestContainer
+#include "amdinfer/core/shared_state.hpp"        // for SharedState
+#include "amdinfer/declarations.hpp"             // for BufferRawPtrs, Infe...
+#include "amdinfer/observation/observer.hpp"     // for Logger, Loggers
+#include "amdinfer/util/containers.hpp"          // for containerProduct
+#include "amdinfer/util/string.hpp"              // for toLower
+#include "amdinfer/util/traits.hpp"              // IWYU pragma: keep
+#include "inference.grpc.pb.h"                   // for GRPCInferenceServic...
+#include "inference.pb.h"                        // for InferTensorContents
 
 namespace amdinfer {
 class CallDataModelInfer;
@@ -487,7 +489,7 @@ CALLDATA_IMPL(ModelLoad, Unary) {
   auto* model = request_.mutable_name();
   util::toLower(model);
   try {
-    state_->modelLoad(*model, parameters.get());
+    state_->modelLoad(*model, parameters);
   } catch (const runtime_error& e) {
     AMDINFER_LOG_ERROR(logger_, e.what());
     finish(::grpc::Status(StatusCode::NOT_FOUND, e.what()));
@@ -516,7 +518,7 @@ CALLDATA_IMPL(WorkerLoad, Unary) {
   util::toLower(model);
 
   try {
-    auto endpoint = state_->workerLoad(*model, parameters.get());
+    auto endpoint = state_->workerLoad(*model, parameters);
     reply_.set_endpoint(endpoint);
     finish(::grpc::Status::OK);
   } catch (const runtime_error& e) {

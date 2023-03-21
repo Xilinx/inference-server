@@ -41,7 +41,7 @@ class TestInvertVideo:
         input_0 = amdinfer.InferenceRequestInput()
         input_0.name = "input0"
         input_0.datatype = amdinfer.DataType.STRING
-        input_0.setStringData(video_path)
+        input_0.setStringData(amdinfer.stringToArray(video_path))
         input_0.shape = [len(video_path)]
         parameters = amdinfer.ParameterMap()
         parameters.put("count", requested_frames_count)

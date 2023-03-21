@@ -16,10 +16,11 @@
 #include <cstdint>  // for uint32_t, uint64_t
 #include <vector>   // for vector, allocator
 
-#include "amdinfer/clients/native.hpp"          // for NativeClient, inferAs...
-#include "amdinfer/core/data_types.hpp"         // for DataType, DataType::U...
-#include "amdinfer/core/predict_api.hpp"        // for InferenceRequest, Inf...
-#include "amdinfer/testing/gtest_fixtures.hpp"  // for AssertionResult, Message
+#include "amdinfer/clients/native.hpp"           // for NativeClient, inferAs...
+#include "amdinfer/core/data_types.hpp"          // for DataType, DataType::U...
+#include "amdinfer/core/inference_request.hpp"   // for InferenceRequest
+#include "amdinfer/core/inference_response.hpp"  // for InferenceResponse
+#include "amdinfer/testing/gtest_fixtures.hpp"   // for AssertionResult, Message
 
 namespace amdinfer {
 
@@ -27,7 +28,7 @@ namespace amdinfer {
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST_F(HttpFixture, Ordered) {
   NativeClient client(&server_);
-  auto endpoint = client.workerLoad("echo", nullptr);
+  auto endpoint = client.workerLoad("echo", {});
   EXPECT_EQ(endpoint, "echo");
 
   std::vector<uint32_t> img_data;

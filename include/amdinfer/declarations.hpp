@@ -24,28 +24,23 @@
 
 namespace amdinfer {
 
-class Buffer;
-
-class Batch;
-
 class RequestContainer;
 using RequestContainerPtr = std::unique_ptr<RequestContainer>;
-class WorkerInfo;
-
-struct UpdateCommand;
 
 class InferenceRequest;
 class InferenceResponse;
-class InferenceRequestInput;
-using InferenceResponseOutput = InferenceRequestInput;
+using InferenceResponsePromisePtr =
+  std::shared_ptr<std::promise<InferenceResponse>>;
+using Callback = std::function<void(const InferenceResponse &)>;
 
+class Buffer;
 using BufferPtr = std::unique_ptr<Buffer>;
 using BufferPtrs = std::vector<BufferPtr>;
-using BufferRawPtrs = std::vector<Buffer*>;
+using BufferRawPtrs = std::vector<Buffer *>;
 
 using InferenceRequestPtr = std::shared_ptr<InferenceRequest>;
 
-using InferenceResponseFuture = std::future<amdinfer::InferenceResponse>;
+using InferenceResponseFuture = std::future<InferenceResponse>;
 
 using StringMap = std::unordered_map<std::string, std::string>;
 

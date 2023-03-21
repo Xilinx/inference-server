@@ -33,8 +33,10 @@
 #include <utility>        // for tuple_element<>::type
 #include <vector>
 
-#include "amdinfer/clients/http_internal.hpp"  // for mapParametersToJson
-#include "amdinfer/core/exceptions.hpp"        // for bad_status
+#include "amdinfer/clients/http_internal.hpp"    // for mapParametersToJson
+#include "amdinfer/core/exceptions.hpp"          // for bad_status
+#include "amdinfer/core/inference_request.hpp"   // for InferenceRequest
+#include "amdinfer/core/inference_response.hpp"  // for InferenceResponse
 
 namespace amdinfer {
 
@@ -209,13 +211,11 @@ ModelMetadata HttpClient::modelMetadata(const std::string& model) const {
 }
 
 void HttpClient::modelLoad(const std::string& model,
-                           ParameterMap* parameters) const {
+                           const ParameterMap& parameters) const {
   auto* client = this->impl_->getClient();
 
   Json::Value json = Json::objectValue;
-  if (parameters != nullptr) {
-    json = mapParametersToJson(parameters);
-  }
+  json = mapParametersToJson(parameters);
 
   auto req = createPostRequest(json, "/v2/repository/models/" + model + "/load",
                                impl_->getHeaders());
@@ -243,13 +243,11 @@ void HttpClient::modelUnload(const std::string& model) const {
 }
 
 std::string HttpClient::workerLoad(const std::string& worker,
-                                   ParameterMap* parameters) const {
+                                   const ParameterMap& parameters) const {
   auto* client = this->impl_->getClient();
 
   Json::Value json = Json::objectValue;
-  if (parameters != nullptr) {
-    json = mapParametersToJson(parameters);
-  }
+  json = mapParametersToJson(parameters);
 
   auto req = createPostRequest(json, "/v2/workers/" + worker + "/load",
                                impl_->getHeaders());
@@ -280,7 +278,9 @@ void HttpClient::workerUnload(const std::string& worker) const {
 auto createInferenceRequest(const std::string& model,
                             const InferenceRequest& request,
                             const StringMap& headers) {
-  assert(!request.getInputs().empty());
+  if (request.getInputs().empty()) {
+    throw invalid_argument("The request's inputs cannot be empty");
+  }
 
   auto json = mapRequestToJson(request);
   return createPostRequest(json, "/v2/models/" + model + "/infer", headers);

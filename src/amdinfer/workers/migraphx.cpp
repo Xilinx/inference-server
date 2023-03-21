@@ -35,13 +35,14 @@
 #include <utility>                // for move
 #include <vector>                 // for vector
 
-#include "amdinfer/batching/hard.hpp"        // for BatchPtr, Batch, Batch...
-#include "amdinfer/build_options.hpp"        // for AMDINFER_ENABLE_LOGGING
-#include "amdinfer/core/data_types.hpp"      // for DataType, operator<<
-#include "amdinfer/core/exceptions.hpp"      // for invalid_argument, runt...
-#include "amdinfer/core/parameters.hpp"      // for ParameterMap
-#include "amdinfer/core/predict_api.hpp"     // for InferenceRequest, Infe...
-#include "amdinfer/declarations.hpp"         // for InferenceResponseOutput
+#include "amdinfer/batching/hard.hpp"           // for BatchPtr, Batch, Batch...
+#include "amdinfer/build_options.hpp"           // for AMDINFER_ENABLE_LOGGING
+#include "amdinfer/core/data_types.hpp"         // for DataType, operator<<
+#include "amdinfer/core/exceptions.hpp"         // for invalid_argument, runt...
+#include "amdinfer/core/inference_request.hpp"  // for InferenceRequest
+#include "amdinfer/core/inference_response.hpp"  // for InferenceResponse
+#include "amdinfer/core/parameters.hpp"          // for ParameterMap
+#include "amdinfer/declarations.hpp"             // for InferenceResponseOutput
 #include "amdinfer/observation/logging.hpp"  // for AMDINFER_LOG_INFO, AMD...
 #include "amdinfer/observation/metrics.hpp"  // for Metrics, MetricCounterIDs
 #include "amdinfer/util/containers.hpp"      // for containerProduct
@@ -508,7 +509,6 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue) {
               output.setName(output_name);
             }
             output.setShape(lengths);
-            output.setData(results);
 
             // Copy migraphx results to a buffer and add to output
             std::vector<std::byte> buffer;

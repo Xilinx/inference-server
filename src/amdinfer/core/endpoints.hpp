@@ -31,14 +31,14 @@
 
 #include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE...
 #include "amdinfer/core/memory_pool/pool.hpp"  // for MemoryPool
-#include "amdinfer/core/predict_api.hpp"       // for ModelMetadata
+#include "amdinfer/core/model_metadata.hpp"    // for ModelMetadata
+#include "amdinfer/core/parameters.hpp"        // for ParameterMap
 #include "amdinfer/observation/logging.hpp"    // for Logger, Loggers
 #include "amdinfer/util/queue.hpp"             // for BlockingQueue
 
 namespace amdinfer {
 
 class RequestContainer;
-class ParameterMap;
 class WorkerInfo;
 
 /**

@@ -24,7 +24,7 @@
 #include <cstddef>  // for byte
 #include <cstring>  // for memcpy
 
-namespace amdinfer {
+namespace amdinfer::util {
 
 template <typename T>
 std::byte *copy(const T &src, std::byte *dst,
@@ -38,6 +38,6 @@ std::byte *copy(const T &src, std::byte *dst,
   return dst + sizeof(T);
 }
 
-}  // namespace amdinfer
+}  // namespace amdinfer::util
 
 #endif  // GUARD_AMDINFER_UTIL_MEMORY

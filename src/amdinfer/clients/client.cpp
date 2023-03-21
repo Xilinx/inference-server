@@ -22,8 +22,10 @@
 #include <thread>         // for sleep_for
 #include <unordered_set>  // for operator!=, unordered_set
 
-#include "amdinfer/build_options.hpp"        // for AMDINFER_ENABLE_LOGGING
-#include "amdinfer/core/exceptions.hpp"      // for connection_error
+#include "amdinfer/build_options.hpp"            // for AMDINFER_ENABLE_LOGGING
+#include "amdinfer/core/exceptions.hpp"          // for connection_error
+#include "amdinfer/core/inference_request.hpp"   // for InferenceRequest
+#include "amdinfer/core/inference_response.hpp"  // for InferenceResponse
 #include "amdinfer/observation/logging.hpp"  // for getLogDirectory, initLogger
 
 namespace amdinfer {

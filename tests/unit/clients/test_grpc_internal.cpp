@@ -21,12 +21,12 @@
 #include "amdinfer/clients/grpc_internal.hpp"    // for mapRequestToProto
 #include "amdinfer/core/data_types.hpp"          // for DataType, switchOver...
 #include "amdinfer/core/exceptions.hpp"          // for invalid_argument
-#include "amdinfer/core/predict_api.hpp"         // for InferenceRequestInput
+#include "amdinfer/core/inference_request.hpp"   // for InferenceRequestInput
 #include "amdinfer/observation/observer.hpp"     // for Logger, Observer
 #include "amdinfer/testing/observation.hpp"      // for initializeTestLogging
 #include "google/protobuf/repeated_ptr_field.h"  // for RepeatedPtrField
 #include "gtest/gtest.h"                         // for Message, TestPartResult
-#include "predict_api.pb.h"                      // for ModelInferRequest
+#include "inference.pb.h"                        // for ModelInferRequest
 
 namespace amdinfer {
 

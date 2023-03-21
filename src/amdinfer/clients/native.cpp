@@ -26,12 +26,15 @@
 #include <string>   // for string
 #include <utility>  // for move
 
-#include "amdinfer/buffers/buffer.hpp"   // for BufferPtr
-#include "amdinfer/build_options.hpp"    // for AMDINFER_ENABLE_TRACING
-#include "amdinfer/core/exceptions.hpp"  // for invalid_argument
-#include "amdinfer/core/parameters.hpp"  // for ParameterMap
-#include "amdinfer/core/predict_api_internal.hpp"  // for RequestContainer
-#include "amdinfer/core/shared_state.hpp"          // for SharedState
+#include "amdinfer/buffers/buffer.hpp"           // for BufferPtr
+#include "amdinfer/build_options.hpp"            // for AMDINFER_ENABLE_TRACING
+#include "amdinfer/core/data_types.hpp"          // for DataType
+#include "amdinfer/core/exceptions.hpp"          // for invalid_argument
+#include "amdinfer/core/inference_request.hpp"   // for InferenceRequest
+#include "amdinfer/core/inference_response.hpp"  // for InferenceResponse
+#include "amdinfer/core/parameters.hpp"          // for ParameterMap
+#include "amdinfer/core/request_container.hpp"   // for RequestContainer
+#include "amdinfer/core/shared_state.hpp"        // for SharedState
 #include "amdinfer/observation/metrics.hpp"      // for Metrics, MetricCount...
 #include "amdinfer/observation/tracing.hpp"      // for startTrace, Trace
 #include "amdinfer/servers/server.hpp"           // for Server
@@ -62,23 +65,14 @@ ModelMetadata NativeClient::modelMetadata(const std::string& model) const {
 }
 
 void NativeClient::modelLoad(const std::string& model,
-                             ParameterMap* parameters) const {
+                             const ParameterMap& parameters) const {
   auto model_lower = util::toLower(model);
-  if (parameters == nullptr) {
-    ParameterMap params;
-    impl_->state->modelLoad(model_lower, &params);
-  } else {
-    impl_->state->modelLoad(model_lower, parameters);
-  }
+  impl_->state->modelLoad(model_lower, parameters);
 }
 
 std::string NativeClient::workerLoad(const std::string& worker,
-                                     ParameterMap* parameters) const {
+                                     const ParameterMap& parameters) const {
   auto worker_lower = util::toLower(worker);
-  if (parameters == nullptr) {
-    ParameterMap params;
-    return impl_->state->workerLoad(worker_lower, &params);
-  }
   return impl_->state->workerLoad(worker_lower, parameters);
 }
 

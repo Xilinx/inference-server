@@ -31,8 +31,8 @@
 #include <vector>
 #include <xir/tensor/tensor.hpp>  // for Tensor
 
+#include "amdinfer/core/data_types.hpp"
 #include "amdinfer/core/memory_pool/memory_allocator.hpp"
-#include "amdinfer/core/predict_api.hpp"
 
 namespace amdinfer {
 
@@ -60,8 +60,7 @@ class VartTensorAllocator : public MemoryAllocator {
  public:
   explicit VartTensorAllocator(size_t max_allocated = -1);
 
-  [[nodiscard]] BufferPtr get(const InferenceRequestInput& tensor,
-                              size_t batch_size) override;
+  [[nodiscard]] BufferPtr get(const Tensor& tensor, size_t batch_size) override;
   void put(const void* address) override;
 
   // void free(const void* address);

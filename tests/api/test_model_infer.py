@@ -37,6 +37,7 @@ class TestModelInfer:
 
         input_data = amdinfer.InferenceRequestInput()
         input_data.shape = [1]
+        input_data.datatype = amdinfer.DataType.UINT32
         input_data.setUint32Data(np.array([1], np.uint32))
         request = amdinfer.InferenceRequest()
         request.addInputTensor(input_data)

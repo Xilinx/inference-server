@@ -25,8 +25,9 @@
 #include <string>   // for string
 #include <vector>   // for vector
 
-#include "amdinfer/core/predict_api.hpp"  // for InferenceRequest (ptr only)
-#include "amdinfer/declarations.hpp"      // for InferenceResponseFuture
+#include "amdinfer/core/model_metadata.hpp"   // for ModelMetadata
+#include "amdinfer/core/server_metadata.hpp"  // for ServerMetadata
+#include "amdinfer/declarations.hpp"          // for InferenceResponseFuture
 
 namespace amdinfer {
 
@@ -86,7 +87,7 @@ class Client {
    * @param parameters load-time parameters for the worker supporting the model
    */
   virtual void modelLoad(const std::string& model,
-                         ParameterMap* parameters) const = 0;
+                         const ParameterMap& parameters) const = 0;
   /**
    * @brief Unloads a previously loaded model and shut it down. This is
    * identical in functionality to workerUnload and is provided for symmetry.
@@ -133,7 +134,7 @@ class Client {
    * @return std::string
    */
   virtual std::string workerLoad(const std::string& worker,
-                                 ParameterMap* parameters) const = 0;
+                                 const ParameterMap& parameters) const = 0;
   /**
    * @brief Unloads a previously loaded worker and shut it down. This is
    * identical in functionality to modelUnload and is provided for symmetry.

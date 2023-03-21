@@ -30,12 +30,23 @@ void wrapDataType(pybind11::module_ &);
 void wrapParameterMap(pybind11::module_ &);
 void wrapPredictApi(pybind11::module_ &);
 void wrapExceptions(pybind11::module_ &);
+void wrapServerMetadata(pybind11::module_ &);
+void wrapInferenceRequests(pybind11::module_ &);
+void wrapInferenceResponses(pybind11::module_ &);
+void wrapModelMetadata(pybind11::module_ &);
+void wrapTensor(pybind11::module_ &);
+void wrapInferenceTensor(pybind11::module_ &);
 
 void inline wrapCore(pybind11::module_ &m) {
   wrapExceptions(m);
   wrapDataType(m);
   wrapParameterMap(m);
-  wrapPredictApi(m);
+  wrapServerMetadata(m);
+  wrapTensor(m);
+  wrapInferenceTensor(m);
+  wrapInferenceRequests(m);
+  wrapInferenceResponses(m);
+  wrapModelMetadata(m);
 }
 
 }  // namespace amdinfer

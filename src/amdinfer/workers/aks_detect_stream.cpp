@@ -40,11 +40,12 @@
 #include <xir/tensor/tensor.hpp>   // for Tensor
 #include <xir/util/data_type.hpp>  // for create_data_type
 
-#include "amdinfer/batching/batcher.hpp"     // for BatchPtr, Batch, BatchP...
-#include "amdinfer/build_options.hpp"        // for AMDINFER_ENABLE_TRACING
-#include "amdinfer/core/data_types.hpp"      // for DataType, DataType::String
-#include "amdinfer/core/parameters.hpp"      // for ParameterMap
-#include "amdinfer/core/predict_api.hpp"     // for InferenceResponse, Infe...
+#include "amdinfer/batching/batcher.hpp"  // for BatchPtr, Batch, BatchP...
+#include "amdinfer/build_options.hpp"     // for AMDINFER_ENABLE_TRACING
+#include "amdinfer/core/data_types.hpp"   // for DataType, DataType::String
+#include "amdinfer/core/inference_request.hpp"   // for InferenceRequest
+#include "amdinfer/core/inference_response.hpp"  // for InferenceResponse
+#include "amdinfer/core/parameters.hpp"          // for ParameterMap
 #include "amdinfer/declarations.hpp"         // for BufferPtrs, InferenceRe...
 #include "amdinfer/observation/logging.hpp"  // for Logger
 #include "amdinfer/observation/tracing.hpp"  // for Trace
@@ -128,10 +129,10 @@ void AksDetectStream::doAcquire(ParameterMap* parameters) {
   this->graph_ = this->sys_manager_->getGraph(graph_name);
 
   this->metadata_.addInputTensor(
-    "input", DataType::Int8,
-    {this->batch_size_, kImageHeight, kImageWidth, kImageChannels});
+    "input", {this->batch_size_, kImageHeight, kImageWidth, kImageChannels},
+    DataType::Int8);
   // TODO(varunsh): what should we return here?
-  this->metadata_.addOutputTensor("output", DataType::Uint32, {0});
+  this->metadata_.addOutputTensor("output", {0}, DataType::Uint32);
   this->metadata_.setName(graph_name);
 }
 
@@ -157,7 +158,7 @@ void AksDetectStream::doRun(BatchPtrQueue* input_queue) {
 #endif
       auto inputs = req->getInputs();
       auto outputs = req->getOutputs();
-      auto key = req->getParameters()->get<std::string>("key");
+      auto key = req->getParameters().get<std::string>("key");
       for (auto& input : inputs) {
         auto* input_buffer = input.getData();
 
@@ -179,8 +180,8 @@ void AksDetectStream::doRun(BatchPtrQueue* input_queue) {
         // contains the number of frames in the video;
         auto count = static_cast<size_t>(
           cap.get(cv::VideoCaptureProperties::CAP_PROP_FRAME_COUNT));
-        if (input.getParameters()->has("count")) {
-          auto requested_count = input.getParameters()->get<int32_t>("count");
+        if (input.getParameters().has("count")) {
+          auto requested_count = input.getParameters().get<int32_t>("count");
           count = std::min(count, static_cast<size_t>(requested_count));
         }
         double fps = cap.get(cv::VideoCaptureProperties::CAP_PROP_FPS);
@@ -195,7 +196,10 @@ void AksDetectStream::doRun(BatchPtrQueue* input_queue) {
         std::string metadata = "[" + std::to_string(video_width) + "," +
                                std::to_string(video_height) + "]";
         auto message = constructMessage(key, std::to_string(fps), metadata);
-        output.setData(message.data());
+        std::vector<std::byte> buffer;
+        buffer.resize(message.size());
+        memcpy(buffer.data(), message.data(), message.size());
+        output.setData(std::move(buffer));
         output.setShape({message.size()});
         resp.addOutput(output);
         req->runCallback(resp);
@@ -289,7 +293,10 @@ void AksDetectStream::doRun(BatchPtrQueue* input_queue) {
               output.setName("image");
               output.setDatatype(DataType::String);
               auto message = constructMessage(key, frames.front(), labels[j]);
-              output.setData(message.data());
+              std::vector<std::byte> buffer;
+              buffer.resize(message.size());
+              memcpy(buffer.data(), message.data(), message.size());
+              output.setData(std::move(buffer));
               output.setShape({message.size()});
               resp.addOutput(output);
               req->runCallback(resp);
@@ -338,7 +345,9 @@ void AksDetectStream::doRun(BatchPtrQueue* input_queue) {
             output.setName("image");
             output.setDatatype(DataType::String);
             auto message = constructMessage(key, frames.front(), labels[j]);
-            output.setData(message.data());
+            buffer.resize(message.size());
+            memcpy(buffer.data(), message.data(), message.size());
+            output.setData(std::move(buffer));
             output.setShape({message.size()});
             resp.addOutput(output);
             req->runCallback(resp);

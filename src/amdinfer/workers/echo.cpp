@@ -29,11 +29,12 @@
 #include <utility>    // for move
 #include <vector>     // for vector
 
-#include "amdinfer/batching/hard.hpp"        // for HardBatcher
-#include "amdinfer/build_options.hpp"        // for AMDINFER_ENABLE_TRACING
-#include "amdinfer/core/data_types.hpp"      // for DataType, DataType::Uint32
-#include "amdinfer/core/parameters.hpp"      // for ParameterMap
-#include "amdinfer/core/predict_api.hpp"     // for InferenceRequest, Infer...
+#include "amdinfer/batching/hard.hpp"    // for HardBatcher
+#include "amdinfer/build_options.hpp"    // for AMDINFER_ENABLE_TRACING
+#include "amdinfer/core/data_types.hpp"  // for DataType, DataType::Uint32
+#include "amdinfer/core/inference_request.hpp"   // for InferenceRequest
+#include "amdinfer/core/inference_response.hpp"  // for InferenceResponse
+#include "amdinfer/core/parameters.hpp"          // for ParameterMap
 #include "amdinfer/declarations.hpp"         // for BufferPtr, InferenceRes...
 #include "amdinfer/observation/logging.hpp"  // for Logger
 #include "amdinfer/observation/metrics.hpp"  // for Metrics
@@ -94,8 +95,8 @@ void Echo::doInit(ParameterMap* parameters) {
 void Echo::doAcquire(ParameterMap* parameters) {
   (void)parameters;  // suppress unused variable warning
 
-  this->metadata_.addInputTensor("input", DataType::Uint32, {1});
-  this->metadata_.addOutputTensor("output", DataType::Uint32, {1});
+  this->metadata_.addInputTensor("input", {1}, DataType::Uint32);
+  this->metadata_.addOutputTensor("output", {1}, DataType::Uint32);
 }
 
 void Echo::doRun(BatchPtrQueue* input_queue) {

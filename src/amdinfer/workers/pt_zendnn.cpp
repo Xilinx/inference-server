@@ -30,13 +30,14 @@
 #include <utility>     // for move
 #include <vector>      // for vector
 
-#include "amdinfer/batching/hard.hpp"        // for Batch, BatchPtrQueue
-#include "amdinfer/build_options.hpp"        // for AMDINFER_ENABLE_LOGGING
-#include "amdinfer/core/data_types.hpp"      // for DataType, DataType::FP32
-#include "amdinfer/core/exceptions.hpp"      // for external_error, file_no...
-#include "amdinfer/core/parameters.hpp"      // for ParameterMap
-#include "amdinfer/core/predict_api.hpp"     // for InferenceResponse, Requ...
-#include "amdinfer/declarations.hpp"         // for InferenceResponseOutput
+#include "amdinfer/batching/hard.hpp"    // for Batch, BatchPtrQueue
+#include "amdinfer/build_options.hpp"    // for AMDINFER_ENABLE_LOGGING
+#include "amdinfer/core/data_types.hpp"  // for DataType, DataType::FP32
+#include "amdinfer/core/exceptions.hpp"  // for external_error, file_no...
+#include "amdinfer/core/inference_request.hpp"   // for InferenceRequest
+#include "amdinfer/core/inference_response.hpp"  // for InferenceResponse
+#include "amdinfer/core/parameters.hpp"          // for ParameterMap
+#include "amdinfer/declarations.hpp"             // for InferenceResponseOutput
 #include "amdinfer/observation/logging.hpp"  // for Logger, AMDINFER_LOG_INFO
 #include "amdinfer/observation/metrics.hpp"  // for Metrics, MetricCounterIDs
 #include "amdinfer/observation/tracing.hpp"  // for Trace
@@ -169,9 +170,9 @@ void PtZendnn::doAcquire(ParameterMap* parameters) {
 
   // Adding metadata for input and output
   this->metadata_.addInputTensor(
-    "input", input_dt_,
-    {this->batch_size_, image_height_, image_width_, image_channels_});
-  this->metadata_.addOutputTensor("output", DataType::FP32, {0});
+    "input", {this->batch_size_, image_height_, image_width_, image_channels_},
+    input_dt_);
+  this->metadata_.addOutputTensor("output", {0}, DataType::FP32);
   this->metadata_.setName("PtZendnn");
 }
 

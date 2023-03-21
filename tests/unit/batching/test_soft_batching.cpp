@@ -23,17 +23,18 @@
 #include <utility>           // for move
 #include <vector>            // for vector
 
-#include "amdinfer/batching/soft.hpp"          // for BatchPtr, SoftBatcher
-#include "amdinfer/buffers/cpu.hpp"            // for CpuBuffer
-#include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_LOGGING
-#include "amdinfer/core/data_types.hpp"        // for DataType, DataType::U...
-#include "amdinfer/core/memory_pool/pool.hpp"  // for MemoryPool
-#include "amdinfer/core/parameters.hpp"        // for ParameterMap
-#include "amdinfer/core/predict_api_internal.hpp"  // for InferenceRequest, Req...
-#include "amdinfer/core/worker_info.hpp"           // for WorkerInfo
-#include "amdinfer/declarations.hpp"               // for BufferPtrs
-#include "amdinfer/observation/logging.hpp"        // for initLogger, LogLevel
-#include "gtest/gtest.h"                           // for ParamIteratorInterface
+#include "amdinfer/batching/soft.hpp"           // for BatchPtr, SoftBatcher
+#include "amdinfer/buffers/cpu.hpp"             // for CpuBuffer
+#include "amdinfer/build_options.hpp"           // for AMDINFER_ENABLE_LOGGING
+#include "amdinfer/core/data_types.hpp"         // for DataType, DataType::U...
+#include "amdinfer/core/inference_request.hpp"  // for InferenceRequest
+#include "amdinfer/core/memory_pool/pool.hpp"   // for MemoryPool
+#include "amdinfer/core/parameters.hpp"         // for ParameterMap
+#include "amdinfer/core/request_container.hpp"  // for RequestContainer
+#include "amdinfer/core/worker_info.hpp"        // for WorkerInfo
+#include "amdinfer/declarations.hpp"            // for BufferPtrs
+#include "amdinfer/observation/logging.hpp"     // for initLogger, LogLevel
+#include "gtest/gtest.h"                        // for ParamIteratorInterface
 
 namespace amdinfer {
 

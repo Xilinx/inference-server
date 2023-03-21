@@ -91,7 +91,7 @@ class ParameterMap : public Serializable {
    * @return T
    */
   template <typename T>
-  T get(const std::string &key) {
+  T get(const std::string &key) const {
     auto &value = this->parameters_.at(key);
     return std::get<T>(value);
   }
@@ -102,7 +102,7 @@ class ParameterMap : public Serializable {
    * @param key name of the parameter to check
    * @return bool
    */
-  bool has(const std::string &key);
+  bool has(const std::string &key) const;
 
   /**
    * @brief Rename the key associated with a parameter. If the new key already
@@ -130,10 +130,14 @@ class ParameterMap : public Serializable {
   /// Returns a read/write iterator to the first parameter in the object
   Iterator begin();
   /// Returns a read iterator to the first parameter in the object
+  [[nodiscard]] ConstIterator begin() const;
+  /// Returns a read iterator to the first parameter in the object
   [[nodiscard]] ConstIterator cbegin() const;
 
   /// Returns a read/write iterator to one past the last parameter in the object
   Iterator end();
+  /// Returns a read iterator to one past the last parameter in the object
+  [[nodiscard]] ConstIterator end() const;
   /// Returns a read iterator to one past the last parameter in the object
   [[nodiscard]] ConstIterator cend() const;
 
@@ -149,14 +153,14 @@ class ParameterMap : public Serializable {
    *
    * @param data_out
    */
-  void serialize(std::byte *data_out) const override;
+  std::byte *serialize(std::byte *data_out) const override;
   /**
    * @brief Deserializes the data at the provided memory address to initialize
    * this object. If the memory cannot be deserialized, an exception is thrown.
    *
    * @param data_in a pointer to the serialized data for this object type
    */
-  void deserialize(const std::byte *data_in) override;
+  const std::byte *deserialize(const std::byte *data_in) override;
 
   /// Provides an implementation to print the class with std::cout to an ostream
   friend std::ostream &operator<<(std::ostream &os, const ParameterMap &self) {
@@ -180,5 +184,48 @@ class ParameterMap : public Serializable {
 using ParameterMapPtr = std::shared_ptr<ParameterMap>;
 
 }  // namespace amdinfer
+
+namespace std {
+template <>
+/**
+ * @brief Overload the "less than" operator so we can compare two
+ * RequestParameter objects. We need this functionality to store objects of
+ * this class in a map. Note, since hashing is not implemented, these objects
+ * cannot be stored in an unordered_map.
+ *
+ */
+struct less<amdinfer::ParameterMap> {
+  /**
+   * @brief Implementation of the comparison of two RequestParameter objects.
+   * We compare the size and then check each key is present and finally, compare
+   * the key values. The types supported in ParameterMap all support
+   * direct comparison with the "less than" operator already.
+   *
+   * @param lhs the RequestParameter object on the left-hand-side
+   * @param rhs the RequestParameter object on the right-hand-side
+   * @return bool
+   */
+  bool operator()(const amdinfer::ParameterMap &lhs,
+                  const amdinfer::ParameterMap &rhs) const {
+    auto lhs_size = lhs.size();
+    auto rhs_size = rhs.size();
+    auto lhs_map = lhs.data();
+    auto rhs_map = rhs.data();
+    if (lhs_size == rhs_size) {
+      for (const auto &[key, lhs_value] : lhs_map) {
+        if (rhs_map.find(key) == rhs_map.end()) {
+          return true;
+        }
+        const auto &rhs_value = rhs_map.at(key);
+        if (lhs_value != rhs_value) {
+          return lhs_value < rhs_value;
+        }
+      }
+      return false;
+    }
+    return lhs_size < rhs_size;
+  }
+};
+}  // namespace std
 
 #endif  // GUARD_AMDINFER_CORE_PARAMETERS

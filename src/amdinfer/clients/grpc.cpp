@@ -29,14 +29,16 @@
 #include <unordered_set>  // for unordered_set
 #include <vector>         // for vector
 
-#include "amdinfer/clients/grpc_internal.hpp"  // for mapParametersToProto
-#include "amdinfer/core/data_types.hpp"        // for DataType
-#include "amdinfer/core/exceptions.hpp"        // for bad_status, connecti...
-#include "amdinfer/core/parameters.hpp"        // for ParameterMap
-#include "amdinfer/declarations.hpp"           // for InferenceResponseFuture
-#include "amdinfer/observation/observer.hpp"   // for Logger, Observer
-#include "predict_api.grpc.pb.h"               // for GRPCInferenceService...
-#include "predict_api.pb.h"                    // for ModelMetadataRespons...
+#include "amdinfer/clients/grpc_internal.hpp"    // for mapParametersToProto
+#include "amdinfer/core/data_types.hpp"          // for DataType
+#include "amdinfer/core/exceptions.hpp"          // for bad_status, connecti...
+#include "amdinfer/core/inference_request.hpp"   // for InferenceRequest
+#include "amdinfer/core/inference_response.hpp"  // for InferenceResponse
+#include "amdinfer/core/parameters.hpp"          // for ParameterMap
+#include "amdinfer/declarations.hpp"             // for InferenceResponseFuture
+#include "amdinfer/observation/observer.hpp"     // for Logger, Observer
+#include "inference.grpc.pb.h"                   // for GRPCInferenceService...
+#include "inference.pb.h"                        // for ModelMetadataRespons...
 
 using grpc::ClientContext;
 using grpc::Status;
@@ -146,8 +148,8 @@ ModelMetadata mapProtoToModelMetadata(
     for (const auto& index : input.shape()) {
       shape.push_back(static_cast<int>(index));
     }
-    metadata.addInputTensor(input.name(), DataType(input.datatype().c_str()),
-                            shape);
+    metadata.addInputTensor(input.name(), shape,
+                            DataType(input.datatype().c_str()));
   }
   const auto& outputs = resp.outputs();
   for (const auto& output : outputs) {
@@ -156,8 +158,8 @@ ModelMetadata mapProtoToModelMetadata(
     for (const auto& index : output.shape()) {
       shape.push_back(static_cast<int>(index));
     }
-    metadata.addInputTensor(output.name(), DataType(output.datatype().c_str()),
-                            shape);
+    metadata.addInputTensor(output.name(), shape,
+                            DataType(output.datatype().c_str()));
   }
   return metadata;
 }
@@ -197,7 +199,7 @@ std::vector<std::string> GrpcClient::modelList() const {
 }
 
 void GrpcClient::modelLoad(const std::string& model,
-                           ParameterMap* parameters) const {
+                           const ParameterMap& parameters) const {
   inference::ModelLoadRequest request;
   inference::ModelLoadResponse reply;
 
@@ -205,9 +207,7 @@ void GrpcClient::modelLoad(const std::string& model,
 
   request.set_name(model);
   auto* params = request.mutable_parameters();
-  if (parameters != nullptr) {
-    mapParametersToProto(parameters->data(), params);
-  }
+  mapParametersToProto(parameters.data(), params);
 
   auto* stub = this->impl_->getStub();
   Status status = stub->ModelLoad(&context, request, &reply);
@@ -234,7 +234,7 @@ void GrpcClient::modelUnload(const std::string& model) const {
 }
 
 std::string GrpcClient::workerLoad(const std::string& worker,
-                                   ParameterMap* parameters) const {
+                                   const ParameterMap& parameters) const {
   inference::WorkerLoadRequest request;
   inference::WorkerLoadResponse reply;
 
@@ -242,9 +242,7 @@ std::string GrpcClient::workerLoad(const std::string& worker,
 
   request.set_name(worker);
   auto* params = request.mutable_parameters();
-  if (parameters != nullptr) {
-    mapParametersToProto(parameters->data(), params);
-  }
+  mapParametersToProto(parameters.data(), params);
 
   auto* stub = this->impl_->getStub();
   Status status = stub->WorkerLoad(&context, request, &reply);

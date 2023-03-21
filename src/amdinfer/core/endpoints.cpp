@@ -22,13 +22,13 @@
 #include <cassert>      // for assert
 #include <type_traits>  // for __decay_and_strip<>::__type
 
-#include "amdinfer/batching/batcher.hpp"           // for Batcher
-#include "amdinfer/build_options.hpp"              // for kMaxModelNameSize
-#include "amdinfer/core/exceptions.hpp"            // for invalid_argument
-#include "amdinfer/core/parameters.hpp"            // for ParameterMap
-#include "amdinfer/core/predict_api_internal.hpp"  // for RequestContainer
-#include "amdinfer/core/worker_info.hpp"           // for WorkerInfo
-#include "amdinfer/util/thread.hpp"                // for setThreadName
+#include "amdinfer/batching/batcher.hpp"        // for Batcher
+#include "amdinfer/build_options.hpp"           // for kMaxModelNameSize
+#include "amdinfer/core/exceptions.hpp"         // for invalid_argument
+#include "amdinfer/core/parameters.hpp"         // for ParameterMap
+#include "amdinfer/core/request_container.hpp"  // for RequestContainer
+#include "amdinfer/core/worker_info.hpp"        // for WorkerInfo
+#include "amdinfer/util/thread.hpp"             // for setThreadName
 
 namespace amdinfer {
 

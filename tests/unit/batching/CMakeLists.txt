@@ -18,11 +18,11 @@ list(APPEND tests soft soft_batching)
 list(
   APPEND tests_libs
          "fake_observation~$<TARGET_OBJECTS:fake_worker_info_buffers_infinite>~\
-      predict_api~parameters~data_types~batching~memory_pool~buffers~\
-      data_types_internal"
+            parameters~data_types~batching~memory_pool~buffers~\
+            data_types_internal~inference_request~inference_response"
          "fake_observation~$<TARGET_OBJECTS:fake_worker_info_buffers_finite>~\
-      predict_api~data_types~parameters~batching~buffers~memory_pool~\
-      data_types_internal"
+            data_types~parameters~batching~buffers~memory_pool~\
+            data_types_internal~inference_request~inference_response"
 )
 
 amdinfer_add_unit_tests("${tests}" "${tests_libs}")

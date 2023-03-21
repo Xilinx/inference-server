@@ -19,6 +19,8 @@ import os
 import sys
 import time
 
+import numpy as np
+
 # By default, Python uses only RTLD_NOW as the dlopen flag. When using
 # RTLD_DEEPBIND to open shared libraries from the inference server, specifying
 # RTLD_GLOBAL is needed for the loaded library to resolve symbols from the main
@@ -61,6 +63,11 @@ def _set_data(input_n, image):
     return input_n
 
 
+def stringToArray(data):
+    array = np.fromiter(data, (np.string_, 1))
+    return array.view(np.uint8)
+
+
 def ImageInferenceRequest(images, asTensor=True):
     """
     Construct a request from an image or list of images
@@ -96,7 +103,7 @@ def ImageInferenceRequest(images, asTensor=True):
                 input_n.datatype = DataType.STRING
                 with open(image, "rb") as f:
                     data = base64.b64encode(f.read()).decode("utf-8")
-                    input_n = _set_data(input_n, data)
+                    input_n = _set_data(input_n, stringToArray(data))
                     input_n.shape = [len(data)]
         elif isinstance(image, np.ndarray):
             input_n.datatype = getattr(DataType, str(image.dtype).upper())

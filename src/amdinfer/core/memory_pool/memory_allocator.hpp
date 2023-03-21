@@ -22,6 +22,7 @@
 
 #include <cstddef>  // for size_t
 
+#include "amdinfer/core/tensor.hpp"
 #include "amdinfer/declarations.hpp"
 
 namespace amdinfer {
@@ -43,7 +44,7 @@ class MemoryAllocator {
   virtual ~MemoryAllocator() = default;
 
   // these methods are thread-safe
-  [[nodiscard]] virtual BufferPtr get(const InferenceRequestInput& tensor,
+  [[nodiscard]] virtual BufferPtr get(const Tensor& tensor,
                                       size_t batch_size) = 0;
   virtual void put(const void* address) = 0;
 };

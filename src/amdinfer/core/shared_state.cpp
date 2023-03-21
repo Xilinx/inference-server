@@ -35,7 +35,7 @@
 #include "amdinfer/core/exceptions.hpp"        // for external_error, invalid...
 #include "amdinfer/core/model_repository.hpp"  // for ModelRepository
 #include "amdinfer/core/parameters.hpp"        // for ParameterMap
-#include "amdinfer/core/predict_api_internal.hpp"  // for ServerMetadata, ModelMe...
+#include "amdinfer/core/request_container.hpp"  // for ServerMetadata, ModelMe...
 #include "amdinfer/observation/observer.hpp"
 #include "amdinfer/util/string.hpp"  // for isLower
 #include "amdinfer/version.hpp"      // for kAmdinferVersion
@@ -72,12 +72,13 @@ ServerMetadata SharedState::serverMetadata() {
 }
 
 void SharedState::modelLoad(const std::string& model,
-                            ParameterMap* parameters) {
-  assert(parameters != nullptr);
+                            const ParameterMap& parameters) {
   assert(util::isLower(model));
 
-  parseModel(repository_.getRepository(), model, parameters);
-  endpoints_.load(model, *parameters);
+  ParameterMap updated_parameters = parameters;
+
+  parseModel(repository_.getRepository(), model, &updated_parameters);
+  endpoints_.load(model, updated_parameters);
 }
 
 void SharedState::modelUnload(const std::string& model) {
@@ -85,12 +86,12 @@ void SharedState::modelUnload(const std::string& model) {
 }
 
 std::string SharedState::workerLoad(const std::string& worker,
-                                    ParameterMap* parameters) {
-  assert(parameters != nullptr);
+                                    const ParameterMap& parameters) {
   assert(util::isLower(worker));
 
-  parameters->put("worker", worker);
-  return endpoints_.load(worker, *parameters);
+  auto updated_parameters = parameters;
+  updated_parameters.put("worker", worker);
+  return endpoints_.load(worker, updated_parameters);
 }
 
 void SharedState::workerUnload(const std::string& worker) {

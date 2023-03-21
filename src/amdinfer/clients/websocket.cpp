@@ -35,8 +35,10 @@
 #include <chrono>   // for milliseconds
 #include <thread>   // for sleep_for
 
-#include "amdinfer/clients/http.hpp"           // for HttpClient
-#include "amdinfer/clients/http_internal.hpp"  // for mapRequestToJson
+#include "amdinfer/clients/http.hpp"             // for HttpClient
+#include "amdinfer/clients/http_internal.hpp"    // for mapRequestToJson
+#include "amdinfer/core/inference_request.hpp"   // for InferenceRequest
+#include "amdinfer/core/inference_response.hpp"  // for InferenceResponse
 
 namespace amdinfer {
 
@@ -186,7 +188,7 @@ ModelMetadata WebSocketClient::modelMetadata(const std::string& model) const {
 }
 
 void WebSocketClient::modelLoad(const std::string& model,
-                                ParameterMap* parameters) const {
+                                const ParameterMap& parameters) const {
   const auto* client = this->impl_->getHttpClient();
   client->modelLoad(model, parameters);
 }
@@ -197,7 +199,7 @@ void WebSocketClient::modelUnload(const std::string& model) const {
 }
 
 std::string WebSocketClient::workerLoad(const std::string& worker,
-                                        ParameterMap* parameters) const {
+                                        const ParameterMap& parameters) const {
   const auto* client = this->impl_->getHttpClient();
   return client->workerLoad(worker, parameters);
 }

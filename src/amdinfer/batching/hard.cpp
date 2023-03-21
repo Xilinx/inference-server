@@ -26,17 +26,18 @@
 #include <utility>  // for move
 #include <vector>   // for vector
 
-#include "amdinfer/buffers/cpu.hpp"            // for CpuBuffer
-#include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_METRICS
-#include "amdinfer/core/exceptions.hpp"        // for invalid_argument
-#include "amdinfer/core/memory_pool/pool.hpp"  // for MemoryPool
-#include "amdinfer/core/predict_api_internal.hpp"  // for InferenceRequestInput
-#include "amdinfer/core/worker_info.hpp"           // for WorkerInfo
-#include "amdinfer/declarations.hpp"               // for RequestContainerPtr
-#include "amdinfer/observation/metrics.hpp"  // for Metrics, MetricCounterIDs
-#include "amdinfer/observation/tracing.hpp"  // for Trace
-#include "amdinfer/util/queue.hpp"           // for BlockingConcurrentQueue
-#include "amdinfer/util/thread.hpp"          // for setThreadName
+#include "amdinfer/buffers/cpu.hpp"             // for CpuBuffer
+#include "amdinfer/build_options.hpp"           // for AMDINFER_ENABLE_METRICS
+#include "amdinfer/core/exceptions.hpp"         // for invalid_argument
+#include "amdinfer/core/inference_request.hpp"  // for InferenceRequest
+#include "amdinfer/core/memory_pool/pool.hpp"   // for MemoryPool
+#include "amdinfer/core/request_container.hpp"  // for InferenceRequestInput
+#include "amdinfer/core/worker_info.hpp"        // for WorkerInfo
+#include "amdinfer/declarations.hpp"            // for RequestContainerPtr
+#include "amdinfer/observation/metrics.hpp"     // for Metrics, MetricCounterIDs
+#include "amdinfer/observation/tracing.hpp"     // for Trace
+#include "amdinfer/util/queue.hpp"              // for BlockingConcurrentQueue
+#include "amdinfer/util/thread.hpp"             // for setThreadName
 
 // IWYU pragma: no_forward_declare amdinfer::Buffer
 

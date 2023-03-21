@@ -53,7 +53,7 @@ void mapParametersToProto(
   const std::map<std::string, amdinfer::Parameter, std::less<>>& parameters,
   google::protobuf::Map<std::string, inference::InferParameter>*
     grpc_parameters);
-ParameterMapPtr mapProtoToParameters(
+ParameterMap mapProtoToParameters(
   const google::protobuf::Map<std::string, inference::InferParameter>& params);
 void mapProtoToParameters(
   const google::protobuf::Map<std::string, inference::InferParameter>& params,

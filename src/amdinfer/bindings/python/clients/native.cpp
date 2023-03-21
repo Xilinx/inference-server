@@ -24,7 +24,10 @@
 #include <pybind11/stl.h>       // IWYU pragma: keep
 
 #include "amdinfer/bindings/python/helpers/docstrings.hpp"  // for DOCS
-#include "amdinfer/servers/server.hpp"                      // for Server
+#include "amdinfer/core/inference_request.hpp"   // for InferenceRequest
+#include "amdinfer/core/inference_response.hpp"  // for InferenceResponse
+#include "amdinfer/core/parameters.hpp"
+#include "amdinfer/servers/server.hpp"  // for Server
 
 namespace py = pybind11;
 
@@ -44,13 +47,11 @@ void wrapNativeClient(py::module_ &m) {
     .def("modelMetadata", &NativeClient::modelMetadata, py::arg("model"),
          DOCS(NativeClient, modelMetadata))
     .def("modelLoad", &NativeClient::modelLoad, py::arg("model"),
-         py::arg("parameters") = static_cast<ParameterMap *>(nullptr),
-         DOCS(NativeClient, modelLoad))
+         py::arg("parameters") = ParameterMap(), DOCS(NativeClient, modelLoad))
     .def("modelUnload", &NativeClient::modelUnload, py::arg("model"),
          DOCS(NativeClient, modelUnload))
     .def("workerLoad", &NativeClient::workerLoad, py::arg("model"),
-         py::arg("parameters") = static_cast<ParameterMap *>(nullptr),
-         DOCS(NativeClient, workerLoad))
+         py::arg("parameters") = ParameterMap(), DOCS(NativeClient, workerLoad))
     .def("workerUnload", &NativeClient::workerUnload, py::arg("model"),
          DOCS(NativeClient, workerUnload))
     .def("modelInfer", &NativeClient::modelInfer, py::arg("model"),

@@ -21,9 +21,9 @@
 
 #include "amdinfer/buffers/buffer.hpp"  // for BufferPtr
 #include "amdinfer/core/exceptions.hpp"
+#include "amdinfer/core/inference_request.hpp"  // for InferenceRequestInput
 #include "amdinfer/core/memory_pool/pool.hpp"
-#include "amdinfer/core/predict_api.hpp"  // for InferenceRequestInput
-#include "amdinfer/testing/gtest.hpp"     // for AssertionResult,...
+#include "amdinfer/testing/gtest.hpp"  // for AssertionResult,...
 
 namespace amdinfer {
 

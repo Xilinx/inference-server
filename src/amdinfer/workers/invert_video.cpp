@@ -28,11 +28,12 @@
 #include <thread>                 // for thread
 #include <vector>                 // for vector
 
-#include "amdinfer/batching/batcher.hpp"     // for Batch, BatchPtrQueue
-#include "amdinfer/build_options.hpp"        // for AMDINFER_ENABLE_TRACING
-#include "amdinfer/core/data_types.hpp"      // for DataType, DataType::String
-#include "amdinfer/core/parameters.hpp"      // for ParameterMap
-#include "amdinfer/core/predict_api.hpp"     // for InferenceResponse, Infe...
+#include "amdinfer/batching/batcher.hpp"  // for Batch, BatchPtrQueue
+#include "amdinfer/build_options.hpp"     // for AMDINFER_ENABLE_TRACING
+#include "amdinfer/core/data_types.hpp"   // for DataType, DataType::String
+#include "amdinfer/core/inference_request.hpp"   // for InferenceRequest
+#include "amdinfer/core/inference_response.hpp"  // for InferenceResponse
+#include "amdinfer/core/parameters.hpp"          // for ParameterMap
 #include "amdinfer/declarations.hpp"         // for BufferPtr, InferenceRes...
 #include "amdinfer/observation/logging.hpp"  // for Logger
 #include "amdinfer/observation/tracing.hpp"  // for startFollowSpan, SpanPtr
@@ -94,11 +95,11 @@ const auto kMaxUrlLength = 128;
 void InvertVideo::doAcquire(ParameterMap* parameters) {
   (void)parameters;  // suppress unused variable warning
 
-  this->metadata_.addInputTensor("input", DataType::String, {kMaxUrlLength});
+  this->metadata_.addInputTensor("input", {kMaxUrlLength}, DataType::String);
   // TODO(varunsh): output is variable
   this->metadata_.addOutputTensor(
-    "output", DataType::Int8,
-    {kMaxImageHeight, kMaxImageWidth, kMaxImageChannels});
+    "output", {kMaxImageHeight, kMaxImageWidth, kMaxImageChannels},
+    DataType::Int8);
 }
 
 void InvertVideo::doRun(BatchPtrQueue* input_queue) {
@@ -123,7 +124,7 @@ void InvertVideo::doRun(BatchPtrQueue* input_queue) {
 #endif
       auto inputs = req->getInputs();
       auto outputs = req->getOutputs();
-      auto key = req->getParameters()->get<std::string>("key");
+      auto key = req->getParameters().get<std::string>("key");
       for (auto& input : inputs) {
         auto* input_buffer = input.getData();
 
@@ -144,8 +145,8 @@ void InvertVideo::doRun(BatchPtrQueue* input_queue) {
         // contains the number of frames in the video;
         auto count = static_cast<int32_t>(
           cap.get(cv::VideoCaptureProperties::CAP_PROP_FRAME_COUNT));
-        if (input.getParameters()->has("count")) {
-          count = input.getParameters()->get<int32_t>("count");
+        if (input.getParameters().has("count")) {
+          count = input.getParameters().get<int32_t>("count");
         }
         double fps = cap.get(cv::VideoCaptureProperties::CAP_PROP_FPS);
 
@@ -153,7 +154,10 @@ void InvertVideo::doRun(BatchPtrQueue* input_queue) {
         output.setName("key");
         output.setDatatype(DataType::String);
         auto message = constructMessage(key, std::to_string(fps));
-        output.setData(message.data());
+        std::vector<std::byte> buffer;
+        buffer.resize(message.size());
+        memcpy(buffer.data(), message.data(), message.size());
+        output.setData(std::move(buffer));
         output.setShape({message.size()});
         resp.addOutput(output);
         req->runCallback(resp);
@@ -179,7 +183,9 @@ void InvertVideo::doRun(BatchPtrQueue* input_queue) {
           output.setName("image");
           output.setDatatype(DataType::String);
           message = constructMessage(key, encoded);
-          output.setData(message.data());
+          buffer.resize(message.size());
+          memcpy(buffer.data(), message.data(), message.size());
+          output.setData(std::move(buffer));
           output.setShape({message.size()});
           resp.addOutput(output);
           req->runCallback(resp);

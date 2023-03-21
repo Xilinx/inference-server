@@ -28,7 +28,7 @@ void test(amdinfer::Client* client) {
   EXPECT_TRUE(client->modelList().empty());
 
   // load one worker
-  client->workerLoad(model, nullptr);
+  client->workerLoad(model, {});
 
   EXPECT_TRUE(client->modelReady(model));
 

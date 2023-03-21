@@ -32,11 +32,12 @@
 #include <string>      // for string
 #include <vector>      // for vector
 
-#include "amdinfer/build_options.hpp"              // for AMDINFER_ENABLE_TRA...
-#include "amdinfer/core/parameters.hpp"            // for ParameterMap (ptr ...
-#include "amdinfer/core/predict_api_internal.hpp"  // for InferenceRequestBui...
-#include "amdinfer/declarations.hpp"               // for BufferRawPtrs, Infe...
-#include "amdinfer/util/traits.hpp"                // for is_any_v
+#include "amdinfer/build_options.hpp"        // for AMDINFER_ENABLE_TRA...
+#include "amdinfer/core/data_types.hpp"      // for fp16
+#include "amdinfer/core/model_metadata.hpp"  // for ModelMetadata
+#include "amdinfer/core/parameters.hpp"      // for ParameterMap (ptr ...
+#include "amdinfer/declarations.hpp"         // for BufferRawPtrs, Infe...
+#include "amdinfer/util/traits.hpp"          // for is_any_v
 
 namespace amdinfer {
 
@@ -44,10 +45,10 @@ namespace amdinfer {
  * @brief Convert JSON-styled parameters to our objects
  *
  * @param parameters
- * @return ParameterMapPtr
+ * @return ParameterMap
  */
-ParameterMapPtr mapJsonToParameters(Json::Value json);
-Json::Value mapParametersToJson(ParameterMap *parameters);
+ParameterMap mapJsonToParameters(Json::Value json);
+Json::Value mapParametersToJson(const ParameterMap &parameters);
 
 InferenceResponse mapJsonToResponse(Json::Value *json);
 Json::Value mapRequestToJson(const InferenceRequest &request);

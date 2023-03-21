@@ -27,6 +27,9 @@
 #include <unordered_map>  // for unordered_map
 
 #include "amdinfer/bindings/python/helpers/docstrings.hpp"  // for DOCS
+#include "amdinfer/core/inference_request.hpp"   // for InferenceRequest
+#include "amdinfer/core/inference_response.hpp"  // for InferenceResponse
+#include "amdinfer/core/parameters.hpp"
 
 namespace py = pybind11;
 
@@ -55,13 +58,11 @@ void wrapHttpClient(py::module_ &m) {
     .def("modelMetadata", &HttpClient::modelMetadata, py::arg("model"),
          DOCS(HttpClient, modelMetadata))
     .def("modelLoad", &HttpClient::modelLoad, py::arg("model"),
-         py::arg("parameters") = static_cast<ParameterMap *>(nullptr),
-         DOCS(HttpClient, modelLoad))
+         py::arg("parameters") = ParameterMap(), DOCS(HttpClient, modelLoad))
     .def("modelUnload", &HttpClient::modelUnload, py::arg("model"),
          DOCS(HttpClient, modelUnload))
     .def("workerLoad", &HttpClient::workerLoad, py::arg("model"),
-         py::arg("parameters") = static_cast<ParameterMap *>(nullptr),
-         DOCS(HttpClient, workerLoad))
+         py::arg("parameters") = ParameterMap(), DOCS(HttpClient, workerLoad))
     .def("workerUnload", &HttpClient::workerUnload, py::arg("model"),
          DOCS(HttpClient, workerUnload))
     .def("modelInfer", &HttpClient::modelInfer, py::arg("model"),

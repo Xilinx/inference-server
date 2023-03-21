@@ -177,7 +177,7 @@ The following packages are installed from Github.
     :github:`protocolbuffers/protobuf`,3.19.4,BSD-3,Dynamically linked by amdinfer-server and Vitis libraries\ :superscript:`a 0`
     :github:`fpagliughi/sockpp`,e5c51b5,BSD-3,Dynamically linked by amdinfer-server :superscript:`a 0`
     :github:`gabime/spdlog`,1.8.2,MIT,Statically linked by amdinfer-server for logging\ :superscript:`a 0`
-    :github:`Xilinx/Vitis-AI`,latest,Apache 2.0,VART is dynamically linked by amdinfer-server\ :superscript:`a 1`
+    :github:`Xilinx/Vitis-AI`,3.0,Apache 2.0,VART is dynamically linked by amdinfer-server\ :superscript:`a 1`
     :github:`wg/wrk`,4.1.0,modified Apache 2.0,Executable used for benchmarking amdinfer-server\ :superscript:`d 0`
 
 Others
@@ -231,7 +231,6 @@ The following files are included in the AMD Inference Server repository under th
     ctpl.hpp,:github:`vit-vit/CTPL`,`ctpl.h <https://github.com/vit-vit/CTPL/blob/master/ctpl.h>`__,Apache 2.0,C++ Thread pool library\ :superscript:`a 0`
     dog-3619020_640.jpg,`Pixabay <https://pixabay.com/photos/dog-spitz-smile-ginger-home-pet-3619020/>`__,`dog-3619020_640.jpg <https://cdn.pixabay.com/photo/2018/08/20/14/08/dog-3619020_640.jpg>`__,`Pixabay License <https://pixabay.com/service/license/>`_,Used for testing\ :superscript:`d 0`
     nine_9273.jpg,`Keras MNIST dataset <https://keras.io/api/datasets/mnist/>`__,?,`CC BY-SA 3.0 <https://creativecommons.org/licenses/by-sa/3.0/legalcode>`__,Used for testing\ :superscript:`d 0`
-    amdinferConfig.cmake,:github:`alexreinking/SharedStaticStarter`,`SomeLibConfig.cmake <https://github.com/alexreinking/SharedStaticStarter/blob/master/packaging/SomeLibConfig.cmake>`__,MIT,CMake module for installing libraries\ :superscript:`a 0`
     migraphx_bert.py,:github:`ROCmSoftwarePlatform/AMDMIGraphX`,`bert-squad-migraphx.py <https://github.com/ROCmSoftwarePlatform/AMDMIGraphX/blob/develop/examples/nlp/python_bert_squad/bert-squad-migraphx.py>`__,MIT,Python example for YoloV4 model\ :superscript:`d 0`
     migraphx_yolo.py,:github:`ROCmSoftwarePlatform/AMDMIGraphX`,`yolov4_inference.ipynb <https://github.com/ROCmSoftwarePlatform/AMDMIGraphX/blob/develop/examples/vision/python_yolov4/yolov4_inference.ipynb>`__,MIT,Python example for Bert model\ :superscript:`d 0`
     sport-1284275_640.jpg,`Pixabay <https://pixabay.com/photos/sport-skateboard-skateboarding-fun-1284275/>`__,`sport-1284275_640.jpg <https://cdn.pixabay.com/photo/2016/03/27/21/05/sport-1284275_640.jpg>`__,`Pixabay License <https://pixabay.com/service/license/>`_,Used for testing\ :superscript:`d 0`

@@ -24,11 +24,13 @@
 #include <string>     // for string, operator+, char_t...
 #include <utility>    // for move
 
-#include "amdinfer/core/exceptions.hpp"            // for invalid_argument
-#include "amdinfer/core/predict_api_internal.hpp"  // for ParameterMapPtr
-#include "amdinfer/core/shared_state.hpp"          // for SharedState
-#include "amdinfer/observation/tracing.hpp"        // for startSpan, Span
-#include "amdinfer/servers/http_server.hpp"        // for RequestBuilder
+#include "amdinfer/core/exceptions.hpp"          // for invalid_argument
+#include "amdinfer/core/inference_request.hpp"   // for InferenceRequest
+#include "amdinfer/core/inference_response.hpp"  // for InferenceResponse
+#include "amdinfer/core/request_container.hpp"   // for ParameterMapPtr
+#include "amdinfer/core/shared_state.hpp"        // for SharedState
+#include "amdinfer/observation/tracing.hpp"      // for startSpan, Span
+#include "amdinfer/servers/http_server.hpp"      // for RequestBuilder
 
 using drogon::HttpRequestPtr;
 using drogon::WebSocketConnectionPtr;

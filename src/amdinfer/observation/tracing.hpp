@@ -73,7 +73,7 @@ class Trace final {
                     const opentelemetry::common::AttributeValue& value);
 
   /// set all parameters as attributes in the active span in the trace
-  void setAttributes(ParameterMap* parameters);
+  void setAttributes(const ParameterMap& parameters);
 
   /// ends all spans except the last one and returns its context for propagation
   StringMap propagate();

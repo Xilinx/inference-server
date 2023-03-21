@@ -16,7 +16,11 @@
 add_subdirectory(memory_pool)
 
 set(base_targets
-    predict_api
+    inference_request
+    inference_response
+    inference_tensor
+    tensor
+    model_metadata
     endpoints
     worker_info
     data_types
@@ -38,6 +42,16 @@ target_include_directories(
 target_link_libraries(model_repository INTERFACE efsw lib_config)
 add_dependencies(model_repository lib_config)
 
+target_link_libraries(inference_tensor INTERFACE $<TARGET_OBJECTS:tensor>)
+target_link_libraries(
+  inference_request INTERFACE inference_tensor
+                              $<TARGET_OBJECTS:inference_tensor>
+)
+target_link_libraries(
+  inference_response INTERFACE inference_tensor
+                               $<TARGET_OBJECTS:inference_tensor>
+)
+
 target_link_libraries(shared_state INTERFACE Jsoncpp_lib)
 
 if(${AMDINFER_ENABLE_VITIS})
@@ -46,7 +60,7 @@ if(${AMDINFER_ENABLE_VITIS})
 endif()
 
 if(${AMDINFER_ENABLE_GRPC})
-  amdinfer_add_protobuf_target(lib_grpc predict_api.proto ON)
+  amdinfer_add_protobuf_target(lib_grpc inference.proto ON)
 endif()
 
 add_library(core INTERFACE)

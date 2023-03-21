@@ -144,7 +144,7 @@ std::string load(const amdinfer::Client* client, const Args& args) {
   parameters.put("input_size", args.input_size);
   parameters.put("output_classes", args.output_classes);
   parameters.put("batch_size", args.batch_size);
-  return client->workerLoad("ptzendnn", &parameters);
+  return client->workerLoad("ptzendnn", parameters);
 }
 
 /**

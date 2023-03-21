@@ -18,15 +18,15 @@
  * @brief Implements the fake predict api InferenceRequest
  */
 
-#include "amdinfer/core/predict_api.hpp"  // for InferenceRequestInput
+#include "amdinfer/core/fake_inference_request.hpp"  // for FakeInferenceRequest
 
 #include <cstddef>  // for size_t
 #include <memory>   // for make_unique
 #include <string>   // for string
 #include <vector>   // for vector
 
-#include "amdinfer/core/fake_predict_api.hpp"  // for FakeInferenceRequest
-#include "amdinfer/declarations.hpp"           // for BufferRawPtrs
+#include "amdinfer/core/inference_request.hpp"  // for InferenceRequestInput
+#include "amdinfer/declarations.hpp"            // for BufferRawPtrs
 
 namespace amdinfer {
 
@@ -35,7 +35,6 @@ FakeInferenceRequest::FakeInferenceRequest(
   std::vector<size_t>& input_offsets, const BufferRawPtrs& output_buffers,
   std::vector<size_t>& output_offsets) {
   this->id_ = "";
-  this->parameters_ = std::make_unique<ParameterMap>();
   this->callback_ = nullptr;
 
   this->inputs_.emplace_back();
@@ -50,7 +49,6 @@ FakeInferenceRequest::FakeInferenceRequest(
 
 FakeInferenceRequest::FakeInferenceRequest() {
   this->id_ = "";
-  this->parameters_ = std::make_unique<ParameterMap>();
   this->callback_ = nullptr;
 
   this->inputs_.emplace_back();

@@ -88,9 +88,9 @@ inline std::string load(const amdinfer::NativeClient& client, int workers) {
   parameters.put("share", false);
 
   std::string endpoint;
-  endpoint = client.workerLoad("AksDetect", &parameters);
+  endpoint = client.workerLoad("AksDetect", parameters);
   for (int i = 0; i < workers - 1; i++) {
-    const auto new_endpoint = client.workerLoad("AksDetect", &parameters);
+    const auto new_endpoint = client.workerLoad("AksDetect", parameters);
     assert(endpoint == new_endpoint);
   }
   return endpoint;

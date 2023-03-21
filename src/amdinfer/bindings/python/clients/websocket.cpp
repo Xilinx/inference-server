@@ -25,6 +25,9 @@
 #include <pybind11/stl.h>       // IWYU pragma: keep
 
 #include "amdinfer/bindings/python/helpers/docstrings.hpp"  // for DOCS
+#include "amdinfer/core/inference_request.hpp"   // for InferenceRequest
+#include "amdinfer/core/inference_response.hpp"  // for InferenceResponse
+#include "amdinfer/core/parameters.hpp"
 
 namespace py = pybind11;
 
@@ -50,12 +53,12 @@ void wrapWebSocketClient(py::module_ &m) {
     .def("modelMetadata", &WebSocketClient::modelMetadata, py::arg("model"),
          DOCS(WebSocketClient, modelMetadata))
     .def("modelLoad", &WebSocketClient::modelLoad, py::arg("model"),
-         py::arg("parameters") = static_cast<ParameterMap *>(nullptr),
+         py::arg("parameters") = ParameterMap(),
          DOCS(WebSocketClient, modelLoad))
     .def("modelUnload", &WebSocketClient::modelUnload, py::arg("model"),
          DOCS(WebSocketClient, modelUnload))
     .def("workerLoad", &WebSocketClient::workerLoad, py::arg("model"),
-         py::arg("parameters") = static_cast<ParameterMap *>(nullptr),
+         py::arg("parameters") = ParameterMap(),
          DOCS(WebSocketClient, workerLoad))
     .def("workerUnload", &WebSocketClient::workerUnload, py::arg("model"),
          DOCS(WebSocketClient, workerUnload))

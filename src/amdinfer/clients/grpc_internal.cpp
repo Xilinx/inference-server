@@ -31,38 +31,41 @@
 #include <variant>  // for visit
 #include <vector>   // for vector, _Bit_reference
 
-#include "amdinfer/build_options.hpp"              // for AMDINFER_ENABLE_LO...
-#include "amdinfer/core/data_types.hpp"            // for DataType, mapTypeToStr
-#include "amdinfer/core/predict_api_internal.hpp"  // for ParameterMap
-#include "amdinfer/declarations.hpp"               // for InferenceResponseOu...
-#include "amdinfer/observation/observer.hpp"       // for kNumTraceData
-#include "amdinfer/util/traits.hpp"                // IWYU pragma: keep
-#include "predict_api.pb.h"                        // for ModelInferResponse_...
+#include "amdinfer/build_options.hpp"            // for AMDINFER_ENABLE_LO...
+#include "amdinfer/core/data_types.hpp"          // for DataType, mapTypeToStr
+#include "amdinfer/core/inference_request.hpp"   // for InferenceRequest
+#include "amdinfer/core/inference_response.hpp"  // for InferenceResponse
+#include "amdinfer/core/model_metadata.hpp"      // for ModelMetadata
+#include "amdinfer/core/request_container.hpp"   // for ParameterMap
+#include "amdinfer/declarations.hpp"             // for InferenceResponseOu...
+#include "amdinfer/observation/observer.hpp"     // for kNumTraceData
+#include "amdinfer/util/traits.hpp"              // IWYU pragma: keep
+#include "inference.pb.h"                        // for ModelInferResponse_...
 
 namespace amdinfer {
 
 void mapProtoToParameters(
   const google::protobuf::Map<std::string, inference::InferParameter>& params,
-  ParameterMap* parameters) {
+  ParameterMap& parameters) {
   using ParameterType = inference::InferParameter::ParameterChoiceCase;
   for (const auto& [key, value] : params) {
     auto type = value.parameter_choice_case();
     switch (type) {
       case ParameterType::kBoolParam: {
-        parameters->put(key, value.bool_param());
+        parameters.put(key, value.bool_param());
         break;
       }
       case ParameterType::kInt64Param: {
         // TODO(varunsh): parameters should switch to uint64?
-        parameters->put(key, static_cast<int>(value.int64_param()));
+        parameters.put(key, static_cast<int>(value.int64_param()));
         break;
       }
       case ParameterType::kDoubleParam: {
-        parameters->put(key, value.double_param());
+        parameters.put(key, value.double_param());
         break;
       }
       case ParameterType::kStringParam: {
-        parameters->put(key, value.string_param());
+        parameters.put(key, value.string_param());
         break;
       }
       default: {
@@ -73,18 +76,12 @@ void mapProtoToParameters(
   }
 }
 
-ParameterMapPtr mapProtoToParameters(
+ParameterMap mapProtoToParameters(
   const google::protobuf::Map<std::string, inference::InferParameter>& params) {
-  auto parameters = std::make_shared<ParameterMap>();
-  mapProtoToParameters(params, parameters.get());
+  ParameterMap parameters;
+  mapProtoToParameters(params, parameters);
 
   return parameters;
-}
-
-void mapProtoToParameters(
-  const google::protobuf::Map<std::string, inference::InferParameter>& params,
-  ParameterMap& parameters) {
-  mapProtoToParameters(params, &parameters);
 }
 
 // refer to cppreference for std::visit
@@ -148,11 +145,10 @@ void mapRequestToProto(const InferenceRequest& request,
                      "Mapping the InferenceRequest to proto object");
   grpc_request.set_id(request.getID());
 
-  if (const auto* parameters = request.getParameters(); parameters != nullptr) {
-    auto params = parameters->data();
-    auto* grpc_parameters = grpc_request.mutable_parameters();
-    mapParametersToProto(params, grpc_parameters);
-  }
+  const auto& parameters = request.getParameters();
+  auto params = parameters.data();
+  auto* grpc_parameters = grpc_request.mutable_parameters();
+  mapParametersToProto(params, grpc_parameters);
 
   const auto& inputs = request.getInputs();
   for (const auto& input : inputs) {
@@ -167,7 +163,7 @@ void mapRequestToProto(const InferenceRequest& request,
     }
     auto datatype = input.getDatatype();
     tensor->set_datatype(datatype.str());
-    mapParametersToProto(input.getParameters()->data(),
+    mapParametersToProto(input.getParameters().data(),
                          tensor->mutable_parameters());
 
     switchOverTypes(AddDataToTensor(), input.getDatatype(), input.getData(),
@@ -265,7 +261,7 @@ void mapModelMetadataToProto(const ModelMetadata& metadata,
   for (const auto& input : inputs) {
     auto* tensor = resp.add_inputs();
     tensor->set_name(input.getName());
-    tensor->set_datatype(input.getDataType().str());
+    tensor->set_datatype(input.getDatatype().str());
     const auto& shape = input.getShape();
     for (const auto& i : shape) {
       tensor->add_shape(i);
@@ -275,7 +271,7 @@ void mapModelMetadataToProto(const ModelMetadata& metadata,
   for (const auto& output : outputs) {
     auto* tensor = resp.add_outputs();
     tensor->set_name(output.getName());
-    tensor->set_datatype(output.getDataType().str());
+    tensor->set_datatype(output.getDatatype().str());
     const auto& shape = output.getShape();
     for (const auto& i : shape) {
       tensor->add_shape(i);
