@@ -61,7 +61,7 @@ class EchoParamFixture : public testing::TestWithParam<Params> {
 
     if (params.add_outputs) {
       InferenceRequestOutput output;
-      output.setName("echo");
+      output.setName("");
       if (params.add_input_parameters) {
         ParameterMap parameters;
         parameters.put("key", "another_value");
@@ -102,7 +102,6 @@ class EchoParamFixture : public testing::TestWithParam<Params> {
       const auto* data = static_cast<uint32_t*>(output.getData());
       EXPECT_EQ(data[0], golden_outputs[0]);
       EXPECT_EQ(output.getDatatype(), DataType::Uint32);
-      // TODO(varunsh): output names should match from request
       EXPECT_EQ(output.getName(), "");
       EXPECT_TRUE(output.getParameters().empty());
       auto shape = output.getShape();
@@ -111,8 +110,7 @@ class EchoParamFixture : public testing::TestWithParam<Params> {
     }
 
     if (add_id) {
-      // TODO(varunsh): ID should be original ID from request
-      EXPECT_EQ(response.getID(), "");
+      EXPECT_EQ(response.getID(), "hello_world");
     }
   }
 

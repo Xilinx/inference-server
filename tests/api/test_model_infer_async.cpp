@@ -53,7 +53,7 @@ void test(const Client* client) {
 
     EXPECT_FALSE(response.isError());
     EXPECT_EQ(response.getID(), "");
-    EXPECT_EQ(response.getModel(), "Responder");
+    EXPECT_EQ(response.getModel(), "echo");
 
     auto outputs = response.getOutputs();
     EXPECT_EQ(outputs.size(), 1);

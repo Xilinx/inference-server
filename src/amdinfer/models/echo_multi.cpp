@@ -70,9 +70,12 @@ void run(amdinfer::Batch* batch, amdinfer::Batch* new_batch) {
     const auto& new_request = new_batch->getRequest(j);
     new_request->setCallback(req->getCallback());
 
-    // new_request->setID(req->getID());
+    new_request->setID(req->getID());
     const auto& inputs = req->getInputs();
-    // auto outputs = req->getOutputs();
+    const auto outputs = req->getOutputs();
+    for (const auto& output : outputs) {
+      new_request->addOutputTensor(output);
+    }
 
     std::vector<int> args;
     const auto input_num = amdinfer::util::containerSum(kInputLengths);
