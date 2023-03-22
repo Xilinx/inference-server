@@ -22,23 +22,27 @@
 #include "amdinfer/amdinfer.hpp"                // for NativeClient, GrpcClient
 #include "amdinfer/testing/gtest_fixtures.hpp"  // for AssertionResult, Suite...
 
-bool isReady(amdinfer::Client* client, const std::string& endpoint) {
+namespace amdinfer {
+
+bool isReady(const Client* client, const std::string& endpoint) {
   try {
     return client->modelReady(endpoint);
-  } catch (const amdinfer::bad_status&) {
+  } catch (const bad_status&) {
     return false;
   }
 }
 
-void test(amdinfer::Client* client) {
-  const std::string worker = "echo";
+void test(const Client* client) {
+  const std::string worker = "cplusplus";
+  ParameterMap parameters;
+  parameters.put("model", "echo");
 
   auto models_0 = client->modelList();
   EXPECT_TRUE(models_0.empty());
 
   EXPECT_FALSE(client->modelReady(worker));
 
-  const auto endpoint = client->workerLoad(worker, {});
+  const auto endpoint = client->workerLoad(worker, parameters);
   EXPECT_EQ(endpoint, worker);
 
   // arbitrarily set to 10ms
@@ -69,7 +73,7 @@ TEST_F(GrpcFixture, ModelReady) { test(client_.get()); }
 
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST_F(BaseFixture, ModelReady) {
-  amdinfer::NativeClient client(&server_);
+  NativeClient client(&server_);
   test(&client);
 }
 
@@ -77,3 +81,5 @@ TEST_F(BaseFixture, ModelReady) {
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST_F(HttpFixture, ModelReady) { test(client_.get()); }
 #endif
+
+}  // namespace amdinfer

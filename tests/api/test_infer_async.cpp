@@ -28,8 +28,12 @@ namespace amdinfer {
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST_F(HttpFixture, Ordered) {
   NativeClient client(&server_);
-  auto endpoint = client.workerLoad("echo", {});
-  EXPECT_EQ(endpoint, "echo");
+  ParameterMap parameters;
+  parameters.put("model", "echo");
+  Chain chain{{"cplusplus"}, {parameters}};
+  chain.load(&client);
+  const auto& endpoint = chain.get();
+  EXPECT_EQ(endpoint, "cplusplus");
 
   std::vector<uint32_t> img_data;
   const auto shape = {1UL};
@@ -47,11 +51,13 @@ TEST_F(HttpFixture, Ordered) {
     reqs.push_back(request);
   }
 
-  auto resps = inferAsyncOrdered(&client, "echo", reqs);
+  auto resps = inferAsyncOrdered(&client, endpoint, reqs);
   EXPECT_EQ(resps.size(), data_size);
   for (const auto& resp : resps) {
     EXPECT_FALSE(resp.isError());
   }
+
+  chain.unload(&client);
 }
 #endif
 

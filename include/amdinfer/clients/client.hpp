@@ -32,6 +32,7 @@
 namespace amdinfer {
 
 class ParameterMap;
+class Endpoint;
 
 /**
  * @brief The base Client class defines the set of methods that all client
@@ -159,6 +160,22 @@ class Client {
   Client();
 };
 
+class Chain {
+ public:
+  Chain(std::vector<std::string> workers, std::vector<ParameterMap> parameters);
+
+  const std::string& get() const&;
+  std::string get() &&;
+
+  void load(const Client* client);
+  void unload(const Client* client);
+
+ private:
+  std::vector<std::string> workers_;
+  std::vector<ParameterMap> parameters_;
+  std::vector<std::string> endpoints_;
+};
+
 /**
  * @brief Checks if the server has a certain extension
  *
@@ -180,6 +197,13 @@ void waitUntilServerReady(const Client* client);
  * @param model the model/worker to wait for
  */
 void waitUntilModelReady(const Client* client, const std::string& model);
+/**
+ * @brief Blocks until the named model/worker is not ready
+ *
+ * @param client a pointer to a client object
+ * @param model the model/worker to wait for
+ */
+void waitUntilModelNotReady(const Client* client, const std::string& model);
 
 /**
  * @brief Makes inference requests in parallel to the specified model. All

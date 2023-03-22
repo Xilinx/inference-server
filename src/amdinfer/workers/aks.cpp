@@ -161,7 +161,7 @@ void Aks::doRun(BatchPtrQueue* input_queue) {
 
         std::vector<std::unique_ptr<vart::TensorBuffer>> v;
         v.emplace_back(std::make_unique<AKS::AksTensorBuffer>(
-          xir::Tensor::create("aks-echo", {1}, xir::create_data_type<int>())));
+          xir::Tensor::create("aks", {1}, xir::create_data_type<int>())));
 
         auto* data_in_ptr = reinterpret_cast<float*>(v[0]->data().first);
         data_in_ptr[0] = value;

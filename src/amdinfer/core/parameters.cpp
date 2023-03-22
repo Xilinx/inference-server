@@ -153,8 +153,6 @@ std::byte *ParameterMap::serialize(std::byte *data_out) const {
  * @tparam Ts: the types of the variant. Order matters!
  * @param i index of the variant type to create
  * @return std::variant<Ts...>
- *
- * https://www.reddit.com/r/cpp/comments/f8cbzs/comment/fimjm2f/?context=3
  */
 template <typename... Ts>
 [[nodiscard]] std::variant<Ts...> expandType(std::size_t i) {

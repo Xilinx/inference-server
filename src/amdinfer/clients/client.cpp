@@ -46,6 +46,50 @@ void initializeClientLogging() {
 
 Client::Client() { initializeClientLogging(); }
 
+Chain::Chain(std::vector<std::string> workers,
+             std::vector<ParameterMap> parameters) {
+  if (workers.size() != parameters.size()) {
+    throw invalid_argument("The number of workers and parameters must match");
+  }
+  workers_ = std::move(workers);
+  workers_.emplace_back("responder");
+  parameters_ = std::move(parameters);
+  parameters_.emplace_back();
+  endpoints_.resize(workers_.size());
+}
+
+const std::string& Chain::get() const& { return endpoints_.front(); }
+
+std::string Chain::get() && { return std::move(endpoints_.front()); }
+
+void Chain::load(const Client* client) {
+  assert(workers_.size() == parameters_.size());
+  assert(workers_.size() == endpoints_.size());
+
+  std::string next;
+  // reverse iterate through vectors using "goes to" operator
+  for (auto i = workers_.size(); i-- > 0;) {
+    const auto& worker = workers_.at(i);
+    auto& parameters = parameters_.at(i);
+
+    if (!next.empty()) {
+      parameters.put("next", next);
+    }
+    auto endpoint = client->workerLoad(worker, parameters);
+    next = endpoint;
+    endpoints_.at(i) = std::move(endpoint);
+    waitUntilModelReady(client, next);
+  }
+}
+
+void Chain::unload(const Client* client) {
+  const auto end = endpoints_.rend();
+  for (auto it = endpoints_.rbegin(); it != end; ++it) {
+    client->workerUnload(*it);
+    waitUntilModelNotReady(client, *it);
+  }
+}
+
 bool serverHasExtension(const Client* client, const std::string& extension) {
   auto metadata = client->serverMetadata();
   return metadata.extensions.find(extension) != metadata.extensions.end();
@@ -65,8 +109,21 @@ void waitUntilServerReady(const Client* client) {
 
 void waitUntilModelReady(const Client* client, const std::string& model) {
   bool ready = false;
+  // arbitrarily set to 1ms
+  const auto sleep_time = std::chrono::milliseconds(1);
   while (!ready) {
     ready = client->modelReady(model);
+    std::this_thread::sleep_for(sleep_time);
+  }
+}
+
+void waitUntilModelNotReady(const Client* client, const std::string& model) {
+  bool ready = true;
+  // arbitrarily set to 1ms
+  const auto sleep_time = std::chrono::milliseconds(1);
+  while (ready) {
+    ready = client->modelReady(model);
+    std::this_thread::sleep_for(sleep_time);
   }
 }
 
