@@ -25,8 +25,7 @@ namespace amdinfer {
 
 void test(const Client* client) {
   std::string worker = "cplusplus";
-  ParameterMap parameters;
-  parameters.put("model", "echo");
+  ParameterMap parameters{{"model"}, {"echo"}};
 
   EXPECT_TRUE(client->modelList().empty());
 

@@ -33,7 +33,7 @@ void test(const Client* client) {
 
   ParameterMap parameters_0;
   parameters_0.put("model", "echo");
-  const auto endpoint = client->workerLoad(worker, parameters_0);
+  const auto endpoint = client->workerLoad(worker, {{"model"}, {"echo"}});
   EXPECT_EQ(endpoint, worker);
   EXPECT_TRUE(client->modelReady(endpoint));
 

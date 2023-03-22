@@ -47,6 +47,10 @@ class ParameterMap : public Serializable {
   using ConstIterator = Container::const_iterator;
 
  public:
+  ParameterMap() = default;
+  ParameterMap(const std::vector<std::string> &keys,
+               const std::vector<std::string> &values);
+
   /**
    * @brief Puts in a key-value pair
    *

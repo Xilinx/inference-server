@@ -34,15 +34,13 @@ bool isReady(const Client* client, const std::string& endpoint) {
 
 void test(const Client* client) {
   const std::string worker = "cplusplus";
-  ParameterMap parameters;
-  parameters.put("model", "echo");
 
   auto models_0 = client->modelList();
   EXPECT_TRUE(models_0.empty());
 
   EXPECT_FALSE(client->modelReady(worker));
 
-  const auto endpoint = client->workerLoad(worker, parameters);
+  const auto endpoint = client->workerLoad(worker, {{"model"}, {"echo"}});
   EXPECT_EQ(endpoint, worker);
 
   // arbitrarily set to 10ms

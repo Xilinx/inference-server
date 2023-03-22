@@ -26,9 +26,22 @@
 #include <type_traits>  // for add_const<>::type, decay_t
 #include <vector>       // for vector
 
-#include "amdinfer/util/memory.hpp"  // for copy
+#include "amdinfer/core/exceptions.hpp"  // for invalid_argument
+#include "amdinfer/util/memory.hpp"      // for copy
 
 namespace amdinfer {
+
+ParameterMap::ParameterMap(const std::vector<std::string> &keys,
+                           const std::vector<std::string> &values) {
+  if (keys.size() != values.size()) {
+    throw invalid_argument("Keys and values sizes must match");
+  }
+
+  const auto size = keys.size();
+  for (auto i = 0U; i < size; ++i) {
+    ParameterMap::put(keys.at(i), values.at(i));
+  }
+}
 
 void ParameterMap::put(const std::string &key, bool value) {
   this->parameters_.try_emplace(key, value);

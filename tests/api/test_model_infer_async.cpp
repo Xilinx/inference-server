@@ -25,9 +25,7 @@
 namespace amdinfer {
 
 void test(const Client* client) {
-  ParameterMap parameters;
-  parameters.put("model", "echo");
-  Chain chain{{"cplusplus"}, {parameters}};
+  Chain chain{{"cplusplus"}, {{{"model"}, {"echo"}}}};
   chain.load(client);
   const auto& endpoint = chain.get();
   EXPECT_EQ(endpoint, "cplusplus");

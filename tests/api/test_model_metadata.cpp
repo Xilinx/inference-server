@@ -26,13 +26,11 @@ namespace amdinfer {
 
 void test(const Client* client) {
   const std::string model = "cplusplus";
-  ParameterMap parameters;
-  parameters.put("model", "echo");
 
   EXPECT_TRUE(client->modelList().empty());
 
   // load one worker
-  client->workerLoad(model, parameters);
+  client->workerLoad(model, {{"model"}, {"echo"}});
 
   EXPECT_TRUE(client->modelReady(model));
 

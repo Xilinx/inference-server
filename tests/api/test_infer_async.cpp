@@ -28,9 +28,7 @@ namespace amdinfer {
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST_F(HttpFixture, Ordered) {
   NativeClient client(&server_);
-  ParameterMap parameters;
-  parameters.put("model", "echo");
-  Chain chain{{"cplusplus"}, {parameters}};
+  Chain chain{{"cplusplus"}, {{{"model"}, {"echo"}}}};
   chain.load(&client);
   const auto& endpoint = chain.get();
   EXPECT_EQ(endpoint, "cplusplus");
