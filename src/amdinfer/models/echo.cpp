@@ -79,6 +79,8 @@ void run(amdinfer::Batch* batch, amdinfer::Batch* new_batch) {
                            static_cast<std::byte*>(new_inputs.at(i).getData()));
     }
 
+    new_batch->setModel(j, "echo");
+
 #ifdef AMDINFER_ENABLE_TRACING
     trace->endSpan();
     new_batch->addTrace(std::move(trace));

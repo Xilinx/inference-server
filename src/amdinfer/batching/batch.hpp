@@ -25,8 +25,6 @@
 
 namespace amdinfer {
 
-class WorkerInfo;
-
 /**
  * @brief The Batch is what the batcher produces and pushes to the workers. It
  * represents the requests, the buffers associated with the request and other
@@ -50,6 +48,9 @@ class Batch {
   [[nodiscard]] size_t getInputSize() const;
   [[nodiscard]] size_t getOutputSize() const;
 
+  const std::string& getModel(size_t index) const;
+  void setModel(size_t index, std::string model);
+
 #ifdef AMDINFER_ENABLE_TRACING
   void addTrace(TracePtr trace);
   TracePtr& getTrace(size_t index);
@@ -63,10 +64,10 @@ class Batch {
   [[nodiscard]] auto end() const { return requests_.end(); }
 
  private:
-  const WorkerInfo* worker_;
   std::vector<InferenceRequestPtr> requests_;
   std::vector<BufferPtr> input_buffers_;
   std::vector<BufferPtr> output_buffers_;
+  std::vector<std::string> models_;
 #ifdef AMDINFER_ENABLE_TRACING
   std::vector<TracePtr> traces_;
 #endif

@@ -97,6 +97,8 @@ void run(amdinfer::Batch* batch, amdinfer::Batch* new_batch) {
       }
     }
 
+    new_batch->setModel(j, "echo_multi");
+
 #ifdef AMDINFER_ENABLE_TRACING
     trace->endSpan();
     new_batch->addTrace(std::move(trace));

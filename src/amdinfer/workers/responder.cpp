@@ -134,7 +134,7 @@ void Responder::doRun(BatchPtrQueue* input_queue) {
 #endif
       InferenceResponse resp;
       resp.setID(req->getID());
-      resp.setModel("Responder");
+      resp.setModel(batch->getModel(j));
       auto inputs = req->getInputs();
       auto outputs = req->getOutputs();
       for (unsigned int i = 0; i < inputs.size(); i++) {
