@@ -42,7 +42,9 @@ std::unique_ptr<Buffer> MemoryPool::get(
   size_t batch_size) const {
   for (const auto& allocator : allocators) {
     try {
-      return allocators_.at(allocator)->get(tensor, batch_size);
+      auto buffer = allocators_.at(allocator)->get(tensor, batch_size);
+      buffer->setPool(this);
+      return buffer;
     } catch (const runtime_error&) {
       continue;
     }

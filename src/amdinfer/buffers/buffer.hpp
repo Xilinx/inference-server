@@ -33,6 +33,8 @@
 
 namespace amdinfer {
 
+class MemoryPool;
+
 /**
  * @brief The base buffer class. Buffer implementations should extend this class
  * and override the methods.
@@ -93,8 +95,12 @@ class Buffer {
 
   MemoryAllocators getAllocator() const;
 
+  void setPool(const MemoryPool* pool);
+  const MemoryPool* getPool() const;
+
  private:
   MemoryAllocators allocator_;
+  const MemoryPool* pool_ = nullptr;
 };
 
 }  // namespace amdinfer

@@ -17,8 +17,8 @@
  * @brief
  */
 
-#ifndef GUARD_AMDINFER_BUFFERS_CPU
-#define GUARD_AMDINFER_BUFFERS_CPU
+#ifndef GUARD_AMDINFER_BUFFERS_VECTOR
+#define GUARD_AMDINFER_BUFFERS_VECTOR
 
 #include <cstddef>  // for size_t, byte
 #include <vector>   // for vector
@@ -35,15 +35,14 @@ enum class MemoryAllocators;
  * @brief CpuBuffer uses vectors for storing data
  *
  */
-class CpuBuffer : public Buffer {
+class VectorBuffer : public Buffer {
  public:
   /**
    * @brief Construct a new Vector Buffer object
    *
-   * @param data non-owning pointer to data
-   * @param data_type type of memory allocator
+   * @param size size of the buffer in bytes
    */
-  CpuBuffer(void* data, MemoryAllocators allocator);
+  explicit VectorBuffer(size_t size);
 
   /**
    * @brief Returns a pointer to the underlying data
@@ -53,9 +52,9 @@ class CpuBuffer : public Buffer {
   void* data(size_t offset) override;
 
  private:
-  std::byte* data_;
+  std::vector<std::byte> data_;
 };
 
 }  // namespace amdinfer
 
-#endif  // GUARD_AMDINFER_BUFFERS_CPU
+#endif  // GUARD_AMDINFER_BUFFERS_VECTOR

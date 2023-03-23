@@ -250,8 +250,9 @@ void CPlusPlus::doRun(BatchPtrQueue* input_queue) {
       MetricCounterIDs::PipelineIngressWorker);
 #endif
 
-    auto new_batch = std::make_unique<Batch>();
+    BatchPtr new_batch;
     if (!(input_tensors_.empty() || output_tensors_.empty())) {
+      new_batch = std::make_unique<Batch>();
       std::vector<BufferPtr> input_buffers;
       input_buffers.reserve(output_tensors_.size());
       const auto batch_size = batch->size();
@@ -279,9 +280,11 @@ void CPlusPlus::doRun(BatchPtrQueue* input_queue) {
 
       runModel(batch.get(), new_batch.get());
     } else {
-      // TODO(varunsh): support this use case
-      throw invalid_argument(
-        "Cannot run a model with an unknown tensor shapes");
+      auto* run_ptr = getFunction(handle_, "run");
+      auto* runModel =
+        reinterpret_cast<amdinfer::BatchPtr (*)(amdinfer::Batch*)>(run_ptr);
+
+      new_batch = runModel(batch.get());
     }
 
     assert(next_ != nullptr);

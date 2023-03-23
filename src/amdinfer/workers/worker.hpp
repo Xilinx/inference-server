@@ -142,10 +142,13 @@ class Worker {
   [[nodiscard]] const Logger& getLogger() const { return logger_; };
 #endif
 
-  void returnInputBuffers(std::unique_ptr<Batch> batch) {
+  void returnInputBuffers(std::unique_ptr<Batch> batch) const {
     auto buffers = batch->getInputBuffers();
     for (auto& buffer : buffers) {
-      pool_->put(std::move(buffer));
+      const auto* pool = buffer->getPool();
+      if (pool != nullptr) {
+        pool->put(std::move(buffer));
+      }
     }
   }
 

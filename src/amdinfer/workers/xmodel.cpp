@@ -344,7 +344,10 @@ void XModel::doRun(BatchPtrQueue* input_queue) {
 #endif
         }
         for (auto& buffer : input_buffers) {
-          pool_->put(std::move(buffer));
+          const auto* pool = buffer->getPool();
+          if (pool != nullptr) {
+            pool->put(std::move(buffer));
+          }
         }
         thread_pool_size--;
       });

@@ -18,6 +18,7 @@
  */
 
 #include "amdinfer/batching/batch.hpp"
+#include "amdinfer/buffers/vector.hpp"
 #include "amdinfer/core/inference_request.hpp"
 #include "amdinfer/core/inference_response.hpp"
 #include "amdinfer/core/parameters.hpp"
@@ -47,27 +48,41 @@ std::vector<amdinfer::Tensor> getInputs() {
 }
 
 std::vector<amdinfer::Tensor> getOutputs() {
-  std::vector<amdinfer::Tensor> output_tensors;
-  output_tensors.reserve(kOutputTensors);
-  for (auto i = 0; i < kOutputTensors; ++i) {
-    std::vector<size_t> shape = {kOutputLengths.at(i)};
-    output_tensors.emplace_back("output" + std::to_string(i), shape,
-                                amdinfer::DataType::Uint32);
-  }
-  return output_tensors;
+  // intentionally return an empty shape, indicating an unknown output tensor
+  // size even though it is known in this case. This forces the worker to use
+  // different logic to invoke the run method.
+  return {};
 }
 
-void run(amdinfer::Batch* batch, amdinfer::Batch* new_batch) {
+amdinfer::BatchPtr run(amdinfer::Batch* batch) {
   amdinfer::Logger logger{amdinfer::Loggers::Server};
 
+  auto new_batch = std::make_unique<amdinfer::Batch>();
   const auto batch_size = batch->size();
+  const auto data_size = amdinfer::DataType("Uint32").size();
+
+  std::vector<amdinfer::BufferPtr> input_buffers;
+  input_buffers.reserve(kOutputTensors);
+  for (auto i = 0; i < kOutputTensors; ++i) {
+    input_buffers.emplace_back(std::make_unique<amdinfer::VectorBuffer>(
+      kOutputLengths.at(i) * batch_size * data_size));
+  }
+
   for (unsigned int j = 0; j < batch_size; j++) {
     const auto& req = batch->getRequest(j);
 #ifdef AMDINFER_ENABLE_TRACING
     auto& trace = batch->getTrace(j);
     trace->startSpan("echoMulti");
 #endif
-    const auto& new_request = new_batch->getRequest(j);
+    auto new_request = std::make_shared<amdinfer::InferenceRequest>();
+    for (auto i = 0; i < kOutputTensors; ++i) {
+      std::vector<size_t> shape = {kOutputLengths.at(i)};
+      auto* data_ptr =
+        input_buffers.at(i)->data(j * kOutputLengths.at(i) * data_size);
+      new_request->addInputTensor(data_ptr, shape, amdinfer::DataType::Uint32,
+                                  "output" + std::to_string(i));
+    }
+
     new_request->setCallback(req->getCallback());
 
     new_request->setID(req->getID());
@@ -100,6 +115,7 @@ void run(amdinfer::Batch* batch, amdinfer::Batch* new_batch) {
       }
     }
 
+    new_batch->addRequest(new_request);
     new_batch->setModel(j, "echo_multi");
 
 #ifdef AMDINFER_ENABLE_TRACING
@@ -111,6 +127,10 @@ void run(amdinfer::Batch* batch, amdinfer::Batch* new_batch) {
     new_batch->addTime(batch->getTime(j));
 #endif
   }
+
+  new_batch->setBuffers(std::move(input_buffers), {});
+
+  return new_batch;
 }
 
 }  // extern "C"
