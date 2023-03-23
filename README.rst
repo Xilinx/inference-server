@@ -40,6 +40,35 @@ The AMD Inference Server is integrated with the following libraries out of the g
 * XModel models with `Vitis AI <https://www.xilinx.com/products/design-tools/vitis/vitis-ai.html>`__ on AMD FPGAs
 * A graph of computation including as pre- and post-processing can be written using `AKS <https://github.com/Xilinx/Vitis-AI/tree/v2.5/src/AKS>`__ on AMD FPGAs for end-to-end inference
 
+Quick Start Inference
+----------------------------------------
+
+Quick start requires AMD EPYC CPU::
+
+  # Step 1: Create the example model repository(requires git-lfs)
+  git lfs clone https://github.com/Xilinx/inference-server.git
+  cd inference-server/examples
+  ./fetch_models.sh
+
+  # Step 2: Launch amd-infer server
+  docker run -d --net=host -v ${PWD}/model_repository:/mnt/models:rw amdih/serve:uif1.1_zendnn_amdinfer_0.3.0 amdinfer-server --enable-repository-watcher
+
+  # Step 3: Sending inference request
+  pip install amdinfer
+  cd inference-server/examples/resnet50/
+  python3 tfzendnn.py --endpoint resnet50 --image ../../tests/assets/dog-3619020_640.jpg --labels ./imagenet_classes.txt
+
+  # Inference should return the following
+  Running the TF+ZenDNN example for ResNet50 in Python
+  Waiting until the server is ready...
+  Making inferences...
+  Top 5 classes for ../../tests/assets/dog-3619020_640.jpg:
+    n02112018 Pomeranian
+    n02112350 keeshond
+    n02086079 Pekinese, Pekingese, Peke
+    n02112137 chow, chow chow
+    n02113023 Pembroke, Pembroke Welsh corgi
+
 Learn more
 ----------
 
