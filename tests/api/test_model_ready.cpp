@@ -40,7 +40,8 @@ void test(const Client* client) {
 
   EXPECT_FALSE(client->modelReady(worker));
 
-  const auto endpoint = client->workerLoad(worker, {{"model"}, {"echo"}});
+  const auto endpoint =
+    client->workerLoad(worker, {{"model"}, {std::string{"echo"}}});
   EXPECT_EQ(endpoint, worker);
 
   // arbitrarily set to 10ms

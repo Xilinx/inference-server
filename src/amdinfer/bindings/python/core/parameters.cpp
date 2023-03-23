@@ -42,24 +42,18 @@ void wrapParameterMap(py::module_ &m) {
   using amdinfer::ParameterMap;
 
   py::class_<ParameterMap, std::shared_ptr<ParameterMap>>(m, "ParameterMap")
-    .def(py::init<>(), DOCS(ParameterMap))
-    .def("put",
-         py::overload_cast<const std::string &, bool>(&ParameterMap::put),
-         DOCS(ParameterMap, put))
-    .def("put",
-         py::overload_cast<const std::string &, double>(&ParameterMap::put),
-         DOCS(ParameterMap, put, 2))
-    .def("put",
-         py::overload_cast<const std::string &, int32_t>(&ParameterMap::put),
-         DOCS(ParameterMap, put, 3))
-    .def("put",
-         py::overload_cast<const std::string &, const std::string &>(
-           &ParameterMap::put),
-         DOCS(ParameterMap, put, 4))
+    .def(py::init<>(), DOCS(ParameterMap, ParameterMap))
+    .def(py::init<const std::vector<std::string> &,
+                  const std::vector<Parameter>>(),
+         py::arg("keys"), py::arg("values"),
+         DOCS(ParameterMap, ParameterMap, 2))
     .def(
       "put",
       py::overload_cast<const std::string &, const char *>(&ParameterMap::put),
-      DOCS(ParameterMap, put, 5))
+      DOCS(ParameterMap, put))
+    .def("put",
+         py::overload_cast<const std::string &, Parameter>(&ParameterMap::put),
+         DOCS(ParameterMap, put))
     .def("getBool", &ParameterMap::get<bool>, DOCS(ParameterMap, get))
     .def("getFloat", &ParameterMap::get<double>, DOCS(ParameterMap, get))
     .def("getInt", &ParameterMap::get<int32_t>, DOCS(ParameterMap, get))

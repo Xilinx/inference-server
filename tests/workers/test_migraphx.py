@@ -77,7 +77,9 @@ class TestMigraphx:
     @staticmethod
     def get_config():
         model = "Migraphx"
-        parameters = {"model": amdinfer.testing.getPathToAsset("onnx_resnet50")}
+        parameters = amdinfer.ParameterMap(
+            ["model"], [amdinfer.testing.getPathToAsset("onnx_resnet50")]
+        )
         return (model, parameters)
 
     def send_request(self, request, check_asserts=True):

@@ -32,7 +32,7 @@
 namespace amdinfer {
 
 ParameterMap::ParameterMap(const std::vector<std::string> &keys,
-                           const std::vector<std::string> &values) {
+                           const std::vector<Parameter> &values) {
   if (keys.size() != values.size()) {
     throw invalid_argument("Keys and values sizes must match");
   }
@@ -43,20 +43,8 @@ ParameterMap::ParameterMap(const std::vector<std::string> &keys,
   }
 }
 
-void ParameterMap::put(const std::string &key, bool value) {
-  this->parameters_.try_emplace(key, value);
-}
-
-void ParameterMap::put(const std::string &key, double value) {
-  this->parameters_.try_emplace(key, value);
-}
-
-void ParameterMap::put(const std::string &key, int32_t value) {
-  this->parameters_.try_emplace(key, value);
-}
-
-void ParameterMap::put(const std::string &key, const std::string &value) {
-  this->parameters_.try_emplace(key, value);
+void ParameterMap::put(const std::string &key, Parameter value) {
+  this->parameters_.try_emplace(key, std::move(value));
 }
 
 void ParameterMap::put(const std::string &key, const char *value) {

@@ -48,45 +48,38 @@ class ParameterMap : public Serializable {
 
  public:
   ParameterMap() = default;
+  /**
+   * @brief Construct a new ParameterMap object with initial values. The sizes
+   * of the keys and values vectors must match.
+   *
+   * @details Until C++20, passing const char* to this constructor will convert
+   * it to a bool instead of a string. Explicitly convert any string literals to
+   * a string before passing them to this constructor.
+   *
+   * @param keys
+   * @param values
+   */
   ParameterMap(const std::vector<std::string> &keys,
-               const std::vector<std::string> &values);
+               const std::vector<Parameter> &values);
 
   /**
-   * @brief Puts in a key-value pair
+   * @brief Put in a key-value pair
    *
    * @param key key used to store and retrieve the value
    * @param value value to store
    */
-  void put(const std::string &key, bool value);
+  void put(const std::string &key, Parameter value);
   /**
-   * @brief Puts in a key-value pair
+   * @brief Put in a key-value pair
    *
-   * @param key key used to store and retrieve the value
-   * @param value value to store
-   */
-  void put(const std::string &key, double value);
-  /**
-   * @brief Puts in a key-value pair
+   * @details This overload is needed because C++ converts const char* to bool
+   * instead of string when both types are present in the variant. This behavior
+   * has been fixed in C++20.
    *
-   * @param key key used to store and retrieve the value
-   * @param value value to store
-   */
-  void put(const std::string &key, int32_t value);
-  /**
-   * @brief Puts in a key-value pair
-   *
-   * @param key key used to store and retrieve the value
-   * @param value value to store
-   */
-  void put(const std::string &key, const std::string &value);
-  /**
-   * @brief Puts in a key-value pair
-   *
-   * @param key key used to store and retrieve the value
-   * @param value value to store
+   * @param key
+   * @param value
    */
   void put(const std::string &key, const char *value);
-
   /**
    * @brief Get the named parameter
    *

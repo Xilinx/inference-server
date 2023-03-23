@@ -33,7 +33,8 @@ void test(const Client* client) {
 
   ParameterMap parameters_0;
   parameters_0.put("model", "echo");
-  const auto endpoint = client->workerLoad(worker, {{"model"}, {"echo"}});
+  const auto endpoint =
+    client->workerLoad(worker, {{"model"}, {std::string{"echo"}}});
   EXPECT_EQ(endpoint, worker);
   EXPECT_TRUE(client->modelReady(endpoint));
 

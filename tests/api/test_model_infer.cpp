@@ -23,7 +23,7 @@
 namespace amdinfer {
 
 void test(const Client* client) {
-  Chain chain{{"cplusplus"}, {{{"model"}, {"echo"}}}};
+  Chain chain{{"cplusplus"}, {{{"model"}, {std::string{"echo"}}}}};
   chain.load(client);
   const auto& endpoint = chain.get();
   EXPECT_EQ(endpoint, "cplusplus");

@@ -24,6 +24,7 @@
 #include <pybind11/pybind11.h>  // for module_, sequence, class_, pybind11
 #include <pybind11/stl.h>       // IWYU pragma: keep
 
+#include "amdinfer/bindings/python/helpers/docstrings.hpp"  // for DOCS
 #include "amdinfer/core/inference_request.hpp"   // for InferenceRequest
 #include "amdinfer/core/inference_response.hpp"  // for InferenceResponse
 
@@ -31,7 +32,7 @@ namespace py = pybind11;
 
 namespace amdinfer {
 
-void wrapClient(py::module_ &m) {
+void wrapClient(py::module_& m) {
   py::class_<Client> client{m, "Client"};
 
   m.def("serverHasExtension", &serverHasExtension, py::arg("client"),
@@ -45,6 +46,14 @@ void wrapClient(py::module_ &m) {
   m.def("inferAsyncOrderedBatched", &inferAsyncOrderedBatched,
         py::arg("client"), py::arg("model"), py::arg("requests"),
         py::arg("batch_sizes"));
+
+  py::class_<Chain>{m, "Chain"}
+    .def(py::init<std::vector<std::string>, std::vector<ParameterMap>>(),
+         py::arg("workers"), py::arg("parameters"), DOCS(Chain, Chain))
+    .def("get",
+         static_cast<const std::string& (Chain::*)() const&>(&Chain::get))
+    .def("load", &Chain::load, py::arg("client"))
+    .def("unload", &Chain::unload, py::arg("unload"));
 }
 
 }  // namespace amdinfer

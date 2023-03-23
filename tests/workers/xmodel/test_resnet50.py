@@ -63,7 +63,9 @@ class TestXmodel:
     @staticmethod
     def get_config():
         model = "Xmodel"
-        parameters = {"model": amdinfer.testing.getPathToAsset("u250_resnet50")}
+        parameters = amdinfer.ParameterMap(
+            ["model"], [amdinfer.testing.getPathToAsset("u250_resnet50")]
+        )
         return (model, parameters)
 
     def test_xmodel_0(self):

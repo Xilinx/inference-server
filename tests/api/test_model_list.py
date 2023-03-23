@@ -17,6 +17,8 @@ import time
 
 import pytest
 
+import amdinfer
+
 
 @pytest.mark.usefixtures("server", "assign_client")
 class TestModelList:
@@ -31,25 +33,32 @@ class TestModelList:
         models_0 = self.rest_client.modelList()
         assert len(models_0) == 0
 
-        endpoint = self.rest_client.workerLoad("echo")
-        assert endpoint == "echo"
+        parameters = amdinfer.ParameterMap(["model"], ["echo"])
+        chain = amdinfer.Chain(["cplusplus"], [parameters])
+        chain.load(self.rest_client)
+        endpoint = chain.get()
+        assert endpoint == "cplusplus"
         assert self.rest_client.modelReady(endpoint)
 
         models = self.rest_client.modelList()
-        assert len(models) == 1
+        assert len(models) == 2
         assert models[0] == endpoint
 
-        endpoint_2 = self.rest_client.workerLoad("invertimage")
-        assert endpoint_2 == "invertimage"
+        parameters = amdinfer.ParameterMap(["model"], ["echo_multi"])
+        chain2 = amdinfer.Chain(["cplusplus"], [parameters])
+        chain2.load(self.rest_client)
+        endpoint_2 = chain2.get()
+        assert endpoint_2 == "cplusplus-0"
         assert self.rest_client.modelReady(endpoint_2)
 
         models = self.rest_client.modelList()
-        assert len(models) == 2
+        # one each for echo and echo_multi models + 1 for a shared responder
+        assert len(models) == 3
         assert endpoint in models
         assert endpoint_2 in models
 
-        self.rest_client.modelUnload(endpoint)
-        self.rest_client.modelUnload(endpoint_2)
+        chain.unload(self.rest_client)
+        chain2.unload(self.rest_client)
 
         models_3 = self.rest_client.modelList()
         while len(models_3) > 0:

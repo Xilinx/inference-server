@@ -25,7 +25,7 @@ class TestAks:
     @staticmethod
     def get_config():
         model = "aks"
-        parameters = {"batch_size": 1}
+        parameters = amdinfer.ParameterMap(["batch_size"], [1])
         return (model, parameters)
 
     def test_aks_0(self):

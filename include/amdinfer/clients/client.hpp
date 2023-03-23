@@ -164,7 +164,9 @@ class Chain {
  public:
   Chain(std::vector<std::string> workers, std::vector<ParameterMap> parameters);
 
+  /// Get the endpoint associated with this chain to send it requests
   const std::string& get() const&;
+  /// Get the endpoint associated with this chain to send it requests
   std::string get() &&;
 
   void load(const Client* client);

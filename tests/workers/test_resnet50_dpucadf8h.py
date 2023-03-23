@@ -33,10 +33,12 @@ class TestInferImageResNet50DPUCADF8H:
     @staticmethod
     def get_config():
         model = "resnet50"
-        parameters = {
-            "aks_graph_name": "resnet50",
-            "aks_graph": "${AKS_ROOT}/graph_zoo/graph_tf_resnet_v1_50_u200_u250_amdinfer.json",
-        }
+        parameters = amdinfer.ParameterMap()
+        parameters.put("aks_graph_name", "resnet50")
+        parameters.put(
+            "aks_graph",
+            "${AKS_ROOT}/graph_zoo/graph_tf_resnet_v1_50_u200_u250_amdinfer.json",
+        )
         return (model, parameters)
 
     def send_request(self, request, check_asserts=True):

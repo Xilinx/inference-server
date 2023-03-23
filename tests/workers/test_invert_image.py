@@ -59,7 +59,7 @@ class TestInvertImage:
     @staticmethod
     def get_config():
         model = "InvertImage"
-        parameters = None
+        parameters = amdinfer.ParameterMap()
         return (model, parameters)
 
     def send_request(self, request, image):

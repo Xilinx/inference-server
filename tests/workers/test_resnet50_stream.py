@@ -34,7 +34,7 @@ class TestResnet50Stream:
     @staticmethod
     def get_config():
         model = "Resnet50Stream"
-        parameters = None
+        parameters = amdinfer.ParameterMap()
         return (model, parameters)
 
     def construct_request(self, requested_frames_count):

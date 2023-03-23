@@ -30,7 +30,7 @@ void test(const Client* client) {
   EXPECT_TRUE(client->modelList().empty());
 
   // load one worker
-  client->workerLoad(model, {{"model"}, {"echo"}});
+  client->workerLoad(model, {{"model"}, {std::string{"echo"}}});
 
   EXPECT_TRUE(client->modelReady(model));
 

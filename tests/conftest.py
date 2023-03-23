@@ -220,32 +220,15 @@ def load(request, server):
     request.cls.rest_client = rest_client(request)
     request.cls.ws_client = ws_client(request)
 
-    endpoints = []
-    for worker, params in zip(reversed(test_model), reversed(test_parameters)):
-        parameters = amdinfer.ParameterMap()
-        if params is not None:
-            for key, value in params.items():
-                parameters.put(key, value)
-
-        if endpoints:
-            parameters.put("next", endpoints[-1])
-
-        endpoint = request.cls.rest_client.workerLoad(worker, parameters)
-        endpoints.append(endpoint)
-
-        while not request.cls.rest_client.modelReady(endpoint):
-            time.sleep(1)
+    chain = amdinfer.Chain(test_model, test_parameters)
+    chain.load(request.cls.rest_client)
 
     # update the endpoint with the newest worker in the chain
-    request.cls.endpoint = endpoints[-1]
+    request.cls.endpoint = chain.get()
 
     yield  # perform testing
 
-    for endpoint in reversed(endpoints):
-        request.cls.rest_client.modelUnload(endpoint)
-
-        while request.cls.rest_client.modelReady(endpoint):
-            time.sleep(1)
+    chain.unload(request.cls.rest_client)
 
     request.cls.ws_client = None
     request.cls.rest_client = None

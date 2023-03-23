@@ -14,7 +14,7 @@
 # limitations under the License.
 
 # list(APPEND tests echo)
-set(tests echo)
+set(tests cplusplus)
 
 if(${AMDINFER_ENABLE_AKS})
   list(APPEND tests facedetect)
