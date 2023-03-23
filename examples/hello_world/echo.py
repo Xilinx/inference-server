@@ -20,8 +20,6 @@ detailed commentary on this example.
 """
 
 # +imports
-from time import sleep
-
 import numpy as np
 
 import amdinfer
@@ -43,7 +41,7 @@ def make_request(data):
     request = amdinfer.InferenceRequest()
     # each request has one or more input tensors, depending on the worker/model that's going to process it
     input_0 = amdinfer.InferenceRequestInput()
-    input_0.name = f"input0"
+    input_0.name = "input0"
     input_0.setUint32Data(np.array([data], np.uint32))
     input_0.datatype = amdinfer.DataType.UINT32
     input_0.shape = [1]
@@ -69,8 +67,12 @@ def main():
     # -start server:
     print("Server ready!")
 
-    # +load worker: load the Echo worker which accepts a number, adds 1, and returns the sum
-    endpoint = client.workerLoad("echo")
+    # +load worker: load the worker with a model which accepts a number, adds 1, and returns the sum
+    parameters = amdinfer.ParameterMap()
+    parameters.put("model", "echo")
+    chain = amdinfer.Chain(["cplusplus"], [parameters])
+    chain.load(client)
+    endpoint = chain.get()
     amdinfer.waitUntilModelReady(client, endpoint)
     # -load worker
     print("Model ready!")
@@ -92,6 +94,10 @@ def main():
         assert recv_data[0] == data + 1
     # -validate
     print("Results validated!")
+
+    # +unload: unload the workers in this chain
+    chain.unload(client)
+    # -unload
 
 
 if __name__ == "__main__":
