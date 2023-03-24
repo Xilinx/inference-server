@@ -105,8 +105,9 @@ workers::Worker* getWorker(const std::string& name) {
 }
 
 WorkerInfo::WorkerInfo(const std::string& name, ParameterMap* parameters,
-                       MemoryPool* pool, BatchPtrQueue* next)
-  : next_(next) {
+                       MemoryPool* pool, BatchPtrQueue* next,
+                       const std::vector<MemoryAllocators>& next_allocators)
+  : next_(next), next_allocators_(next_allocators) {
   this->addAndStartWorker(name, parameters, pool);
 }
 
@@ -135,6 +136,7 @@ void WorkerInfo::addAndStartWorker(const std::string& name,
 
   this->batch_size_ = worker->getBatchSize();
   worker->setNext(next_);
+  worker->setNextAllocators(next_allocators_);
 
   if (this->batchers_.empty()) {
     int32_t batcher_count = 1;
@@ -240,6 +242,11 @@ void WorkerInfo::shutdown() {
 ModelMetadata WorkerInfo::getMetadata() const {
   auto* worker_class = workers_.begin()->second;
   return worker_class->getMetadata();
+}
+
+std::vector<MemoryAllocators> WorkerInfo::getAllocators() const {
+  const auto* worker_class = workers_.begin()->second;
+  return worker_class->getAllocators();
 }
 
 }  // namespace amdinfer

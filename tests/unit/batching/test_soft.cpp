@@ -44,7 +44,7 @@ TEST(UnitSoftBatcher, ConstructAndStart) {
   SoftBatcher batcher(&pool);
   batcher.setName("test");
 
-  WorkerInfo fake("", nullptr, &pool, nullptr);
+  WorkerInfo fake("", nullptr, &pool, nullptr, {});
   batcher.start({MemoryAllocators::Cpu});
 
   batcher.enqueue(nullptr);

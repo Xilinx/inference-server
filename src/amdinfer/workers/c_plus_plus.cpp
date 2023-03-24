@@ -253,7 +253,7 @@ void CPlusPlus::doRun(BatchPtrQueue* input_queue, const MemoryPool* pool) {
       const auto batch_size = batch->size();
       for (const auto& tensor : output_tensors_) {
         input_buffers.push_back(
-          pool->get({MemoryAllocators::Cpu}, tensor, batch_size));
+          pool->get(next_allocators_, tensor, batch_size));
       }
       for (auto i = 0U; i < batch_size; ++i) {
         auto new_request = std::make_shared<InferenceRequest>();

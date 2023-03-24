@@ -242,14 +242,16 @@ std::string Endpoints::unsafeLoad(const std::string& worker,
   try {
     if (worker_info == nullptr) {
       BatchPtrQueue* next = nullptr;
+      std::vector<MemoryAllocators> next_allocators;
       if (parameters->has("next")) {
         auto next_endpoint = parameters->get<std::string>("next");
         const auto* next_info = this->unsafeGet(next_endpoint);
         next = next_info->getInputQueue();
+        next_allocators = next_info->getAllocators();
       }
 
-      auto new_worker =
-        std::make_unique<WorkerInfo>(worker_name, parameters, &pool_, next);
+      auto new_worker = std::make_unique<WorkerInfo>(
+        worker_name, parameters, &pool_, next, next_allocators);
       this->workers_.try_emplace(endpoint, std::move(new_worker));
       // if the worker exists but the share parameter is false, we need to add
       // one

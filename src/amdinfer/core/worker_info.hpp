@@ -53,7 +53,8 @@ class WorkerInfo {
  public:
   /// Construct a new WorkerInfo object
   WorkerInfo(const std::string& name, ParameterMap* parameters,
-             MemoryPool* pool, BatchPtrQueue* next);
+             MemoryPool* pool, BatchPtrQueue* next,
+             const std::vector<MemoryAllocators>& next_allocators);
   ~WorkerInfo();                           ///> Destroy a WorkerInfo object
   WorkerInfo(WorkerInfo const&) = delete;  ///< Copy constructor
   /// Copy assignment constructor
@@ -99,6 +100,8 @@ class WorkerInfo {
   /// get the batch size of the worker group
   [[nodiscard]] auto getBatchSize() const { return this->batch_size_; }
 
+  std::vector<MemoryAllocators> getAllocators() const;
+
   ModelMetadata getMetadata() const;
 
  private:
@@ -107,6 +110,7 @@ class WorkerInfo {
   std::vector<std::unique_ptr<Batcher>> batchers_;
   size_t batch_size_ = 1;
   BatchPtrQueue* next_;
+  std::vector<MemoryAllocators> next_allocators_;
 
   friend class Manager;
 };

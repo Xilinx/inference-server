@@ -102,8 +102,6 @@ class Worker {
     this->status_ = WorkerStatus::Dead;
   }
 
-  void setPool(MemoryPool* pool) { pool_ = pool; }
-
   [[nodiscard]] size_t getBatchSize() const { return this->batch_size_; }
   [[nodiscard]] WorkerStatus getStatus() const { return this->status_; }
 
@@ -128,6 +126,9 @@ class Worker {
   ModelMetadata getMetadata() const { return this->metadata_; }
 
   void setNext(BatchPtrQueue* batcher) { next_ = batcher; }
+  void setNextAllocators(const std::vector<MemoryAllocators>& allocators) {
+    next_allocators_ = allocators;
+  }
 
  protected:
 #ifdef AMDINFER_ENABLE_LOGGING
@@ -146,8 +147,8 @@ class Worker {
 
   size_t batch_size_ = 1;
   ModelMetadata metadata_;
-  MemoryPool* pool_;
   BatchPtrQueue* next_ = nullptr;
+  std::vector<MemoryAllocators> next_allocators_;
 
  private:
   /// Perform low-cost initialization of the worker
