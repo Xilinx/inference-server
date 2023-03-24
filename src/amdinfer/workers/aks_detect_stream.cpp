@@ -77,23 +77,18 @@ namespace workers {
 class AksDetectStream : public Worker {
  public:
   using Worker::Worker;
-  std::thread spawn(BatchPtrQueue* input_queue) override;
   [[nodiscard]] std::vector<MemoryAllocators> getAllocators() const override;
 
  private:
   void doInit(ParameterMap* parameters) override;
   void doAcquire(ParameterMap* parameters) override;
-  void doRun(BatchPtrQueue* input_queue) override;
+  void doRun(BatchPtrQueue* input_queue, const MemoryPool* pool) override;
   void doRelease() override;
   void doDestroy() override;
 
   AKS::SysManagerExt* sys_manager_ = nullptr;
   AKS::AIGraph* graph_ = nullptr;
 };
-
-std::thread AksDetectStream::spawn(BatchPtrQueue* input_queue) {
-  return std::thread(&AksDetectStream::run, this, input_queue);
-}
 
 std::vector<MemoryAllocators> AksDetectStream::getAllocators() const {
   return {MemoryAllocators::Cpu};
@@ -136,7 +131,8 @@ void AksDetectStream::doAcquire(ParameterMap* parameters) {
   this->metadata_.setName(graph_name);
 }
 
-void AksDetectStream::doRun(BatchPtrQueue* input_queue) {
+void AksDetectStream::doRun(BatchPtrQueue* input_queue,
+                            [[maybe_unused]] const MemoryPool* pool) {
   util::setThreadName("AksDetectStream");
 #ifdef AMDINFER_ENABLE_LOGGING
   const auto& logger = this->getLogger();

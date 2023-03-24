@@ -69,13 +69,12 @@ namespace amdinfer::workers {
 class ResNet50 : public Worker {
  public:
   using Worker::Worker;
-  std::thread spawn(BatchPtrQueue* input_queue) override;
   [[nodiscard]] std::vector<MemoryAllocators> getAllocators() const override;
 
  private:
   void doInit(ParameterMap* parameters) override;
   void doAcquire(ParameterMap* parameters) override;
-  void doRun(BatchPtrQueue* input_queue) override;
+  void doRun(BatchPtrQueue* input_queue, const MemoryPool* pool) override;
   void doRelease() override;
   void doDestroy() override;
 
@@ -83,10 +82,6 @@ class ResNet50 : public Worker {
   std::string graph_name_;
   AKS::AIGraph* graph_ = nullptr;
 };
-
-std::thread ResNet50::spawn(BatchPtrQueue* input_queue) {
-  return std::thread(&ResNet50::run, this, input_queue);
-}
 
 std::vector<MemoryAllocators> ResNet50::getAllocators() const {
   return {MemoryAllocators::Cpu};
@@ -134,7 +129,8 @@ void ResNet50::doAcquire(ParameterMap* parameters) {
   this->metadata_.setName(this->graph_name_);
 }
 
-void ResNet50::doRun(BatchPtrQueue* input_queue) {
+void ResNet50::doRun(BatchPtrQueue* input_queue,
+                     [[maybe_unused]] const MemoryPool* pool) {
   std::shared_ptr<InferenceRequest> req;
   util::setThreadName("ResNet50");
 #ifdef AMDINFER_ENABLE_LOGGING

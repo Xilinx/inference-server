@@ -73,13 +73,12 @@ namespace amdinfer::workers {
 class XModel : public Worker {
  public:
   XModel() : Worker("XModel", "XModel") {}
-  std::thread spawn(BatchPtrQueue* input_queue) override;
   [[nodiscard]] std::vector<MemoryAllocators> getAllocators() const override;
 
  private:
   void doInit(ParameterMap* parameters) override;
   void doAcquire(ParameterMap* parameters) override;
-  void doRun(BatchPtrQueue* input_queue) override;
+  void doRun(BatchPtrQueue* input_queue, const MemoryPool* pool) override;
   void doRelease() override;
   void doDestroy() override;
 
@@ -93,10 +92,6 @@ class XModel : public Worker {
   std::vector<uint32_t> output_size_;
   util::ThreadPool thread_pool_;
 };
-
-std::thread XModel::spawn(BatchPtrQueue* input_queue) {
-  return std::thread(&XModel::run, this, input_queue);
-}
 
 std::vector<MemoryAllocators> XModel::getAllocators() const {
   return {MemoryAllocators::VartTensor};
@@ -177,7 +172,7 @@ void XModel::doAcquire(ParameterMap* parameters) {
   }
 }
 
-void XModel::doRun(BatchPtrQueue* input_queue) {
+void XModel::doRun(BatchPtrQueue* input_queue, const MemoryPool* pool) {
   std::atomic_int32_t thread_pool_size = 0;
   const int max_thread_pool_size =
     this->thread_pool_.getSize() * 4;  // 4 is arbitrary
@@ -205,7 +200,7 @@ void XModel::doRun(BatchPtrQueue* input_queue) {
       std::this_thread::sleep_for(thread_pool_delay);
     }
     this->thread_pool_.push(
-      [this, batch = std::move(batch), &thread_pool_size](int id) {
+      [this, batch = std::move(batch), &thread_pool_size, pool](int id) {
         (void)id;  // suppress unused variable warning
 #ifdef AMDINFER_ENABLE_TRACING
         for (unsigned int j = 0; j < batch->size(); j++) {
@@ -239,7 +234,7 @@ void XModel::doRun(BatchPtrQueue* input_queue) {
           InferenceRequestInput input(nullptr, shape, type, tensor->get_name());
           // the shape includes the batch size so use external batch size 1
           output_buffers.push_back(
-            pool_->get({MemoryAllocators::VartTensor}, input, 1));
+            pool->get({MemoryAllocators::VartTensor}, input, 1));
         }
 
         std::vector<vart::TensorBuffer*> outputs_ptr;

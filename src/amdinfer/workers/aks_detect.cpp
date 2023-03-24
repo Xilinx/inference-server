@@ -72,13 +72,12 @@ namespace amdinfer::workers {
 class AksDetect : public Worker {
  public:
   using Worker::Worker;
-  std::thread spawn(BatchPtrQueue* input_queue) override;
   [[nodiscard]] std::vector<MemoryAllocators> getAllocators() const override;
 
  private:
   void doInit(ParameterMap* parameters) override;
   void doAcquire(ParameterMap* parameters) override;
-  void doRun(BatchPtrQueue* input_queue) override;
+  void doRun(BatchPtrQueue* input_queue, const MemoryPool* pool) override;
   void doRelease() override;
   void doDestroy() override;
 
@@ -86,10 +85,6 @@ class AksDetect : public Worker {
   std::string graph_name_;
   AKS::AIGraph* graph_ = nullptr;
 };
-
-std::thread AksDetect::spawn(BatchPtrQueue* input_queue) {
-  return std::thread(&AksDetect::run, this, input_queue);
-}
 
 std::vector<MemoryAllocators> AksDetect::getAllocators() const {
   return {MemoryAllocators::Cpu};
@@ -145,7 +140,8 @@ void AksDetect::doAcquire(ParameterMap* parameters) {
   this->metadata_.setName(this->graph_name_);
 }
 
-void AksDetect::doRun(BatchPtrQueue* input_queue) {
+void AksDetect::doRun(BatchPtrQueue* input_queue,
+                      [[maybe_unused]] const MemoryPool* pool) {
   util::setThreadName("AksDetect");
 #ifdef AMDINFER_ENABLE_LOGGING
   const auto& logger = this->getLogger();

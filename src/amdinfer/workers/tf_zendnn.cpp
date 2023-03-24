@@ -75,13 +75,12 @@ const int kResNetOutputClasses = 1000;
 class TfZendnn : public Worker {
  public:
   using Worker::Worker;
-  std::thread spawn(BatchPtrQueue* input_queue) override;
   [[nodiscard]] std::vector<MemoryAllocators> getAllocators() const override;
 
  private:
   void doInit(ParameterMap* parameters) override;
   void doAcquire(ParameterMap* parameters) override;
-  void doRun(BatchPtrQueue* input_queue) override;
+  void doRun(BatchPtrQueue* input_queue, const MemoryPool* pool) override;
   void doRelease() override;
   void doDestroy() override;
 
@@ -102,10 +101,6 @@ class TfZendnn : public Worker {
   std::string output_node_{"predict"};
   DataType input_dt_ = DataType::Fp32;
 };
-
-std::thread TfZendnn::spawn(BatchPtrQueue* input_queue) {
-  return std::thread(&TfZendnn::run, this, input_queue);
-}
 
 std::vector<MemoryAllocators> TfZendnn::getAllocators() const {
   return {MemoryAllocators::Cpu};
@@ -211,7 +206,8 @@ void TfZendnn::doAcquire(ParameterMap* parameters) {
   this->metadata_.setName("TfZendnn");
 }
 
-void TfZendnn::doRun(BatchPtrQueue* input_queue) {
+void TfZendnn::doRun(BatchPtrQueue* input_queue,
+                     [[maybe_unused]] const MemoryPool* pool) {
   util::setThreadName("TfZendnn");
 #ifdef AMDINFER_ENABLE_LOGGING
   const auto& logger = this->getLogger();

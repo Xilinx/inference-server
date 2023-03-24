@@ -134,7 +134,6 @@ void WorkerInfo::addAndStartWorker(const std::string& name,
   }
 
   this->batch_size_ = worker->getBatchSize();
-  worker->setPool(pool);
   worker->setNext(next_);
 
   if (this->batchers_.empty()) {
@@ -155,7 +154,8 @@ void WorkerInfo::addAndStartWorker(const std::string& name,
       batcher->start(allocators);
     }
   }
-  auto thread = worker->spawn(this->batchers_[0]->getOutputQueue());
+  std::thread thread{&workers::Worker::run, worker,
+                     this->batchers_[0]->getOutputQueue(), pool};
 
   auto thread_id = thread.get_id();
 

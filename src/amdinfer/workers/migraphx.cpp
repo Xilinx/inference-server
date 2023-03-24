@@ -61,13 +61,12 @@ namespace amdinfer::workers {
 class MIGraphXWorker : public Worker {
  public:
   using Worker::Worker;
-  std::thread spawn(BatchPtrQueue* input_queue) override;
   [[nodiscard]] std::vector<MemoryAllocators> getAllocators() const override;
 
  private:
   void doInit(ParameterMap* parameters) override;
   void doAcquire(ParameterMap* parameters) override;
-  void doRun(BatchPtrQueue* input_queue) override;
+  void doRun(BatchPtrQueue* input_queue, const MemoryPool* pool) override;
   void doRelease() override;
   void doDestroy() override;
 
@@ -86,10 +85,6 @@ class MIGraphXWorker : public Worker {
   // Calculated sizes in bytes for each input tensor, by input name
   std::map<std::string, size_t> input_sizes_;
 };
-
-std::thread MIGraphXWorker::spawn(BatchPtrQueue* input_queue) {
-  return std::thread(&MIGraphXWorker::run, this, input_queue);
-}
 
 std::vector<MemoryAllocators> MIGraphXWorker::getAllocators() const {
   return {MemoryAllocators::Cpu};
@@ -297,7 +292,8 @@ void MIGraphXWorker::doInit(ParameterMap* parameters) {
 
 void MIGraphXWorker::doAcquire(ParameterMap* parameters) { (void)parameters; }
 
-void MIGraphXWorker::doRun(BatchPtrQueue* input_queue) {
+void MIGraphXWorker::doRun(BatchPtrQueue* input_queue,
+                           [[maybe_unused]] const MemoryPool* pool) {
 #ifdef AMDINFER_ENABLE_LOGGING
   const auto& logger = this->getLogger();
 #endif

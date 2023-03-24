@@ -65,14 +65,6 @@ class Worker {
   }
   virtual ~Worker() = default;  ///< Destroy the Worker object
 
-  /**
-   * @brief Starts the worker's run() method as a separate thread and returns it
-   *
-   * @param input_queue queue used to send requests to the started worker thread
-   * @return std::thread
-   */
-  virtual std::thread spawn(BatchPtrQueue* input_queue) = 0;
-
   /// Allocate some buffers that are used to hold input and output data
   [[nodiscard]] virtual std::vector<MemoryAllocators> getAllocators() const = 0;
 
@@ -92,9 +84,9 @@ class Worker {
    *
    * @param input_queue queue that receives incoming requests
    */
-  void run(BatchPtrQueue* input_queue) {
+  void run(BatchPtrQueue* input_queue, const MemoryPool* pool) {
     this->status_ = WorkerStatus::Run;
-    this->doRun(input_queue);
+    this->doRun(input_queue, pool);
     this->status_ = WorkerStatus::Inactive;
   }
   /// Release any hardware resources
@@ -155,7 +147,7 @@ class Worker {
   size_t batch_size_ = 1;
   ModelMetadata metadata_;
   MemoryPool* pool_;
-  BatchPtrQueue* next_;
+  BatchPtrQueue* next_ = nullptr;
 
  private:
   /// Perform low-cost initialization of the worker
@@ -167,7 +159,7 @@ class Worker {
    *
    * @param input_queue queue that receives incoming requests
    */
-  virtual void doRun(BatchPtrQueue* input_queue) = 0;
+  virtual void doRun(BatchPtrQueue* input_queue, const MemoryPool* pool) = 0;
   /// Release any hardware resources
   virtual void doRelease() = 0;
   /// Perform any final operations before the worker's run thread is joined

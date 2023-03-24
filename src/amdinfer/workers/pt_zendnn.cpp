@@ -64,13 +64,12 @@ const int kResNetOutputClasses = 1000;
 class PtZendnn : public Worker {
  public:
   using Worker::Worker;
-  std::thread spawn(BatchPtrQueue* input_queue) override;
   [[nodiscard]] std::vector<MemoryAllocators> getAllocators() const override;
 
  private:
   void doInit(ParameterMap* parameters) override;
   void doAcquire(ParameterMap* parameters) override;
-  void doRun(BatchPtrQueue* input_queue) override;
+  void doRun(BatchPtrQueue* input_queue, const MemoryPool* pool) override;
   void doRelease() override;
   void doDestroy() override;
 
@@ -94,10 +93,6 @@ class PtZendnn : public Worker {
 
   DataType input_dt_ = DataType::FP32;
 };
-
-std::thread PtZendnn::spawn(BatchPtrQueue* input_queue) {
-  return std::thread(&PtZendnn::run, this, input_queue);
-}
 
 std::vector<MemoryAllocators> PtZendnn::getAllocators() const {
   return {MemoryAllocators::Cpu};
@@ -176,7 +171,8 @@ void PtZendnn::doAcquire(ParameterMap* parameters) {
   this->metadata_.setName("PtZendnn");
 }
 
-void PtZendnn::doRun(BatchPtrQueue* input_queue) {
+void PtZendnn::doRun(BatchPtrQueue* input_queue,
+                     [[maybe_unused]] const MemoryPool* pool) {
   std::unique_ptr<Batch> batch;
   util::setThreadName("PtZendnn");
 #ifdef AMDINFER_ENABLE_LOGGING

@@ -59,20 +59,15 @@ namespace workers {
 class InvertVideo : public Worker {
  public:
   using Worker::Worker;
-  std::thread spawn(BatchPtrQueue* input_queue) override;
   [[nodiscard]] std::vector<MemoryAllocators> getAllocators() const override;
 
  private:
   void doInit(ParameterMap* parameters) override;
   void doAcquire(ParameterMap* parameters) override;
-  void doRun(BatchPtrQueue* input_queue) override;
+  void doRun(BatchPtrQueue* input_queue, const MemoryPool* pool) override;
   void doRelease() override;
   void doDestroy() override;
 };
-
-std::thread InvertVideo::spawn(BatchPtrQueue* input_queue) {
-  return std::thread(&InvertVideo::run, this, input_queue);
-}
 
 std::vector<MemoryAllocators> InvertVideo::getAllocators() const {
   return {MemoryAllocators::Cpu};
@@ -102,7 +97,8 @@ void InvertVideo::doAcquire(ParameterMap* parameters) {
     DataType::Int8);
 }
 
-void InvertVideo::doRun(BatchPtrQueue* input_queue) {
+void InvertVideo::doRun(BatchPtrQueue* input_queue,
+                        [[maybe_unused]] const MemoryPool* pool) {
   util::setThreadName("InvertVideo");
 #ifdef AMDINFER_ENABLE_LOGGING
   const auto& logger = this->getLogger();

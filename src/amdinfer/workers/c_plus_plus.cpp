@@ -106,13 +106,12 @@ namespace workers {
 class CPlusPlus : public Worker {
  public:
   using Worker::Worker;
-  std::thread spawn(BatchPtrQueue* input_queue) override;
   [[nodiscard]] std::vector<MemoryAllocators> getAllocators() const override;
 
  private:
   void doInit(ParameterMap* parameters) override;
   void doAcquire(ParameterMap* parameters) override;
-  void doRun(BatchPtrQueue* input_queue) override;
+  void doRun(BatchPtrQueue* input_queue, const MemoryPool* pool) override;
   void doRelease() override;
   void doDestroy() override;
 
@@ -129,10 +128,6 @@ class CPlusPlus : public Worker {
     return this->makeBatcher<HardBatcher>(num, parameters, pool);
   };
 };
-
-std::thread CPlusPlus::spawn(BatchPtrQueue* input_queue) {
-  return std::thread(&CPlusPlus::run, this, input_queue);
-}
 
 std::vector<MemoryAllocators> CPlusPlus::getAllocators() const {
   return {MemoryAllocators::Cpu};
@@ -232,7 +227,7 @@ void CPlusPlus::doAcquire([[maybe_unused]] ParameterMap* parameters) {
   }
 }
 
-void CPlusPlus::doRun(BatchPtrQueue* input_queue) {
+void CPlusPlus::doRun(BatchPtrQueue* input_queue, const MemoryPool* pool) {
   util::setThreadName("CPlusPlus");
 #ifdef AMDINFER_ENABLE_LOGGING
   const auto& logger = this->getLogger();
@@ -258,7 +253,7 @@ void CPlusPlus::doRun(BatchPtrQueue* input_queue) {
       const auto batch_size = batch->size();
       for (const auto& tensor : output_tensors_) {
         input_buffers.push_back(
-          pool_->get({MemoryAllocators::Cpu}, tensor, batch_size));
+          pool->get({MemoryAllocators::Cpu}, tensor, batch_size));
       }
       for (auto i = 0U; i < batch_size; ++i) {
         auto new_request = std::make_shared<InferenceRequest>();

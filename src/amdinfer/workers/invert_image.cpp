@@ -84,20 +84,15 @@ namespace amdinfer::workers {
 class InvertImage : public Worker {
  public:
   using Worker::Worker;
-  std::thread spawn(BatchPtrQueue* input_queue) override;
   [[nodiscard]] std::vector<MemoryAllocators> getAllocators() const override;
 
  private:
   void doInit(ParameterMap* parameters) override;
   void doAcquire(ParameterMap* parameters) override;
-  void doRun(BatchPtrQueue* input_queue) override;
+  void doRun(BatchPtrQueue* input_queue, const MemoryPool* pool) override;
   void doRelease() override;
   void doDestroy() override;
 };
-
-std::thread InvertImage::spawn(BatchPtrQueue* input_queue) {
-  return std::thread(&InvertImage::run, this, input_queue);
-}
 
 std::vector<MemoryAllocators> InvertImage::getAllocators() const {
   return {MemoryAllocators::Cpu};
@@ -131,7 +126,8 @@ void InvertImage::doAcquire(ParameterMap* parameters) {
     DataType::Uint32);
 }
 
-void InvertImage::doRun(BatchPtrQueue* input_queue) {
+void InvertImage::doRun(BatchPtrQueue* input_queue,
+                        [[maybe_unused]] const MemoryPool* pool) {
   util::setThreadName("InvertImage");
 #ifdef AMDINFER_ENABLE_LOGGING
   const auto& logger = this->getLogger();
