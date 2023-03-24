@@ -546,7 +546,7 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue,
     }
 
     timer.add("batch_stop");
-    this->returnInputBuffers(std::move(batch));
+    returnInputBuffers(std::move(batch));
     [[maybe_unused]] auto duration =
       timer.count<std::micro>("batch_start", "batch_stop");
     AMDINFER_LOG_INFO(

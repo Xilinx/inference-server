@@ -285,7 +285,7 @@ void CPlusPlus::doRun(BatchPtrQueue* input_queue, const MemoryPool* pool) {
     assert(next_ != nullptr);
     next_->enqueue(std::move(new_batch));
 
-    this->returnInputBuffers(std::move(batch));
+    returnInputBuffers(std::move(batch));
   }
   AMDINFER_LOG_INFO(logger, "CPlusPlus ending");
 }

@@ -175,7 +175,7 @@ void Responder::doRun(BatchPtrQueue* input_queue,
                                             duration);
 #endif
     }
-    this->returnInputBuffers(std::move(batch));
+    returnInputBuffers(std::move(batch));
   }
   AMDINFER_LOG_INFO(logger, "Responder ending");
 }

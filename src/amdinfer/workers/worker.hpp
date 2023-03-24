@@ -52,6 +52,16 @@ enum class WorkerStatus {
   Dead
 };
 
+void returnInputBuffers(std::unique_ptr<Batch> batch) {
+  auto buffers = batch->getInputBuffers();
+  for (auto& buffer : buffers) {
+    const auto* pool = buffer->getPool();
+    if (pool != nullptr) {
+      pool->put(std::move(buffer));
+    }
+  }
+}
+
 /**
  * @brief All workers should extend the Worker class which defines the methods
  * to create, start, and run workers over their lifecycle.
@@ -134,16 +144,6 @@ class Worker {
 #ifdef AMDINFER_ENABLE_LOGGING
   [[nodiscard]] const Logger& getLogger() const { return logger_; };
 #endif
-
-  void returnInputBuffers(std::unique_ptr<Batch> batch) const {
-    auto buffers = batch->getInputBuffers();
-    for (auto& buffer : buffers) {
-      const auto* pool = buffer->getPool();
-      if (pool != nullptr) {
-        pool->put(std::move(buffer));
-      }
-    }
-  }
 
   size_t batch_size_ = 1;
   ModelMetadata metadata_;

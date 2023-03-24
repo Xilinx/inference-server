@@ -284,7 +284,7 @@ void ResNet50::doRun(BatchPtrQueue* input_queue,
 #endif
       req->runCallbackOnce(resp);
     }
-    this->returnInputBuffers(std::move(batch));
+    returnInputBuffers(std::move(batch));
   }
   AMDINFER_LOG_INFO(logger, "ResNet50 ending");
 }
