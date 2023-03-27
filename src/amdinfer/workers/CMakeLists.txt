@@ -15,7 +15,7 @@
 
 include(GNUInstallDirs)
 
-set(workers InvertImage InvertVideo CPlusPlus Responder)
+set(workers InvertVideo CPlusPlus Responder)
 
 if(${AMDINFER_ENABLE_VITIS})
   list(APPEND workers Xmodel)
@@ -61,9 +61,6 @@ foreach(worker ${workers})
   list(APPEND WORKER_TARGETS ${target})
 endforeach()
 
-target_link_libraries(
-  workerInvertimage PRIVATE base64 opencv_core opencv_imgcodecs
-)
 target_link_libraries(
   workerInvertvideo PRIVATE base64 opencv_core opencv_imgcodecs opencv_videoio
 )
