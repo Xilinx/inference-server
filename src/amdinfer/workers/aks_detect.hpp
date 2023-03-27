@@ -31,8 +31,11 @@ struct DetectResponse {
   float h;
 };
 
-// the number of float values per response
-const int kAkdDetectResponseSize = 7;
+// the number of float values in DetectResponse
+const auto kDetectResponseSize = 6;
+
+// the number of float values per response from AKS. +1 for the batch ID
+const int kAksDetectResponseSize = kDetectResponseSize + 1;
 
 }  // namespace amdinfer::workers
 

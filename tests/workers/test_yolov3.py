@@ -88,12 +88,12 @@ class TestInferImageYoloV3DPUCADF8H:
             outputs = response.getOutputs()
             assert len(outputs) == num_inputs
             for index, output in enumerate(outputs):
-                assert output.name == "input" + str(index)
+                assert output.name == ""
                 assert output.datatype == amdinfer.DataType.FP32
                 assert output.parameters.empty()
                 data = output.getFp32Data()
                 num_boxes = int(len(data) / 6)
-                assert output.shape == [6, num_boxes]
+                assert output.shape == [num_boxes, 6]
                 assert len(data) == len(gold_response_output)
                 assert np.allclose(data, gold_response_output, 0.01, 0)
         return response

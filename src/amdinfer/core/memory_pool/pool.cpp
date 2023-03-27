@@ -19,6 +19,8 @@
 
 #include "amdinfer/core/memory_pool/pool.hpp"
 
+#include <cassert>
+
 #include "amdinfer/buffers/cpu.hpp"
 #include "amdinfer/core/exceptions.hpp"
 #include "amdinfer/core/memory_pool/cpu_allocator.hpp"
@@ -40,6 +42,7 @@ MemoryPool::MemoryPool() {
 std::unique_ptr<Buffer> MemoryPool::get(
   const std::vector<MemoryAllocators>& allocators, const Tensor& tensor,
   size_t batch_size) const {
+  assert(!allocators.empty());
   for (const auto& allocator : allocators) {
     try {
       auto buffer = allocators_.at(allocator)->get(tensor, batch_size);

@@ -138,7 +138,7 @@ void Responder::doRun(BatchPtrQueue* input_queue,
         const auto* input_buffer = input.getData();
 
         InferenceResponseOutput output;
-        output.setDatatype(DataType::Uint32);
+        output.setDatatype(input.getDatatype());
         std::string output_name;
         if (i < outputs.size()) {
           output_name = outputs[i].getName();

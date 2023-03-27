@@ -133,63 +133,6 @@ std::vector<MemoryAllocators> CPlusPlus::getAllocators() const {
   return {MemoryAllocators::Cpu};
 }
 
-void respond(Batch* batch) {
-  const auto batch_size = batch->size();
-  for (unsigned int j = 0; j < batch_size; j++) {
-    const auto& req = batch->getRequest(j);
-#ifdef AMDINFER_ENABLE_TRACING
-    const auto& trace = batch->getTrace(j);
-    trace->startSpan("response");
-#endif
-    InferenceResponse resp;
-    resp.setID(req->getID());
-    resp.setModel("CPlusPlus");
-    auto inputs = req->getInputs();
-    auto outputs = req->getOutputs();
-    for (unsigned int i = 0; i < inputs.size(); i++) {
-      const auto& input = inputs[i];
-      const auto* input_buffer = input.getData();
-
-      InferenceResponseOutput output;
-      output.setDatatype(DataType::Uint32);
-      std::string output_name;
-      if (i < outputs.size()) {
-        output_name = outputs[i].getName();
-      }
-
-      if (output_name.empty()) {
-        output.setName(input.getName());
-      } else {
-        output.setName(output_name);
-      }
-      output.setShape(input.getShape());
-      std::vector<std::byte> buffer;
-      const auto size = input.getSize() * input.getDatatype().size();
-      buffer.resize(size);
-      memcpy(buffer.data(), input_buffer, size);
-      output.setData(std::move(buffer));
-      resp.addOutput(output);
-    }
-
-#ifdef AMDINFER_ENABLE_TRACING
-    auto context = trace->propagate();
-    resp.setContext(std::move(context));
-#endif
-
-    // respond back to the client
-    req->runCallbackOnce(resp);
-#ifdef AMDINFER_ENABLE_METRICS
-    Metrics::getInstance().incrementCounter(
-      MetricCounterIDs::PipelineEgressWorker);
-    util::Timer timer{batch->getTime(j)};
-    timer.stop();
-    auto duration = timer.count<std::micro>();
-    Metrics::getInstance().observeSummary(MetricSummaryIDs::RequestLatency,
-                                          duration);
-#endif
-  }
-}
-
 void CPlusPlus::doInit(ParameterMap* parameters) {
   constexpr auto kBatchSize = 1;
 
