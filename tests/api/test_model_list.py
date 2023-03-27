@@ -34,31 +34,30 @@ class TestModelList:
         assert len(models_0) == 0
 
         parameters = amdinfer.ParameterMap(["model"], ["echo"])
-        chain = amdinfer.Chain(["cplusplus"], [parameters])
-        chain.load(self.rest_client)
-        endpoint = chain.get()
+        endpoints = amdinfer.loadEnsemble(self.rest_client, ["cplusplus"], [parameters])
+        endpoint = endpoints[0]
         assert endpoint == "cplusplus"
         assert self.rest_client.modelReady(endpoint)
 
         models = self.rest_client.modelList()
-        assert len(models) == 2
+        assert len(models) == 1
         assert models[0] == endpoint
 
         parameters = amdinfer.ParameterMap(["model"], ["echo_multi"])
-        chain2 = amdinfer.Chain(["cplusplus"], [parameters])
-        chain2.load(self.rest_client)
-        endpoint_2 = chain2.get()
+        endpoints_2 = amdinfer.loadEnsemble(
+            self.rest_client, ["cplusplus"], [parameters]
+        )
+        endpoint_2 = endpoints_2[0]
         assert endpoint_2 == "cplusplus-0"
         assert self.rest_client.modelReady(endpoint_2)
 
         models = self.rest_client.modelList()
-        # one each for echo and echo_multi models + 1 for a shared responder
-        assert len(models) == 3
+        assert len(models) == 2
         assert endpoint in models
         assert endpoint_2 in models
 
-        chain.unload(self.rest_client)
-        chain2.unload(self.rest_client)
+        amdinfer.unloadModels(self.rest_client, endpoints)
+        amdinfer.unloadModels(self.rest_client, endpoints_2)
 
         models_3 = self.rest_client.modelList()
         while len(models_3) > 0:

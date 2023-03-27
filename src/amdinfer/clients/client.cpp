@@ -44,51 +44,42 @@ void initializeClientLogging() {
 #endif
 }
 
-Client::Client() { initializeClientLogging(); }
-
-Chain::Chain(std::vector<std::string> workers,
-             std::vector<ParameterMap> parameters) {
+std::vector<std::string> loadEnsemble(const Client* client,
+                                      std::vector<std::string> workers,
+                                      std::vector<ParameterMap> parameters) {
   if (workers.size() != parameters.size()) {
     throw invalid_argument("The number of workers and parameters must match");
   }
-  workers_ = std::move(workers);
-  workers_.emplace_back("responder");
-  parameters_ = std::move(parameters);
-  parameters_.emplace_back();
-  endpoints_.resize(workers_.size());
-}
 
-const std::string& Chain::get() const& { return endpoints_.front(); }
-
-std::string Chain::get() && { return std::move(endpoints_.front()); }
-
-void Chain::load(const Client* client) {
-  assert(workers_.size() == parameters_.size());
-  assert(workers_.size() == endpoints_.size());
+  std::vector<std::string> endpoints;
+  endpoints.resize(workers.size());
 
   std::string next;
   // reverse iterate through vectors using "goes to" operator
-  for (auto i = workers_.size(); i-- > 0;) {
-    const auto& worker = workers_.at(i);
-    auto& parameters = parameters_.at(i);
+  for (auto i = workers.size(); i-- > 0;) {
+    const auto& worker = workers.at(i);
+    auto& parameter = parameters.at(i);
 
     if (!next.empty()) {
-      parameters.put("next", next);
+      parameter.put("next", next);
     }
-    auto endpoint = client->workerLoad(worker, parameters);
+    auto endpoint = client->workerLoad(worker, parameter);
     next = endpoint;
-    endpoints_.at(i) = std::move(endpoint);
+    endpoints.at(i) = std::move(endpoint);
     waitUntilModelReady(client, next);
+  }
+
+  return endpoints;
+}
+
+void unloadModels(const Client* client,
+                  const std::vector<std::string>& models) {
+  for (const auto& model : models) {
+    client->modelUnload(model);
   }
 }
 
-void Chain::unload(const Client* client) {
-  const auto end = endpoints_.rend();
-  for (auto it = endpoints_.rbegin(); it != end; ++it) {
-    client->workerUnload(*it);
-    waitUntilModelNotReady(client, *it);
-  }
-}
+Client::Client() { initializeClientLogging(); }
 
 bool serverHasExtension(const Client* client, const std::string& extension) {
   auto metadata = client->serverMetadata();

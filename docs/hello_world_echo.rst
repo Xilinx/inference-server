@@ -67,14 +67,13 @@ The server will remain active as long as the server object stays in scope.
 Load a worker
 -------------
 
-Inference requests in AMD Inference Server are made to worker chains, which are made up of one or more workers.
+Inference requests in AMD Inference Server are made to workers.
 Workers are started as threads in AMD Inference Server and have a defined lifecycle.
-Before making an inference request to a chain, a chain must first be loaded.
-After loading the chain, you can get the endpoint to send it further requests.
+Before making an inference request to a worker, it must first be loaded.
+Loading a worker returns an endpoint that the client should use for future operations.
 
-This simple worker chain is made of a single worker, "cplusplus" and a sample model is passed to it at load-time "echo".
-This model is a simple test model that accepts an integer as input, adds one to it and returns the sum.
-An implicit worker is added to end of every chain to handle responding back to the client.
+This simple worker, "cplusplus", is a worker that accepts a C++-based "model" which is specified in the parameters.
+This model, "echo" is a simple test model that accepts an integer as input, adds one to it and returns the sum.
 
 .. literalinclude:: ../examples/hello_world/echo.py
     :start-after: +load worker
@@ -84,9 +83,9 @@ An implicit worker is added to end of every chain to handle responding back to t
 Inference
 ---------
 
-Once the chain is ready, you can make an inference request to it.
+Once the worker is ready, you can make an inference request to it.
 To do so, first construct a request.
-We construct a request that contains an integer and send it to AMD Inference Server.
+We construct a request that contains an integer and send it to the server.
 
 .. literalinclude:: ../examples/hello_world/echo.py
     :start-after: +inference
@@ -122,7 +121,6 @@ Clean up
 --------
 
 Workers that are loaded in AMD Inference Server will persist until the server shuts down or they're explicitly unloaded.
-If you load a chain, you can also unload it at the end.
 As the script ends, the Server object's destructor will clean up any active workers on the server and it will shut down
 
 .. literalinclude:: ../examples/hello_world/echo.py
@@ -133,6 +131,6 @@ As the script ends, the Server object's destructor will clean up any active work
 Next steps
 ----------
 
-This example demonstrates the complete process from starting the server, creating a client, loading a chain, and making an inference.
+This example demonstrates the complete process from starting the server, creating a client, loading a worker, and making an inference.
 Depending on your use case, you may only be performing a subset of these actions but this provides an overview of what's happening behind the scenes.
 You can look at more sophisticated examples for another overview of the steps associated with making inferences.

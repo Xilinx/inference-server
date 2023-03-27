@@ -47,13 +47,9 @@ void wrapClient(py::module_& m) {
         py::arg("client"), py::arg("model"), py::arg("requests"),
         py::arg("batch_sizes"));
 
-  py::class_<Chain>{m, "Chain"}
-    .def(py::init<std::vector<std::string>, std::vector<ParameterMap>>(),
-         py::arg("workers"), py::arg("parameters"), DOCS(Chain, Chain))
-    .def("get",
-         static_cast<const std::string& (Chain::*)() const&>(&Chain::get))
-    .def("load", &Chain::load, py::arg("client"))
-    .def("unload", &Chain::unload, py::arg("unload"));
+  m.def("loadEnsemble", &loadEnsemble, py::arg("client"), py::arg("models"),
+        py::arg("parameters"));
+  m.def("unloadModels", &unloadModels, py::arg("client"), py::arg("models"));
 }
 
 }  // namespace amdinfer

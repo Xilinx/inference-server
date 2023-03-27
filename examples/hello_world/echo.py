@@ -70,9 +70,7 @@ def main():
     # +load worker: load the worker with a model which accepts a number, adds 1, and returns the sum
     parameters = amdinfer.ParameterMap()
     parameters.put("model", "echo")
-    chain = amdinfer.Chain(["cplusplus"], [parameters])
-    chain.load(client)
-    endpoint = chain.get()
+    endpoint = client.workerLoad(client, "cplusplus", parameters)
     amdinfer.waitUntilModelReady(client, endpoint)
     # -load worker
     print("Model ready!")
@@ -95,8 +93,8 @@ def main():
     # -validate
     print("Results validated!")
 
-    # +unload: unload the workers in this chain
-    chain.unload(client)
+    # +unload: unload the worker
+    client.workerUnload(endpoint)
     # -unload
 
 

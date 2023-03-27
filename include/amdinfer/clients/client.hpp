@@ -160,24 +160,6 @@ class Client {
   Client();
 };
 
-class Chain {
- public:
-  Chain(std::vector<std::string> workers, std::vector<ParameterMap> parameters);
-
-  /// Get the endpoint associated with this chain to send it requests
-  const std::string& get() const&;
-  /// Get the endpoint associated with this chain to send it requests
-  std::string get() &&;
-
-  void load(const Client* client);
-  void unload(const Client* client);
-
- private:
-  std::vector<std::string> workers_;
-  std::vector<ParameterMap> parameters_;
-  std::vector<std::string> endpoints_;
-};
-
 /**
  * @brief Checks if the server has a certain extension
  *
@@ -206,6 +188,28 @@ void waitUntilModelReady(const Client* client, const std::string& model);
  * @param model the model/worker to wait for
  */
 void waitUntilModelNotReady(const Client* client, const std::string& model);
+
+/**
+ * @brief Load an ensemble - a chain of connected workers. This implementation
+ * uses the simplest case where the ensemble is a single linear graph.
+ *
+ * @param client a pointer to a client object
+ * @param workers the list of workers to connect
+ * @param parameters the list of parameters corresponding to each worker
+ * @return std::vector<std::string> the endpoints for each loaded worker
+ */
+std::vector<std::string> loadEnsemble(const Client* client,
+                                      std::vector<std::string> workers,
+                                      std::vector<ParameterMap> parameters);
+
+/**
+ * @brief Unload a list of models. This list may be from an ensemble or
+ * individually loaded workers or models.
+ *
+ * @param client a pointer to a client object
+ * @param models a list of models to unload
+ */
+void unloadModels(const Client* client, const std::vector<std::string>& models);
 
 /**
  * @brief Makes inference requests in parallel to the specified model. All

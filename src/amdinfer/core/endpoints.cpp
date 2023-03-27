@@ -28,6 +28,7 @@
 #include "amdinfer/core/parameters.hpp"         // for ParameterMap
 #include "amdinfer/core/request_container.hpp"  // for RequestContainer
 #include "amdinfer/core/worker_info.hpp"        // for WorkerInfo
+#include "amdinfer/util/string.hpp"             // for startsWith
 #include "amdinfer/util/thread.hpp"             // for setThreadName
 
 namespace amdinfer {
@@ -248,6 +249,12 @@ std::string Endpoints::unsafeLoad(const std::string& worker,
         const auto* next_info = this->unsafeGet(next_endpoint);
         next = next_info->getInputQueue();
         next_allocators = next_info->getAllocators();
+      } else if (worker != "responder") {
+        const auto* next_info = this->unsafeGet("responder");
+        next = next_info->getInputQueue();
+        next_allocators = next_info->getAllocators();
+      } else {
+        // worker being loaded is the responder so we don't do anything
       }
 
       auto new_worker = std::make_unique<WorkerInfo>(
@@ -312,7 +319,9 @@ void Endpoints::unsafeList(std::vector<std::string>* list) const {
   assert(list->empty());
   list->reserve(workers_.size());
   for (const auto& [worker, _] : workers_) {
-    list->push_back(worker);
+    if (!util::startsWith(worker, "responder")) {
+      list->push_back(worker);
+    }
   }
 }
 

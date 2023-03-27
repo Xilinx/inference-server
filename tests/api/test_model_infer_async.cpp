@@ -25,9 +25,9 @@
 namespace amdinfer {
 
 void test(const Client* client) {
-  Chain chain{{"cplusplus"}, {{{"model"}, {std::string{"echo"}}}}};
-  chain.load(client);
-  const auto& endpoint = chain.get();
+  auto endpoints =
+    loadEnsemble(client, {"cplusplus"}, {{{"model"}, {std::string{"echo"}}}});
+  const auto& endpoint = endpoints[0];
   EXPECT_EQ(endpoint, "cplusplus");
 
   std::vector<uint32_t> img_data;
@@ -63,7 +63,7 @@ void test(const Client* client) {
     }
   }
 
-  chain.unload(client);
+  unloadModels(client, endpoints);
 }
 
 #ifdef AMDINFER_ENABLE_GRPC

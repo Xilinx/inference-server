@@ -28,9 +28,9 @@ namespace amdinfer {
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST_F(HttpFixture, Ordered) {
   NativeClient client(&server_);
-  Chain chain{{"cplusplus"}, {{{"model"}, {std::string{"echo"}}}}};
-  chain.load(&client);
-  const auto& endpoint = chain.get();
+  auto endpoints =
+    loadEnsemble(&client, {"cplusplus"}, {{{"model"}, {std::string{"echo"}}}});
+  const auto& endpoint = endpoints[0];
   EXPECT_EQ(endpoint, "cplusplus");
 
   std::vector<uint32_t> img_data;
@@ -55,7 +55,7 @@ TEST_F(HttpFixture, Ordered) {
     EXPECT_FALSE(resp.isError());
   }
 
-  chain.unload(&client);
+  unloadModels(&client, endpoints);
 }
 #endif
 

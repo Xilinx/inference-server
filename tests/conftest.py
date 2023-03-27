@@ -220,15 +220,16 @@ def load(request, server):
     request.cls.rest_client = rest_client(request)
     request.cls.ws_client = ws_client(request)
 
-    chain = amdinfer.Chain(test_model, test_parameters)
-    chain.load(request.cls.rest_client)
+    endpoints = amdinfer.loadEnsemble(
+        request.cls.rest_client, test_model, test_parameters
+    )
 
-    # update the endpoint with the newest worker in the chain
-    request.cls.endpoint = chain.get()
+    # update the endpoint with the first worker in the ensemble
+    request.cls.endpoint = endpoints[0]
 
     yield  # perform testing
 
-    chain.unload(request.cls.rest_client)
+    amdinfer.unloadModels(request.cls.rest_client, endpoints)
 
     request.cls.ws_client = None
     request.cls.rest_client = None
