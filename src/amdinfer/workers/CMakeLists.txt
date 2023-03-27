@@ -117,13 +117,6 @@ if(${AMDINFER_ENABLE_AKS})
     workerResnet50stream PRIVATE opencv_imgproc opencv_videoio
   )
   target_link_libraries(workerAksdetectstream PRIVATE opencv_videoio)
-
-  # AKS Worker
-  add_library(workerAks SHARED aks.cpp)
-  target_link_libraries(workerAks PRIVATE buffers aks vart-runner xir timer)
-  target_include_directories(workerAks PRIVATE ${AMDINFER_INCLUDE_DIRS})
-  set_target_options(workerAks)
-  list(APPEND WORKER_TARGETS workerAks)
 else()
   message(STATUS "AKS not enabled, skipping AKS workers")
 endif()

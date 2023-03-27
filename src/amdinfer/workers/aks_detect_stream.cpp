@@ -70,8 +70,8 @@ std::string constructMessage(const std::string& key, const std::string& data,
 namespace workers {
 
 /**
- * @brief The AksDetectStream worker is a simple worker that accepts an path to
- * a video and sends the inverted frames back to the client over a websocket.
+ * @brief The AksDetectStream worker is a streaming (over WebSocket) worker that
+ * runs a detection-based model on a video with AKS.
  *
  */
 class AksDetectStream : public Worker {
@@ -94,8 +94,7 @@ std::vector<MemoryAllocators> AksDetectStream::getAllocators() const {
   return {MemoryAllocators::Cpu};
 }
 
-void AksDetectStream::doInit(ParameterMap* parameters) {
-  (void)parameters;  // suppress unused variable warning
+void AksDetectStream::doInit([[maybe_unused]] ParameterMap* parameters) {
   constexpr auto kBatchSize = 4;
 
   /// Get AKS System Manager instance
@@ -109,17 +108,21 @@ constexpr auto kImageHeight = 1080;
 constexpr auto kImageChannels = 3;
 
 void AksDetectStream::doAcquire(ParameterMap* parameters) {
-  std::string path{
-    "${AKS_ROOT}/graph_zoo/graph_yolov3_u200_u250_amdinfer.json"};
+  std::string path;
   if (parameters->has("aks_graph")) {
     path = parameters->get<std::string>("aks_graph");
+  } else {
+    throw invalid_argument("aks_graph must be specified in the parameters");
   }
   util::autoExpandEnvironmentVariables(path);
   this->sys_manager_->loadGraphs(path);
 
-  std::string graph_name{"yolov3"};
+  std::string graph_name;
   if (parameters->has("aks_graph_name")) {
     graph_name = parameters->get<std::string>("aks_graph_name");
+  } else {
+    throw invalid_argument(
+      "aks_graph_name must be specified in the parameters");
   }
   this->graph_ = this->sys_manager_->getGraph(graph_name);
 
@@ -262,7 +265,7 @@ void AksDetectStream::doRun(BatchPtrQueue* input_queue,
               labels.emplace_back("[");
             }
             for (int i = 0; i < shape[0] * shape[1];
-                 i += kAkdDetectResponseSize) {
+                 i += kAksDetectResponseSize) {
               auto batch_id = static_cast<int>(top_k_data[i]);
               const auto* detect_response =
                 reinterpret_cast<DetectResponse*>(&(top_k_data[i + 1]));
@@ -314,7 +317,7 @@ void AksDetectStream::doRun(BatchPtrQueue* input_queue,
             labels.emplace_back("[");
           }
           for (int i = 0; i < shape[0] * shape[1];
-               i += kAkdDetectResponseSize) {
+               i += kAksDetectResponseSize) {
             auto batch_id = static_cast<int>(top_k_data[i]);
             const auto* detect_response =
               reinterpret_cast<DetectResponse*>(&(top_k_data[i + 1]));
