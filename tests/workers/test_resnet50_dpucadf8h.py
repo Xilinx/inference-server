@@ -71,7 +71,7 @@ class TestInferImageResNet50DPUCADF8H:
             outputs = response.getOutputs()
             assert len(outputs) == num_inputs
             for index, output in enumerate(outputs):
-                assert output.name == "input" + str(index)
+                assert output.name == ""
                 assert output.datatype == amdinfer.DataType.UINT32
                 assert output.parameters.empty()
                 assert output.shape == [5, 1, 1]

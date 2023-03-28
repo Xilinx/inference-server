@@ -50,6 +50,7 @@
 #include "amdinfer/observation/tracing.hpp"  // for Trace
 #include "amdinfer/util/base64.hpp"          // for base64_decode
 #include "amdinfer/util/containers.hpp"      // for containerProduct
+#include "amdinfer/util/memory.hpp"          // for copy
 #include "amdinfer/util/parse_env.hpp"       // for autoExpandEnvironmentVa...
 #include "amdinfer/util/thread.hpp"          // for setThreadName
 #include "amdinfer/util/timer.hpp"           // for Timer
@@ -131,7 +132,6 @@ void ResNet50::doAcquire(ParameterMap* parameters) {
 
 void ResNet50::doRun(BatchPtrQueue* input_queue,
                      [[maybe_unused]] const MemoryPool* pool) {
-  std::shared_ptr<InferenceRequest> req;
   util::setThreadName("ResNet50");
 #ifdef AMDINFER_ENABLE_LOGGING
   const auto& logger = this->getLogger();
@@ -144,8 +144,6 @@ void ResNet50::doRun(BatchPtrQueue* input_queue,
       break;
     }
     AMDINFER_LOG_INFO(logger, "Got request in Resnet50");
-    std::vector<InferenceResponse> responses;
-    responses.reserve(batch->size());
 
     std::vector<std::unique_ptr<vart::TensorBuffer>> v;
     v.reserve(batch->getInputSize());
@@ -154,14 +152,10 @@ void ResNet50::doRun(BatchPtrQueue* input_queue,
     for (unsigned int j = 0; j < batch->size(); j++) {
       const auto& req = batch->getRequest(j);
 #ifdef AMDINFER_ENABLE_TRACING
-      auto& trace = batch->getTrace(j);
+      const auto& trace = batch->getTrace(j);
       trace->startSpan("Resnet50");
 #endif
-      auto& resp = responses.emplace_back();
-      resp.setID(req->getID());
-      resp.setModel(this->graph_name_);
       auto inputs = req->getInputs();
-      auto outputs = req->getOutputs();
 
       uint64_t input_size = 0;
       for (auto& input : inputs) {
@@ -240,50 +234,49 @@ void ResNet50::doRun(BatchPtrQueue* input_queue,
       response_size = shape[0];
     }
 
+    auto new_batch = std::make_unique<Batch>();
+    std::vector<BufferPtr> input_buffers;
+    input_buffers.push_back(
+      pool->get(next_allocators_, Tensor{"name", new_shape, DataType::Uint32},
+                batch->size()));
+
     for (unsigned int k = 0; k < batch->size(); k++) {
       const auto& req = batch->getRequest(k);
-      auto inputs = req->getInputs();
-      auto outputs = req->getOutputs();
-      auto& resp = responses[k];
+      auto new_request = std::make_shared<InferenceRequest>();
+      auto* data_ptr = input_buffers.at(0)->data(k * response_size *
+                                                 DataType("Uint32").size());
+      new_request->addInputTensor(
+        InferenceRequestInput{data_ptr, new_shape, DataType::Uint32, ""});
+      util::copy(top_k_data + (k * response_size),
+                 static_cast<std::byte*>(data_ptr),
+                 response_size * sizeof(int));
 
-      for (unsigned int i = 0; i < inputs.size(); i++) {
-        InferenceResponseOutput output;
-        std::vector<std::byte> buffer;
-        buffer.resize(response_size * sizeof(int));
-        memcpy(buffer.data(), top_k_data + (i * response_size),
-               response_size * sizeof(int));
-        output.setData(std::move(buffer));
-
-        std::string output_name;
-        if (i < outputs.size()) {
-          output_name = outputs[i].getName();
-        }
-
-        if (output_name.empty()) {
-          output.setName(inputs[0].getName());
-        } else {
-          output.setName(output_name);
-        }
-
-        output.setShape(new_shape);
-
-        output.setDatatype(DataType::Uint32);
-        resp.addOutput(output);
+      new_request->setCallback(req->getCallback());
+      new_request->setID(req->getID());
+      const auto outputs = req->getOutputs();
+      for (const auto& output : outputs) {
+        new_request->addOutputTensor(output);
       }
 
-#ifdef AMDINFER_ENABLE_METRICS
-      util::Timer timer{batch->getTime(k)};
-      timer.stop();
-      auto duration = timer.count<std::micro>();
-      Metrics::getInstance().observeSummary(MetricSummaryIDs::RequestLatency,
-                                            duration);
-#endif
+      new_batch->addRequest(new_request);
+
+      new_batch->setModel(k, graph_name_);
+
+      auto& trace = batch->getTrace(static_cast<int>(k));
 #ifdef AMDINFER_ENABLE_TRACING
-      auto context = batch->getTrace(k)->propagate();
-      resp.setContext(std::move(context));
+      trace->endSpan();
+      new_batch->addTrace(std::move(trace));
 #endif
-      req->runCallbackOnce(resp);
+
+#ifdef AMDINFER_ENABLE_METRICS
+      new_batch->addTime(batch->getTime(k));
+#endif
     }
+
+    new_batch->setBuffers(std::move(input_buffers), {});
+
+    assert(next_ != nullptr);
+    next_->enqueue(std::move(new_batch));
     returnInputBuffers(std::move(batch));
   }
   AMDINFER_LOG_INFO(logger, "ResNet50 ending");

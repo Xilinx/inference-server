@@ -172,7 +172,6 @@ void AksDetect::doRun(BatchPtrQueue* input_queue,
 #endif
 
       auto inputs = req->getInputs();
-      auto outputs = req->getOutputs();
 
       uint64_t input_size = 0;
       for (auto& input : inputs) {
