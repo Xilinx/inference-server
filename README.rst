@@ -40,20 +40,20 @@ The AMD Inference Server is integrated with the following libraries out of the g
 * XModel models with `Vitis AI <https://www.xilinx.com/products/design-tools/vitis/vitis-ai.html>`__ on AMD FPGAs
 * A graph of computation including as pre- and post-processing can be written using `AKS <https://github.com/Xilinx/Vitis-AI/tree/v2.5/src/AKS>`__ on AMD FPGAs for end-to-end inference
 
-Quick Start Inference
-----------------------------------------
+Quick Start Deployment and Inference
+------------------------------------
 
-Quick start requires AMD EPYC CPU::
+.. code-block:: bash
 
   # Step 1: Create the example model repository(requires git-lfs)
   git lfs clone https://github.com/Xilinx/inference-server.git
   cd inference-server/examples
   ./fetch_models.sh
 
-  # Step 2: Launch amd-infer server
+  # Step 2: Launch the AMD Inference Server
   docker run -d --net=host -v ${PWD}/model_repository:/mnt/models:rw amdih/serve:uif1.1_zendnn_amdinfer_0.3.0 amdinfer-server --enable-repository-watcher
 
-  # Step 3: Sending inference request
+  # Step 3: Send an inference request
   pip install amdinfer
   cd inference-server/examples/resnet50/
   python3 tfzendnn.py --endpoint resnet50 --image ../../tests/assets/dog-3619020_640.jpg --labels ./imagenet_classes.txt
@@ -68,6 +68,8 @@ Quick start requires AMD EPYC CPU::
     n02086079 Pekinese, Pekingese, Peke
     n02112137 chow, chow chow
     n02113023 Pembroke, Pembroke Welsh corgi
+
+.. note::
 
 Learn more
 ----------
