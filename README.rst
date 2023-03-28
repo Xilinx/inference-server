@@ -43,7 +43,7 @@ The AMD Inference Server is integrated with the following libraries out of the g
 Quick Start Deployment and Inference
 ------------------------------------
 
-.. code-block:: bash
+.. code-block:: 
 
   # Step 1: Create the example model repository(requires git-lfs)
   git lfs clone https://github.com/Xilinx/inference-server.git
@@ -69,7 +69,7 @@ Quick Start Deployment and Inference
     n02112137 chow, chow chow
     n02113023 Pembroke, Pembroke Welsh corgi
 
-.. note::
+::
 
 Learn more
 ----------
