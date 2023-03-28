@@ -160,9 +160,6 @@ void AksDetect::doRun(BatchPtrQueue* input_queue,
 
     const auto batch_size = batch->size();
 
-    std::vector<InferenceResponse> responses;
-    responses.reserve(batch->getInputSize());
-
     std::vector<std::unique_ptr<vart::TensorBuffer>> v;
     v.reserve(batch_size);
 
@@ -173,9 +170,6 @@ void AksDetect::doRun(BatchPtrQueue* input_queue,
       const auto& trace = batch->getTrace(static_cast<int>(j));
       trace->startSpan("AksDetect");
 #endif
-      auto& resp = responses.emplace_back();
-      resp.setID(req->getID());
-      resp.setModel(this->graph_name_);
 
       auto inputs = req->getInputs();
       auto outputs = req->getOutputs();
@@ -306,6 +300,8 @@ void AksDetect::doRun(BatchPtrQueue* input_queue,
       new_batch->addTime(batch->getTime(i));
 #endif
     }
+
+    new_batch->setBuffers(std::move(input_buffers), {});
 
     assert(next_ != nullptr);
     next_->enqueue(std::move(new_batch));
