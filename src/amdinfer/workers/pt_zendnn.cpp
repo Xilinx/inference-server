@@ -42,6 +42,7 @@
 #include "amdinfer/observation/metrics.hpp"  // for Metrics, MetricCounterIDs
 #include "amdinfer/observation/tracing.hpp"  // for Trace
 #include "amdinfer/util/containers.hpp"      // for containerProduct
+#include "amdinfer/util/memory.hpp"          // for copy
 #include "amdinfer/util/thread.hpp"          // for setThreadName
 #include "amdinfer/util/timer.hpp"           // for Timer
 #include "amdinfer/workers/worker.hpp"       // for Worker, kNumBufferAuto
@@ -187,9 +188,6 @@ void PtZendnn::doRun(BatchPtrQueue* input_queue,
     AMDINFER_LOG_DEBUG(logger, "Got request in PtZendnn. Size: " +
                                  std::to_string(batch->size()));
 
-    std::vector<InferenceResponse> responses;
-    responses.reserve(batch->size());
-
     // This ensures no gradient is calculated and provide performance boost
     torch::NoGradGuard no_grad;
     c10::InferenceMode guard;
@@ -215,9 +213,6 @@ void PtZendnn::doRun(BatchPtrQueue* input_queue,
       const auto& trace = batch->getTrace(j);
       trace->startSpan("ptzendnn");
 #endif
-      auto& resp = responses.emplace_back();
-      resp.setID(req->getID());
-      resp.setModel("PTModel");
 
       auto inputs = req->getInputs();
       auto outputs = req->getOutputs();
@@ -270,55 +265,52 @@ void PtZendnn::doRun(BatchPtrQueue* input_queue,
     // Copy the output from the model to the response object
     size_t response_size = output_classes_;
     std::vector<size_t> new_shape = {response_size};
+
+    auto new_batch = std::make_unique<Batch>();
+    std::vector<BufferPtr> input_buffers;
+    input_buffers.push_back(pool->get(next_allocators_,
+                                      Tensor{"name", new_shape, DataType::Fp32},
+                                      batch->size()));
+
     for (unsigned int k = 0; k < batch->size(); k++) {
       const auto& req = batch->getRequest(k);
-      auto inputs = req->getInputs();
-      auto outputs = req->getOutputs();
-      auto& resp = responses[k];
 
-      for (unsigned int i = 0; i < inputs.size(); i++) {
-        InferenceResponseOutput output;
-        std::vector<std::byte> buffer;
-        buffer.resize(response_size * sizeof(float));
+      auto new_request = std::make_shared<InferenceRequest>();
+      auto* data_ptr =
+        input_buffers.at(0)->data(k * response_size * DataType("Fp32").size());
+      new_request->addInputTensor(
+        InferenceRequestInput{data_ptr, new_shape, DataType::Fp32, ""});
+      util::copy(output_tensor[0].data_ptr<float>(),
+                 static_cast<std::byte*>(data_ptr),
+                 response_size * sizeof(float));
 
-        memcpy(buffer.data(), output_tensor[i].data_ptr<float>(),
-               response_size * sizeof(float));
-        output.setData(std::move(buffer));
-
-        std::string output_name;
-        if (i < outputs.size()) {
-          output_name = outputs[i].getName();
-        }
-
-        if (output_name.empty()) {
-          output.setName(inputs[0].getName());
-        } else {
-          output.setName(output_name);
-        }
-
-        output.setShape(new_shape);
-        output.setDatatype(DataType::FP32);
-        resp.addOutput(output);
+      new_request->setCallback(req->getCallback());
+      new_request->setID(req->getID());
+      const auto outputs = req->getOutputs();
+      for (const auto& output : outputs) {
+        new_request->addOutputTensor(output);
       }
 
-#ifdef AMDINFER_ENABLE_TRACING
-      auto context = batch->getTrace(k)->propagate();
-      resp.setContext(std::move(context));
-#endif
-      timer.stop();
-      [[maybe_unused]] auto duration = timer.count<std::milli>();
-      AMDINFER_LOG_DEBUG(logger,
-                         "Total time taken: " + std::to_string(duration));
+      new_batch->addRequest(new_request);
 
-      req->runCallbackOnce(resp);
+      new_batch->setModel(k, "PTModel");
+
+      auto& trace = batch->getTrace(static_cast<int>(k));
+#ifdef AMDINFER_ENABLE_TRACING
+      trace->endSpan();
+      new_batch->addTrace(std::move(trace));
+#endif
 
 #ifdef AMDINFER_ENABLE_METRICS
-      timer.add("metrics", batch->getTime(k));
-      duration = timer.count<std::micro>("metrics", "stop");
-      Metrics::getInstance().observeSummary(MetricSummaryIDs::RequestLatency,
-                                            duration);
+      new_batch->addTime(batch->getTime(k));
 #endif
     }
+
+    new_batch->setBuffers(std::move(input_buffers), {});
+
+    assert(next_ != nullptr);
+    next_->enqueue(std::move(new_batch));
+
     returnInputBuffers(std::move(batch));
   }
   AMDINFER_LOG_INFO(logger, "PtZendnn ending");

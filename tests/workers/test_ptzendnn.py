@@ -110,7 +110,7 @@ class TestPtZendnn:
             outputs = response.getOutputs()
             assert len(outputs) == num_inputs
             for index, output in enumerate(outputs):
-                assert output.name == "input" + str(index)
+                assert output.name == ""
                 assert output.datatype == amdinfer.DataType.FP32
                 assert output.parameters.empty()
         return response
