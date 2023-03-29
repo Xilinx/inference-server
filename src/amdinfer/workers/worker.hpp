@@ -55,10 +55,7 @@ enum class WorkerStatus {
 void returnInputBuffers(std::unique_ptr<Batch> batch) {
   auto buffers = batch->getInputBuffers();
   for (auto& buffer : buffers) {
-    const auto* pool = buffer->getPool();
-    if (pool != nullptr) {
-      pool->put(std::move(buffer));
-    }
+    buffer->free();
   }
 }
 

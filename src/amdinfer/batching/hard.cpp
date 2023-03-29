@@ -117,8 +117,7 @@ void HardBatcher::doRun(const std::vector<MemoryAllocators>& allocators) {
         auto new_offset =
           raw_input->write(input.getData(), offset,
                            input.getSize() * input.getDatatype().size());
-        pool_->put(
-          std::make_unique<CpuBuffer>(input.getData(), MemoryAllocators::Cpu));
+        pool_->put(MemoryAllocators::Cpu, input.getData());
         request->setInputTensorData(i, raw_input->data(offset));
         offset = new_offset;
       }

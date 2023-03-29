@@ -79,18 +79,15 @@ BufferPtr VartTensorAllocator::get(const Tensor& tensor, size_t batch_size) {
 void VartTensorAllocator::put(const void* address) {
   const std::lock_guard lock{mutex_};
   const auto end = headers_.end();
-  auto found = headers_.end();
   for (auto it = headers_.begin(); it != end; it++) {
     if (it->address == address) {
-      found->free = true;
+      it->free = true;
       // std::cout << "Freed memory\n";
       return;
     }
   }
 
-  if (found == end) {
-    throw runtime_error("Address not found");
-  }
+  throw runtime_error("Address not found");
 }
 
 }  // namespace amdinfer

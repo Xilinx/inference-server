@@ -96,6 +96,10 @@ class Buffer {
   MemoryAllocators getAllocator() const;
 
   void setPool(const MemoryPool* pool);
+
+  virtual void free() = 0;
+
+ protected:
   const MemoryPool* getPool() const;
 
  private:

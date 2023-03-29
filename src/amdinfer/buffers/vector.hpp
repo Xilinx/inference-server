@@ -51,6 +51,8 @@ class VectorBuffer : public Buffer {
    */
   void* data(size_t offset) override;
 
+  void free() override;
+
  private:
   std::vector<std::byte> data_;
 };

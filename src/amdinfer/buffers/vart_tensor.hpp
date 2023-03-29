@@ -49,6 +49,8 @@ class VartTensorBuffer : public Buffer {
 
   vart::TensorBuffer* getTensorBuffer();
 
+  void free() override;
+
  private:
   vart::TensorBuffer* data_;
 };

@@ -55,10 +55,8 @@ std::unique_ptr<Buffer> MemoryPool::get(
   throw runtime_error("Memory could not be allocated");
 }
 
-void MemoryPool::put(std::unique_ptr<Buffer> memory) const {
-  const auto allocator = memory->getAllocator();
-  const auto* address = memory->data(0);
-  allocators_.at(allocator)->put(address);
+void MemoryPool::put(MemoryAllocators allocator, void* memory) const {
+  allocators_.at(allocator)->put(memory);
 }
 
 }  // namespace amdinfer

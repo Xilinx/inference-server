@@ -52,6 +52,8 @@ class CpuBuffer : public Buffer {
    */
   void* data(size_t offset) override;
 
+  void free() override;
+
  private:
   std::byte* data_;
 };

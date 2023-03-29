@@ -34,7 +34,7 @@ TEST(UnitPool, Basic) {
 
   auto buffer = pool.get({MemoryAllocators::Cpu}, input, 1);
 
-  pool.put(std::move(buffer));
+  buffer->free();
 }
 
 }  // namespace amdinfer

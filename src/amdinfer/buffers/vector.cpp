@@ -31,4 +31,6 @@ VectorBuffer::VectorBuffer(size_t size) : Buffer(MemoryAllocators::Cpu) {
 
 void* VectorBuffer::data(size_t offset) { return data_.data() + offset; }
 
+void VectorBuffer::free() { data_.clear(); }
+
 }  // namespace amdinfer
