@@ -280,7 +280,7 @@ void PtZendnn::doRun(BatchPtrQueue* input_queue,
         input_buffers.at(0)->data(k * response_size * DataType("Fp32").size());
       new_request->addInputTensor(
         InferenceRequestInput{data_ptr, new_shape, DataType::Fp32, ""});
-      util::copy(output_tensor[0].data_ptr<float>(),
+      util::copy(output_tensor[0].data_ptr<float>() + (k * response_size),
                  static_cast<std::byte*>(data_ptr),
                  response_size * sizeof(float));
 

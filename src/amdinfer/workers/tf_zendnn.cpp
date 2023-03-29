@@ -54,6 +54,7 @@
 #include "amdinfer/observation/logging.hpp"      // for Logger, PROTE...
 #include "amdinfer/observation/metrics.hpp"      // for Metrics, Metr...
 #include "amdinfer/observation/tracing.hpp"      // for Trace
+#include "amdinfer/util/memory.hpp"              // for copy
 #include "amdinfer/util/thread.hpp"              // for setThreadName
 #include "amdinfer/util/timer.hpp"               // for Timer
 #include "amdinfer/workers/worker.hpp"           // for Worker, kNumB...
@@ -250,10 +251,6 @@ void TfZendnn::doRun(BatchPtrQueue* input_queue,
       const auto& trace = batch->getTrace(j);
       trace->startSpan("tfzendnn");
 #endif
-      auto& resp = responses.emplace_back();
-      resp.setID(req->getID());
-      resp.setModel("TFModel");
-
       auto inputs = req->getInputs();
       auto outputs = req->getOutputs();
       AMDINFER_LOG_DEBUG(logger,
@@ -297,57 +294,51 @@ void TfZendnn::doRun(BatchPtrQueue* input_queue,
     // Copy the output from the model to the response object
     size_t response_size = output_classes_;
     std::vector<size_t> new_shape = {response_size};
+
+    auto new_batch = std::make_unique<Batch>();
+    std::vector<BufferPtr> input_buffers;
+    input_buffers.push_back(pool->get(next_allocators_,
+                                      Tensor{"name", new_shape, DataType::Fp32},
+                                      batch->size()));
+
     for (unsigned int k = 0; k < batch->size(); k++) {
       const auto& req = batch->getRequest(k);
-      auto inputs = req->getInputs();
-      auto outputs = req->getOutputs();
-      auto& resp = responses[k];
 
-      for (unsigned int i = 0; i < inputs.size(); i++) {
-        InferenceResponseOutput output;
-        std::vector<std::byte> buffer;
-        buffer.resize(response_size * sizeof(float));
+      auto new_request = std::make_shared<InferenceRequest>();
+      auto* data_ptr =
+        input_buffers.at(0)->data(k * response_size * DataType("Fp32").size());
+      new_request->addInputTensor(
+        InferenceRequestInput{data_ptr, new_shape, DataType::Fp32, ""});
+      util::copy(output_tensor[0].flat<float>().data() + (k * response_size),
+                 static_cast<std::byte*>(data_ptr),
+                 response_size * sizeof(float));
 
-        memcpy(buffer.data(),
-               output_tensor[0].flat<float>().data() + (i * response_size),
-               response_size * sizeof(float));
-        output.setData(std::move(buffer));
-
-        std::string output_name;
-        if (i < outputs.size()) {
-          output_name = outputs[i].getName();
-        }
-
-        if (output_name.empty()) {
-          output.setName(inputs[0].getName());
-        } else {
-          output.setName(output_name);
-        }
-
-        output.setShape(new_shape);
-        output.setDatatype(DataType::Fp32);
-        resp.addOutput(output);
+      new_request->setCallback(req->getCallback());
+      new_request->setID(req->getID());
+      const auto outputs = req->getOutputs();
+      for (const auto& output : outputs) {
+        new_request->addOutputTensor(output);
       }
 
+      new_batch->addRequest(new_request);
+
+      new_batch->setModel(k, "TFModel");
+
+      auto& trace = batch->getTrace(static_cast<int>(k));
 #ifdef AMDINFER_ENABLE_TRACING
-      auto context = batch->getTrace(k)->propagate();
-      resp.setContext(std::move(context));
+      trace->endSpan();
+      new_batch->addTrace(std::move(trace));
 #endif
-
-      timer.stop();
-      duration = timer.count<std::milli>();
-      AMDINFER_LOG_DEBUG(logger,
-                         "Total time taken: " + std::to_string(duration));
-
-      req->runCallbackOnce(resp);
 
 #ifdef AMDINFER_ENABLE_METRICS
-      timer.add("metrics", batch->getTime(k));
-      duration = timer.count<std::micro>("metrics", "stop");
-      Metrics::getInstance().observeSummary(MetricSummaryIDs::RequestLatency,
-                                            duration);
+      new_batch->addTime(batch->getTime(k));
 #endif
     }
+    new_batch->setBuffers(std::move(input_buffers), {});
+
+    assert(next_ != nullptr);
+    next_->enqueue(std::move(new_batch));
+
     returnInputBuffers(std::move(batch));
   }
   AMDINFER_LOG_INFO(logger, "TfZendnn ending");
