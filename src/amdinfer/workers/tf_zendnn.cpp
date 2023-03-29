@@ -223,9 +223,6 @@ void TfZendnn::doRun(BatchPtrQueue* input_queue,
     AMDINFER_LOG_DEBUG(logger, "Got request in TfZendnn. Size: " +
                                  std::to_string(batch->size()));
 
-    std::vector<InferenceResponse> responses;
-    responses.reserve(batch->size());
-
 #ifdef AMDINFER_ENABLE_METRICS
     Metrics::getInstance().incrementCounter(
       MetricCounterIDs::PipelineIngressWorker);

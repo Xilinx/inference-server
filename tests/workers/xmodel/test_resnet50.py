@@ -45,7 +45,7 @@ def validate(responses):
         outputs = response.getOutputs()
         assert len(outputs) == 1
         for index, output in enumerate(outputs):
-            assert output.name == "input" + str(index)
+            assert output.name == ""
             assert output.datatype == amdinfer.DataType.INT8
             assert output.parameters.empty()
             top_categories = postprocess(output, k)

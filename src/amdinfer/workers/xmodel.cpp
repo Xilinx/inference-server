@@ -56,6 +56,7 @@
 #include "amdinfer/observation/observer.hpp"      // for Loggers, Metrics...
 #include "amdinfer/util/containers.hpp"           // for containerProduct
 #include "amdinfer/util/ctpl.hpp"                 // for ThreadPool
+#include "amdinfer/util/memory.hpp"               // for copy
 #include "amdinfer/util/parse_env.hpp"            // for autoExpandEnvironm...
 #include "amdinfer/util/queue.hpp"                // for BufferPtrsQueue
 #include "amdinfer/util/thread.hpp"               // for setThreadName
@@ -204,7 +205,7 @@ void XModel::doRun(BatchPtrQueue* input_queue, const MemoryPool* pool) {
         (void)id;  // suppress unused variable warning
 #ifdef AMDINFER_ENABLE_TRACING
         for (unsigned int j = 0; j < batch->size(); j++) {
-          auto& trace = batch->getTrace(j);
+          const auto& trace = batch->getTrace(j);
           trace->startSpan("xmodel");
         }
 #endif
@@ -225,6 +226,7 @@ void XModel::doRun(BatchPtrQueue* input_queue, const MemoryPool* pool) {
         }
 
         BufferPtrs output_buffers;
+        BufferPtrs new_input_buffers;
         auto output_tensors = this->getRunner()->get_output_tensors();
         for (const auto* tensor : output_tensors) {
           auto xir_shape = tensor->get_shape();
@@ -235,6 +237,7 @@ void XModel::doRun(BatchPtrQueue* input_queue, const MemoryPool* pool) {
           // the shape includes the batch size so use external batch size 1
           output_buffers.push_back(
             pool->get({MemoryAllocators::VartTensor}, input, 1));
+          new_input_buffers.push_back(pool->get(next_allocators_, input, 1));
         }
 
         std::vector<vart::TensorBuffer*> outputs_ptr;
@@ -255,15 +258,6 @@ void XModel::doRun(BatchPtrQueue* input_queue, const MemoryPool* pool) {
         std::queue<std::pair<uint32_t, int>> futures;
         futures.push(getRunner()->execute_async(inputs_ptr, outputs_ptr));
 
-        std::vector<InferenceResponse> responses;
-        responses.reserve(batch->size());
-
-        for (const auto& req : *batch) {
-          auto& resp = responses.emplace_back();
-          resp.setID(req->getID());
-          resp.setModel("xmodel");
-        }
-
         while (!futures.empty()) {
           auto job_id = futures.front();
           futures.pop();
@@ -277,72 +271,64 @@ void XModel::doRun(BatchPtrQueue* input_queue, const MemoryPool* pool) {
         }
 
         const auto num_batches = batch->size();
+        auto new_batch = std::make_unique<Batch>();
         for (unsigned int k = 0; k < num_batches; k++) {
           const auto& req = batch->getRequest(k);
-          auto inputs = req->getInputs();
-          auto outputs = req->getOutputs();
-          auto& resp = responses[k];
+
+          auto new_request = std::make_shared<InferenceRequest>();
 
           const auto num_outputs = outputs_ptr.size();
           for (unsigned int i = 0; i < num_outputs; i++) {
-            // auto* output_index = output_buffers[i]->data(0);
-            auto* output_index =
-              reinterpret_cast<void*>(outputs_ptr.at(i)->data().first);
-            InferenceResponseOutput output;
-            auto output_tensors = getRunner()->get_output_tensors();
             auto output_shape = output_tensors[i]->get_shape();
             std::vector<uint64_t> new_shape;
             new_shape.reserve(output_shape.size() - 1);
-            for (size_t j = 0; j < output_shape.size() - 1; j++) {
-              new_shape.push_back(output_shape[j + 1]);
+            for (auto j = 1U; j < output_shape.size(); j++) {
+              new_shape.push_back(output_shape[j]);
             }
-            output.setShape(new_shape);
+            auto* output_index =
+              reinterpret_cast<void*>(outputs_ptr.at(i)->data().first);
 
-            output.setDatatype(this->output_type_[i]);
-
-            std::vector<std::byte> buffer;
-            buffer.resize(this->output_size_[i] * sizeof(uint8_t));
-            memcpy(buffer.data(),
-                   reinterpret_cast<int8_t*>(output_index) +
-                     (i * this->output_size_[i]),
-                   this->output_size_[i] * sizeof(uint8_t));
-            output.setData(std::move(buffer));
-
-            std::string output_name;
-            if (i < outputs.size()) {
-              output_name = outputs[i].getName();
-            }
-
-            if (output_name.empty()) {
-              output.setName(inputs[0].getName());
-            } else {
-              output.setName(output_name);
-            }
-
-            resp.addOutput(output);
+            auto* data_ptr = new_input_buffers.at(i)->data(
+              k * output_size_[i] * (output_type_[i]).size());
+            new_request->addInputTensor(
+              InferenceRequestInput{data_ptr, new_shape, output_type_[i], ""});
+            util::copy(
+              reinterpret_cast<int8_t*>(output_index) + (i * output_size_[i]),
+              static_cast<std::byte*>(data_ptr),
+              output_size_[i] * output_type_[i].size());
           }
 
+          new_request->setCallback(req->getCallback());
+          new_request->setID(req->getID());
+          const auto outputs = req->getOutputs();
+          for (const auto& output : outputs) {
+            new_request->addOutputTensor(output);
+          }
+
+          new_batch->addRequest(new_request);
+
+          new_batch->setModel(k, "xmodel");
+
+          auto& trace = batch->getTrace(static_cast<int>(k));
 #ifdef AMDINFER_ENABLE_TRACING
-          auto context = batch->getTrace(k)->propagate();
-          resp.setContext(std::move(context));
+          trace->endSpan();
+          new_batch->addTrace(std::move(trace));
 #endif
 
-          req->runCallbackOnce(resp);
 #ifdef AMDINFER_ENABLE_METRICS
-          Metrics::getInstance().incrementCounter(
-            MetricCounterIDs::PipelineEgressWorker);
-          util::Timer timer{batch->getTime(k)};
-          timer.stop();
-          auto duration = timer.count<std::micro>();
-          Metrics::getInstance().observeSummary(
-            MetricSummaryIDs::RequestLatency, duration);
+          new_batch->addTime(batch->getTime(k));
 #endif
         }
+        new_batch->setBuffers(std::move(new_input_buffers), {});
+
+        assert(next_ != nullptr);
+        next_->enqueue(std::move(new_batch));
+
         for (auto& buffer : input_buffers) {
-          const auto* pool = buffer->getPool();
-          if (pool != nullptr) {
-            pool->put(std::move(buffer));
-          }
+          buffer->free();
+        }
+        for (auto& buffer : output_buffers) {
+          buffer->free();
         }
         thread_pool_size--;
       });
