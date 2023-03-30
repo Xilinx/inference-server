@@ -31,27 +31,9 @@ void Batch::addRequest(InferenceRequestPtr request) {
   models_.emplace_back();
 }
 
-std::vector<Buffer*> Batch::getRawInputBuffers() const {
-  std::vector<Buffer*> buffers;
-  buffers.reserve(input_buffers_.size());
-  for (const auto& buffer : input_buffers_) {
-    buffers.push_back(buffer.get());
-  }
-  return buffers;
-}
+const BufferPtrs& Batch::getInputBuffers() const { return input_buffers_; }
 
-BufferPtrs Batch::getInputBuffers() { return std::move(input_buffers_); }
-
-std::vector<Buffer*> Batch::getRawOutputBuffers() const {
-  std::vector<Buffer*> buffers;
-  buffers.reserve(output_buffers_.size());
-  for (const auto& buffer : output_buffers_) {
-    buffers.push_back(buffer.get());
-  }
-  return buffers;
-}
-
-BufferPtrs Batch::getOutputBuffers() { return std::move(output_buffers_); }
+const BufferPtrs& Batch::getOutputBuffers() const { return output_buffers_; }
 
 const std::vector<InferenceRequestPtr>& Batch::getRequests() const {
   return requests_;

@@ -179,7 +179,7 @@ BatchPtr XModel::doRun(Batch* batch, const MemoryPool* pool) {
   }
 #endif
 
-  auto input_buffers = batch->getInputBuffers();
+  const auto& input_buffers = batch->getInputBuffers();
   // const auto& output_buffers = batch->getOutputBuffers();
 
 #ifdef AMDINFER_ENABLE_LOGGING

@@ -55,13 +55,6 @@ enum class WorkerStatus {
   Dead
 };
 
-// void returnInputBuffers(std::unique_ptr<Batch> batch) {
-//   auto buffers = batch->getInputBuffers();
-//   for (auto& buffer : buffers) {
-//     buffer->free();
-//   }
-// }
-
 /**
  * @brief All workers should extend the Worker class which defines the methods
  * to create, start, and run workers over their lifecycle.
@@ -210,7 +203,7 @@ class SingleThreadedWorker : public Worker {
         next_->enqueue(std::move(new_batch));
       }
 
-      auto buffers = batch->getInputBuffers();
+      const auto& buffers = batch->getInputBuffers();
       for (const auto& buffer : buffers) {
         buffer->free();
       }
@@ -271,7 +264,7 @@ class MultiThreadedWorker : public Worker {
           next_->enqueue(std::move(new_batch));
         }
 
-        auto buffers = batch->getInputBuffers();
+        const auto& buffers = batch->getInputBuffers();
         for (const auto& buffer : buffers) {
           buffer->free();
         }

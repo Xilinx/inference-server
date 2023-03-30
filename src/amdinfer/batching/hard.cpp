@@ -53,7 +53,6 @@ void HardBatcher::doRun(const std::vector<MemoryAllocators>& allocators) {
     auto batch = std::make_unique<Batch>();
     size_t batch_size = 0;
 
-    std::vector<BufferPtr> input_buffers;
     std::vector<size_t> input_offset;
     std::vector<size_t> output_offset;
 
@@ -86,6 +85,7 @@ void HardBatcher::doRun(const std::vector<MemoryAllocators>& allocators) {
       }
 
       if (first_request) {
+        std::vector<BufferPtr> input_buffers;
         input_buffers.reserve(input_size);
         // auto output_sizes = req->getOutputSizes();
         // TODO(varunsh): the spec does not require the request to have outputs
@@ -105,20 +105,19 @@ void HardBatcher::doRun(const std::vector<MemoryAllocators>& allocators) {
         batch->setBuffers(std::move(input_buffers), {});
       }
 
-      auto raw_inputs = batch->getRawInputBuffers();
-      auto raw_outputs = batch->getRawOutputBuffers();
+      const auto& input_buffers = batch->getInputBuffers();
 
       auto old_input_offset = input_offset;
       for (auto i = 0U; i < input_size; ++i) {
         const auto& input = inputs[i];
-        auto* raw_input = raw_inputs[i];
+        const auto& input_buffer = input_buffers.at(i);
         auto& offset = input_offset[i];
 
         auto new_offset =
-          raw_input->write(input.getData(), offset,
-                           input.getSize() * input.getDatatype().size());
+          input_buffer->write(input.getData(), offset,
+                              input.getSize() * input.getDatatype().size());
         pool_->put(MemoryAllocators::Cpu, input.getData());
-        request->setInputTensorData(i, raw_input->data(offset));
+        request->setInputTensorData(i, input_buffer->data(offset));
         offset = new_offset;
       }
 
