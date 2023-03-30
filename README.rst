@@ -46,17 +46,15 @@ Quick Start Deployment and Inference
 .. code-block:: 
 
   # Step 1: Create the example model repository(requires git-lfs)
-  git lfs clone https://github.com/Xilinx/inference-server.git
-  cd inference-server/examples
-  ./fetch_models.sh
+  wget https://github.com/Xilinx/inference-server/raw/main/examples/resnet50/quickstart-setup.sh
+  ./quickstart-setup.sh
 
   # Step 2: Launch the AMD Inference Server
   docker run -d --net=host -v ${PWD}/model_repository:/mnt/models:rw amdih/serve:uif1.1_zendnn_amdinfer_0.3.0 amdinfer-server --enable-repository-watcher
 
   # Step 3: Send an inference request
   pip install amdinfer
-  cd inference-server/examples/resnet50/
-  python3 tfzendnn.py --endpoint resnet50 --image ../../tests/assets/dog-3619020_640.jpg --labels ./imagenet_classes.txt
+  python3 tfzendnn.py --endpoint resnet50 --image ./dog-3619020_640.jpg --labels ./imagenet_classes.txt
 
   # Inference should return the following
   Running the TF+ZenDNN example for ResNet50 in Python
