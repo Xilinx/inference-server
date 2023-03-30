@@ -74,15 +74,15 @@ namespace workers {
  * runs a detection-based model on a video with AKS.
  *
  */
-class AksDetectStream : public Worker {
+class AksDetectStream : public SingleThreadedWorker {
  public:
-  using Worker::Worker;
+  using SingleThreadedWorker::SingleThreadedWorker;
   [[nodiscard]] std::vector<MemoryAllocators> getAllocators() const override;
 
  private:
   void doInit(ParameterMap* parameters) override;
   void doAcquire(ParameterMap* parameters) override;
-  void doRun(BatchPtrQueue* input_queue, const MemoryPool* pool) override;
+  BatchPtr doRun(Batch* batch, const MemoryPool* pool) override;
   void doRelease() override;
   void doDestroy() override;
 
@@ -133,180 +133,117 @@ void AksDetectStream::doAcquire(ParameterMap* parameters) {
   this->metadata_.addOutputTensor("output", {0}, DataType::Uint32);
   this->metadata_.setName(graph_name);
 }
-
-void AksDetectStream::doRun(BatchPtrQueue* input_queue,
-                            [[maybe_unused]] const MemoryPool* pool) {
-  util::setThreadName("AksDetectStream");
+BatchPtr AksDetectStream::doRun(Batch* batch,
+                                [[maybe_unused]] const MemoryPool* pool) {
 #ifdef AMDINFER_ENABLE_LOGGING
   const auto& logger = this->getLogger();
 #endif
 
-  while (true) {
-    BatchPtr batch;
-    input_queue->wait_dequeue(batch);
-    if (batch == nullptr) {
-      break;
-    }
-
-    AMDINFER_LOG_INFO(logger, "Got request in AksDetectStream");
-    for (unsigned int k = 0; k < batch->size(); k++) {
-      const auto& req = batch->getRequest(static_cast<int>(k));
+  for (unsigned int k = 0; k < batch->size(); k++) {
+    const auto& req = batch->getRequest(static_cast<int>(k));
 #ifdef AMDINFER_ENABLE_TRACING
-      const auto& trace = batch->getTrace(static_cast<int>(k));
-      trace->startSpan("aks_detect_stream");
+    const auto& trace = batch->getTrace(static_cast<int>(k));
+    trace->startSpan("aks_detect_stream");
 #endif
-      auto inputs = req->getInputs();
-      auto outputs = req->getOutputs();
-      auto key = req->getParameters().get<std::string>("key");
-      for (auto& input : inputs) {
-        auto* input_buffer = input.getData();
+    auto inputs = req->getInputs();
+    auto outputs = req->getOutputs();
+    auto key = req->getParameters().get<std::string>("key");
+    for (auto& input : inputs) {
+      auto* input_buffer = input.getData();
 
-        const auto* idata = static_cast<char*>(input_buffer);
-        std::string data{idata, input.getSize()};
+      const auto* idata = static_cast<char*>(input_buffer);
+      std::string data{idata, input.getSize()};
 
-        cv::VideoCapture cap(data);  // open the video file
-        if (!cap.isOpened()) {       // check if we succeeded
-          const char* error = "Cannot open video file";
-          AMDINFER_LOG_ERROR(logger, error);
-          req->runCallbackError(error);
-          continue;
-        }
+      cv::VideoCapture cap(data);  // open the video file
+      if (!cap.isOpened()) {       // check if we succeeded
+        const char* error = "Cannot open video file";
+        AMDINFER_LOG_ERROR(logger, error);
+        req->runCallbackError(error);
+        continue;
+      }
 
-        InferenceResponse resp;
-        resp.setID(req->getID());
-        resp.setModel("aks_detect_stream");
+      InferenceResponse resp;
+      resp.setID(req->getID());
+      resp.setModel("aks_detect_stream");
 
-        // contains the number of frames in the video;
-        auto count = static_cast<size_t>(
-          cap.get(cv::VideoCaptureProperties::CAP_PROP_FRAME_COUNT));
-        if (input.getParameters().has("count")) {
-          auto requested_count = input.getParameters().get<int32_t>("count");
-          count = std::min(count, static_cast<size_t>(requested_count));
-        }
-        double fps = cap.get(cv::VideoCaptureProperties::CAP_PROP_FPS);
-        auto video_width =
-          cap.get(cv::VideoCaptureProperties::CAP_PROP_FRAME_WIDTH);
-        auto video_height =
-          cap.get(cv::VideoCaptureProperties::CAP_PROP_FRAME_HEIGHT);
+      // contains the number of frames in the video;
+      auto count = static_cast<size_t>(
+        cap.get(cv::VideoCaptureProperties::CAP_PROP_FRAME_COUNT));
+      if (input.getParameters().has("count")) {
+        auto requested_count = input.getParameters().get<int32_t>("count");
+        count = std::min(count, static_cast<size_t>(requested_count));
+      }
+      double fps = cap.get(cv::VideoCaptureProperties::CAP_PROP_FPS);
+      auto video_width =
+        cap.get(cv::VideoCaptureProperties::CAP_PROP_FRAME_WIDTH);
+      auto video_height =
+        cap.get(cv::VideoCaptureProperties::CAP_PROP_FRAME_HEIGHT);
 
-        InferenceResponseOutput output;
-        output.setName("key");
-        output.setDatatype(DataType::String);
-        std::string metadata = "[" + std::to_string(video_width) + "," +
-                               std::to_string(video_height) + "]";
-        auto message = constructMessage(key, std::to_string(fps), metadata);
-        std::vector<std::byte> buffer;
-        buffer.resize(message.size());
-        memcpy(buffer.data(), message.data(), message.size());
-        output.setData(std::move(buffer));
-        output.setShape({message.size()});
-        resp.addOutput(output);
-        req->runCallback(resp);
+      InferenceResponseOutput output;
+      output.setName("key");
+      output.setDatatype(DataType::String);
+      std::string metadata = "[" + std::to_string(video_width) + "," +
+                             std::to_string(video_height) + "]";
+      auto message = constructMessage(key, std::to_string(fps), metadata);
+      std::vector<std::byte> buffer;
+      buffer.resize(message.size());
+      memcpy(buffer.data(), message.data(), message.size());
+      output.setData(std::move(buffer));
+      output.setShape({message.size()});
+      resp.addOutput(output);
+      req->runCallback(resp);
 
-        // round to nearest multiple of batch size
-        auto count_adjusted = count - (count % this->batch_size_);
-        std::queue<
-          std::future<std::vector<std::unique_ptr<vart::TensorBuffer>>>>
-          futures;
-        std::queue<std::string> frames;
-        for (unsigned int frame_num = 0; frame_num < count_adjusted;
-             frame_num += this->batch_size_) {
-          std::vector<std::unique_ptr<vart::TensorBuffer>> v;
-          v.reserve(1);
+      // round to nearest multiple of batch size
+      auto count_adjusted = count - (count % this->batch_size_);
+      std::queue<std::future<std::vector<std::unique_ptr<vart::TensorBuffer>>>>
+        futures;
+      std::queue<std::string> frames;
+      for (unsigned int frame_num = 0; frame_num < count_adjusted;
+           frame_num += this->batch_size_) {
+        std::vector<std::unique_ptr<vart::TensorBuffer>> v;
+        v.reserve(1);
 
 #ifdef AMDINFER_ENABLE_TRACING
-          trace->startSpan("enqueue_batch");
+        trace->startSpan("enqueue_batch");
 #endif
 
-          for (size_t i = 0; i < this->batch_size_; i++) {
-            cv::Mat frame;
-            cap >> frame;  // get the next frame from video
-            if (frame.empty()) {
-              i--;
-              continue;
-            }
-            if (i == 0) {
-              v.emplace_back(
-                std::make_unique<AKS::AksTensorBuffer>(xir::Tensor::create(
-                  "AksDetect-stream",
-                  {static_cast<int>(this->batch_size_), frame.size().height,
-                   frame.size().width, kImageChannels},
-                  xir::create_data_type<unsigned char>())));
-            }
-            // cv::resize(frame, frame, cv::Size(kImageWidth, kImageHeight));
-            auto input_size = frame.step[0] * frame.rows;
-            memcpy(
-              reinterpret_cast<uint8_t*>(v[0]->data().first) + (i * input_size),
-              frame.data, input_size);
-
-            std::vector<unsigned char> buf;
-            cv::imencode(".jpg", frame, buf);
-            const auto* enc_msg = reinterpret_cast<const char*>(buf.data());
-            std::string encoded = util::base64Encode(enc_msg, buf.size());
-            frames.push("data:image/jpg;base64," + encoded);
+        for (size_t i = 0; i < this->batch_size_; i++) {
+          cv::Mat frame;
+          cap >> frame;  // get the next frame from video
+          if (frame.empty()) {
+            i--;
+            continue;
           }
-          AMDINFER_LOG_INFO(logger, "Enqueuing in " + key);
-          futures.push(this->sys_manager_->enqueueJob(this->graph_, "",
-                                                      std::move(v), nullptr));
-#ifdef AMDINFER_ENABLE_TRACING
-          trace->endSpan();
-#endif
-          auto status = futures.front().wait_for(std::chrono::seconds(0));
-          if (status == std::future_status::ready) {
-            std::vector<std::unique_ptr<vart::TensorBuffer>>
-              out_data_descriptor = futures.front().get();
-            futures.pop();
-            auto* top_k_data =
-              reinterpret_cast<float*>(out_data_descriptor[0]->data().first);
-            auto shape = out_data_descriptor[0]->get_tensor()->get_shape();
-            std::vector<std::string> labels;
-            labels.reserve(this->batch_size_);
-            for (unsigned int j = 0; j < this->batch_size_; j++) {
-              labels.emplace_back("[");
-            }
-            for (int i = 0; i < shape[0] * shape[1];
-                 i += kAksDetectResponseSize) {
-              auto batch_id = static_cast<int>(top_k_data[i]);
-              const auto* detect_response =
-                reinterpret_cast<DetectResponse*>(&(top_k_data[i + 1]));
-
-              labels[batch_id].append(R"({"fill": false, "box": [)");
-              labels[batch_id].append(std::to_string(detect_response->x) + ",");
-              labels[batch_id].append(std::to_string(detect_response->y) + ",");
-              labels[batch_id].append(std::to_string(detect_response->w) + ",");
-              labels[batch_id].append(std::to_string(detect_response->h));
-              labels[batch_id].append(R"(], "label": ")");
-              labels[batch_id].append(
-                std::to_string(detect_response->class_id) + "\"},");
-            }
-            for (unsigned int j = 0; j < this->batch_size_; j++) {
-              if (labels[j].size() > 1) {
-                labels[j].pop_back();  // trim trailing comma
-              }
-              labels[j] += "]";
-              InferenceResponse resp;
-              resp.setID(req->getID());
-              resp.setModel("invert_video");
-
-              InferenceResponseOutput output;
-              output.setName("image");
-              output.setDatatype(DataType::String);
-              auto message = constructMessage(key, frames.front(), labels[j]);
-              std::vector<std::byte> buffer;
-              buffer.resize(message.size());
-              memcpy(buffer.data(), message.data(), message.size());
-              output.setData(std::move(buffer));
-              output.setShape({message.size()});
-              resp.addOutput(output);
-              req->runCallback(resp);
-              frames.pop();
-            }
+          if (i == 0) {
+            v.emplace_back(
+              std::make_unique<AKS::AksTensorBuffer>(xir::Tensor::create(
+                "AksDetect-stream",
+                {static_cast<int>(this->batch_size_), frame.size().height,
+                 frame.size().width, kImageChannels},
+                xir::create_data_type<unsigned char>())));
           }
+          // cv::resize(frame, frame, cv::Size(kImageWidth, kImageHeight));
+          auto input_size = frame.step[0] * frame.rows;
+          memcpy(
+            reinterpret_cast<uint8_t*>(v[0]->data().first) + (i * input_size),
+            frame.data, input_size);
+
+          std::vector<unsigned char> buf;
+          cv::imencode(".jpg", frame, buf);
+          const auto* enc_msg = reinterpret_cast<const char*>(buf.data());
+          std::string encoded = util::base64Encode(enc_msg, buf.size());
+          frames.push("data:image/jpg;base64," + encoded);
         }
-        while (!futures.empty()) {
+        AMDINFER_LOG_INFO(logger, "Enqueuing in " + key);
+        futures.push(this->sys_manager_->enqueueJob(this->graph_, "",
+                                                    std::move(v), nullptr));
+#ifdef AMDINFER_ENABLE_TRACING
+        trace->endSpan();
+#endif
+        auto status = futures.front().wait_for(std::chrono::seconds(0));
+        if (status == std::future_status::ready) {
           std::vector<std::unique_ptr<vart::TensorBuffer>> out_data_descriptor =
             futures.front().get();
-          AMDINFER_LOG_INFO(logger, "Got future with key " + key);
           futures.pop();
           auto* top_k_data =
             reinterpret_cast<float*>(out_data_descriptor[0]->data().first);
@@ -344,6 +281,7 @@ void AksDetectStream::doRun(BatchPtrQueue* input_queue,
             output.setName("image");
             output.setDatatype(DataType::String);
             auto message = constructMessage(key, frames.front(), labels[j]);
+            std::vector<std::byte> buffer;
             buffer.resize(message.size());
             memcpy(buffer.data(), message.data(), message.size());
             output.setData(std::move(buffer));
@@ -354,9 +292,60 @@ void AksDetectStream::doRun(BatchPtrQueue* input_queue,
           }
         }
       }
+      while (!futures.empty()) {
+        std::vector<std::unique_ptr<vart::TensorBuffer>> out_data_descriptor =
+          futures.front().get();
+        AMDINFER_LOG_INFO(logger, "Got future with key " + key);
+        futures.pop();
+        auto* top_k_data =
+          reinterpret_cast<float*>(out_data_descriptor[0]->data().first);
+        auto shape = out_data_descriptor[0]->get_tensor()->get_shape();
+        std::vector<std::string> labels;
+        labels.reserve(this->batch_size_);
+        for (unsigned int j = 0; j < this->batch_size_; j++) {
+          labels.emplace_back("[");
+        }
+        for (int i = 0; i < shape[0] * shape[1]; i += kAksDetectResponseSize) {
+          auto batch_id = static_cast<int>(top_k_data[i]);
+          const auto* detect_response =
+            reinterpret_cast<DetectResponse*>(&(top_k_data[i + 1]));
+
+          labels[batch_id].append(R"({"fill": false, "box": [)");
+          labels[batch_id].append(std::to_string(detect_response->x) + ",");
+          labels[batch_id].append(std::to_string(detect_response->y) + ",");
+          labels[batch_id].append(std::to_string(detect_response->w) + ",");
+          labels[batch_id].append(std::to_string(detect_response->h));
+          labels[batch_id].append(R"(], "label": ")");
+          labels[batch_id].append(std::to_string(detect_response->class_id) +
+                                  "\"},");
+        }
+        for (unsigned int j = 0; j < this->batch_size_; j++) {
+          if (labels[j].size() > 1) {
+            labels[j].pop_back();  // trim trailing comma
+          }
+          labels[j] += "]";
+          InferenceResponse resp;
+          resp.setID(req->getID());
+          resp.setModel("invert_video");
+
+          InferenceResponseOutput output;
+          output.setName("image");
+          output.setDatatype(DataType::String);
+          auto message = constructMessage(key, frames.front(), labels[j]);
+          buffer.resize(message.size());
+          memcpy(buffer.data(), message.data(), message.size());
+          output.setData(std::move(buffer));
+          output.setShape({message.size()});
+          resp.addOutput(output);
+          req->runCallback(resp);
+          frames.pop();
+        }
+      }
     }
   }
-  AMDINFER_LOG_INFO(logger, "AksDetectStream ending");
+
+  // okay because ensembles disabled for this worker
+  return nullptr;
 }
 
 void AksDetectStream::doRelease() {}
@@ -370,6 +359,7 @@ extern "C" {
 // using smart pointer here may cause problems inside shared object so managing
 // manually
 amdinfer::workers::Worker* getWorker() {
-  return new amdinfer::workers::AksDetectStream("AksDetectStream", "AKS");
+  return new amdinfer::workers::AksDetectStream("AksDetectStream", "AKS",
+                                                false);
 }
 }  // extern C

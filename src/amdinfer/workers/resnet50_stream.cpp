@@ -75,15 +75,15 @@ namespace workers {
  * video and sends the inverted frames back to the client over a websocket.
  *
  */
-class ResNet50Stream : public Worker {
+class ResNet50Stream : public SingleThreadedWorker {
  public:
-  using Worker::Worker;
+  using SingleThreadedWorker::SingleThreadedWorker;
   [[nodiscard]] std::vector<MemoryAllocators> getAllocators() const override;
 
  private:
   void doInit(ParameterMap* parameters) override;
   void doAcquire(ParameterMap* parameters) override;
-  void doRun(BatchPtrQueue* input_queue, const MemoryPool* pool) override;
+  BatchPtr doRun(Batch* batch, const MemoryPool* pool) override;
   void doRelease() override;
   void doDestroy() override;
 
@@ -141,145 +141,95 @@ void ResNet50Stream::doAcquire(ParameterMap* parameters) {
   this->metadata_.setName(this->graph_name_);
 }
 
-void ResNet50Stream::doRun(BatchPtrQueue* input_queue,
-                           [[maybe_unused]] const MemoryPool* pool) {
+BatchPtr ResNet50Stream::doRun(Batch* batch,
+                               [[maybe_unused]] const MemoryPool* pool) {
   std::shared_ptr<InferenceRequest> req;
-  util::setThreadName("ResNet50Stream");
 #ifdef AMDINFER_ENABLE_LOGGING
   const auto& logger = this->getLogger();
 #endif
 
-  while (true) {
-    BatchPtr batch;
-    input_queue->wait_dequeue(batch);
-    if (batch == nullptr) {
-      break;
-    }
+  for (const auto& req : *batch) {
+    auto inputs = req->getInputs();
+    auto outputs = req->getOutputs();
+    auto key = req->getParameters().get<std::string>("key");
+    for (auto& input : inputs) {
+      auto* input_buffer = input.getData();
 
-    AMDINFER_LOG_INFO(logger, "Got request in ResNet50Stream");
-    for (const auto& req : *batch) {
-      auto inputs = req->getInputs();
-      auto outputs = req->getOutputs();
-      auto key = req->getParameters().get<std::string>("key");
-      for (auto& input : inputs) {
-        auto* input_buffer = input.getData();
+      const auto* idata = static_cast<char*>(input_buffer);
+      std::string data{idata, input.getSize()};
 
-        const auto* idata = static_cast<char*>(input_buffer);
-        std::string data{idata, input.getSize()};
+      cv::VideoCapture cap(data);  // open the video file
+      if (!cap.isOpened()) {       // check if we succeeded
+        const char* error = "Cannot open video file";
+        AMDINFER_LOG_ERROR(logger, error);
+        req->runCallbackError(error);
+        continue;
+      }
 
-        cv::VideoCapture cap(data);  // open the video file
-        if (!cap.isOpened()) {       // check if we succeeded
-          const char* error = "Cannot open video file";
-          AMDINFER_LOG_ERROR(logger, error);
-          req->runCallbackError(error);
-          continue;
+      InferenceResponse resp;
+      resp.setID(req->getID());
+      resp.setModel("aks_detect_stream");
+
+      // contains the number of frames in the video;
+      auto count = static_cast<size_t>(cap.get(VidProps::CAP_PROP_FRAME_COUNT));
+      if (input.getParameters().has("count")) {
+        auto requested_count = input.getParameters().get<int32_t>("count");
+        count = std::min(count, static_cast<size_t>(requested_count));
+      }
+      double fps = cap.get(VidProps::CAP_PROP_FPS);
+      auto video_width = cap.get(VidProps::CAP_PROP_FRAME_WIDTH);
+      auto video_height = cap.get(VidProps::CAP_PROP_FRAME_HEIGHT);
+
+      InferenceResponseOutput output;
+      output.setName("key");
+      output.setDatatype(DataType::String);
+      std::string metadata = "[" + std::to_string(video_width) + "," +
+                             std::to_string(video_height) + "]";
+      auto message = constructMessage(key, std::to_string(fps), metadata);
+      std::vector<std::byte> buffer;
+      buffer.resize(message.size());
+      memcpy(buffer.data(), message.data(), message.size());
+      output.setData(std::move(buffer));
+      output.setShape({message.size()});
+      resp.addOutput(output);
+      req->runCallback(resp);
+      // round to nearest multiple of batch size
+      auto count_adjusted = count - (count % this->batch_size_);
+      std::queue<std::future<std::vector<std::unique_ptr<vart::TensorBuffer>>>>
+        futures;
+      std::queue<std::string> frames;
+      for (unsigned int num_frames = 0; num_frames < count_adjusted;
+           num_frames += this->batch_size_) {
+        std::vector<std::unique_ptr<vart::TensorBuffer>> v;
+        v.reserve(1);
+        v.emplace_back(std::make_unique<AKS::AksTensorBuffer>(
+          xir::Tensor::create("resnet-stream",
+                              {static_cast<int>(this->batch_size_),
+                               kImageHeight, kImageWidth, kImageChannels},
+                              xir::create_data_type<unsigned char>())));
+
+        for (size_t i = 0; i < this->batch_size_; i++) {
+          cv::Mat frame;
+          cap >> frame;  // get the next frame from video
+          // if (frame.empty()) {
+          //   continue;
+          // }
+          cv::resize(frame, frame, cv::Size(kImageWidth, kImageHeight));
+
+          memcpy(
+            reinterpret_cast<uint8_t*>(v[0]->data().first) + (i * kImageSize),
+            frame.data, kImageSize);
+
+          std::vector<unsigned char> buf;
+          cv::imencode(".jpg", frame, buf);
+          const auto* enc_msg = reinterpret_cast<const char*>(buf.data());
+          std::string encoded = util::base64Encode(enc_msg, buf.size());
+          frames.push("data:image/jpg;base64," + encoded);
         }
-
-        InferenceResponse resp;
-        resp.setID(req->getID());
-        resp.setModel("aks_detect_stream");
-
-        // contains the number of frames in the video;
-        auto count =
-          static_cast<size_t>(cap.get(VidProps::CAP_PROP_FRAME_COUNT));
-        if (input.getParameters().has("count")) {
-          auto requested_count = input.getParameters().get<int32_t>("count");
-          count = std::min(count, static_cast<size_t>(requested_count));
-        }
-        double fps = cap.get(VidProps::CAP_PROP_FPS);
-        auto video_width = cap.get(VidProps::CAP_PROP_FRAME_WIDTH);
-        auto video_height = cap.get(VidProps::CAP_PROP_FRAME_HEIGHT);
-
-        InferenceResponseOutput output;
-        output.setName("key");
-        output.setDatatype(DataType::String);
-        std::string metadata = "[" + std::to_string(video_width) + "," +
-                               std::to_string(video_height) + "]";
-        auto message = constructMessage(key, std::to_string(fps), metadata);
-        std::vector<std::byte> buffer;
-        buffer.resize(message.size());
-        memcpy(buffer.data(), message.data(), message.size());
-        output.setData(std::move(buffer));
-        output.setShape({message.size()});
-        resp.addOutput(output);
-        req->runCallback(resp);
-        // round to nearest multiple of batch size
-        auto count_adjusted = count - (count % this->batch_size_);
-        std::queue<
-          std::future<std::vector<std::unique_ptr<vart::TensorBuffer>>>>
-          futures;
-        std::queue<std::string> frames;
-        for (unsigned int num_frames = 0; num_frames < count_adjusted;
-             num_frames += this->batch_size_) {
-          std::vector<std::unique_ptr<vart::TensorBuffer>> v;
-          v.reserve(1);
-          v.emplace_back(std::make_unique<AKS::AksTensorBuffer>(
-            xir::Tensor::create("resnet-stream",
-                                {static_cast<int>(this->batch_size_),
-                                 kImageHeight, kImageWidth, kImageChannels},
-                                xir::create_data_type<unsigned char>())));
-
-          for (size_t i = 0; i < this->batch_size_; i++) {
-            cv::Mat frame;
-            cap >> frame;  // get the next frame from video
-            // if (frame.empty()) {
-            //   continue;
-            // }
-            cv::resize(frame, frame, cv::Size(kImageWidth, kImageHeight));
-
-            memcpy(
-              reinterpret_cast<uint8_t*>(v[0]->data().first) + (i * kImageSize),
-              frame.data, kImageSize);
-
-            std::vector<unsigned char> buf;
-            cv::imencode(".jpg", frame, buf);
-            const auto* enc_msg = reinterpret_cast<const char*>(buf.data());
-            std::string encoded = util::base64Encode(enc_msg, buf.size());
-            frames.push("data:image/jpg;base64," + encoded);
-          }
-          futures.push(this->sys_manager_->enqueueJob(this->graph_, "",
-                                                      std::move(v), nullptr));
-          auto status = futures.front().wait_for(std::chrono::seconds(0));
-          if (status == std::future_status::ready) {
-            std::vector<std::unique_ptr<vart::TensorBuffer>>
-              out_data_descriptor = futures.front().get();
-            futures.pop();
-            int* top_k_data =
-              reinterpret_cast<int*>(out_data_descriptor[0]->data().first);
-            for (unsigned int i = 0; i < this->batch_size_; i++) {
-              std::string labels = "[";
-              for (unsigned int j = 0; j < kResnetClassifications; j++) {
-                auto y = std::to_string(j * kBoxHeight);
-                auto label =
-                  std::to_string(top_k_data[(i * kResnetClassifications) + j]);
-                labels.append(R"({"fill": true, "box": [0,)");
-                labels.append(y + ",");
-                labels.append(kImageWidthStr + ",");
-                labels.append(kBoxHeightStr + R"(], "label": ")");
-                labels.append(label + "\"},");
-              }
-              labels.pop_back();  // trim trailing comma
-              labels += "]";
-              InferenceResponse resp;
-              resp.setID(req->getID());
-              resp.setModel("invert_video");
-
-              InferenceResponseOutput output;
-              output.setName("image");
-              output.setDatatype(DataType::String);
-              auto message = constructMessage(key, frames.front(), labels);
-              std::vector<std::byte> buffer;
-              buffer.resize(message.size());
-              memcpy(buffer.data(), message.data(), message.size());
-              output.setData(std::move(buffer));
-              output.setShape({message.size()});
-              resp.addOutput(output);
-              req->runCallback(resp);
-              frames.pop();
-            }
-          }
-        }
-        while (!futures.empty()) {
+        futures.push(this->sys_manager_->enqueueJob(this->graph_, "",
+                                                    std::move(v), nullptr));
+        auto status = futures.front().wait_for(std::chrono::seconds(0));
+        if (status == std::future_status::ready) {
           std::vector<std::unique_ptr<vart::TensorBuffer>> out_data_descriptor =
             futures.front().get();
           futures.pop();
@@ -318,9 +268,49 @@ void ResNet50Stream::doRun(BatchPtrQueue* input_queue,
           }
         }
       }
+      while (!futures.empty()) {
+        std::vector<std::unique_ptr<vart::TensorBuffer>> out_data_descriptor =
+          futures.front().get();
+        futures.pop();
+        int* top_k_data =
+          reinterpret_cast<int*>(out_data_descriptor[0]->data().first);
+        for (unsigned int i = 0; i < this->batch_size_; i++) {
+          std::string labels = "[";
+          for (unsigned int j = 0; j < kResnetClassifications; j++) {
+            auto y = std::to_string(j * kBoxHeight);
+            auto label =
+              std::to_string(top_k_data[(i * kResnetClassifications) + j]);
+            labels.append(R"({"fill": true, "box": [0,)");
+            labels.append(y + ",");
+            labels.append(kImageWidthStr + ",");
+            labels.append(kBoxHeightStr + R"(], "label": ")");
+            labels.append(label + "\"},");
+          }
+          labels.pop_back();  // trim trailing comma
+          labels += "]";
+          InferenceResponse resp;
+          resp.setID(req->getID());
+          resp.setModel("invert_video");
+
+          InferenceResponseOutput output;
+          output.setName("image");
+          output.setDatatype(DataType::String);
+          auto message = constructMessage(key, frames.front(), labels);
+          std::vector<std::byte> buffer;
+          buffer.resize(message.size());
+          memcpy(buffer.data(), message.data(), message.size());
+          output.setData(std::move(buffer));
+          output.setShape({message.size()});
+          resp.addOutput(output);
+          req->runCallback(resp);
+          frames.pop();
+        }
+      }
     }
   }
-  AMDINFER_LOG_INFO(logger, "ResNet50Stream ending");
+
+  // okay because ensembles disabled for this worker
+  return nullptr;
 }
 
 void ResNet50Stream::doRelease() {}
@@ -334,6 +324,6 @@ extern "C" {
 // using smart pointer here may cause problems inside shared object so managing
 // manually
 amdinfer::workers::Worker* getWorker() {
-  return new amdinfer::workers::ResNet50Stream("ResNet50Stream", "AKS");
+  return new amdinfer::workers::ResNet50Stream("ResNet50Stream", "AKS", false);
 }
 }  // extern C

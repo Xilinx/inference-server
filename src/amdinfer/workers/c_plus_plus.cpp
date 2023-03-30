@@ -103,15 +103,15 @@ namespace workers {
  * @brief The CPlusPlus worker can run a compiled C++ "model".
  *
  */
-class CPlusPlus : public Worker {
+class CPlusPlus : public SingleThreadedWorker {
  public:
-  using Worker::Worker;
+  using SingleThreadedWorker::SingleThreadedWorker;
   [[nodiscard]] std::vector<MemoryAllocators> getAllocators() const override;
 
  private:
   void doInit(ParameterMap* parameters) override;
   void doAcquire(ParameterMap* parameters) override;
-  void doRun(BatchPtrQueue* input_queue, const MemoryPool* pool) override;
+  BatchPtr doRun(Batch* batch, const MemoryPool* pool) override;
   void doRelease() override;
   void doDestroy() override;
 
@@ -170,67 +170,44 @@ void CPlusPlus::doAcquire([[maybe_unused]] ParameterMap* parameters) {
   }
 }
 
-void CPlusPlus::doRun(BatchPtrQueue* input_queue, const MemoryPool* pool) {
-  util::setThreadName("CPlusPlus");
-#ifdef AMDINFER_ENABLE_LOGGING
-  const auto& logger = this->getLogger();
-#endif
-
-  while (true) {
-    BatchPtr batch;
-    input_queue->wait_dequeue(batch);
-    if (batch == nullptr) {
-      break;
+BatchPtr CPlusPlus::doRun(Batch* batch, const MemoryPool* pool) {
+  BatchPtr new_batch;
+  if (!(input_tensors_.empty() || output_tensors_.empty())) {
+    new_batch = std::make_unique<Batch>();
+    std::vector<BufferPtr> input_buffers;
+    input_buffers.reserve(output_tensors_.size());
+    const auto batch_size = batch->size();
+    for (const auto& tensor : output_tensors_) {
+      input_buffers.push_back(pool->get(next_allocators_, tensor, batch_size));
     }
-    AMDINFER_LOG_INFO(logger, "Got request in CPlusPlus");
-#ifdef AMDINFER_ENABLE_METRICS
-    Metrics::getInstance().incrementCounter(
-      MetricCounterIDs::PipelineIngressWorker);
-#endif
-
-    BatchPtr new_batch;
-    if (!(input_tensors_.empty() || output_tensors_.empty())) {
-      new_batch = std::make_unique<Batch>();
-      std::vector<BufferPtr> input_buffers;
-      input_buffers.reserve(output_tensors_.size());
-      const auto batch_size = batch->size();
+    for (auto i = 0U; i < batch_size; ++i) {
+      auto new_request = std::make_shared<InferenceRequest>();
+      int index = 0;
       for (const auto& tensor : output_tensors_) {
-        input_buffers.push_back(
-          pool->get(next_allocators_, tensor, batch_size));
+        new_request->addInputTensor(InferenceRequestInput{tensor});
+        new_request->setInputTensorData(
+          index, input_buffers.at(index)->data(i * tensor.getSize() *
+                                               tensor.getDatatype().size()));
+        index++;
       }
-      for (auto i = 0U; i < batch_size; ++i) {
-        auto new_request = std::make_shared<InferenceRequest>();
-        int index = 0;
-        for (const auto& tensor : output_tensors_) {
-          new_request->addInputTensor(InferenceRequestInput{tensor});
-          new_request->setInputTensorData(
-            index, input_buffers.at(index)->data(i * tensor.getSize() *
-                                                 tensor.getDatatype().size()));
-          index++;
-        }
-        new_batch->addRequest(new_request);
-      }
-      new_batch->setBuffers(std::move(input_buffers), {});
-
-      auto* run_ptr = getFunction(handle_, "run");
-      auto* runModel =
-        reinterpret_cast<void (*)(amdinfer::Batch*, amdinfer::Batch*)>(run_ptr);
-
-      runModel(batch.get(), new_batch.get());
-    } else {
-      auto* run_ptr = getFunction(handle_, "run");
-      auto* runModel =
-        reinterpret_cast<amdinfer::BatchPtr (*)(amdinfer::Batch*)>(run_ptr);
-
-      new_batch = runModel(batch.get());
+      new_batch->addRequest(new_request);
     }
+    new_batch->setBuffers(std::move(input_buffers), {});
 
-    assert(next_ != nullptr);
-    next_->enqueue(std::move(new_batch));
+    auto* run_ptr = getFunction(handle_, "run");
+    auto* runModel =
+      reinterpret_cast<void (*)(amdinfer::Batch*, amdinfer::Batch*)>(run_ptr);
 
-    returnInputBuffers(std::move(batch));
+    runModel(batch, new_batch.get());
+  } else {
+    auto* run_ptr = getFunction(handle_, "run");
+    auto* runModel =
+      reinterpret_cast<amdinfer::BatchPtr (*)(amdinfer::Batch*)>(run_ptr);
+
+    new_batch = runModel(batch);
   }
-  AMDINFER_LOG_INFO(logger, "CPlusPlus ending");
+
+  return new_batch;
 }
 
 void CPlusPlus::doRelease() {}
@@ -244,6 +221,6 @@ extern "C" {
 // using smart pointer here may cause problems inside shared object so managing
 // manually
 amdinfer::workers::Worker* getWorker() {
-  return new amdinfer::workers::CPlusPlus("cPlusPlus", "cpu");
+  return new amdinfer::workers::CPlusPlus("CPlusPlus", "CPU", true);
 }
 }  // extern C

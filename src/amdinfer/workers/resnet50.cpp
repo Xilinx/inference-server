@@ -67,15 +67,15 @@ namespace amdinfer::workers {
  * classification IDs
  *
  */
-class ResNet50 : public Worker {
+class ResNet50 : public SingleThreadedWorker {
  public:
-  using Worker::Worker;
+  using SingleThreadedWorker::SingleThreadedWorker;
   [[nodiscard]] std::vector<MemoryAllocators> getAllocators() const override;
 
  private:
   void doInit(ParameterMap* parameters) override;
   void doAcquire(ParameterMap* parameters) override;
-  void doRun(BatchPtrQueue* input_queue, const MemoryPool* pool) override;
+  BatchPtr doRun(Batch* batch, const MemoryPool* pool) override;
   void doRelease() override;
   void doDestroy() override;
 
@@ -130,156 +130,141 @@ void ResNet50::doAcquire(ParameterMap* parameters) {
   this->metadata_.setName(this->graph_name_);
 }
 
-void ResNet50::doRun(BatchPtrQueue* input_queue,
-                     [[maybe_unused]] const MemoryPool* pool) {
-  util::setThreadName("ResNet50");
+BatchPtr ResNet50::doRun(Batch* batch, const MemoryPool* pool) {
 #ifdef AMDINFER_ENABLE_LOGGING
   const auto& logger = this->getLogger();
 #endif
 
-  while (true) {
-    BatchPtr batch;
-    input_queue->wait_dequeue(batch);
-    if (batch == nullptr) {
-      break;
-    }
-    AMDINFER_LOG_INFO(logger, "Got request in Resnet50");
+  std::vector<std::unique_ptr<vart::TensorBuffer>> v;
+  v.reserve(batch->getInputSize());
 
-    std::vector<std::unique_ptr<vart::TensorBuffer>> v;
-    v.reserve(batch->getInputSize());
-
-    size_t tensor_count = 0;
-    for (unsigned int j = 0; j < batch->size(); j++) {
-      const auto& req = batch->getRequest(j);
+  size_t tensor_count = 0;
+  for (unsigned int j = 0; j < batch->size(); j++) {
+    const auto& req = batch->getRequest(j);
 #ifdef AMDINFER_ENABLE_TRACING
-      const auto& trace = batch->getTrace(j);
-      trace->startSpan("Resnet50");
+    const auto& trace = batch->getTrace(j);
+    trace->startSpan("Resnet50");
 #endif
-      auto inputs = req->getInputs();
+    auto inputs = req->getInputs();
 
-      uint64_t input_size = 0;
-      for (auto& input : inputs) {
-        auto* input_buffer = input.getData();
+    uint64_t input_size = 0;
+    for (auto& input : inputs) {
+      auto* input_buffer = input.getData();
 
-        auto input_shape = input.getShape();
+      auto input_shape = input.getShape();
 
-        input_size = util::containerProduct(input_shape);
-        auto input_dtype = input.getDatatype();
+      input_size = util::containerProduct(input_shape);
+      auto input_dtype = input.getDatatype();
 
-        std::vector<int> tensor_shape = {static_cast<int>(this->batch_size_)};
-        if (input_dtype == DataType::Uint8) {
-          if (tensor_count == 0) {
-            tensor_shape.insert(tensor_shape.end(), input_shape.begin(),
-                                input_shape.end());
-            v.emplace_back(std::make_unique<AKS::AksTensorBuffer>(
-              xir::Tensor::create(this->graph_name_, tensor_shape,
-                                  xir::create_data_type<unsigned char>())));
-          }
-          /// Copy input to AKS Buffers: Find a better way to share buffers
-          memcpy(reinterpret_cast<uint8_t*>(v[0]->data().first) +
-                   (tensor_count * input_size),
-                 input_buffer, input_size);
-        } else if (input_dtype == DataType::String) {
-          auto* idata = static_cast<char*>(input_buffer);
-          auto decoded_str = util::base64Decode(idata, input_size);
-          std::vector<char> data(decoded_str.begin(), decoded_str.end());
-          cv::Mat img = cv::imdecode(data, cv::IMREAD_UNCHANGED);
-          if (img.empty()) {
-            const char* error = "Decoded image is empty";
-            AMDINFER_LOG_ERROR(logger, error);
-            req->runCallbackError(error);
-            continue;
-          }
-          // set size to actual size of image instead of size of base64 str
-          input_size = img.step[0] * img.rows;
-
-          if (tensor_count == 0) {
-            tensor_shape.insert(
-              tensor_shape.end(),
-              {img.size().height, img.size().width, kImageChannels});
-            v.emplace_back(std::make_unique<AKS::AksTensorBuffer>(
-              xir::Tensor::create(this->graph_name_, tensor_shape,
-                                  xir::create_data_type<unsigned char>())));
-          }
-
-          // TODO(varunsh): assuming decoded image will be right size
-          memcpy(reinterpret_cast<uint8_t*>(v[0]->data().first) +
-                   (tensor_count * input_size),
-                 img.data, input_size);
+      std::vector<int> tensor_shape = {static_cast<int>(this->batch_size_)};
+      if (input_dtype == DataType::Uint8) {
+        if (tensor_count == 0) {
+          tensor_shape.insert(tensor_shape.end(), input_shape.begin(),
+                              input_shape.end());
+          v.emplace_back(std::make_unique<AKS::AksTensorBuffer>(
+            xir::Tensor::create(this->graph_name_, tensor_shape,
+                                xir::create_data_type<unsigned char>())));
         }
-        tensor_count = (tensor_count + 1) % this->batch_size_;
+        /// Copy input to AKS Buffers: Find a better way to share buffers
+        memcpy(reinterpret_cast<uint8_t*>(v[0]->data().first) +
+                 (tensor_count * input_size),
+               input_buffer, input_size);
+      } else if (input_dtype == DataType::String) {
+        auto* idata = static_cast<char*>(input_buffer);
+        auto decoded_str = util::base64Decode(idata, input_size);
+        std::vector<char> data(decoded_str.begin(), decoded_str.end());
+        cv::Mat img = cv::imdecode(data, cv::IMREAD_UNCHANGED);
+        if (img.empty()) {
+          const char* error = "Decoded image is empty";
+          AMDINFER_LOG_ERROR(logger, error);
+          req->runCallbackError(error);
+          continue;
+        }
+        // set size to actual size of image instead of size of base64 str
+        input_size = img.step[0] * img.rows;
+
+        if (tensor_count == 0) {
+          tensor_shape.insert(
+            tensor_shape.end(),
+            {img.size().height, img.size().width, kImageChannels});
+          v.emplace_back(std::make_unique<AKS::AksTensorBuffer>(
+            xir::Tensor::create(this->graph_name_, tensor_shape,
+                                xir::create_data_type<unsigned char>())));
+        }
+
+        // TODO(varunsh): assuming decoded image will be right size
+        memcpy(reinterpret_cast<uint8_t*>(v[0]->data().first) +
+                 (tensor_count * input_size),
+               img.data, input_size);
       }
+      tensor_count = (tensor_count + 1) % this->batch_size_;
+    }
+  }
+
+  std::future<std::vector<std::unique_ptr<vart::TensorBuffer>>> future =
+    this->sys_manager_->enqueueJob(this->graph_, "", std::move(v), nullptr);
+
+  auto out_data_descriptor = future.get();
+
+  int* top_k_data =
+    reinterpret_cast<int*>(out_data_descriptor[0]->data().first);
+  auto shape = out_data_descriptor[0]->get_tensor()->get_shape();
+
+  int response_size = 0;
+  std::vector<uint64_t> new_shape;
+  if (shape.size() > 1) {  // [batch, a, b, c]
+    response_size = util::containerProduct(shape.begin() + 1, shape.end());
+    // We exclude the batch size from the returned shape
+    new_shape.reserve(shape.size() - 1);
+    for (size_t i = 0; i < shape.size() - 1; i++) {
+      new_shape.push_back(shape[i + 1]);
+    }
+  } else {  // [a]
+    new_shape.push_back(shape[0]);
+    response_size = shape[0];
+  }
+
+  auto new_batch = std::make_unique<Batch>();
+  std::vector<BufferPtr> input_buffers;
+  input_buffers.push_back(pool->get(next_allocators_,
+                                    Tensor{"name", new_shape, DataType::Uint32},
+                                    batch->size()));
+
+  for (unsigned int k = 0; k < batch->size(); k++) {
+    const auto& req = batch->getRequest(k);
+    auto new_request = std::make_shared<InferenceRequest>();
+    auto* data_ptr =
+      input_buffers.at(0)->data(k * response_size * DataType("Uint32").size());
+    new_request->addInputTensor(
+      InferenceRequestInput{data_ptr, new_shape, DataType::Uint32, ""});
+    util::copy(top_k_data + (k * response_size),
+               static_cast<std::byte*>(data_ptr), response_size * sizeof(int));
+
+    new_request->setCallback(req->getCallback());
+    new_request->setID(req->getID());
+    const auto outputs = req->getOutputs();
+    for (const auto& output : outputs) {
+      new_request->addOutputTensor(output);
     }
 
-    std::future<std::vector<std::unique_ptr<vart::TensorBuffer>>> future =
-      this->sys_manager_->enqueueJob(this->graph_, "", std::move(v), nullptr);
+    new_batch->addRequest(new_request);
 
-    auto out_data_descriptor = future.get();
+    new_batch->setModel(k, graph_name_);
 
-    int* top_k_data =
-      reinterpret_cast<int*>(out_data_descriptor[0]->data().first);
-    auto shape = out_data_descriptor[0]->get_tensor()->get_shape();
-
-    int response_size = 0;
-    std::vector<uint64_t> new_shape;
-    if (shape.size() > 1) {  // [batch, a, b, c]
-      response_size = util::containerProduct(shape.begin() + 1, shape.end());
-      // We exclude the batch size from the returned shape
-      new_shape.reserve(shape.size() - 1);
-      for (size_t i = 0; i < shape.size() - 1; i++) {
-        new_shape.push_back(shape[i + 1]);
-      }
-    } else {  // [a]
-      new_shape.push_back(shape[0]);
-      response_size = shape[0];
-    }
-
-    auto new_batch = std::make_unique<Batch>();
-    std::vector<BufferPtr> input_buffers;
-    input_buffers.push_back(
-      pool->get(next_allocators_, Tensor{"name", new_shape, DataType::Uint32},
-                batch->size()));
-
-    for (unsigned int k = 0; k < batch->size(); k++) {
-      const auto& req = batch->getRequest(k);
-      auto new_request = std::make_shared<InferenceRequest>();
-      auto* data_ptr = input_buffers.at(0)->data(k * response_size *
-                                                 DataType("Uint32").size());
-      new_request->addInputTensor(
-        InferenceRequestInput{data_ptr, new_shape, DataType::Uint32, ""});
-      util::copy(top_k_data + (k * response_size),
-                 static_cast<std::byte*>(data_ptr),
-                 response_size * sizeof(int));
-
-      new_request->setCallback(req->getCallback());
-      new_request->setID(req->getID());
-      const auto outputs = req->getOutputs();
-      for (const auto& output : outputs) {
-        new_request->addOutputTensor(output);
-      }
-
-      new_batch->addRequest(new_request);
-
-      new_batch->setModel(k, graph_name_);
-
-      auto& trace = batch->getTrace(static_cast<int>(k));
+    auto& trace = batch->getTrace(static_cast<int>(k));
 #ifdef AMDINFER_ENABLE_TRACING
-      trace->endSpan();
-      new_batch->addTrace(std::move(trace));
+    trace->endSpan();
+    new_batch->addTrace(std::move(trace));
 #endif
 
 #ifdef AMDINFER_ENABLE_METRICS
-      new_batch->addTime(batch->getTime(k));
+    new_batch->addTime(batch->getTime(k));
 #endif
-    }
-
-    new_batch->setBuffers(std::move(input_buffers), {});
-
-    assert(next_ != nullptr);
-    next_->enqueue(std::move(new_batch));
-    returnInputBuffers(std::move(batch));
   }
-  AMDINFER_LOG_INFO(logger, "ResNet50 ending");
+
+  new_batch->setBuffers(std::move(input_buffers), {});
+
+  return new_batch;
 }
 
 void ResNet50::doRelease() {}
@@ -291,6 +276,6 @@ extern "C" {
 // using smart pointer here may cause problems inside shared object so managing
 // manually
 amdinfer::workers::Worker* getWorker() {
-  return new amdinfer::workers::ResNet50("ResNet50", "AKS");
+  return new amdinfer::workers::ResNet50("ResNet50", "AKS", true);
 }
 }  // extern C

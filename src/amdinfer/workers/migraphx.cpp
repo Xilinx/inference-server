@@ -60,15 +60,15 @@ namespace amdinfer::workers {
  * argument and compiles and evaluates it.
  *
  */
-class MIGraphXWorker : public Worker {
+class MIGraphXWorker : public SingleThreadedWorker {
  public:
-  using Worker::Worker;
+  using SingleThreadedWorker::SingleThreadedWorker;
   [[nodiscard]] std::vector<MemoryAllocators> getAllocators() const override;
 
  private:
   void doInit(ParameterMap* parameters) override;
   void doAcquire(ParameterMap* parameters) override;
-  void doRun(BatchPtrQueue* input_queue, const MemoryPool* pool) override;
+  BatchPtr doRun(Batch* batch, const MemoryPool* pool) override;
   void doRelease() override;
   void doDestroy() override;
 
@@ -304,14 +304,10 @@ void MIGraphXWorker::doInit(ParameterMap* parameters) {
 
 void MIGraphXWorker::doAcquire(ParameterMap* parameters) { (void)parameters; }
 
-void MIGraphXWorker::doRun(BatchPtrQueue* input_queue,
-                           [[maybe_unused]] const MemoryPool* pool) {
+BatchPtr MIGraphXWorker::doRun(Batch* batch, const MemoryPool* pool) {
 #ifdef AMDINFER_ENABLE_LOGGING
   const auto& logger = this->getLogger();
 #endif
-  AMDINFER_LOG_INFO(logger, "beginning of MIGraphXWorker::doRun");
-
-  util::setThreadName("Migraphx");
 
   // stringstream used for formatting logger messages
   std::string msg;
@@ -324,62 +320,50 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue,
   // client and continue waiting for requests.
   //
 
-  while (true) {
-    BatchPtr batch;
-    input_queue->wait_dequeue(batch);
-    if (batch == nullptr) {
-      break;
-    }
-    AMDINFER_LOG_INFO(logger, "New batch request in migraphx");
-    util::Timer timer;
-    timer.add("batch_start");
-#ifdef AMDINFER_ENABLE_METRICS
-    Metrics::getInstance().incrementCounter(
-      MetricCounterIDs::PipelineIngressWorker);
-#endif
+  util::Timer timer;
+  timer.add("batch_start");
 
-    // The MIGraphX operation: run the migraphx eval() method.
-    // If migraphx exceptions happen, they will be handled
+  // The MIGraphX operation: run the migraphx eval() method.
+  // If migraphx exceptions happen, they will be handled
 
-    // We only need to look at the 0'th request to set up evaluation, because
-    // its input pointers (one for each input) are the base addresses of the
-    // data for the entire batch. The different input tensors are not required
-    // to be contiguous with each other.
-    const auto& req0 = batch->getRequest(0);
-    auto inputs0 =
-      req0->getInputs();  // const std::vector<InferenceRequestInput>
+  // We only need to look at the 0'th request to set up evaluation, because
+  // its input pointers (one for each input) are the base addresses of the
+  // data for the entire batch. The different input tensors are not required
+  // to be contiguous with each other.
+  const auto& req0 = batch->getRequest(0);
+  auto inputs0 = req0->getInputs();  // const std::vector<InferenceRequestInput>
 
-    BatchPtr new_batch;
-    std::vector<amdinfer::BufferPtr> input_buffers;
+  BatchPtr new_batch;
+  std::vector<amdinfer::BufferPtr> input_buffers;
 
-    try {
-      migraphx::program_parameters params;
+  try {
+    migraphx::program_parameters params;
 
-      // populate the migraphx parameters with shape read from the onnx
-      // model.
-      auto param_shapes = prog_.get_parameter_shapes();
+    // populate the migraphx parameters with shape read from the onnx
+    // model.
+    auto param_shapes = prog_.get_parameter_shapes();
 
-      for (const auto& aninput : inputs0) {  // InferenceRequestInput
-        auto aname = aninput.getName();
+    for (const auto& aninput : inputs0) {  // InferenceRequestInput
+      auto aname = aninput.getName();
 
-        // Look up the shape by name in the model, but if there's only 1 input
-        // then the name in the request isn't required to match.
-        if (inputs0.size() == 1) {
-          aname = param_shapes.names().front();
-        }
-        migraphx::shape modelshape = param_shapes[aname.c_str()];
+      // Look up the shape by name in the model, but if there's only 1 input
+      // then the name in the request isn't required to match.
+      if (inputs0.size() == 1) {
+        aname = param_shapes.names().front();
+      }
+      migraphx::shape modelshape = param_shapes[aname.c_str()];
 
-        if (toDataType(modelshape.type()) != aninput.getDatatype()) {
-          smsg.str("");
-          smsg << "Migraph worker model and input data types don't match:   "
-               << toDataType(modelshape.type()) << " vs "
-               << aninput.getDatatype();
-          throw(invalid_argument(smsg.str()));
-        }
+      if (toDataType(modelshape.type()) != aninput.getDatatype()) {
+        smsg.str("");
+        smsg << "Migraph worker model and input data types don't match:   "
+             << toDataType(modelshape.type()) << " vs "
+             << aninput.getDatatype();
+        throw(invalid_argument(smsg.str()));
+      }
 
-        // check that lengths() and type match
-        auto llen = modelshape.lengths();
-        // clang-format off
+      // check that lengths() and type match
+      auto llen = modelshape.lengths();
+      // clang-format off
         //    compare each dimension of shapes except the 0'th (batch size)
         //  TODO(bpickrel): the following check works inconsistently between different example client scripts.
         // It accepts inputs from the yolo script but rejects hello_migraphx.py inputs
@@ -397,158 +381,154 @@ void MIGraphXWorker::doRun(BatchPtrQueue* input_queue,
         //     throw invalid_argument(smsg.str());
         //   }
         // }
-        // clang-format on
+      // clang-format on
 
-        auto* a_data = aninput.getData();  //  void *
-        params.add(aname.c_str(), migraphx::argument(modelshape, a_data));
-      }
-      // If there were fewer requests in the batch than the stated batch size,
-      // pad the various input tensors with copies of the 0'th request's data.
+      auto* a_data = aninput.getData();  //  void *
+      params.add(aname.c_str(), migraphx::argument(modelshape, a_data));
+    }
+    // If there were fewer requests in the batch than the stated batch size,
+    // pad the various input tensors with copies of the 0'th request's data.
 
-      if (pad_batch_) {
-        // for each named input channel
-        for (const auto& aninput : inputs0) {
-          auto aname = aninput.getName();
-          // Look up the shape by name in the model, but if there's only 1 input
-          // then the name in the request isn't required to match.
-          if (inputs0.size() == 1) {
-            aname = param_shapes.names().front();
-          }
-          auto* a_data = static_cast<char*>(aninput.getData());
-          // For each empty slot in buffer, i.e. from end of real requests up to
-          // batch size
-          for (size_t req_idx = batch->getRequests().size();
-               req_idx < batch_size_; req_idx++) {
-            memcpy(a_data + req_idx * input_sizes_[aname], a_data,
-                   input_sizes_[aname]);
-          }
+    if (pad_batch_) {
+      // for each named input channel
+      for (const auto& aninput : inputs0) {
+        auto aname = aninput.getName();
+        // Look up the shape by name in the model, but if there's only 1 input
+        // then the name in the request isn't required to match.
+        if (inputs0.size() == 1) {
+          aname = param_shapes.names().front();
+        }
+        auto* a_data = static_cast<char*>(aninput.getData());
+        // For each empty slot in buffer, i.e. from end of real requests up to
+        // batch size
+        for (size_t req_idx = batch->getRequests().size();
+             req_idx < batch_size_; req_idx++) {
+          memcpy(a_data + req_idx * input_sizes_[aname], a_data,
+                 input_sizes_[aname]);
         }
       }
+    }
 
-      //
-      // Run the inference
-      //
+    //
+    // Run the inference
+    //
 
-      AMDINFER_LOG_INFO(logger, "Beginning migraphx eval");
-      timer.add("eval_start");
-      migraphx::api::arguments migraphx_output = this->prog_.eval(params);
-      timer.add("eval_end");
-      auto eval_duration_us = timer.count<std::micro>("eval_start", "eval_end");
-      [[maybe_unused]] auto eval_duration_s = eval_duration_us / std::mega::num;
-      AMDINFER_LOG_INFO(
-        logger, std::string("Finished migraphx eval; batch size: ") +
-                  std::to_string(batch_size_) + "  elapsed time: " +
-                  std::to_string(eval_duration_us) + " us.  Images/sec: " +
-                  std::to_string(batch_size_ / (eval_duration_s)));
+    AMDINFER_LOG_INFO(logger, "Beginning migraphx eval");
+    timer.add("eval_start");
+    migraphx::api::arguments migraphx_output = this->prog_.eval(params);
+    timer.add("eval_end");
+    auto eval_duration_us = timer.count<std::micro>("eval_start", "eval_end");
+    [[maybe_unused]] auto eval_duration_s = eval_duration_us / std::mega::num;
+    AMDINFER_LOG_INFO(
+      logger,
+      std::string("Finished migraphx eval; batch size: ") +
+        std::to_string(batch_size_) +
+        "  elapsed time: " + std::to_string(eval_duration_us) +
+        " us.  Images/sec: " + std::to_string(batch_size_ / (eval_duration_s)));
 
-      //
-      //           Fetch the results and populate response to each request in
-      //           the batch
-      //
+    //
+    //           Fetch the results and populate response to each request in
+    //           the batch
+    //
 
-      new_batch = std::make_unique<amdinfer::Batch>();
-      const auto batch_size = batch->size();
+    new_batch = std::make_unique<amdinfer::Batch>();
+    const auto batch_size = batch->size();
 
-      // Fetch the vector shape, data, etc. for output from the
-      // parsed/compiled model
-      migraphx::api::shapes output_shapes = prog_.get_output_shapes();
-      std::vector<DataType> datatypes;
-      datatypes.reserve(output_shapes.size());
+    // Fetch the vector shape, data, etc. for output from the
+    // parsed/compiled model
+    migraphx::api::shapes output_shapes = prog_.get_output_shapes();
+    std::vector<DataType> datatypes;
+    datatypes.reserve(output_shapes.size());
 
-      size_t num_output_tensors = migraphx_output.size();
-      assert(output_shapes.size() == num_output_tensors);
-      input_buffers.reserve(num_output_tensors);
+    size_t num_output_tensors = migraphx_output.size();
+    assert(output_shapes.size() == num_output_tensors);
+    input_buffers.reserve(num_output_tensors);
+    for (auto i = 0U; i < num_output_tensors; ++i) {
+      auto migraphx_shape = migraphx_output[i].get_shape();
+      auto shape = migraphx_shape.lengths();
+      // erase the leading batch size to get the tensor size
+      shape.erase(shape.begin());
+
+      datatypes.push_back(toDataType(output_shapes[i].type()));
+
+      Tensor tensor{"", shape, datatypes.back()};
+      input_buffers.emplace_back(
+        pool->get(next_allocators_, tensor, batch_size));
+    }
+
+    for (unsigned int j = 0; j < batch_size; j++) {
+#ifdef AMDINFER_ENABLE_TRACING
+      auto& trace = batch->getTrace(j);
+      trace->startSpan("migraphx");
+#endif
+      const auto& req = batch->getRequest(j);
+      auto new_request = std::make_shared<InferenceRequest>();
+
+      new_request->setCallback(req->getCallback());
+
+      new_request->setID(req->getID());
+      const auto outputs = req->getOutputs();
+      for (const auto& output : outputs) {
+        new_request->addOutputTensor(output);
+      }
+
       for (auto i = 0U; i < num_output_tensors; ++i) {
         auto migraphx_shape = migraphx_output[i].get_shape();
         auto shape = migraphx_shape.lengths();
         // erase the leading batch size to get the tensor size
         shape.erase(shape.begin());
 
-        datatypes.push_back(toDataType(output_shapes[i].type()));
+        const auto& datatype = datatypes.at(i);
 
-        Tensor tensor{"", shape, datatypes.back()};
-        input_buffers.emplace_back(
-          pool->get(next_allocators_, tensor, batch_size));
+        auto size = util::containerProduct(shape) * datatype.size();
+        // TODO(bpickrel): the BERT example's last tensor produces a shape of
+        // [10], which becomes zero after erasing the batch size, resulting in
+        // a tensor of size zero. What does this mean?
+        // assert(size > 0);
+        auto* data_ptr = input_buffers.at(i)->data(size * j);
+        const char* results = migraphx_output[i].data() + (size * j);
+
+        std::memcpy(data_ptr, results, size);
+        InferenceRequestInput input{data_ptr, shape, datatype, ""};
+
+        new_request->addInputTensor(std::move(input));
       }
 
-      for (unsigned int j = 0; j < batch_size; j++) {
-#ifdef AMDINFER_ENABLE_TRACING
-        auto& trace = batch->getTrace(j);
-        trace->startSpan("migraphx");
-#endif
-        const auto& req = batch->getRequest(j);
-        auto new_request = std::make_shared<InferenceRequest>();
+      new_batch->addRequest(new_request);
 
-        new_request->setCallback(req->getCallback());
-
-        new_request->setID(req->getID());
-        const auto outputs = req->getOutputs();
-        for (const auto& output : outputs) {
-          new_request->addOutputTensor(output);
-        }
-
-        for (auto i = 0U; i < num_output_tensors; ++i) {
-          auto migraphx_shape = migraphx_output[i].get_shape();
-          auto shape = migraphx_shape.lengths();
-          // erase the leading batch size to get the tensor size
-          shape.erase(shape.begin());
-
-          const auto& datatype = datatypes.at(i);
-
-          auto size = util::containerProduct(shape) * datatype.size();
-          // TODO(bpickrel): the BERT example's last tensor produces a shape of
-          // [10], which becomes zero after erasing the batch size, resulting in
-          // a tensor of size zero. What does this mean?
-          // assert(size > 0);
-          auto* data_ptr = input_buffers.at(i)->data(size * j);
-          const char* results = migraphx_output[i].data() + (size * j);
-
-          std::memcpy(data_ptr, results, size);
-          InferenceRequestInput input{data_ptr, shape, datatype, ""};
-
-          new_request->addInputTensor(std::move(input));
-        }
-
-        new_batch->addRequest(new_request);
-
-        new_batch->setModel(j, "migraphx");
+      new_batch->setModel(j, "migraphx");
 
 #ifdef AMDINFER_ENABLE_TRACING
-        trace->endSpan();
-        new_batch->addTrace(std::move(trace));
+      trace->endSpan();
+      new_batch->addTrace(std::move(trace));
 #endif
 
 #ifdef AMDINFER_ENABLE_METRICS
-        new_batch->addTime(batch->getTime(j));
+      new_batch->addTime(batch->getTime(j));
 #endif
-      }  // end j, request
-    } catch (const std::exception& e) {
-      // This outer catch block catches exceptions in evaluation of the batch.
-      AMDINFER_LOG_ERROR(logger, e.what());
-      // Pass error message back as reply for each request in the batch
-      const auto& requests = batch->getRequests();
-      for (const auto& req_e : requests) {
-        req_e->runCallbackError(std::string("Migraphx inference error: ") +
-                                e.what());
-      }
+    }  // end j, request
+  } catch (const std::exception& e) {
+    // This outer catch block catches exceptions in evaluation of the batch.
+    AMDINFER_LOG_ERROR(logger, e.what());
+    // Pass error message back as reply for each request in the batch
+    const auto& requests = batch->getRequests();
+    for (const auto& req_e : requests) {
+      req_e->runCallbackError(std::string("Migraphx inference error: ") +
+                              e.what());
     }
+  }
 
-    new_batch->setBuffers(std::move(input_buffers), {});
+  new_batch->setBuffers(std::move(input_buffers), {});
 
-    timer.add("batch_stop");
-    [[maybe_unused]] auto duration =
-      timer.count<std::micro>("batch_start", "batch_stop");
-    AMDINFER_LOG_INFO(
-      logger, std::string("Finished migraphx batch processing; batch size: ") +
-                std::to_string(batch_size_) +
-                "  elapsed time: " + std::to_string(duration) + " us");
+  timer.add("batch_stop");
+  [[maybe_unused]] auto duration =
+    timer.count<std::micro>("batch_start", "batch_stop");
+  AMDINFER_LOG_INFO(
+    logger, std::string("Finished migraphx batch processing; batch size: ") +
+              std::to_string(batch_size_) +
+              "  elapsed time: " + std::to_string(duration) + " us");
 
-    assert(next_ != nullptr);
-    next_->enqueue(std::move(new_batch));
-
-    returnInputBuffers(std::move(batch));
-  }  // end while (batch)
-  AMDINFER_LOG_INFO(logger, "Migraphx::doRun ending");
+  return new_batch;
 }
 
 void MIGraphXWorker::doRelease() {}
@@ -560,6 +540,6 @@ extern "C" {
 // using smart pointer here may cause problems inside shared object so managing
 // manually
 amdinfer::workers::Worker* getWorker() {
-  return new amdinfer::workers::MIGraphXWorker("MIGraphX", "gpu");
+  return new amdinfer::workers::MIGraphXWorker("MIGraphX", "GPU", true);
 }
 }  // extern C

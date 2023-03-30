@@ -62,15 +62,15 @@ const int kResNetOutputClasses = 1000;
  * returns the corresponding number of output tensors.
  *
  */
-class PtZendnn : public Worker {
+class PtZendnn : public SingleThreadedWorker {
  public:
-  using Worker::Worker;
+  using SingleThreadedWorker::SingleThreadedWorker;
   [[nodiscard]] std::vector<MemoryAllocators> getAllocators() const override;
 
  private:
   void doInit(ParameterMap* parameters) override;
   void doAcquire(ParameterMap* parameters) override;
-  void doRun(BatchPtrQueue* input_queue, const MemoryPool* pool) override;
+  BatchPtr doRun(Batch* batch, const MemoryPool* pool) override;
   void doRelease() override;
   void doDestroy() override;
 
@@ -172,148 +172,132 @@ void PtZendnn::doAcquire(ParameterMap* parameters) {
   this->metadata_.setName("PtZendnn");
 }
 
-void PtZendnn::doRun(BatchPtrQueue* input_queue,
-                     [[maybe_unused]] const MemoryPool* pool) {
-  std::unique_ptr<Batch> batch;
-  util::setThreadName("PtZendnn");
+BatchPtr PtZendnn::doRun(Batch* batch, const MemoryPool* pool) {
 #ifdef AMDINFER_ENABLE_LOGGING
   const auto& logger = this->getLogger();
 #endif
 
-  while (true) {
-    input_queue->wait_dequeue(batch);
-    if (batch == nullptr) {
-      break;
-    }
-    AMDINFER_LOG_DEBUG(logger, "Got request in PtZendnn. Size: " +
-                                 std::to_string(batch->size()));
+  // This ensures no gradient is calculated and provide performance boost
+  torch::NoGradGuard no_grad;
+  c10::InferenceMode guard;
 
-    // This ensures no gradient is calculated and provide performance boost
-    torch::NoGradGuard no_grad;
-    c10::InferenceMode guard;
+  size_t input_size = 0;
+  std::vector<torch::jit::IValue> input_vec;
+  auto tensors = static_cast<int>(batch->size());
 
-    size_t input_size = 0;
-    std::vector<torch::jit::IValue> input_vec;
-    auto tensors = static_cast<int>(batch->size());
-
-    // Initialize a PT tensor with required shape
-    torch::Tensor input_tensor = torch::empty(
-      {tensors, image_channels_, image_height_, image_width_}, torch::kF32);
+  // Initialize a PT tensor with required shape
+  torch::Tensor input_tensor = torch::empty(
+    {tensors, image_channels_, image_height_, image_width_}, torch::kF32);
 
 #ifdef AMDINFER_ENABLE_METRICS
-    Metrics::getInstance().incrementCounter(
-      MetricCounterIDs::PipelineIngressWorker);
+  Metrics::getInstance().incrementCounter(
+    MetricCounterIDs::PipelineIngressWorker);
 #endif
-    size_t vec_size = 0;
-    util::Timer timer{true};
-    for (unsigned int j = 0; j < batch->size(); j++) {
-      const auto& req = batch->getRequest(j);
+  size_t vec_size = 0;
+  util::Timer timer{true};
+  for (unsigned int j = 0; j < batch->size(); j++) {
+    const auto& req = batch->getRequest(j);
 
 #ifdef AMDINFER_ENABLE_TRACING
-      const auto& trace = batch->getTrace(j);
-      trace->startSpan("ptzendnn");
+    const auto& trace = batch->getTrace(j);
+    trace->startSpan("ptzendnn");
 #endif
 
-      auto inputs = req->getInputs();
-      auto outputs = req->getOutputs();
-      AMDINFER_LOG_DEBUG(logger,
-                         "Size of input: " + std::to_string(inputs.size()));
+    auto inputs = req->getInputs();
+    auto outputs = req->getOutputs();
+    AMDINFER_LOG_DEBUG(logger,
+                       "Size of input: " + std::to_string(inputs.size()));
 
-      // Get all the inputs from the requests and copy to the PT tensor
-      for (const auto& input : inputs) {
-        auto* input_buffer = input.getData();
-        const auto& input_shape = input.getShape();
-        input_size = util::containerProduct(input_shape);
+    // Get all the inputs from the requests and copy to the PT tensor
+    for (const auto& input : inputs) {
+      auto* input_buffer = input.getData();
+      const auto& input_shape = input.getShape();
+      input_size = util::containerProduct(input_shape);
 
-        auto* float_buffer = static_cast<float*>(input_buffer);
-        std::copy(float_buffer, float_buffer + input_size,
-                  input_tensor.data_ptr<float>() + vec_size);
-        vec_size = vec_size + input_size;
-      }
+      auto* float_buffer = static_cast<float*>(input_buffer);
+      std::copy(float_buffer, float_buffer + input_size,
+                input_tensor.data_ptr<float>() + vec_size);
+      vec_size = vec_size + input_size;
     }
-
-    // Create the inputs and output tensor
-    input_vec.emplace_back(input_tensor);
-    c10::IValue prediction;
-
-    // Run through the model to get the predictions
-    timer.add("infer_start");
-    try {
-      prediction = this->model_.forward(input_vec);
-    } catch (const c10::Error& e) {
-      AMDINFER_LOG_ERROR(logger, "Model not suported/Issue with the model");
-      for (const auto& req : *batch) {
-        req->runCallbackError("Something went wrong");
-      }
-    }
-    timer.add("infer_stop");
-    {
-      [[maybe_unused]] auto duration =
-        timer.count<std::milli>("infer_start", "infer_stop");
-      AMDINFER_LOG_INFO(logger, "Time (ms) taken for " +
-                                  std::to_string(batch->size()) +
-                                  " images: " + std::to_string(duration));
-    }
-    at::Tensor output_tensor;
-    if (!prediction.isTuple()) {
-      output_tensor = prediction.toTensor();
-    } else {
-      // For some models like InceptionV3 and GoogleNet which returns Tuple
-      output_tensor = prediction.toTuple()->elements()[0].toTensor();
-    }
-
-    // Copy the output from the model to the response object
-    size_t response_size = output_classes_;
-    std::vector<size_t> new_shape = {response_size};
-
-    auto new_batch = std::make_unique<Batch>();
-    std::vector<BufferPtr> input_buffers;
-    input_buffers.push_back(pool->get(next_allocators_,
-                                      Tensor{"name", new_shape, DataType::Fp32},
-                                      batch->size()));
-
-    for (unsigned int k = 0; k < batch->size(); k++) {
-      const auto& req = batch->getRequest(k);
-
-      auto new_request = std::make_shared<InferenceRequest>();
-      auto* data_ptr =
-        input_buffers.at(0)->data(k * response_size * DataType("Fp32").size());
-      new_request->addInputTensor(
-        InferenceRequestInput{data_ptr, new_shape, DataType::Fp32, ""});
-      util::copy(output_tensor[0].data_ptr<float>() + (k * response_size),
-                 static_cast<std::byte*>(data_ptr),
-                 response_size * sizeof(float));
-
-      new_request->setCallback(req->getCallback());
-      new_request->setID(req->getID());
-      const auto outputs = req->getOutputs();
-      for (const auto& output : outputs) {
-        new_request->addOutputTensor(output);
-      }
-
-      new_batch->addRequest(new_request);
-
-      new_batch->setModel(k, "PTModel");
-
-      auto& trace = batch->getTrace(static_cast<int>(k));
-#ifdef AMDINFER_ENABLE_TRACING
-      trace->endSpan();
-      new_batch->addTrace(std::move(trace));
-#endif
-
-#ifdef AMDINFER_ENABLE_METRICS
-      new_batch->addTime(batch->getTime(k));
-#endif
-    }
-
-    new_batch->setBuffers(std::move(input_buffers), {});
-
-    assert(next_ != nullptr);
-    next_->enqueue(std::move(new_batch));
-
-    returnInputBuffers(std::move(batch));
   }
-  AMDINFER_LOG_INFO(logger, "PtZendnn ending");
+
+  // Create the inputs and output tensor
+  input_vec.emplace_back(input_tensor);
+  c10::IValue prediction;
+
+  // Run through the model to get the predictions
+  timer.add("infer_start");
+  try {
+    prediction = this->model_.forward(input_vec);
+  } catch (const c10::Error& e) {
+    AMDINFER_LOG_ERROR(logger, "Model not suported/Issue with the model");
+    for (const auto& req : *batch) {
+      req->runCallbackError("Something went wrong");
+    }
+  }
+  timer.add("infer_stop");
+  {
+    [[maybe_unused]] auto duration =
+      timer.count<std::milli>("infer_start", "infer_stop");
+    AMDINFER_LOG_INFO(logger, "Time (ms) taken for " +
+                                std::to_string(batch->size()) +
+                                " images: " + std::to_string(duration));
+  }
+  at::Tensor output_tensor;
+  if (!prediction.isTuple()) {
+    output_tensor = prediction.toTensor();
+  } else {
+    // For some models like InceptionV3 and GoogleNet which returns Tuple
+    output_tensor = prediction.toTuple()->elements()[0].toTensor();
+  }
+
+  // Copy the output from the model to the response object
+  size_t response_size = output_classes_;
+  std::vector<size_t> new_shape = {response_size};
+
+  auto new_batch = std::make_unique<Batch>();
+  std::vector<BufferPtr> input_buffers;
+  input_buffers.push_back(pool->get(next_allocators_,
+                                    Tensor{"name", new_shape, DataType::Fp32},
+                                    batch->size()));
+
+  for (unsigned int k = 0; k < batch->size(); k++) {
+    const auto& req = batch->getRequest(k);
+
+    auto new_request = std::make_shared<InferenceRequest>();
+    auto* data_ptr =
+      input_buffers.at(0)->data(k * response_size * DataType("Fp32").size());
+    new_request->addInputTensor(
+      InferenceRequestInput{data_ptr, new_shape, DataType::Fp32, ""});
+    util::copy(output_tensor[0].data_ptr<float>() + (k * response_size),
+               static_cast<std::byte*>(data_ptr),
+               response_size * sizeof(float));
+
+    new_request->setCallback(req->getCallback());
+    new_request->setID(req->getID());
+    const auto outputs = req->getOutputs();
+    for (const auto& output : outputs) {
+      new_request->addOutputTensor(output);
+    }
+
+    new_batch->addRequest(new_request);
+
+    new_batch->setModel(k, "PTModel");
+
+    auto& trace = batch->getTrace(static_cast<int>(k));
+#ifdef AMDINFER_ENABLE_TRACING
+    trace->endSpan();
+    new_batch->addTrace(std::move(trace));
+#endif
+
+#ifdef AMDINFER_ENABLE_METRICS
+    new_batch->addTime(batch->getTime(k));
+#endif
+  }
+
+  new_batch->setBuffers(std::move(input_buffers), {});
+
+  return new_batch;
 }
 
 void PtZendnn::doRelease() {}
@@ -325,6 +309,6 @@ extern "C" {
 // using smart pointer here may cause problems inside shared object so managing
 // manually
 amdinfer::workers::Worker* getWorker() {
-  return new amdinfer::workers::PtZendnn("PtZendnn", "cpu");
+  return new amdinfer::workers::PtZendnn("PtZendnn", "CPU", true);
 }
 }  // extern C

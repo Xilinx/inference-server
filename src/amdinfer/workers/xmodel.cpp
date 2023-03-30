@@ -55,7 +55,6 @@
 #include "amdinfer/declarations.hpp"              // for BufferPtrs, Infere...
 #include "amdinfer/observation/observer.hpp"      // for Loggers, Metrics...
 #include "amdinfer/util/containers.hpp"           // for containerProduct
-#include "amdinfer/util/ctpl.hpp"                 // for ThreadPool
 #include "amdinfer/util/memory.hpp"               // for copy
 #include "amdinfer/util/parse_env.hpp"            // for autoExpandEnvironm...
 #include "amdinfer/util/queue.hpp"                // for BufferPtrsQueue
@@ -71,15 +70,15 @@ namespace amdinfer::workers {
  * to the FPGA using the Vitis AI runtime libraries.
  *
  */
-class XModel : public Worker {
+class XModel : public MultiThreadedWorker {
  public:
-  XModel() : Worker("XModel", "XModel") {}
+  using MultiThreadedWorker::MultiThreadedWorker;
   [[nodiscard]] std::vector<MemoryAllocators> getAllocators() const override;
 
  private:
   void doInit(ParameterMap* parameters) override;
   void doAcquire(ParameterMap* parameters) override;
-  void doRun(BatchPtrQueue* input_queue, const MemoryPool* pool) override;
+  BatchPtr doRun(Batch* batch, const MemoryPool* pool) override;
   void doRelease() override;
   void doDestroy() override;
 
@@ -91,7 +90,6 @@ class XModel : public Worker {
   std::unique_ptr<vart::Runner> runner_;
   std::vector<DataType> output_type_;
   std::vector<uint32_t> output_size_;
-  util::ThreadPool thread_pool_;
 };
 
 std::vector<MemoryAllocators> XModel::getAllocators() const {
@@ -150,7 +148,7 @@ void XModel::doAcquire(ParameterMap* parameters) {
   if (parameters->has("threads")) {
     threads = parameters->get<int32_t>("threads");
   }
-  this->thread_pool_.resize(threads);
+  this->createThreadPool(threads);
 
   runner_ = vart::Runner::create_runner(this->subgraph_, "run");
   auto input_tensors = runner_->get_input_tensors();
@@ -173,171 +171,130 @@ void XModel::doAcquire(ParameterMap* parameters) {
   }
 }
 
-void XModel::doRun(BatchPtrQueue* input_queue, const MemoryPool* pool) {
-  std::atomic_int32_t thread_pool_size = 0;
-  const int max_thread_pool_size =
-    this->thread_pool_.getSize() * 4;  // 4 is arbitrary
-  util::setThreadName("XModel");
-#ifdef AMDINFER_ENABLE_LOGGING
-  const auto& logger = this->getLogger();
-#endif
-
-  const auto thread_pool_delay = std::chrono::milliseconds(10);
-
-  while (true) {
-    BatchPtr batch;
-    input_queue->wait_dequeue(batch);
-    if (batch == nullptr) {
-      break;
-    }
-    AMDINFER_LOG_INFO(
-      logger, "Got request in xmodel: " + std::to_string(batch->size()));
-#ifdef AMDINFER_ENABLE_METRICS
-    Metrics::getInstance().incrementCounter(
-      MetricCounterIDs::PipelineIngressWorker);
-#endif
-    thread_pool_size++;
-    if (thread_pool_size > max_thread_pool_size) {
-      std::this_thread::sleep_for(thread_pool_delay);
-    }
-    this->thread_pool_.push(
-      [this, batch = std::move(batch), &thread_pool_size, pool](int id) {
-        (void)id;  // suppress unused variable warning
+BatchPtr XModel::doRun(Batch* batch, const MemoryPool* pool) {
 #ifdef AMDINFER_ENABLE_TRACING
-        for (unsigned int j = 0; j < batch->size(); j++) {
-          const auto& trace = batch->getTrace(j);
-          trace->startSpan("xmodel");
-        }
+  for (unsigned int j = 0; j < batch->size(); j++) {
+    const auto& trace = batch->getTrace(j);
+    trace->startSpan("xmodel");
+  }
 #endif
 
-        auto input_buffers = batch->getInputBuffers();
-      // const auto& output_buffers = batch->getOutputBuffers();
+  auto input_buffers = batch->getInputBuffers();
+  // const auto& output_buffers = batch->getOutputBuffers();
 
 #ifdef AMDINFER_ENABLE_LOGGING
-        for (const auto& buffer : input_buffers) {
-          logTraceBuffer(getLogger(), buffer->data(0));
-        }
+  for (const auto& buffer : input_buffers) {
+    logTraceBuffer(getLogger(), buffer->data(0));
+  }
 #endif  // AMDINFER_ENABLE_LOGGING
 
-        std::vector<vart::TensorBuffer*> inputs_ptr;
-        for (const auto& buffer : input_buffers) {
-          auto* vart = dynamic_cast<VartTensorBuffer*>(buffer.get());
-          inputs_ptr.emplace_back(vart->getTensorBuffer());
-        }
+  std::vector<vart::TensorBuffer*> inputs_ptr;
+  for (const auto& buffer : input_buffers) {
+    auto* vart = dynamic_cast<VartTensorBuffer*>(buffer.get());
+    inputs_ptr.emplace_back(vart->getTensorBuffer());
+  }
 
-        BufferPtrs output_buffers;
-        BufferPtrs new_input_buffers;
-        auto output_tensors = this->getRunner()->get_output_tensors();
-        for (const auto* tensor : output_tensors) {
-          auto xir_shape = tensor->get_shape();
-          std::vector<size_t> shape{xir_shape.begin(), xir_shape.end()};
-          auto xir_type = tensor->get_data_type();
-          auto type = mapXirToType(xir_type);
-          InferenceRequestInput input(nullptr, shape, type, tensor->get_name());
-          // the shape includes the batch size so use external batch size 1
-          output_buffers.push_back(
-            pool->get({MemoryAllocators::VartTensor}, input, 1));
-          new_input_buffers.push_back(pool->get(next_allocators_, input, 1));
-        }
+  BufferPtrs output_buffers;
+  BufferPtrs new_input_buffers;
+  auto output_tensors = this->getRunner()->get_output_tensors();
+  for (const auto* tensor : output_tensors) {
+    auto xir_shape = tensor->get_shape();
+    std::vector<size_t> shape{xir_shape.begin(), xir_shape.end()};
+    auto xir_type = tensor->get_data_type();
+    auto type = mapXirToType(xir_type);
+    InferenceRequestInput input(nullptr, shape, type, tensor->get_name());
+    // the shape includes the batch size so use external batch size 1
+    output_buffers.push_back(
+      pool->get({MemoryAllocators::VartTensor}, input, 1));
+    new_input_buffers.push_back(pool->get(next_allocators_, input, 1));
+  }
 
-        std::vector<vart::TensorBuffer*> outputs_ptr;
-        for (const auto& buffer : output_buffers) {
-          auto* vart = dynamic_cast<VartTensorBuffer*>(buffer.get());
-          outputs_ptr.emplace_back(vart->getTensorBuffer());
-        }
+  std::vector<vart::TensorBuffer*> outputs_ptr;
+  for (const auto& buffer : output_buffers) {
+    auto* vart = dynamic_cast<VartTensorBuffer*>(buffer.get());
+    outputs_ptr.emplace_back(vart->getTensorBuffer());
+  }
 
-        // auto outputs_ptr = this->getRunner()->get_outputs();
+  // auto outputs_ptr = this->getRunner()->get_outputs();
 
-        for (auto* input : inputs_ptr) {
-          const auto* tensor = input->get_tensor();
-          auto num = tensor->get_element_num();
-          auto batches = (tensor->get_shape())[0];
-          input->sync_for_write(0, num / batches);
-        }
+  for (auto* input : inputs_ptr) {
+    const auto* tensor = input->get_tensor();
+    auto num = tensor->get_element_num();
+    auto batches = (tensor->get_shape())[0];
+    input->sync_for_write(0, num / batches);
+  }
 
-        std::queue<std::pair<uint32_t, int>> futures;
-        futures.push(getRunner()->execute_async(inputs_ptr, outputs_ptr));
+  std::queue<std::pair<uint32_t, int>> futures;
+  futures.push(getRunner()->execute_async(inputs_ptr, outputs_ptr));
 
-        while (!futures.empty()) {
-          auto job_id = futures.front();
-          futures.pop();
-          getRunner()->wait(job_id.first, -1);
-        }
+  while (!futures.empty()) {
+    auto job_id = futures.front();
+    futures.pop();
+    getRunner()->wait(job_id.first, -1);
+  }
 
-        for (auto* output : outputs_ptr) {
-          const auto* tensor = output->get_tensor();
-          output->sync_for_read(
-            0, tensor->get_element_num() / (tensor->get_shape())[0]);
-        }
+  for (auto* output : outputs_ptr) {
+    const auto* tensor = output->get_tensor();
+    output->sync_for_read(0,
+                          tensor->get_element_num() / (tensor->get_shape())[0]);
+  }
 
-        const auto num_batches = batch->size();
-        auto new_batch = std::make_unique<Batch>();
-        for (unsigned int k = 0; k < num_batches; k++) {
-          const auto& req = batch->getRequest(k);
+  const auto num_batches = batch->size();
+  auto new_batch = std::make_unique<Batch>();
+  for (unsigned int k = 0; k < num_batches; k++) {
+    const auto& req = batch->getRequest(k);
 
-          auto new_request = std::make_shared<InferenceRequest>();
+    auto new_request = std::make_shared<InferenceRequest>();
 
-          const auto num_outputs = outputs_ptr.size();
-          for (unsigned int i = 0; i < num_outputs; i++) {
-            auto output_shape = output_tensors[i]->get_shape();
-            std::vector<uint64_t> new_shape;
-            new_shape.reserve(output_shape.size() - 1);
-            for (auto j = 1U; j < output_shape.size(); j++) {
-              new_shape.push_back(output_shape[j]);
-            }
-            auto* output_index =
-              reinterpret_cast<void*>(outputs_ptr.at(i)->data().first);
+    const auto num_outputs = outputs_ptr.size();
+    for (unsigned int i = 0; i < num_outputs; i++) {
+      auto output_shape = output_tensors[i]->get_shape();
+      std::vector<uint64_t> new_shape;
+      new_shape.reserve(output_shape.size() - 1);
+      for (auto j = 1U; j < output_shape.size(); j++) {
+        new_shape.push_back(output_shape[j]);
+      }
+      auto* output_index =
+        reinterpret_cast<void*>(outputs_ptr.at(i)->data().first);
 
-            auto* data_ptr = new_input_buffers.at(i)->data(
-              k * output_size_[i] * (output_type_[i]).size());
-            new_request->addInputTensor(
-              InferenceRequestInput{data_ptr, new_shape, output_type_[i], ""});
-            util::copy(
-              reinterpret_cast<int8_t*>(output_index) + (i * output_size_[i]),
-              static_cast<std::byte*>(data_ptr),
-              output_size_[i] * output_type_[i].size());
-          }
+      auto* data_ptr = new_input_buffers.at(i)->data(k * output_size_[i] *
+                                                     (output_type_[i]).size());
+      new_request->addInputTensor(
+        InferenceRequestInput{data_ptr, new_shape, output_type_[i], ""});
+      util::copy(
+        reinterpret_cast<int8_t*>(output_index) + (i * output_size_[i]),
+        static_cast<std::byte*>(data_ptr),
+        output_size_[i] * output_type_[i].size());
+    }
 
-          new_request->setCallback(req->getCallback());
-          new_request->setID(req->getID());
-          const auto outputs = req->getOutputs();
-          for (const auto& output : outputs) {
-            new_request->addOutputTensor(output);
-          }
+    new_request->setCallback(req->getCallback());
+    new_request->setID(req->getID());
+    const auto outputs = req->getOutputs();
+    for (const auto& output : outputs) {
+      new_request->addOutputTensor(output);
+    }
 
-          new_batch->addRequest(new_request);
+    new_batch->addRequest(new_request);
 
-          new_batch->setModel(k, "xmodel");
+    new_batch->setModel(k, "xmodel");
 
-          auto& trace = batch->getTrace(static_cast<int>(k));
+    auto& trace = batch->getTrace(static_cast<int>(k));
 #ifdef AMDINFER_ENABLE_TRACING
-          trace->endSpan();
-          new_batch->addTrace(std::move(trace));
+    trace->endSpan();
+    new_batch->addTrace(std::move(trace));
 #endif
 
 #ifdef AMDINFER_ENABLE_METRICS
-          new_batch->addTime(batch->getTime(k));
+    new_batch->addTime(batch->getTime(k));
 #endif
-        }
-        new_batch->setBuffers(std::move(new_input_buffers), {});
-
-        assert(next_ != nullptr);
-        next_->enqueue(std::move(new_batch));
-
-        for (auto& buffer : input_buffers) {
-          buffer->free();
-        }
-        for (auto& buffer : output_buffers) {
-          buffer->free();
-        }
-        thread_pool_size--;
-      });
   }
-  AMDINFER_LOG_INFO(logger, "XModel ending");
+  new_batch->setBuffers(std::move(new_input_buffers), {});
+
+  return new_batch;
 }
 
-void XModel::doRelease() {}
-void XModel::doDestroy() { this->thread_pool_.stop(true); }
+void XModel::doRelease() { this->destroyThreadPool(); }
+void XModel::doDestroy() {}
 
 }  // namespace amdinfer::workers
 
@@ -345,6 +302,6 @@ extern "C" {
 // using smart pointer here may cause problems inside shared object so managing
 // manually
 amdinfer::workers::Worker* getWorker() {
-  return new amdinfer::workers::XModel();
+  return new amdinfer::workers::XModel("XModel", "FPGA", true);
 }
 }  // extern C

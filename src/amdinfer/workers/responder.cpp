@@ -58,15 +58,15 @@ namespace workers {
  * @brief The Responder worker can run a compiled C++ "model".
  *
  */
-class Responder : public Worker {
+class Responder : public SingleThreadedWorker {
  public:
-  using Worker::Worker;
+  using SingleThreadedWorker::SingleThreadedWorker;
   [[nodiscard]] std::vector<MemoryAllocators> getAllocators() const override;
 
  private:
   void doInit(ParameterMap* parameters) override;
   void doAcquire(ParameterMap* parameters) override;
-  void doRun(BatchPtrQueue* input_queue, const MemoryPool* pool) override;
+  BatchPtr doRun(Batch* batch, const MemoryPool* pool) override;
   void doRelease() override;
   void doDestroy() override;
 
@@ -101,83 +101,64 @@ void Responder::doAcquire([[maybe_unused]] ParameterMap* parameters) {
   // TODO(varunsh): what should we do for metadata_?
 }
 
-void Responder::doRun(BatchPtrQueue* input_queue,
-                      [[maybe_unused]] const MemoryPool* pool) {
-  assert(next_ == nullptr);
-  util::setThreadName("Responder");
-#ifdef AMDINFER_ENABLE_LOGGING
-  const auto& logger = this->getLogger();
-#endif
-
-  while (true) {
-    BatchPtr batch;
-    input_queue->wait_dequeue(batch);
-    if (batch == nullptr) {
-      break;
-    }
-    AMDINFER_LOG_INFO(logger, "Got request in Responder");
-#ifdef AMDINFER_ENABLE_METRICS
-    Metrics::getInstance().incrementCounter(
-      MetricCounterIDs::PipelineIngressWorker);
-#endif
-
-    const auto batch_size = batch->size();
-    for (unsigned int j = 0; j < batch_size; j++) {
-      const auto& req = batch->getRequest(j);
+BatchPtr Responder::doRun(Batch* batch,
+                          [[maybe_unused]] const MemoryPool* pool) {
+  const auto batch_size = batch->size();
+  for (unsigned int j = 0; j < batch_size; j++) {
+    const auto& req = batch->getRequest(j);
 #ifdef AMDINFER_ENABLE_TRACING
-      const auto& trace = batch->getTrace(j);
-      trace->startSpan("response");
+    const auto& trace = batch->getTrace(j);
+    trace->startSpan("response");
 #endif
-      InferenceResponse resp;
-      resp.setID(req->getID());
-      resp.setModel(batch->getModel(j));
-      auto inputs = req->getInputs();
-      auto outputs = req->getOutputs();
-      for (unsigned int i = 0; i < inputs.size(); i++) {
-        const auto& input = inputs[i];
-        const auto* input_buffer = input.getData();
+    InferenceResponse resp;
+    resp.setID(req->getID());
+    resp.setModel(batch->getModel(j));
+    auto inputs = req->getInputs();
+    auto outputs = req->getOutputs();
+    for (unsigned int i = 0; i < inputs.size(); i++) {
+      const auto& input = inputs[i];
+      const auto* input_buffer = input.getData();
 
-        InferenceResponseOutput output;
-        output.setDatatype(input.getDatatype());
-        std::string output_name;
-        if (i < outputs.size()) {
-          output_name = outputs[i].getName();
-        }
-
-        if (output_name.empty()) {
-          output.setName(input.getName());
-        } else {
-          output.setName(output_name);
-        }
-        output.setShape(input.getShape());
-        std::vector<std::byte> buffer;
-        const auto size = input.getSize() * input.getDatatype().size();
-        buffer.resize(size);
-        memcpy(buffer.data(), input_buffer, size);
-        output.setData(std::move(buffer));
-        resp.addOutput(output);
+      InferenceResponseOutput output;
+      output.setDatatype(input.getDatatype());
+      std::string output_name;
+      if (i < outputs.size()) {
+        output_name = outputs[i].getName();
       }
 
+      if (output_name.empty()) {
+        output.setName(input.getName());
+      } else {
+        output.setName(output_name);
+      }
+      output.setShape(input.getShape());
+      std::vector<std::byte> buffer;
+      const auto size = input.getSize() * input.getDatatype().size();
+      buffer.resize(size);
+      memcpy(buffer.data(), input_buffer, size);
+      output.setData(std::move(buffer));
+      resp.addOutput(output);
+    }
+
 #ifdef AMDINFER_ENABLE_TRACING
-      auto context = trace->propagate();
-      resp.setContext(std::move(context));
+    auto context = trace->propagate();
+    resp.setContext(std::move(context));
 #endif
 
-      // respond back to the client
-      req->runCallbackOnce(resp);
+    // respond back to the client
+    req->runCallbackOnce(resp);
 #ifdef AMDINFER_ENABLE_METRICS
-      Metrics::getInstance().incrementCounter(
-        MetricCounterIDs::PipelineEgressWorker);
-      util::Timer timer{batch->getTime(j)};
-      timer.stop();
-      auto duration = timer.count<std::micro>();
-      Metrics::getInstance().observeSummary(MetricSummaryIDs::RequestLatency,
-                                            duration);
+    Metrics::getInstance().incrementCounter(
+      MetricCounterIDs::PipelineEgressWorker);
+    util::Timer timer{batch->getTime(j)};
+    timer.stop();
+    auto duration = timer.count<std::micro>();
+    Metrics::getInstance().observeSummary(MetricSummaryIDs::RequestLatency,
+                                          duration);
 #endif
-    }
-    returnInputBuffers(std::move(batch));
   }
-  AMDINFER_LOG_INFO(logger, "Responder ending");
+  // okay because ensembles disabled for this worker
+  return nullptr;
 }
 
 void Responder::doRelease() {}
@@ -191,6 +172,6 @@ extern "C" {
 // using smart pointer here may cause problems inside shared object so managing
 // manually
 amdinfer::workers::Worker* getWorker() {
-  return new amdinfer::workers::Responder("responder", "cpu");
+  return new amdinfer::workers::Responder("responder", "CPU", false);
 }
 }  // extern C

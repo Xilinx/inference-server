@@ -35,8 +35,8 @@ void test(const Client* client) {
   EXPECT_TRUE(client->modelReady(model));
 
   auto metadata = client->modelMetadata(model);
-  EXPECT_EQ(metadata.getName(), "cPlusPlus");
-  EXPECT_EQ(metadata.getPlatform(), "cpu");
+  EXPECT_EQ(metadata.getName(), "CPlusPlus");
+  EXPECT_EQ(metadata.getPlatform(), "CPU");
   // TODO(varunsh): add other assertions
 
   client->workerUnload(model);  // unload the model

@@ -34,6 +34,9 @@
 #include "amdinfer/core/memory_pool/pool.hpp"
 #include "amdinfer/core/model_metadata.hpp"
 #include "amdinfer/observation/logging.hpp"
+#include "amdinfer/observation/metrics.hpp"
+#include "amdinfer/util/ctpl.hpp"    // for ThreadPool
+#include "amdinfer/util/thread.hpp"  // for setThreadName
 
 namespace amdinfer {
 
@@ -52,12 +55,12 @@ enum class WorkerStatus {
   Dead
 };
 
-void returnInputBuffers(std::unique_ptr<Batch> batch) {
-  auto buffers = batch->getInputBuffers();
-  for (auto& buffer : buffers) {
-    buffer->free();
-  }
-}
+// void returnInputBuffers(std::unique_ptr<Batch> batch) {
+//   auto buffers = batch->getInputBuffers();
+//   for (auto& buffer : buffers) {
+//     buffer->free();
+//   }
+// }
 
 /**
  * @brief All workers should extend the Worker class which defines the methods
@@ -66,13 +69,13 @@ void returnInputBuffers(std::unique_ptr<Batch> batch) {
 class Worker {
  public:
   /// The constructor only initializes the private class members
-  Worker(const std::string& name, const std::string& platform)
-    : metadata_(name, platform) {
+  Worker(const std::string& name, const std::string& platform, bool allow_next)
+    : metadata_(name, platform), allow_next_(allow_next) {
     this->status_ = WorkerStatus::New;
   }
   virtual ~Worker() = default;  ///< Destroy the Worker object
 
-  /// Allocate some buffers that are used to hold input and output data
+  /// Get the memory allocators supported by this worker
   [[nodiscard]] virtual std::vector<MemoryAllocators> getAllocators() const = 0;
 
   /// Perform low-cost initialization of the worker
@@ -91,15 +94,11 @@ class Worker {
    *
    * @param input_queue queue that receives incoming requests
    */
-  void run(BatchPtrQueue* input_queue, const MemoryPool* pool) {
-    this->status_ = WorkerStatus::Run;
-    this->doRun(input_queue, pool);
-    this->status_ = WorkerStatus::Inactive;
-  }
+  virtual void run(BatchPtrQueue* input_queue, const MemoryPool* pool) = 0;
   /// Release any hardware resources
   void release() {
-    this->status_ = WorkerStatus::Release;
-    this->metadata_.setReady(false);
+    status_ = WorkerStatus::Release;
+    metadata_.setReady(false);
     this->doRelease();
   }
   /// Perform any final operations before the worker thread is joined
@@ -132,7 +131,13 @@ class Worker {
 
   ModelMetadata getMetadata() const { return this->metadata_; }
 
-  void setNext(BatchPtrQueue* batcher) { next_ = batcher; }
+  const std::string& getName() const { return metadata_.getName(); }
+
+  void setNext(BatchPtrQueue* batcher) {
+    if (allow_next_) {
+      next_ = batcher;
+    }
+  }
   void setNextAllocators(const std::vector<MemoryAllocators>& allocators) {
     next_allocators_ = allocators;
   }
@@ -144,20 +149,23 @@ class Worker {
 
   size_t batch_size_ = 1;
   ModelMetadata metadata_;
-  BatchPtrQueue* next_ = nullptr;
   std::vector<MemoryAllocators> next_allocators_;
+  BatchPtrQueue* next_ = nullptr;
+  WorkerStatus status_;
+
+  /**
+   * @brief The main body of the worker executes the work
+   *
+   * @param input_queue queue that receives incoming requests
+   */
+  virtual std::unique_ptr<Batch> doRun(Batch* batch,
+                                       const MemoryPool* pool) = 0;
 
  private:
   /// Perform low-cost initialization of the worker
   virtual void doInit(ParameterMap* parameters) = 0;
   /// Acquire any hardware resources or perform high-cost initialization
   virtual void doAcquire(ParameterMap* parameters) = 0;
-  /**
-   * @brief The main body of the worker executes the work
-   *
-   * @param input_queue queue that receives incoming requests
-   */
-  virtual void doRun(BatchPtrQueue* input_queue, const MemoryPool* pool) = 0;
   /// Release any hardware resources
   virtual void doRelease() = 0;
   /// Perform any final operations before the worker's run thread is joined
@@ -166,8 +174,126 @@ class Worker {
 #ifdef AMDINFER_ENABLE_LOGGING
   Logger logger_{Loggers::Server};
 #endif
+  bool allow_next_ = true;
+};
 
-  WorkerStatus status_;
+class SingleThreadedWorker : public Worker {
+ public:
+  using Worker::Worker;
+  /**
+   * @brief The main body of the worker executes the work
+   *
+   * @param input_queue queue that receives incoming requests
+   */
+  void run(BatchPtrQueue* input_queue, const MemoryPool* pool) override {
+    this->status_ = WorkerStatus::Run;
+    const auto& name = this->getName();
+    const auto logger = this->getLogger();
+    util::setThreadName(name);
+
+    while (true) {
+      BatchPtr batch;
+      input_queue->wait_dequeue(batch);
+      if (batch == nullptr) {
+        break;
+      }
+
+      AMDINFER_LOG_INFO(logger, "Got request in " + name);
+#ifdef AMDINFER_ENABLE_METRICS
+      Metrics::getInstance().incrementCounter(
+        MetricCounterIDs::PipelineIngressWorker);
+#endif
+
+      auto new_batch = this->doRun(batch.get(), pool);
+
+      if (next_ != nullptr) {
+        next_->enqueue(std::move(new_batch));
+      }
+
+      auto buffers = batch->getInputBuffers();
+      for (const auto& buffer : buffers) {
+        buffer->free();
+      }
+    }
+
+    AMDINFER_LOG_INFO(logger, name + " ending");
+
+    status_ = WorkerStatus::Inactive;
+  }
+
+ private:
+  using Worker::next_;
+  using Worker::status_;
+};
+
+class MultiThreadedWorker : public Worker {
+ public:
+  using Worker::Worker;
+  /**
+   * @brief The main body of the worker executes the work
+   *
+   * @param input_queue queue that receives incoming requests
+   */
+  void run(BatchPtrQueue* input_queue, const MemoryPool* pool) override {
+    this->status_ = WorkerStatus::Run;
+    const auto& name = this->getName();
+    const auto logger = this->getLogger();
+    util::setThreadName(name);
+    std::atomic_int32_t outstanding_batches = 0;
+    // 4 is arbitrary
+    const int max_outstanding_batches = thread_pool_.getSize() * 4;
+    // 10 is arbitrary
+    const auto thread_pool_delay = std::chrono::milliseconds(10);
+
+    while (true) {
+      BatchPtr batch;
+      input_queue->wait_dequeue(batch);
+      if (batch == nullptr) {
+        break;
+      }
+
+      AMDINFER_LOG_INFO(logger, "Got request in " + name);
+#ifdef AMDINFER_ENABLE_METRICS
+      Metrics::getInstance().incrementCounter(
+        MetricCounterIDs::PipelineIngressWorker);
+#endif
+
+      outstanding_batches++;
+      if (outstanding_batches > max_outstanding_batches) {
+        std::this_thread::sleep_for(thread_pool_delay);
+      }
+
+      thread_pool_.push([this, batch = std::move(batch), &outstanding_batches,
+                         pool]([[maybe_unused]] int id) {
+        auto new_batch = this->doRun(batch.get(), pool);
+
+        if (next_ != nullptr) {
+          next_->enqueue(std::move(new_batch));
+        }
+
+        auto buffers = batch->getInputBuffers();
+        for (const auto& buffer : buffers) {
+          buffer->free();
+        }
+
+        outstanding_batches--;
+      });
+    }
+
+    AMDINFER_LOG_INFO(logger, name + " ending");
+
+    status_ = WorkerStatus::Inactive;
+  }
+
+ protected:
+  void createThreadPool(int threads) { thread_pool_.resize(threads); }
+
+  void destroyThreadPool() { thread_pool_.stop(true); }
+
+ private:
+  using Worker::next_;
+  using Worker::status_;
+  util::ThreadPool thread_pool_;
 };
 
 }  // namespace workers
