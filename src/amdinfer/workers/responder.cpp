@@ -106,10 +106,7 @@ BatchPtr Responder::doRun(Batch* batch,
   const auto batch_size = batch->size();
   for (unsigned int j = 0; j < batch_size; j++) {
     const auto& req = batch->getRequest(j);
-#ifdef AMDINFER_ENABLE_TRACING
-    const auto& trace = batch->getTrace(j);
-    trace->startSpan("response");
-#endif
+
     InferenceResponse resp;
     resp.setID(req->getID());
     resp.setModel(batch->getModel(j));
@@ -141,6 +138,7 @@ BatchPtr Responder::doRun(Batch* batch,
     }
 
 #ifdef AMDINFER_ENABLE_TRACING
+    const auto& trace = batch->getTrace(j);
     auto context = trace->propagate();
     resp.setContext(std::move(context));
 #endif

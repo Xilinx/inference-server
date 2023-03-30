@@ -172,13 +172,6 @@ void XModel::doAcquire(ParameterMap* parameters) {
 }
 
 BatchPtr XModel::doRun(Batch* batch, const MemoryPool* pool) {
-#ifdef AMDINFER_ENABLE_TRACING
-  for (unsigned int j = 0; j < batch->size(); j++) {
-    const auto& trace = batch->getTrace(j);
-    trace->startSpan("xmodel");
-  }
-#endif
-
   const auto& input_buffers = batch->getInputBuffers();
   // const auto& output_buffers = batch->getOutputBuffers();
 
@@ -277,16 +270,6 @@ BatchPtr XModel::doRun(Batch* batch, const MemoryPool* pool) {
     new_batch->addRequest(new_request);
 
     new_batch->setModel(k, "xmodel");
-
-    auto& trace = batch->getTrace(static_cast<int>(k));
-#ifdef AMDINFER_ENABLE_TRACING
-    trace->endSpan();
-    new_batch->addTrace(std::move(trace));
-#endif
-
-#ifdef AMDINFER_ENABLE_METRICS
-    new_batch->addTime(batch->getTime(k));
-#endif
   }
   new_batch->setBuffers(std::move(new_input_buffers), {});
 

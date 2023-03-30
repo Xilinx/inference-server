@@ -141,10 +141,6 @@ BatchPtr AksDetectStream::doRun(Batch* batch,
 
   for (unsigned int k = 0; k < batch->size(); k++) {
     const auto& req = batch->getRequest(static_cast<int>(k));
-#ifdef AMDINFER_ENABLE_TRACING
-    const auto& trace = batch->getTrace(static_cast<int>(k));
-    trace->startSpan("aks_detect_stream");
-#endif
     auto inputs = req->getInputs();
     auto outputs = req->getOutputs();
     auto key = req->getParameters().get<std::string>("key");
@@ -204,6 +200,7 @@ BatchPtr AksDetectStream::doRun(Batch* batch,
         v.reserve(1);
 
 #ifdef AMDINFER_ENABLE_TRACING
+        const auto& trace = batch->getTrace(k);
         trace->startSpan("enqueue_batch");
 #endif
 

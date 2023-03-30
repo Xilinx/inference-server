@@ -40,7 +40,6 @@
 #include "amdinfer/declarations.hpp"             // for InferenceResponseOutput
 #include "amdinfer/observation/logging.hpp"  // for Logger, AMDINFER_LOG_INFO
 #include "amdinfer/observation/metrics.hpp"  // for Metrics, MetricCounterIDs
-#include "amdinfer/observation/tracing.hpp"  // for Trace
 #include "amdinfer/util/containers.hpp"      // for containerProduct
 #include "amdinfer/util/memory.hpp"          // for copy
 #include "amdinfer/util/thread.hpp"          // for setThreadName
@@ -198,11 +197,6 @@ BatchPtr PtZendnn::doRun(Batch* batch, const MemoryPool* pool) {
   for (unsigned int j = 0; j < batch->size(); j++) {
     const auto& req = batch->getRequest(j);
 
-#ifdef AMDINFER_ENABLE_TRACING
-    const auto& trace = batch->getTrace(j);
-    trace->startSpan("ptzendnn");
-#endif
-
     auto inputs = req->getInputs();
     auto outputs = req->getOutputs();
     AMDINFER_LOG_DEBUG(logger,
@@ -283,16 +277,6 @@ BatchPtr PtZendnn::doRun(Batch* batch, const MemoryPool* pool) {
     new_batch->addRequest(new_request);
 
     new_batch->setModel(k, "PTModel");
-
-    auto& trace = batch->getTrace(static_cast<int>(k));
-#ifdef AMDINFER_ENABLE_TRACING
-    trace->endSpan();
-    new_batch->addTrace(std::move(trace));
-#endif
-
-#ifdef AMDINFER_ENABLE_METRICS
-    new_batch->addTime(batch->getTime(k));
-#endif
   }
 
   new_batch->setBuffers(std::move(input_buffers), {});

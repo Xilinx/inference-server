@@ -143,7 +143,6 @@ amdinfer::BatchPtr run(amdinfer::Batch* batch) {
 
 #ifdef AMDINFER_ENABLE_TRACING
     trace->endSpan();
-    new_batch->addTrace(std::move(trace));
 #endif
 
 #ifdef AMDINFER_ENABLE_METRICS

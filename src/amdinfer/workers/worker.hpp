@@ -21,6 +21,7 @@
 #ifndef GUARD_AMDINFER_WORKERS_WORKER
 #define GUARD_AMDINFER_WORKERS_WORKER
 
+#include <cassert>
 #include <limits>
 #include <memory>
 #include <string>
@@ -191,6 +192,15 @@ class SingleThreadedWorker : public Worker {
         break;
       }
 
+      [[maybe_unused]] auto batch_size = batch->size();
+
+#ifdef AMDINFER_ENABLE_TRACING
+      for (auto i = 0U; i < batch_size; ++i) {
+        const auto& trace = batch->getTrace(i);
+        trace->startSpan(name.c_str());
+      }
+#endif
+
       AMDINFER_LOG_INFO(logger, "Got request in " + name);
 #ifdef AMDINFER_ENABLE_METRICS
       Metrics::getInstance().incrementCounter(
@@ -200,6 +210,21 @@ class SingleThreadedWorker : public Worker {
       auto new_batch = this->doRun(batch.get(), pool);
 
       if (next_ != nullptr) {
+        assert(new_batch != nullptr);
+        assert(new_batch->size() == batch_size);
+#ifdef AMDINFER_ENABLE_TRACING
+        for (auto i = 0U; i < batch_size; ++i) {
+          auto& trace = batch->getTrace(i);
+          trace->endSpan();
+          new_batch->addTrace(std::move(trace));
+        }
+#endif
+
+#ifdef AMDINFER_ENABLE_METRICS
+        for (auto i = 0U; i < batch_size; ++i) {
+          new_batch->addTime(batch->getTime(i));
+        }
+#endif
         next_->enqueue(std::move(new_batch));
       }
 
@@ -245,6 +270,15 @@ class MultiThreadedWorker : public Worker {
         break;
       }
 
+      [[maybe_unused]] auto batch_size = batch->size();
+
+#ifdef AMDINFER_ENABLE_TRACING
+      for (auto i = 0U; i < batch_size; ++i) {
+        const auto& trace = batch->getTrace(i);
+        trace->startSpan(name.c_str());
+      }
+#endif
+
       AMDINFER_LOG_INFO(logger, "Got request in " + name);
 #ifdef AMDINFER_ENABLE_METRICS
       Metrics::getInstance().incrementCounter(
@@ -258,9 +292,26 @@ class MultiThreadedWorker : public Worker {
 
       thread_pool_.push([this, batch = std::move(batch), &outstanding_batches,
                          pool]([[maybe_unused]] int id) {
+        [[maybe_unused]] auto batch_size = batch->size();
         auto new_batch = this->doRun(batch.get(), pool);
 
         if (next_ != nullptr) {
+          assert(new_batch != nullptr);
+          assert(new_batch->size() == batch_size);
+#ifdef AMDINFER_ENABLE_TRACING
+          for (auto i = 0U; i < batch_size; ++i) {
+            auto& trace = batch->getTrace(i);
+            trace->endSpan();
+            new_batch->addTrace(std::move(trace));
+          }
+#endif
+
+#ifdef AMDINFER_ENABLE_METRICS
+          for (auto i = 0U; i < batch_size; ++i) {
+            new_batch->addTime(batch->getTime(i));
+          }
+#endif
+
           next_->enqueue(std::move(new_batch));
         }
 

@@ -46,12 +46,6 @@ const InferenceRequestPtr& Batch::getRequest(size_t index) {
 bool Batch::empty() const { return requests_.empty(); }
 
 size_t Batch::size() const {
-#ifdef AMDINFER_ENABLE_TRACING
-  assert(requests_.size() == traces_.size());
-#endif
-#ifdef AMDINFER_ENABLE_METRICS
-  assert(requests_.size() == start_times_.size());
-#endif
   assert(requests_.size() == models_.size());
 
   return requests_.size();

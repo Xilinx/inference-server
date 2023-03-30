@@ -49,10 +49,6 @@ void run(amdinfer::Batch* batch, amdinfer::Batch* new_batch) {
   const auto batch_size = batch->size();
   for (unsigned int j = 0; j < batch_size; j++) {
     const auto& req = batch->getRequest(j);
-#ifdef AMDINFER_ENABLE_TRACING
-    auto& trace = batch->getTrace(j);
-    trace->startSpan("echo");
-#endif
     const auto& new_request = new_batch->getRequest(j);
     new_request->setCallback(req->getCallback());
 
@@ -83,15 +79,6 @@ void run(amdinfer::Batch* batch, amdinfer::Batch* new_batch) {
     }
 
     new_batch->setModel(j, "echo");
-
-#ifdef AMDINFER_ENABLE_TRACING
-    trace->endSpan();
-    new_batch->addTrace(std::move(trace));
-#endif
-
-#ifdef AMDINFER_ENABLE_METRICS
-    new_batch->addTime(batch->getTime(j));
-#endif
   }
 }
 

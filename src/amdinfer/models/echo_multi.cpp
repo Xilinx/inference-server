@@ -70,10 +70,6 @@ amdinfer::BatchPtr run(amdinfer::Batch* batch) {
 
   for (unsigned int j = 0; j < batch_size; j++) {
     const auto& req = batch->getRequest(j);
-#ifdef AMDINFER_ENABLE_TRACING
-    auto& trace = batch->getTrace(j);
-    trace->startSpan("echoMulti");
-#endif
     auto new_request = std::make_shared<amdinfer::InferenceRequest>();
     for (auto i = 0; i < kOutputTensors; ++i) {
       std::vector<size_t> shape = {kOutputLengths.at(i)};
@@ -117,15 +113,6 @@ amdinfer::BatchPtr run(amdinfer::Batch* batch) {
 
     new_batch->addRequest(new_request);
     new_batch->setModel(j, "echo_multi");
-
-#ifdef AMDINFER_ENABLE_TRACING
-    trace->endSpan();
-    new_batch->addTrace(std::move(trace));
-#endif
-
-#ifdef AMDINFER_ENABLE_METRICS
-    new_batch->addTime(batch->getTime(j));
-#endif
   }
 
   new_batch->setBuffers(std::move(input_buffers), {});

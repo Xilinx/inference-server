@@ -457,10 +457,6 @@ BatchPtr MIGraphXWorker::doRun(Batch* batch, const MemoryPool* pool) {
     }
 
     for (unsigned int j = 0; j < batch_size; j++) {
-#ifdef AMDINFER_ENABLE_TRACING
-      auto& trace = batch->getTrace(j);
-      trace->startSpan("migraphx");
-#endif
       const auto& req = batch->getRequest(j);
       auto new_request = std::make_shared<InferenceRequest>();
 
@@ -498,14 +494,6 @@ BatchPtr MIGraphXWorker::doRun(Batch* batch, const MemoryPool* pool) {
 
       new_batch->setModel(j, "migraphx");
 
-#ifdef AMDINFER_ENABLE_TRACING
-      trace->endSpan();
-      new_batch->addTrace(std::move(trace));
-#endif
-
-#ifdef AMDINFER_ENABLE_METRICS
-      new_batch->addTime(batch->getTime(j));
-#endif
     }  // end j, request
   } catch (const std::exception& e) {
     // This outer catch block catches exceptions in evaluation of the batch.

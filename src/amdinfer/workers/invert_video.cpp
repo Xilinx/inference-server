@@ -105,10 +105,6 @@ BatchPtr InvertVideo::doRun(Batch* batch,
 
   for (unsigned int j = 0; j < batch->size(); j++) {
     const auto& req = batch->getRequest(j);
-#ifdef AMDINFER_ENABLE_TRACING
-    const auto& trace = batch->getTrace(j);
-    trace->startSpan("InvertVideo");
-#endif
     auto inputs = req->getInputs();
     auto outputs = req->getOutputs();
     auto key = req->getParameters().get<std::string>("key");

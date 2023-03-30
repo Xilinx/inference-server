@@ -50,7 +50,6 @@
 #include "amdinfer/declarations.hpp"         // for BufferPtrs, InferenceRe...
 #include "amdinfer/observation/logging.hpp"  // for Logger
 #include "amdinfer/observation/metrics.hpp"  // for Metrics, MetricSummaryIDs
-#include "amdinfer/observation/tracing.hpp"  // for Trace
 #include "amdinfer/util/base64.hpp"          // for base64_decode
 #include "amdinfer/util/containers.hpp"      // for containerProduct
 #include "amdinfer/util/memory.hpp"          // for copy
@@ -155,10 +154,6 @@ BatchPtr AksDetect::doRun(Batch* batch, const MemoryPool* pool) {
   size_t tensor_count = 0;
   for (unsigned int j = 0; j < batch_size; j++) {
     const auto& req = batch->getRequest(static_cast<int>(j));
-#ifdef AMDINFER_ENABLE_TRACING
-    const auto& trace = batch->getTrace(static_cast<int>(j));
-    trace->startSpan("AksDetect");
-#endif
 
     auto inputs = req->getInputs();
 
@@ -277,16 +272,6 @@ BatchPtr AksDetect::doRun(Batch* batch, const MemoryPool* pool) {
     new_batch->addRequest(new_request);
 
     new_batch->setModel(i, graph_name_);
-
-    auto& trace = batch->getTrace(static_cast<int>(i));
-#ifdef AMDINFER_ENABLE_TRACING
-    trace->endSpan();
-    new_batch->addTrace(std::move(trace));
-#endif
-
-#ifdef AMDINFER_ENABLE_METRICS
-    new_batch->addTime(batch->getTime(i));
-#endif
   }
 
   new_batch->setBuffers(std::move(input_buffers), {});
