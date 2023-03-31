@@ -50,15 +50,9 @@ void run(amdinfer::Batch* batch, amdinfer::Batch* new_batch) {
   for (unsigned int j = 0; j < batch_size; j++) {
     const auto& req = batch->getRequest(j);
     const auto& new_request = new_batch->getRequest(j);
-    new_request->setCallback(req->getCallback());
 
-    new_request->setID(req->getID());
     const auto& inputs = req->getInputs();
     const auto inputs_size = inputs.size();
-    const auto outputs = req->getOutputs();
-    for (const auto& output : outputs) {
-      new_request->addOutputTensor(output);
-    }
 
     const auto& new_inputs = new_request->getInputs();
     for (auto i = 0U; i < inputs_size; ++i) {

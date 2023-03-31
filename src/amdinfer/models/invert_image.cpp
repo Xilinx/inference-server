@@ -85,7 +85,7 @@ amdinfer::BatchPtr run(amdinfer::Batch* batch) {
   for (unsigned int j = 0; j < batch_size; j++) {
     const auto& req = batch->getRequest(j);
 #ifdef AMDINFER_ENABLE_TRACING
-    auto& trace = batch->getTrace(j);
+    const auto& trace = batch->getTrace(j);
     trace->startSpan("invert_image");
 #endif
     const auto& inputs = req->getInputs();
@@ -94,7 +94,7 @@ amdinfer::BatchPtr run(amdinfer::Batch* batch) {
     auto input_size = amdinfer::util::containerProduct(input_shape);
     auto input_datatype = inputs[0].getDatatype();
 
-    auto new_request = std::make_shared<amdinfer::InferenceRequest>();
+    auto new_request = req->propagate();
     auto* data_ptr = input_buffers.at(0)->data(j * kMaxImageSize * data_size);
     if (input_datatype == amdinfer::DataType::Uint8) {
       new_request->addInputTensor(data_ptr, input_shape,
@@ -128,14 +128,6 @@ amdinfer::BatchPtr run(amdinfer::Batch* batch) {
                            encoded.size());
       new_request->addInputTensor(data_ptr, {encoded.size()},
                                   amdinfer::DataType::String, "output");
-    }
-
-    new_request->setCallback(req->getCallback());
-
-    new_request->setID(req->getID());
-    const auto outputs = req->getOutputs();
-    for (const auto& output : outputs) {
-      new_request->addOutputTensor(output);
     }
 
     new_batch->addRequest(new_request);

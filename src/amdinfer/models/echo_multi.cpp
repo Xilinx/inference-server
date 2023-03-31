@@ -70,7 +70,7 @@ amdinfer::BatchPtr run(amdinfer::Batch* batch) {
 
   for (unsigned int j = 0; j < batch_size; j++) {
     const auto& req = batch->getRequest(j);
-    auto new_request = std::make_shared<amdinfer::InferenceRequest>();
+    auto new_request = req->propagate();
     for (auto i = 0; i < kOutputTensors; ++i) {
       std::vector<size_t> shape = {kOutputLengths.at(i)};
       auto* data_ptr =
@@ -79,14 +79,7 @@ amdinfer::BatchPtr run(amdinfer::Batch* batch) {
                                   "output" + std::to_string(i));
     }
 
-    new_request->setCallback(req->getCallback());
-
-    new_request->setID(req->getID());
     const auto& inputs = req->getInputs();
-    const auto outputs = req->getOutputs();
-    for (const auto& output : outputs) {
-      new_request->addOutputTensor(output);
-    }
 
     std::vector<int> args;
     const auto input_num = amdinfer::util::containerSum(kInputLengths);

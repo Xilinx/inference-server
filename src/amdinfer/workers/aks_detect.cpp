@@ -245,7 +245,8 @@ BatchPtr AksDetect::doRun(Batch* batch, const MemoryPool* pool) {
               batch_size));
 
   for (auto i = 0U; i < batch_size; ++i) {
-    auto new_request = std::make_shared<InferenceRequest>();
+    const auto& req = batch->getRequest(i);
+    auto new_request = req->propagate();
     new_request->addInputTensor(InferenceRequestInput{
       nullptr, {boxes.at(i), kDetectResponseSize}, DataType::Fp32, ""});
     auto* data_ptr = input_buffers.at(0)->data(
@@ -259,14 +260,6 @@ BatchPtr AksDetect::doRun(Batch* batch, const MemoryPool* pool) {
           util::copy(&(aks_data[j + 1]), static_cast<std::byte*>(data_ptr),
                      sizeof(DetectResponse));
       }
-    }
-
-    const auto& req = batch->getRequest(i);
-    new_request->setCallback(req->getCallback());
-    new_request->setID(req->getID());
-    const auto outputs = req->getOutputs();
-    for (const auto& output : outputs) {
-      new_request->addOutputTensor(output);
     }
 
     new_batch->addRequest(new_request);

@@ -227,20 +227,13 @@ BatchPtr ResNet50::doRun(Batch* batch, const MemoryPool* pool) {
 
   for (unsigned int k = 0; k < batch->size(); k++) {
     const auto& req = batch->getRequest(k);
-    auto new_request = std::make_shared<InferenceRequest>();
+    auto new_request = req->propagate();
     auto* data_ptr =
       input_buffers.at(0)->data(k * response_size * DataType("Uint32").size());
     new_request->addInputTensor(
       InferenceRequestInput{data_ptr, new_shape, DataType::Uint32, ""});
     util::copy(top_k_data + (k * response_size),
                static_cast<std::byte*>(data_ptr), response_size * sizeof(int));
-
-    new_request->setCallback(req->getCallback());
-    new_request->setID(req->getID());
-    const auto outputs = req->getOutputs();
-    for (const auto& output : outputs) {
-      new_request->addOutputTensor(output);
-    }
 
     new_batch->addRequest(new_request);
 

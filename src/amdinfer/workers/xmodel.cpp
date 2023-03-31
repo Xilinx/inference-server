@@ -237,7 +237,7 @@ BatchPtr XModel::doRun(Batch* batch, const MemoryPool* pool) {
   for (unsigned int k = 0; k < num_batches; k++) {
     const auto& req = batch->getRequest(k);
 
-    auto new_request = std::make_shared<InferenceRequest>();
+    auto new_request = req->propagate();
 
     const auto num_outputs = outputs_ptr.size();
     for (unsigned int i = 0; i < num_outputs; i++) {
@@ -258,13 +258,6 @@ BatchPtr XModel::doRun(Batch* batch, const MemoryPool* pool) {
         reinterpret_cast<int8_t*>(output_index) + (i * output_size_[i]),
         static_cast<std::byte*>(data_ptr),
         output_size_[i] * output_type_[i].size());
-    }
-
-    new_request->setCallback(req->getCallback());
-    new_request->setID(req->getID());
-    const auto outputs = req->getOutputs();
-    for (const auto& output : outputs) {
-      new_request->addOutputTensor(output);
     }
 
     new_batch->addRequest(new_request);

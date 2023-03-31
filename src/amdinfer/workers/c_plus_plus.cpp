@@ -181,7 +181,8 @@ BatchPtr CPlusPlus::doRun(Batch* batch, const MemoryPool* pool) {
       input_buffers.push_back(pool->get(next_allocators_, tensor, batch_size));
     }
     for (auto i = 0U; i < batch_size; ++i) {
-      auto new_request = std::make_shared<InferenceRequest>();
+      const auto& req = batch->getRequest(i);
+      auto new_request = req->propagate();
       int index = 0;
       for (const auto& tensor : output_tensors_) {
         new_request->addInputTensor(InferenceRequestInput{tensor});

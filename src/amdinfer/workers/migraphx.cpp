@@ -458,15 +458,7 @@ BatchPtr MIGraphXWorker::doRun(Batch* batch, const MemoryPool* pool) {
 
     for (unsigned int j = 0; j < batch_size; j++) {
       const auto& req = batch->getRequest(j);
-      auto new_request = std::make_shared<InferenceRequest>();
-
-      new_request->setCallback(req->getCallback());
-
-      new_request->setID(req->getID());
-      const auto outputs = req->getOutputs();
-      for (const auto& output : outputs) {
-        new_request->addOutputTensor(output);
-      }
+      auto new_request = req->propagate();
 
       for (auto i = 0U; i < num_output_tensors; ++i) {
         auto migraphx_shape = migraphx_output[i].get_shape();
