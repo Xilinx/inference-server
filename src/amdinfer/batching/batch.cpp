@@ -28,7 +28,21 @@ namespace amdinfer {
 
 void Batch::addRequest(InferenceRequestPtr request) {
   requests_.push_back(std::move(request));
-  models_.emplace_back();
+  // models_.emplace_back();
+}
+
+std::unique_ptr<Batch> Batch::propagate() {
+  const auto batch_size = this->size();
+  auto new_batch = std::make_unique<Batch>();
+  new_batch->models_.resize(batch_size);
+
+  for (auto i = 0U; i < batch_size; ++i) {
+    new_batch->setModel(i, this->getModel(i));
+#ifdef AMDINFER_ENABLE_METRICS
+    new_batch->addTime(this->getTime(i));
+#endif
+  }
+  return new_batch;
 }
 
 const BufferPtrs& Batch::getInputBuffers() const { return input_buffers_; }
@@ -46,7 +60,7 @@ const InferenceRequestPtr& Batch::getRequest(size_t index) {
 bool Batch::empty() const { return requests_.empty(); }
 
 size_t Batch::size() const {
-  assert(requests_.size() == models_.size());
+  // assert(requests_.size() == models_.size());
 
   return requests_.size();
 }
@@ -69,6 +83,10 @@ void Batch::setModel(size_t index, std::string model) {
   if (old_model.empty()) {
     old_model = std::move(model);
   }
+}
+
+void Batch::addModel(std::string model) {
+  models_.emplace_back(std::move(model));
 }
 
 #ifdef AMDINFER_ENABLE_TRACING

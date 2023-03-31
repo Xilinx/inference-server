@@ -123,6 +123,7 @@ void HardBatcher::doRun(const std::vector<MemoryAllocators>& allocators) {
 
       batch->addRequest(request);
       batch_size++;
+      batch->addModel("");
 #ifdef AMDINFER_ENABLE_TRACING
       trace->endSpan();
       batch->addTrace(std::move(trace));

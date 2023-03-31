@@ -34,6 +34,7 @@ namespace amdinfer {
 class Batch {
  public:
   void addRequest(InferenceRequestPtr request);
+  std::unique_ptr<Batch> propagate();
 
   void setBuffers(BufferPtrs inputs, BufferPtrs outputs);
   [[nodiscard]] const InferenceRequestPtr& getRequest(size_t index);
@@ -48,6 +49,7 @@ class Batch {
 
   const std::string& getModel(size_t index) const;
   void setModel(size_t index, std::string model);
+  void addModel(std::string model);
 
 #ifdef AMDINFER_ENABLE_TRACING
   void addTrace(TracePtr trace);
