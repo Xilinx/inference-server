@@ -43,10 +43,14 @@ The AMD Inference Server is integrated with the following libraries out of the g
 Quick Start Deployment and Inference
 ------------------------------------
 
-.. code-block:: 
+The following example demonstrates how to deploy the server locally and run a sample inference.
+This example runs on the CPU and does not require any special hardware.
 
-  # Step 1: Create the example model repository(requires git-lfs)
+.. code-block:: bash
+
+  # Step 1: Download the example files and create a model repository
   wget https://github.com/Xilinx/inference-server/raw/main/examples/resnet50/quickstart-setup.sh
+  chmod +x ./quickstart-setup.sh
   ./quickstart-setup.sh
 
   # Step 2: Launch the AMD Inference Server
@@ -67,14 +71,12 @@ Quick Start Deployment and Inference
     n02112137 chow, chow chow
     n02113023 Pembroke, Pembroke Welsh corgi
 
-::
-
 Learn more
 ----------
 
 The documentation for the AMD Inference Server is available `online <https://xilinx.github.io/inference-server/>`__.
 
-Check out the `Quickstart <https://xilinx.github.io/inference-server/main/quickstart.html>`__ on how to get started.
+Check out the quickstart guides online to help you get started based on your use case(s): `inference <https://xilinx.github.io/inference-server/main/quickstart_inference.html>`__, `deployment <https://xilinx.github.io/inference-server/main/quickstart_deployment.html>`__ and `development <https://xilinx.github.io/inference-server/main/quickstart_development.html>`__.
 
 Support
 -------
