@@ -56,20 +56,23 @@ This example runs on the CPU and does not require any special hardware.
   # Step 2: Launch the AMD Inference Server
   docker run -d --net=host -v ${PWD}/model_repository:/mnt/models:rw amdih/serve:uif1.1_zendnn_amdinfer_0.3.0 amdinfer-server --enable-repository-watcher
 
-  # Step 3: Send an inference request
+  # Step 3: Install the Python client library
   pip install amdinfer
+
+  # Step 4: Send an inference request
   python3 tfzendnn.py --endpoint resnet50 --image ./dog-3619020_640.jpg --labels ./imagenet_classes.txt
 
-  # Inference should return the following
-  Running the TF+ZenDNN example for ResNet50 in Python
-  Waiting until the server is ready...
-  Making inferences...
-  Top 5 classes for ../../tests/assets/dog-3619020_640.jpg:
-    n02112018 Pomeranian
-    n02112350 keeshond
-    n02086079 Pekinese, Pekingese, Peke
-    n02112137 chow, chow chow
-    n02113023 Pembroke, Pembroke Welsh corgi
+  # Inference should print the following:
+  #
+  #     Running the TF+ZenDNN example for ResNet50 in Python
+  #     Waiting until the server is ready...
+  #     Making inferences...
+  #     Top 5 classes for ../../tests/assets/dog-3619020_640.jpg:
+  #       n02112018 Pomeranian
+  #       n02112350 keeshond
+  #       n02086079 Pekinese, Pekingese, Peke
+  #       n02112137 chow, chow chow
+  #       n02113023 Pembroke, Pembroke Welsh corgi
 
 Learn more
 ----------
