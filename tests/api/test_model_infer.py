@@ -33,8 +33,7 @@ class TestModelInfer:
         """
 
         parameters = amdinfer.ParameterMap(["model"], ["echo"])
-        endpoints = amdinfer.loadEnsemble(self.rest_client, ["cplusplus"], [parameters])
-        endpoint = endpoints[0]
+        endpoint = self.rest_client.workerLoad("cplusplus", parameters)
         assert endpoint == "cplusplus"
 
         input_data = amdinfer.InferenceRequestInput()
@@ -53,4 +52,4 @@ class TestModelInfer:
         assert len(output_data) == 1
         assert output_data[0] == 2
 
-        amdinfer.unloadModels(self.rest_client, endpoints)
+        self.rest_client.workerUnload(endpoint)

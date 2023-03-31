@@ -87,8 +87,7 @@ inline std::string load(const amdinfer::NativeClient& client, int workers) {
                  "graph_facedetect_u200_u250_amdinfer.json");
   parameters.put("share", false);
 
-  auto endpoints = loadEnsemble(&client, {"AksDetect"}, {parameters});
-  const auto& endpoint = endpoints[0];
+  auto endpoint = client.workerLoad("AksDetect", parameters);
 
   for (int i = 0; i < workers - 1; i++) {
     const auto new_endpoint = client.workerLoad("AksDetect", parameters);

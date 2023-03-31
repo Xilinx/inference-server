@@ -23,9 +23,8 @@
 namespace amdinfer {
 
 void test(const Client* client) {
-  auto endpoints =
-    loadEnsemble(client, {"cplusplus"}, {{{"model"}, {std::string{"echo"}}}});
-  const auto& endpoint = endpoints[0];
+  auto endpoint =
+    client->workerLoad("cplusplus", {{"model"}, {std::string{"echo"}}});
   EXPECT_EQ(endpoint, "cplusplus");
 
   std::vector<uint32_t> img_data;
@@ -51,7 +50,7 @@ void test(const Client* client) {
     EXPECT_EQ(data[0], 2);
   }
 
-  unloadModels(client, endpoints);
+  client->workerUnload(endpoint);
 }
 
 #ifdef AMDINFER_ENABLE_GRPC

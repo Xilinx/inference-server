@@ -34,8 +34,7 @@ class TestModelList:
         assert len(models_0) == 0
 
         parameters = amdinfer.ParameterMap(["model"], ["echo"])
-        endpoints = amdinfer.loadEnsemble(self.rest_client, ["cplusplus"], [parameters])
-        endpoint = endpoints[0]
+        endpoint = self.rest_client.workerLoad("cplusplus", parameters)
         assert endpoint == "cplusplus"
         assert self.rest_client.modelReady(endpoint)
 
@@ -44,10 +43,7 @@ class TestModelList:
         assert models[0] == endpoint
 
         parameters = amdinfer.ParameterMap(["model"], ["echo_multi"])
-        endpoints_2 = amdinfer.loadEnsemble(
-            self.rest_client, ["cplusplus"], [parameters]
-        )
-        endpoint_2 = endpoints_2[0]
+        endpoint_2 = self.rest_client.workerLoad("cplusplus", parameters)
         assert endpoint_2 == "cplusplus-0"
         assert self.rest_client.modelReady(endpoint_2)
 
@@ -56,8 +52,8 @@ class TestModelList:
         assert endpoint in models
         assert endpoint_2 in models
 
-        amdinfer.unloadModels(self.rest_client, endpoints)
-        amdinfer.unloadModels(self.rest_client, endpoints_2)
+        self.rest_client.workerUnload(endpoint)
+        self.rest_client.workerUnload(endpoint_2)
 
         models_3 = self.rest_client.modelList()
         while len(models_3) > 0:

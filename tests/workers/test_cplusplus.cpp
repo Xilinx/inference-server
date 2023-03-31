@@ -119,9 +119,8 @@ class EchoParamFixture : public testing::TestWithParam<Params> {
 
 TEST_P(EchoParamFixture, EchoNative) {  // NOLINT
   amdinfer::NativeClient client(&server);
-  auto endpoints =
-    loadEnsemble(&client, {"cplusplus"}, {{{"model"}, {std::string{"echo"}}}});
-  const auto& endpoint = endpoints[0];
+  auto endpoint =
+    client.workerLoad("cplusplus", {{"model"}, {std::string{"echo"}}});
 
   auto request = this->constructRequest();
 
@@ -129,7 +128,7 @@ TEST_P(EchoParamFixture, EchoNative) {  // NOLINT
 
   validate(response);
 
-  unloadModels(&client, endpoints);
+  client.workerUnload(endpoint);
 }
 
 #ifdef AMDINFER_ENABLE_GRPC
@@ -139,16 +138,15 @@ TEST_P(EchoParamFixture, EchoGrpc) {  // NOLINT
     amdinfer::GrpcClient("localhost:" + std::to_string(kDefaultGrpcPort));
   waitUntilServerReady(&client);
 
-  auto endpoints =
-    loadEnsemble(&client, {"cplusplus"}, {{{"model"}, {std::string{"echo"}}}});
-  const auto& endpoint = endpoints[0];
+  auto endpoint =
+    client.workerLoad("cplusplus", {{"model"}, {std::string{"echo"}}});
 
   auto request = this->constructRequest();
 
   auto response = client.modelInfer(endpoint, request);
   validate(response);
 
-  unloadModels(&client, endpoints);
+  client.workerUnload(endpoint);
 }
 #endif
 
