@@ -47,6 +47,10 @@ foreach(lib ${output_libraries})
     ${lib} PROPERTIES VERSION ${amdinfer_VERSION}
                       SOVERSION ${amdinfer_VERSION_MAJOR}
   )
+
+  set_target_properties(
+    ${lib} PROPERTIES BUILD_RPATH ${PROJECT_BINARY_DIR}/src/amdinfer/workers
+  )
 endforeach()
 
 # the compiled server binary
