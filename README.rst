@@ -40,12 +40,46 @@ The AMD Inference Server is integrated with the following libraries out of the g
 * XModel models with `Vitis AI <https://www.xilinx.com/products/design-tools/vitis/vitis-ai.html>`__ on AMD FPGAs
 * A graph of computation including as pre- and post-processing can be written using `AKS <https://github.com/Xilinx/Vitis-AI/tree/v2.5/src/AKS>`__ on AMD FPGAs for end-to-end inference
 
+Quick Start Deployment and Inference
+------------------------------------
+
+The following example demonstrates how to deploy the server locally and run a sample inference.
+This example runs on the CPU and does not require any special hardware.
+
+.. code-block:: bash
+
+  # Step 1: Download the example files and create a model repository
+  wget https://github.com/Xilinx/inference-server/raw/main/examples/resnet50/quickstart-setup.sh
+  chmod +x ./quickstart-setup.sh
+  ./quickstart-setup.sh
+
+  # Step 2: Launch the AMD Inference Server
+  docker run -d --net=host -v ${PWD}/model_repository:/mnt/models:rw amdih/serve:uif1.1_zendnn_amdinfer_0.3.0 amdinfer-server --enable-repository-watcher
+
+  # Step 3: Install the Python client library
+  pip install amdinfer
+
+  # Step 4: Send an inference request
+  python3 tfzendnn.py --endpoint resnet50 --image ./dog-3619020_640.jpg --labels ./imagenet_classes.txt
+
+  # Inference should print the following:
+  #
+  #     Running the TF+ZenDNN example for ResNet50 in Python
+  #     Waiting until the server is ready...
+  #     Making inferences...
+  #     Top 5 classes for ../../tests/assets/dog-3619020_640.jpg:
+  #       n02112018 Pomeranian
+  #       n02112350 keeshond
+  #       n02086079 Pekinese, Pekingese, Peke
+  #       n02112137 chow, chow chow
+  #       n02113023 Pembroke, Pembroke Welsh corgi
+
 Learn more
 ----------
 
 The documentation for the AMD Inference Server is available `online <https://xilinx.github.io/inference-server/>`__.
 
-Check out the `Quickstart <https://xilinx.github.io/inference-server/main/quickstart.html>`__ on how to get started.
+Check out the quickstart guides online to help you get started based on your use case(s): `inference <https://xilinx.github.io/inference-server/main/quickstart_inference.html>`__, `deployment <https://xilinx.github.io/inference-server/main/quickstart_deployment.html>`__ and `development <https://xilinx.github.io/inference-server/main/quickstart_development.html>`__.
 
 Support
 -------
