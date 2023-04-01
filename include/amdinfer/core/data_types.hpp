@@ -142,7 +142,7 @@ class DataType {
       case DataType::Fp64:
         return sizeof(double);
       case DataType::String:
-        return sizeof(std::string);
+        return sizeof(char);
       default:
         throw invalid_argument("Unknown datatype passed");
     }

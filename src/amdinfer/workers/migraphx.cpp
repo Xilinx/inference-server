@@ -431,7 +431,7 @@ BatchPtr MIGraphXWorker::doRun(Batch* batch, const MemoryPool* pool) {
     //           the batch
     //
 
-    auto new_batch = batch->propagate();
+    new_batch = batch->propagate();
     const auto batch_size = batch->size();
 
     // Fetch the vector shape, data, etc. for output from the

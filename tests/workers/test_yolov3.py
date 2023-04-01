@@ -35,13 +35,15 @@ class TestInferImageYoloV3DPUCADF8H:
 
     @staticmethod
     def get_config():
-        model = "AksDetect"
-        parameters = amdinfer.ParameterMap()
-        parameters.put("aks_graph_name", "yolov3")
-        parameters.put(
+        model = ["CPlusPlus", "AksDetect"]
+        parameters = amdinfer.ParameterMap(["model"], ["base64_decode"])
+
+        aks_parameters = amdinfer.ParameterMap()
+        aks_parameters.put("aks_graph_name", "yolov3")
+        aks_parameters.put(
             "aks_graph", "${AKS_ROOT}/graph_zoo/graph_yolov3_u200_u250_amdinfer.json"
         )
-        return (model, parameters)
+        return (model, [parameters, aks_parameters])
 
     def send_request(self, request, check_asserts=True):
         """

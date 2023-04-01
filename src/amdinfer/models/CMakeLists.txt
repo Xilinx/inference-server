@@ -14,7 +14,7 @@
 
 include(GNUInstallDirs)
 
-set(filenames echo echo_multi invert_image)
+set(filenames base64_encode base64_decode echo echo_multi invert_image)
 set(targets "")
 
 function(amdinfer_get_target_name target filename)
@@ -30,10 +30,11 @@ foreach(filename ${filenames})
   list(APPEND targets ${target})
 endforeach()
 
-amdinfer_get_target_name(invert_image_target invert_image)
-target_link_libraries(
-  ${invert_image_target} PRIVATE opencv_core opencv_imgcodecs
-)
+# link these models against OpenCV
+foreach(filename base64_encode base64_decode invert_image)
+  amdinfer_get_target_name(target ${filename})
+  target_link_libraries(${target} PRIVATE opencv_core opencv_imgcodecs)
+endforeach()
 
 if(NOT SKBUILD)
   install(TARGETS ${targets} LIBRARY COMPONENT amdinfer_Runtime

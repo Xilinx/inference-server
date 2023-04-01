@@ -173,7 +173,7 @@ void CPlusPlus::doAcquire([[maybe_unused]] ParameterMap* parameters) {
 BatchPtr CPlusPlus::doRun(Batch* batch, const MemoryPool* pool) {
   BatchPtr new_batch;
   if (!(input_tensors_.empty() || output_tensors_.empty())) {
-    auto new_batch = batch->propagate();
+    new_batch = batch->propagate();
     std::vector<BufferPtr> input_buffers;
     input_buffers.reserve(output_tensors_.size());
     const auto batch_size = batch->size();

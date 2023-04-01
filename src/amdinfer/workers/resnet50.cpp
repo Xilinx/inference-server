@@ -130,10 +130,6 @@ void ResNet50::doAcquire(ParameterMap* parameters) {
 }
 
 BatchPtr ResNet50::doRun(Batch* batch, const MemoryPool* pool) {
-#ifdef AMDINFER_ENABLE_LOGGING
-  const auto& logger = this->getLogger();
-#endif
-
   std::vector<std::unique_ptr<vart::TensorBuffer>> v;
   v.reserve(batch->getInputSize());
 
@@ -152,46 +148,17 @@ BatchPtr ResNet50::doRun(Batch* batch, const MemoryPool* pool) {
       auto input_dtype = input.getDatatype();
 
       std::vector<int> tensor_shape = {static_cast<int>(this->batch_size_)};
-      if (input_dtype == DataType::Uint8) {
-        if (tensor_count == 0) {
-          tensor_shape.insert(tensor_shape.end(), input_shape.begin(),
-                              input_shape.end());
-          v.emplace_back(std::make_unique<AKS::AksTensorBuffer>(
-            xir::Tensor::create(this->graph_name_, tensor_shape,
-                                xir::create_data_type<unsigned char>())));
-        }
-        /// Copy input to AKS Buffers: Find a better way to share buffers
-        memcpy(reinterpret_cast<uint8_t*>(v[0]->data().first) +
-                 (tensor_count * input_size),
-               input_buffer, input_size);
-      } else if (input_dtype == DataType::String) {
-        auto* idata = static_cast<char*>(input_buffer);
-        auto decoded_str = util::base64Decode(idata, input_size);
-        std::vector<char> data(decoded_str.begin(), decoded_str.end());
-        cv::Mat img = cv::imdecode(data, cv::IMREAD_UNCHANGED);
-        if (img.empty()) {
-          const char* error = "Decoded image is empty";
-          AMDINFER_LOG_ERROR(logger, error);
-          req->runCallbackError(error);
-          continue;
-        }
-        // set size to actual size of image instead of size of base64 str
-        input_size = img.step[0] * img.rows;
-
-        if (tensor_count == 0) {
-          tensor_shape.insert(
-            tensor_shape.end(),
-            {img.size().height, img.size().width, kImageChannels});
-          v.emplace_back(std::make_unique<AKS::AksTensorBuffer>(
-            xir::Tensor::create(this->graph_name_, tensor_shape,
-                                xir::create_data_type<unsigned char>())));
-        }
-
-        // TODO(varunsh): assuming decoded image will be right size
-        memcpy(reinterpret_cast<uint8_t*>(v[0]->data().first) +
-                 (tensor_count * input_size),
-               img.data, input_size);
+      if (tensor_count == 0) {
+        tensor_shape.insert(tensor_shape.end(), input_shape.begin(),
+                            input_shape.end());
+        v.emplace_back(std::make_unique<AKS::AksTensorBuffer>(
+          xir::Tensor::create(this->graph_name_, tensor_shape,
+                              xir::create_data_type<unsigned char>())));
       }
+      /// Copy input to AKS Buffers: Find a better way to share buffers
+      memcpy(reinterpret_cast<uint8_t*>(v[0]->data().first) +
+               (tensor_count * input_size),
+             input_buffer, input_size);
       tensor_count = (tensor_count + 1) % this->batch_size_;
     }
   }

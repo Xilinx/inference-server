@@ -14,7 +14,7 @@
 
 /**
  * @file
- * @brief Implements the invert_image model
+ * @brief Implements the base64_codec model
  */
 
 #include <opencv2/core.hpp>       // for bitwise_not, Mat
@@ -33,32 +33,10 @@
 #include "amdinfer/util/memory.hpp"
 #include "amdinfer/util/timer.hpp"
 
-/// Invert the pixel color. Assumes RGB in some order with optional alpha
-template <typename T, bool kAlphaPresent>
-void invert(void* ibuf, void* obuf, uint64_t size) {
-  static_assert(std::is_pointer_v<T>, "T must be a pointer type");
-  auto* idata = static_cast<T>(ibuf);
-  auto* odata = static_cast<T>(obuf);
-  static_assert(sizeof(idata[0]) < sizeof(uint64_t), "T must be <8 bytes");
-
-  // mask to get the largest value. E.g. for uint8_t, mask will be 255.
-  const auto mask = (1ULL << (sizeof(idata[0]) * CHAR_BIT)) - 1;
-  const uint64_t incr = kAlphaPresent ? 4 : 3;
-  for (uint64_t i = 0; i < size; i += incr) {
-    odata[i] = mask - idata[i];
-    odata[i + 1] = mask - idata[i + 1];
-    odata[i + 2] = mask - idata[i + 2];
-    if constexpr (kAlphaPresent) {
-      odata[i + 3] = idata[i + 3];
-    }
-  }
-}
-
 extern "C" {
 
 std::vector<amdinfer::Tensor> getInputs() {
-  // intentionally return an empty shape, indicating an unknown output tensor
-  // size even though it is known in this case. This forces the worker to use
+  // intentionally return an empty shape. This forces the worker to use
   // different logic to invoke the run method.
   return {};
 }
@@ -76,36 +54,61 @@ amdinfer::BatchPtr run(amdinfer::Batch* batch) {
 
   auto new_batch = batch->propagate();
   const auto batch_size = batch->size();
-  const auto data_size = amdinfer::DataType("Uint8").size();
 
-  std::vector<amdinfer::BufferPtr> input_buffers;
-  input_buffers.emplace_back(std::make_unique<amdinfer::VectorBuffer>(
-    kMaxImageSize * batch_size * data_size));
-
+  std::vector<std::string> encoded_images;
+  size_t max_encoded_size = 0;
   for (unsigned int j = 0; j < batch_size; j++) {
     const auto& req = batch->getRequest(j);
 #ifdef AMDINFER_ENABLE_TRACING
     const auto& trace = batch->getTrace(j);
-    trace->startSpan("invert_image");
+    trace->startSpan("base64_encode");
 #endif
     const auto& inputs = req->getInputs();
-    auto input_shape = inputs[0].getShape();
-
-    auto input_size = amdinfer::util::containerProduct(input_shape);
-    auto input_datatype = inputs[0].getDatatype();
+    if (inputs.size() != 1) {
+      req->runCallbackError("Only one input tensor should be present");
+      continue;
+    }
+    auto& input = inputs.at(0);
+    auto input_shape = input.getShape();
 
     auto new_request = req->propagate();
-    auto* data_ptr = input_buffers.at(0)->data(j * kMaxImageSize * data_size);
-    new_request->addInputTensor(data_ptr, input_shape,
-                                amdinfer::DataType::Uint8, "output");
-    invert<uint8_t*, false>(inputs[0].getData(), data_ptr, input_size);
+
+    auto img =
+      cv::Mat{static_cast<int>(input_shape[0]),
+              static_cast<int>(input_shape[1]), CV_8UC3, input.getData()};
+    std::vector<unsigned char> buf;
+    cv::imencode(".jpg", img, buf);
+    const auto* enc_msg = reinterpret_cast<const char*>(buf.data());
+    auto encoded = amdinfer::util::base64Encode(enc_msg, buf.size());
+    const auto encoded_size = encoded.size();
+    if (encoded_size > max_encoded_size) {
+      max_encoded_size = encoded_size;
+    }
+
+    new_request->addInputTensor(nullptr, {encoded_size},
+                                amdinfer::DataType::String, "output");
+    encoded_images.emplace_back(std::move(encoded));
 
     new_batch->addRequest(new_request);
-    new_batch->setModel(j, "invert_image");
 
 #ifdef AMDINFER_ENABLE_TRACING
     trace->endSpan();
 #endif
+  }
+
+  const auto data_size = amdinfer::DataType("Uint8").size();
+  std::vector<amdinfer::BufferPtr> input_buffers;
+  input_buffers.emplace_back(std::make_unique<amdinfer::VectorBuffer>(
+    max_encoded_size * batch_size * data_size));
+
+  for (auto j = 0U; j < batch_size; j++) {
+    auto* data_ptr =
+      input_buffers.at(0)->data(j * max_encoded_size * data_size);
+    const auto& req = new_batch->getRequest(j);
+    req->setInputTensorData(j, data_ptr);
+    const auto& data = encoded_images.at(j);
+    amdinfer::util::copy(data.data(), static_cast<std::byte*>(data_ptr),
+                         data.size());
   }
 
   new_batch->setBuffers(std::move(input_buffers), {});
