@@ -237,7 +237,7 @@ BatchPtr AksDetect::doRun(Batch* batch, const MemoryPool* pool) {
   }
   const auto max_boxes = *std::max_element(boxes.begin(), boxes.end());
 
-  auto new_batch = std::make_unique<Batch>();
+  auto new_batch = batch->propagate();
   std::vector<BufferPtr> input_buffers;
   input_buffers.push_back(
     pool->get(next_allocators_,

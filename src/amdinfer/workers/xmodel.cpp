@@ -233,7 +233,7 @@ BatchPtr XModel::doRun(Batch* batch, const MemoryPool* pool) {
   }
 
   const auto num_batches = batch->size();
-  auto new_batch = std::make_unique<Batch>();
+  auto new_batch = batch->propagate();
   for (unsigned int k = 0; k < num_batches; k++) {
     const auto& req = batch->getRequest(k);
 

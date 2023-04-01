@@ -219,12 +219,6 @@ class SingleThreadedWorker : public Worker {
           new_batch->addTrace(std::move(trace));
         }
 #endif
-
-#ifdef AMDINFER_ENABLE_METRICS
-        for (auto i = 0U; i < batch_size; ++i) {
-          new_batch->addTime(batch->getTime(i));
-        }
-#endif
         next_->enqueue(std::move(new_batch));
       }
 

@@ -270,7 +270,7 @@ BatchPtr TfZendnn::doRun(Batch* batch, const MemoryPool* pool) {
   size_t response_size = output_classes_;
   std::vector<size_t> new_shape = {response_size};
 
-  auto new_batch = std::make_unique<Batch>();
+  auto new_batch = batch->propagate();
   std::vector<BufferPtr> input_buffers;
   input_buffers.push_back(pool->get(next_allocators_,
                                     Tensor{"name", new_shape, DataType::Fp32},

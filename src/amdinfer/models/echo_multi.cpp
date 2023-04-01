@@ -57,7 +57,7 @@ std::vector<amdinfer::Tensor> getOutputs() {
 amdinfer::BatchPtr run(amdinfer::Batch* batch) {
   amdinfer::Logger logger{amdinfer::Loggers::Server};
 
-  auto new_batch = std::make_unique<amdinfer::Batch>();
+  auto new_batch = batch->propagate();
   const auto batch_size = batch->size();
   const auto data_size = amdinfer::DataType("Uint32").size();
 

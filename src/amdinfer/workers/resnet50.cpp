@@ -219,7 +219,7 @@ BatchPtr ResNet50::doRun(Batch* batch, const MemoryPool* pool) {
     response_size = shape[0];
   }
 
-  auto new_batch = std::make_unique<Batch>();
+  auto new_batch = batch->propagate();
   std::vector<BufferPtr> input_buffers;
   input_buffers.push_back(pool->get(next_allocators_,
                                     Tensor{"name", new_shape, DataType::Uint32},

@@ -14,7 +14,7 @@
 
 /**
  * @file
- * @brief Implements the echo_multi model
+ * @brief Implements the invert_image model
  */
 
 #include <opencv2/core.hpp>       // for bitwise_not, Mat
@@ -74,7 +74,7 @@ const auto kMaxImageSize = kMaxImageHeight * kMaxImageWidth * kMaxImageChannels;
 amdinfer::BatchPtr run(amdinfer::Batch* batch) {
   amdinfer::Logger logger{amdinfer::Loggers::Server};
 
-  auto new_batch = std::make_unique<amdinfer::Batch>();
+  auto new_batch = batch->propagate();
   const auto batch_size = batch->size();
   const auto data_size = amdinfer::DataType("Uint8").size();
 
@@ -135,10 +135,6 @@ amdinfer::BatchPtr run(amdinfer::Batch* batch) {
 
 #ifdef AMDINFER_ENABLE_TRACING
     trace->endSpan();
-#endif
-
-#ifdef AMDINFER_ENABLE_METRICS
-    new_batch->addTime(batch->getTime(j));
 #endif
   }
 
