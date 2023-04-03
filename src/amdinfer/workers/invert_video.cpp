@@ -111,10 +111,12 @@ BatchPtr InvertVideo::doRun(Batch* batch,
     for (auto& input : inputs) {
       auto* input_buffer = input.getData();
 
-      auto* idata = static_cast<char*>(input_buffer);
+      // TODO(varunsh): should strings have null terminators embedded?
+      const auto* idata = static_cast<char*>(input_buffer);
+      std::string data{idata, input.getSize()};
 
-      cv::VideoCapture cap(idata);  // open the video file
-      if (!cap.isOpened()) {        // check if we succeeded
+      cv::VideoCapture cap(data);  // open the video file
+      if (!cap.isOpened()) {       // check if we succeeded
         const char* error = "Cannot open video file";
         AMDINFER_LOG_ERROR(logger, error);
         req->runCallbackError(error);
