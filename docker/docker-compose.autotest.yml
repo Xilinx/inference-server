@@ -25,9 +25,9 @@ services:
       - 127.0.0.1:8998:8998 # used for amdinfer server
     volumes:
       # for test artifacts
-      - $PWD/external/aks:/workspace/amdinfer/external/aks:ro
+      - $PWD/external:/workspace/amdinfer/external:ro
+      - $PWD/external/artifacts:/opt/xilinx/amdinfer/artifacts:ro
       - $PWD/external/artifacts/repository:/mnt/models:ro
-      - $PWD/external/artifacts:/workspace/amdinfer/external/artifacts:ro
       - $PWD/tests/assets:/workspace/amdinfer/tests/assets:ro
       - /opt/xilinx/overlaybins:/opt/xilinx/overlaybins:ro
     working_dir: /home/amdinfer-user
