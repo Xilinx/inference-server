@@ -35,21 +35,21 @@
 
 /// Invert the pixel color. Assumes RGB in some order with optional alpha
 template <typename T, bool kAlphaPresent>
-void invert(void* ibuf, void* obuf, uint64_t size) {
+void invert(void* input_buffer, void* output_buffer, uint64_t size) {
   static_assert(std::is_pointer_v<T>, "T must be a pointer type");
-  auto* idata = static_cast<T>(ibuf);
-  auto* odata = static_cast<T>(obuf);
-  static_assert(sizeof(idata[0]) < sizeof(uint64_t), "T must be <8 bytes");
+  auto* input_data = static_cast<T>(input_buffer);
+  auto* output_data = static_cast<T>(output_buffer);
+  static_assert(sizeof(input_data[0]) < sizeof(uint64_t), "T must be <8 bytes");
 
   // mask to get the largest value. E.g. for uint8_t, mask will be 255.
-  const auto mask = (1ULL << (sizeof(idata[0]) * CHAR_BIT)) - 1;
+  const auto mask = (1ULL << (sizeof(input_data[0]) * CHAR_BIT)) - 1;
   const uint64_t incr = kAlphaPresent ? 4 : 3;
   for (uint64_t i = 0; i < size; i += incr) {
-    odata[i] = mask - idata[i];
-    odata[i + 1] = mask - idata[i + 1];
-    odata[i + 2] = mask - idata[i + 2];
+    output_data[i] = mask - input_data[i];
+    output_data[i + 1] = mask - input_data[i + 1];
+    output_data[i + 2] = mask - input_data[i + 2];
     if constexpr (kAlphaPresent) {
-      odata[i + 3] = idata[i + 3];
+      output_data[i + 3] = input_data[i + 3];
     }
   }
 }
@@ -92,7 +92,6 @@ amdinfer::BatchPtr run(amdinfer::Batch* batch) {
     auto input_shape = inputs[0].getShape();
 
     auto input_size = amdinfer::util::containerProduct(input_shape);
-    auto input_datatype = inputs[0].getDatatype();
 
     auto new_request = req->propagate();
     auto* data_ptr = input_buffers.at(0)->data(j * kMaxImageSize * data_size);

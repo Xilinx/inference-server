@@ -145,7 +145,6 @@ BatchPtr ResNet50::doRun(Batch* batch, const MemoryPool* pool) {
       auto input_shape = input.getShape();
 
       input_size = util::containerProduct(input_shape);
-      auto input_dtype = input.getDatatype();
 
       std::vector<int> tensor_shape = {static_cast<int>(this->batch_size_)};
       if (tensor_count == 0) {
