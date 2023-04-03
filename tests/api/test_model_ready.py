@@ -31,24 +31,25 @@ class TestModelReady:
         Test that modelReady correctly throws errors and
         """
 
-        worker = "echo"
+        worker = "cplusplus"
 
         models = self.rest_client.modelList()
         assert len(models) == 0
 
         assert not self.rest_client.modelReady(worker)
 
-        endpoint_0 = self.rest_client.workerLoad(worker)
-        assert endpoint_0 == "echo"
-        while not self.rest_client.modelReady(worker):
+        parameters = amdinfer.ParameterMap(["model"], ["echo"])
+        endpoint_0 = self.rest_client.workerLoad(worker, parameters)
+        assert endpoint_0 == "cplusplus"
+        while not self.rest_client.modelReady(endpoint_0):
             time.sleep(1)
 
         models = self.rest_client.modelList()
         assert len(models) == 1
 
-        self.rest_client.modelUnload(worker)
+        self.rest_client.modelUnload(endpoint_0)
 
-        while self.rest_client.modelReady(worker):
+        while self.rest_client.modelReady(endpoint_0):
             time.sleep(1)
 
         models = self.rest_client.modelList()

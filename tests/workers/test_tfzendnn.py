@@ -68,16 +68,15 @@ class TestTfZendnn:
     @staticmethod
     def get_config():
         model = "TfZendnn"
-        parameters = {
-            "model": amdinfer.testing.getPathToAsset("tf_resnet50"),
-            "input_node": "input",
-            "output_node": "resnet_v1_50/predictions/Reshape_1",
-            "input_size": 224,
-            "output_classes": 1000,
-            "inter_op": 64,
-            "intra_op": 1,
-            "batch_size": 8,
-        }
+        parameters = amdinfer.ParameterMap()
+        parameters.put("model", amdinfer.testing.getPathToAsset("tf_resnet50"))
+        parameters.put("input_node", "input")
+        parameters.put("output_node", "resnet_v1_50/predictions/Reshape_1")
+        parameters.put("input_size", 224)
+        parameters.put("output_classes", 1000)
+        parameters.put("inter_op", 64)
+        parameters.put("intra_op", 1)
+        parameters.put("batch_size", 8)
         return (model, parameters)
 
     def send_request(self, request, check_asserts=True):
@@ -109,7 +108,7 @@ class TestTfZendnn:
             outputs = response.getOutputs()
             assert len(outputs) == num_inputs
             for index, output in enumerate(outputs):
-                assert output.name == "input" + str(index)
+                assert output.name == ""
                 assert output.datatype == amdinfer.DataType.FP32
                 assert output.parameters.empty()
         return response

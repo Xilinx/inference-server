@@ -34,34 +34,39 @@ class TestLoad:
         models = self.rest_client.modelList()
         assert len(models) == 0
 
-        endpoint_0 = self.rest_client.workerLoad("echo")  # this loads the model
-        assert endpoint_0 == "echo"
-        response = self.rest_client.workerLoad(
-            "echo"
-        )  # this will do nothing and return 200
-        assert response == "echo"
+        worker = "cplusplus"
+        parameters = amdinfer.ParameterMap(["model"], ["echo"])
 
-        parameters = amdinfer.ParameterMap()
+        # this loads the model
+        endpoint_0 = self.rest_client.workerLoad(worker, parameters)
+        assert endpoint_0 == worker
+        # this will do nothing and return the same endpoint
+        endpoint_0 = self.rest_client.workerLoad(worker, parameters)
+        assert endpoint_0 == worker
+
+        # load the same worker with a different config
+        # arbitrarily set to 100 just to create a different config
         parameters.put("max_buffer_num", 100)
-        endpoint_1 = self.rest_client.workerLoad(
-            "echo", parameters
-        )  # load echo with a different config
-        assert endpoint_1 == "echo-0"
+        endpoint_1 = self.rest_client.workerLoad(worker, parameters)
+        expected_endpoint = worker + "-0"
+        assert endpoint_1 == expected_endpoint
 
-        # load echo with the same config as earlier but force allocation of a new worker
+        # load worker with the same config as earlier but force allocation of a new worker
         parameters.put("share", False)
-        response = self.rest_client.workerLoad("echo", parameters)
-        assert response == "echo-0"
+        endpoint_1 = self.rest_client.workerLoad(worker, parameters)
+        assert endpoint_1 == expected_endpoint
 
         assert self.rest_client.modelReady(endpoint_0)
         assert self.rest_client.modelReady(endpoint_1)
 
-        self.rest_client.modelUnload(endpoint_0)  # this unloads the model echo
-        self.rest_client.modelUnload(endpoint_0)  # this will do nothing and return 200
-        self.rest_client.modelUnload(endpoint_1)  # this unloads the model echo-0
-        self.rest_client.modelUnload(
-            endpoint_1
-        )  # this unloads the second echo-0 worker
+        # this unloads the first model
+        self.rest_client.modelUnload(endpoint_0)
+        # this will do nothing and return
+        self.rest_client.modelUnload(endpoint_0)
+        # this unloads the one copy of the second worker
+        self.rest_client.modelUnload(endpoint_1)
+        # this unloads the second copy of the second worker
+        self.rest_client.modelUnload(endpoint_1)
 
         while self.rest_client.modelReady(endpoint_0):
             time.sleep(1)

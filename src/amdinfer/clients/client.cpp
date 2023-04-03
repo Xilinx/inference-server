@@ -44,6 +44,41 @@ void initializeClientLogging() {
 #endif
 }
 
+std::vector<std::string> loadEnsemble(const Client* client,
+                                      std::vector<std::string> workers,
+                                      std::vector<ParameterMap> parameters) {
+  if (workers.size() != parameters.size()) {
+    throw invalid_argument("The number of workers and parameters must match");
+  }
+
+  std::vector<std::string> endpoints;
+  endpoints.resize(workers.size());
+
+  std::string next;
+  // reverse iterate through vectors using "goes to" operator
+  for (auto i = workers.size(); i-- > 0;) {
+    const auto& worker = workers.at(i);
+    auto& parameter = parameters.at(i);
+
+    if (!next.empty()) {
+      parameter.put("next", next);
+    }
+    auto endpoint = client->workerLoad(worker, parameter);
+    next = endpoint;
+    endpoints.at(i) = std::move(endpoint);
+    waitUntilModelReady(client, next);
+  }
+
+  return endpoints;
+}
+
+void unloadModels(const Client* client,
+                  const std::vector<std::string>& models) {
+  for (const auto& model : models) {
+    client->modelUnload(model);
+  }
+}
+
 Client::Client() { initializeClientLogging(); }
 
 bool serverHasExtension(const Client* client, const std::string& extension) {
@@ -65,8 +100,21 @@ void waitUntilServerReady(const Client* client) {
 
 void waitUntilModelReady(const Client* client, const std::string& model) {
   bool ready = false;
+  // arbitrarily set to 1ms
+  const auto sleep_time = std::chrono::milliseconds(1);
   while (!ready) {
     ready = client->modelReady(model);
+    std::this_thread::sleep_for(sleep_time);
+  }
+}
+
+void waitUntilModelNotReady(const Client* client, const std::string& model) {
+  bool ready = true;
+  // arbitrarily set to 1ms
+  const auto sleep_time = std::chrono::milliseconds(1);
+  while (ready) {
+    ready = client->modelReady(model);
+    std::this_thread::sleep_for(sleep_time);
   }
 }
 

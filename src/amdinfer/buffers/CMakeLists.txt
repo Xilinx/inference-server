@@ -14,7 +14,7 @@
 # limitations under the License.
 
 set(base_targets buffer)
-set(derived_targets cpu)
+set(derived_targets cpu vector)
 if(${AMDINFER_ENABLE_VITIS})
   list(APPEND derived_targets vart_tensor)
 endif()

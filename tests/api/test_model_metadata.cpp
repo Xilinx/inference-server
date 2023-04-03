@@ -22,19 +22,21 @@
 #include "amdinfer/amdinfer.hpp"                // for ModelMetadata, NativeC...
 #include "amdinfer/testing/gtest_fixtures.hpp"  // for AssertionResult, Suite...
 
-void test(amdinfer::Client* client) {
-  const std::string model = "echo";
+namespace amdinfer {
+
+void test(const Client* client) {
+  const std::string model = "cplusplus";
 
   EXPECT_TRUE(client->modelList().empty());
 
   // load one worker
-  client->workerLoad(model, {});
+  client->workerLoad(model, {{"model"}, {std::string{"echo"}}});
 
   EXPECT_TRUE(client->modelReady(model));
 
   auto metadata = client->modelMetadata(model);
-  EXPECT_EQ(metadata.getName(), "echo");
-  EXPECT_EQ(metadata.getPlatform(), "cpu");
+  EXPECT_EQ(metadata.getName(), "CPlusPlus");
+  EXPECT_EQ(metadata.getPlatform(), "CPU");
   // TODO(varunsh): add other assertions
 
   client->workerUnload(model);  // unload the model
@@ -51,7 +53,7 @@ TEST_F(GrpcFixture, modelMetadata) { test(client_.get()); }
 
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST_F(BaseFixture, modelMetadata) {
-  amdinfer::NativeClient client(&server_);
+  NativeClient client(&server_);
   test(&client);
 }
 
@@ -59,3 +61,5 @@ TEST_F(BaseFixture, modelMetadata) {
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST_F(HttpFixture, modelMetadata) { test(client_.get()); }
 #endif
+
+}  // namespace amdinfer

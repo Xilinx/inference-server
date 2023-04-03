@@ -105,7 +105,9 @@ workers::Worker* getWorker(const std::string& name) {
 }
 
 WorkerInfo::WorkerInfo(const std::string& name, ParameterMap* parameters,
-                       MemoryPool* pool) {
+                       MemoryPool* pool, BatchPtrQueue* next,
+                       const std::vector<MemoryAllocators>& next_allocators)
+  : next_(next), next_allocators_(next_allocators) {
   this->addAndStartWorker(name, parameters, pool);
 }
 
@@ -133,7 +135,8 @@ void WorkerInfo::addAndStartWorker(const std::string& name,
   }
 
   this->batch_size_ = worker->getBatchSize();
-  worker->setPool(pool);
+  worker->setNext(next_);
+  worker->setNextAllocators(next_allocators_);
 
   if (this->batchers_.empty()) {
     int32_t batcher_count = 1;
@@ -153,7 +156,8 @@ void WorkerInfo::addAndStartWorker(const std::string& name,
       batcher->start(allocators);
     }
   }
-  auto thread = worker->spawn(this->batchers_[0]->getOutputQueue());
+  std::thread thread{&workers::Worker::run, worker,
+                     this->batchers_[0]->getOutputQueue(), pool};
 
   auto thread_id = thread.get_id();
 
@@ -162,6 +166,10 @@ void WorkerInfo::addAndStartWorker(const std::string& name,
 }
 
 Batcher* WorkerInfo::getBatcher() { return this->batchers_[0].get(); }
+
+BatchPtrQueue* WorkerInfo::getInputQueue() const {
+  return batchers_[0]->getOutputQueue();
+}
 
 void WorkerInfo::join(std::thread::id id) {
   auto& thread = worker_threads_.at(id);
@@ -234,6 +242,11 @@ void WorkerInfo::shutdown() {
 ModelMetadata WorkerInfo::getMetadata() const {
   auto* worker_class = workers_.begin()->second;
   return worker_class->getMetadata();
+}
+
+std::vector<MemoryAllocators> WorkerInfo::getAllocators() const {
+  const auto* worker_class = workers_.begin()->second;
+  return worker_class->getAllocators();
 }
 
 }  // namespace amdinfer

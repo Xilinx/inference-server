@@ -24,6 +24,7 @@
 #include <pybind11/pybind11.h>  // for module_, sequence, class_, pybind11
 #include <pybind11/stl.h>       // IWYU pragma: keep
 
+#include "amdinfer/bindings/python/helpers/docstrings.hpp"  // for DOCS
 #include "amdinfer/core/inference_request.hpp"   // for InferenceRequest
 #include "amdinfer/core/inference_response.hpp"  // for InferenceResponse
 
@@ -31,7 +32,7 @@ namespace py = pybind11;
 
 namespace amdinfer {
 
-void wrapClient(py::module_ &m) {
+void wrapClient(py::module_& m) {
   py::class_<Client> client{m, "Client"};
 
   m.def("serverHasExtension", &serverHasExtension, py::arg("client"),
@@ -39,12 +40,18 @@ void wrapClient(py::module_ &m) {
   m.def("waitUntilServerReady", &waitUntilServerReady, py::arg("client"));
   m.def("waitUntilModelReady", &waitUntilModelReady, py::arg("client"),
         py::arg("model"));
+  m.def("waitUntilModelNotReady", &waitUntilModelNotReady, py::arg("client"),
+        py::arg("model"));
 
   m.def("inferAsyncOrdered", &inferAsyncOrdered, py::arg("client"),
         py::arg("model"), py::arg("requests"));
   m.def("inferAsyncOrderedBatched", &inferAsyncOrderedBatched,
         py::arg("client"), py::arg("model"), py::arg("requests"),
         py::arg("batch_sizes"));
+
+  m.def("loadEnsemble", &loadEnsemble, py::arg("client"), py::arg("models"),
+        py::arg("parameters"));
+  m.def("unloadModels", &unloadModels, py::arg("client"), py::arg("models"));
 }
 
 }  // namespace amdinfer

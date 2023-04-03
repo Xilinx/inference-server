@@ -32,6 +32,7 @@
 namespace amdinfer {
 
 class ParameterMap;
+class Endpoint;
 
 /**
  * @brief The base Client class defines the set of methods that all client
@@ -180,6 +181,35 @@ void waitUntilServerReady(const Client* client);
  * @param model the model/worker to wait for
  */
 void waitUntilModelReady(const Client* client, const std::string& model);
+/**
+ * @brief Blocks until the named model/worker is not ready
+ *
+ * @param client a pointer to a client object
+ * @param model the model/worker to wait for
+ */
+void waitUntilModelNotReady(const Client* client, const std::string& model);
+
+/**
+ * @brief Load an ensemble - a chain of connected workers. This implementation
+ * uses the simplest case where the ensemble is a single linear graph.
+ *
+ * @param client a pointer to a client object
+ * @param workers the list of workers to connect
+ * @param parameters the list of parameters corresponding to each worker
+ * @return std::vector<std::string> the endpoints for each loaded worker
+ */
+std::vector<std::string> loadEnsemble(const Client* client,
+                                      std::vector<std::string> workers,
+                                      std::vector<ParameterMap> parameters);
+
+/**
+ * @brief Unload a list of models. This list may be from an ensemble or
+ * individually loaded workers or models.
+ *
+ * @param client a pointer to a client object
+ * @param models a list of models to unload
+ */
+void unloadModels(const Client* client, const std::vector<std::string>& models);
 
 /**
  * @brief Makes inference requests in parallel to the specified model. All

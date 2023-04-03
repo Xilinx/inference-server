@@ -30,6 +30,8 @@ Added
 
 * An example MLPerf app using the inference server API (:pr:`129`)
 * Google Benchmark for writing performance-tracking tests (:pr:`147`)
+* Custom memory storage classes in the memory pool (:pr:`166`)
+* C++ worker for executing C++ "models" (:pr:`172`)
 
 Changed
 ^^^^^^^
@@ -38,6 +40,10 @@ Changed
 * Require the server as an argument for creating the NativeClient (:pr:`125`)
 * Use a global memory pool to allocate memory for incoming requests (:pr:`149`)
 * Resolve the request at the incoming server rather than the batcher (:pr:`164`)
+* Add flags to run container-based tests in parallel (:pr:`168`)
+* Bump up to Vitis AI 3.0 (:pr:`169`)
+* Refactor inference request objects and tensors (:pr:`172`)
+* Use const references throughout for ParameterMap (:pr:`172`)
 
 Deprecated
 ^^^^^^^^^^
@@ -49,6 +55,9 @@ Fixed
 ^^^^^
 
 * Use the right unit for batcher timeout (:pr:`129`)
+* Don't call ``next`` and ``prev`` on end iterators (:pr:`166`)
+* Use the right package name for ``g++`` in CentOS (:pr:`168`)
+* Fix building with different CMake options (:pr:`170`)
 
 Security
 ^^^^^^^^

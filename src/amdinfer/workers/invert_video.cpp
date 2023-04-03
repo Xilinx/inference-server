@@ -56,23 +56,18 @@ namespace workers {
  * video and sends the inverted frames back to the client over a websocket.
  *
  */
-class InvertVideo : public Worker {
+class InvertVideo : public SingleThreadedWorker {
  public:
-  using Worker::Worker;
-  std::thread spawn(BatchPtrQueue* input_queue) override;
+  using SingleThreadedWorker::SingleThreadedWorker;
   [[nodiscard]] std::vector<MemoryAllocators> getAllocators() const override;
 
  private:
   void doInit(ParameterMap* parameters) override;
   void doAcquire(ParameterMap* parameters) override;
-  void doRun(BatchPtrQueue* input_queue) override;
+  BatchPtr doRun(Batch* batch, const MemoryPool* pool) override;
   void doRelease() override;
   void doDestroy() override;
 };
-
-std::thread InvertVideo::spawn(BatchPtrQueue* input_queue) {
-  return std::thread(&InvertVideo::run, this, input_queue);
-}
 
 std::vector<MemoryAllocators> InvertVideo::getAllocators() const {
   return {MemoryAllocators::Cpu};
@@ -102,98 +97,89 @@ void InvertVideo::doAcquire(ParameterMap* parameters) {
     DataType::Int8);
 }
 
-void InvertVideo::doRun(BatchPtrQueue* input_queue) {
-  util::setThreadName("InvertVideo");
+BatchPtr InvertVideo::doRun(Batch* batch,
+                            [[maybe_unused]] const MemoryPool* pool) {
 #ifdef AMDINFER_ENABLE_LOGGING
   const auto& logger = this->getLogger();
 #endif
 
-  while (true) {
-    BatchPtr batch;
-    input_queue->wait_dequeue(batch);
-    if (batch == nullptr) {
-      break;
-    }
+  for (unsigned int j = 0; j < batch->size(); j++) {
+    const auto& req = batch->getRequest(j);
+    auto inputs = req->getInputs();
+    auto outputs = req->getOutputs();
+    auto key = req->getParameters().get<std::string>("key");
+    for (auto& input : inputs) {
+      auto* input_buffer = input.getData();
 
-    AMDINFER_LOG_INFO(logger, "Got request in InvertVideo");
-    for (unsigned int j = 0; j < batch->size(); j++) {
-      const auto& req = batch->getRequest(j);
-#ifdef AMDINFER_ENABLE_TRACING
-      const auto& trace = batch->getTrace(j);
-      trace->startSpan("InvertVideo");
-#endif
-      auto inputs = req->getInputs();
-      auto outputs = req->getOutputs();
-      auto key = req->getParameters().get<std::string>("key");
-      for (auto& input : inputs) {
-        auto* input_buffer = input.getData();
+      // TODO(varunsh): should strings have null terminators embedded?
+      const auto* idata = static_cast<char*>(input_buffer);
+      std::string data{idata, input.getSize()};
 
-        auto* idata = static_cast<char*>(input_buffer);
+      cv::VideoCapture cap(data);  // open the video file
+      if (!cap.isOpened()) {       // check if we succeeded
+        const char* error = "Cannot open video file";
+        AMDINFER_LOG_ERROR(logger, error);
+        req->runCallbackError(error);
+        continue;
+      }
 
-        cv::VideoCapture cap(idata);  // open the video file
-        if (!cap.isOpened()) {        // check if we succeeded
-          const char* error = "Cannot open video file";
-          AMDINFER_LOG_ERROR(logger, error);
-          req->runCallbackError(error);
+      InferenceResponse resp;
+      resp.setID(req->getID());
+      resp.setModel("invert_video");
+
+      // contains the number of frames in the video;
+      auto count = static_cast<int32_t>(
+        cap.get(cv::VideoCaptureProperties::CAP_PROP_FRAME_COUNT));
+      if (input.getParameters().has("count")) {
+        count = input.getParameters().get<int32_t>("count");
+      }
+      double fps = cap.get(cv::VideoCaptureProperties::CAP_PROP_FPS);
+
+      InferenceResponseOutput output;
+      output.setName("key");
+      output.setDatatype(DataType::String);
+      auto message = constructMessage(key, std::to_string(fps));
+      std::vector<std::byte> buffer;
+      buffer.resize(message.size());
+      memcpy(buffer.data(), message.data(), message.size());
+      output.setData(std::move(buffer));
+      output.setShape({message.size()});
+      resp.addOutput(output);
+      req->runCallback(resp);
+      for (int num_frames = 0; num_frames < count; num_frames++) {
+        cv::Mat frame;
+        cap >> frame;  // get the next frame from video
+        if (frame.empty()) {
+          num_frames--;
           continue;
         }
+        cv::bitwise_not(frame, frame);
+        std::vector<unsigned char> buf;
+        cv::imencode(".jpg", frame, buf);
+        const auto* enc_msg = reinterpret_cast<const char*>(buf.data());
+        std::string encoded =
+          "data:image/jpg;base64," + util::base64Encode(enc_msg, buf.size());
 
         InferenceResponse resp;
         resp.setID(req->getID());
         resp.setModel("invert_video");
 
-        // contains the number of frames in the video;
-        auto count = static_cast<int32_t>(
-          cap.get(cv::VideoCaptureProperties::CAP_PROP_FRAME_COUNT));
-        if (input.getParameters().has("count")) {
-          count = input.getParameters().get<int32_t>("count");
-        }
-        double fps = cap.get(cv::VideoCaptureProperties::CAP_PROP_FPS);
-
         InferenceResponseOutput output;
-        output.setName("key");
+        output.setName("image");
         output.setDatatype(DataType::String);
-        auto message = constructMessage(key, std::to_string(fps));
-        std::vector<std::byte> buffer;
+        message = constructMessage(key, encoded);
         buffer.resize(message.size());
         memcpy(buffer.data(), message.data(), message.size());
         output.setData(std::move(buffer));
         output.setShape({message.size()});
         resp.addOutput(output);
         req->runCallback(resp);
-        for (int num_frames = 0; num_frames < count; num_frames++) {
-          cv::Mat frame;
-          cap >> frame;  // get the next frame from video
-          if (frame.empty()) {
-            num_frames--;
-            continue;
-          }
-          cv::bitwise_not(frame, frame);
-          std::vector<unsigned char> buf;
-          cv::imencode(".jpg", frame, buf);
-          const auto* enc_msg = reinterpret_cast<const char*>(buf.data());
-          std::string encoded =
-            "data:image/jpg;base64," + util::base64Encode(enc_msg, buf.size());
-
-          InferenceResponse resp;
-          resp.setID(req->getID());
-          resp.setModel("invert_video");
-
-          InferenceResponseOutput output;
-          output.setName("image");
-          output.setDatatype(DataType::String);
-          message = constructMessage(key, encoded);
-          buffer.resize(message.size());
-          memcpy(buffer.data(), message.data(), message.size());
-          output.setData(std::move(buffer));
-          output.setShape({message.size()});
-          resp.addOutput(output);
-          req->runCallback(resp);
-        }
       }
     }
   }
-  AMDINFER_LOG_INFO(logger, "InvertVideo ending");
+
+  // okay because ensembles disabled for this worker
+  return nullptr;
 }
 
 void InvertVideo::doRelease() {}
@@ -207,6 +193,6 @@ extern "C" {
 // using smart pointer here may cause problems inside shared object so managing
 // manually
 amdinfer::workers::Worker* getWorker() {
-  return new amdinfer::workers::InvertVideo("InvertVideo", "CPU");
+  return new amdinfer::workers::InvertVideo("InvertVideo", "CPU", false);
 }
 }  // extern C

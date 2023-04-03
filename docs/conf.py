@@ -50,6 +50,7 @@ else:
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
+    "sphinxcontrib.jquery",
     "breathe",
     "exhale",
     # adds argparse directive to parse CLIs

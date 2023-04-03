@@ -36,6 +36,10 @@ inline auto containerProduct(Iter begin, Iter end) {
   static_assert(std::is_arithmetic_v<value_type>,
                 "The container must contain an arithmetic type");
 
+  // if the range is empty
+  if (begin == end) {
+    return static_cast<value_type>(0);
+  }
   value_type init = 1;
   return std::accumulate(begin, end, init, std::multiplies<>());
 }

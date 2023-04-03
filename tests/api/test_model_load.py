@@ -20,51 +20,22 @@ import pytest
 import amdinfer
 
 
-# TODO(varunsh): update test to use modelLoad like C++ variant
+@pytest.mark.extensions(["tfzendnn"])
 @pytest.mark.usefixtures("server", "assign_client")
-class TestLoad:
-    """
-    Base class for Echo worker tests
-    """
-
-    def test_loads(self):
+class TestModelLoad:
+    def test_model_load(self):
         """
         Test loading multiple times
         """
 
+        model = "mnist"
         models = self.rest_client.modelList()
         assert len(models) == 0
 
-        endpoint_0 = self.rest_client.workerLoad("echo")  # this loads the model
-        assert endpoint_0 == "echo"
-        response = self.rest_client.workerLoad(
-            "echo"
-        )  # this will do nothing and return 200
-        assert response == "echo"
+        self.rest_client.modelLoad(model)  # this loads the model
+        assert self.rest_client.modelReady(model)
 
-        parameters = amdinfer.ParameterMap()
-        parameters.put("max_buffer_num", 100)
-        endpoint_1 = self.rest_client.workerLoad(
-            "echo", parameters
-        )  # load echo with a different config
-        assert endpoint_1 == "echo-0"
+        self.rest_client.modelUnload(model)
 
-        # load echo with the same config as earlier but force allocation of a new worker
-        parameters.put("share", False)
-        response = self.rest_client.workerLoad("echo", parameters)
-        assert response == "echo-0"
-
-        assert self.rest_client.modelReady(endpoint_0)
-        assert self.rest_client.modelReady(endpoint_1)
-
-        self.rest_client.modelUnload(endpoint_0)  # this unloads the model echo
-        self.rest_client.modelUnload(endpoint_0)  # this will do nothing and return 200
-        self.rest_client.modelUnload(endpoint_1)  # this unloads the model echo-0
-        self.rest_client.modelUnload(
-            endpoint_1
-        )  # this unloads the second echo-0 worker
-
-        while self.rest_client.modelReady(endpoint_0):
-            time.sleep(1)
-        while self.rest_client.modelReady(endpoint_1):
+        while self.rest_client.modelList():
             time.sleep(1)

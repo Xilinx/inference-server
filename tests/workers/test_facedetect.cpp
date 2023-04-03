@@ -56,8 +56,8 @@ void dequeueValidate(FutureQueue& my_queue, int num_images) {
       auto num_boxes = 1;
       auto shape = output.getShape();
       EXPECT_EQ(shape.size(), 2);
-      EXPECT_EQ(shape[0], kGoldResponseSize);
-      EXPECT_EQ(shape[1], num_boxes);
+      EXPECT_EQ(shape[0], num_boxes);
+      EXPECT_EQ(shape[1], kGoldResponseSize);
       EXPECT_EQ(size, kGoldResponseSize);
       const auto tolerance = 0.05;
       for (size_t j = 0; j < kGoldResponseSize; j++) {

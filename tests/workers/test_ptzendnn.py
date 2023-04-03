@@ -74,12 +74,11 @@ class TestPtZendnn:
     @staticmethod
     def get_config():
         model = "PtZendnn"
-        parameters = {
-            "model": amdinfer.testing.getPathToAsset("pt_resnet50"),
-            "input_size": 224,
-            "output_classes": 1000,
-            "batch_size": 8,
-        }
+        parameters = amdinfer.ParameterMap()
+        parameters.put("model", amdinfer.testing.getPathToAsset("pt_resnet50"))
+        parameters.put("input_size", 224)
+        parameters.put("output_classes", 1000)
+        parameters.put("batch_size", 8)
         return (model, parameters)
 
     def send_request(self, request, check_asserts=True):
@@ -111,7 +110,7 @@ class TestPtZendnn:
             outputs = response.getOutputs()
             assert len(outputs) == num_inputs
             for index, output in enumerate(outputs):
-                assert output.name == "input" + str(index)
+                assert output.name == ""
                 assert output.datatype == amdinfer.DataType.FP32
                 assert output.parameters.empty()
         return response

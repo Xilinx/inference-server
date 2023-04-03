@@ -19,7 +19,7 @@
 #include <vector>   // for vector
 
 #include "amdinfer/core/parameters.hpp"  // for ParameterMap
-#include "gtest/gtest.h"                 // for AssertionResult, Message
+#include "amdinfer/testing/gtest.hpp"    // for EXPECT_THROW_CHECK
 
 namespace amdinfer {
 
@@ -72,6 +72,29 @@ TEST(UnitParameterMap, SerDes) {
             new_params.get<bool>(keys[index_bool]));
   EXPECT_EQ(params.get<double>(keys[index_double]),
             new_params.get<double>(keys[index_double]));
+}
+
+// NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
+TEST(UnitParameterMap, InitializingConstructorConstChar) {
+  ParameterMap parameters{{"model"}, {"echo"}};
+
+  // Passing const char* to a variant type stores it as a bool instead of a
+  // string if both types are present. This has been fixed in C++20
+  // (https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p0608r3.html)
+  std::string model;
+  EXPECT_THROW_CHECK(model = parameters.get<std::string>("model");
+                     , EXPECT_STREQ(e.what(), "Unexpected index"),
+                     std::bad_variant_access);
+
+  parameters.erase("model");
+  parameters.put("model", std::string{"echo"});
+  model = parameters.get<std::string>("model");
+  EXPECT_EQ(model, "echo");
+
+  parameters.erase("model");
+  parameters.put("model", "echo");
+  model = parameters.get<std::string>("model");
+  EXPECT_EQ(model, "echo");
 }
 
 }  // namespace amdinfer

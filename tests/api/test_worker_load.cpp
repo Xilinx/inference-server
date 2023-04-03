@@ -21,37 +21,40 @@
 #include "amdinfer/amdinfer.hpp"                // for Client, RequestParame...
 #include "amdinfer/testing/gtest_fixtures.hpp"  // for AssertionResult, Message
 
-void test(amdinfer::Client* client) {
-  std::string worker = "echo";
+namespace amdinfer {
+
+void test(const Client* client) {
+  std::string worker = "cplusplus";
+  ParameterMap parameters{{"model"}, {std::string{"echo"}}};
 
   EXPECT_TRUE(client->modelList().empty());
 
   // load one worker
-  auto endpoint = client->workerLoad(worker, {});
+  auto endpoint = client->workerLoad(worker, parameters);
   EXPECT_EQ(endpoint, worker);
   // do a redundant load
-  endpoint = client->workerLoad(worker, {});
+  endpoint = client->workerLoad(worker, parameters);
   EXPECT_EQ(endpoint, worker);
 
   // load the same worker with a different config
-  amdinfer::ParameterMap parameters;
   // arbitrarily set to 100 just to create a different config
   const auto max_buffer_num = 100;
   parameters.put("max_buffer_num", max_buffer_num);
   auto endpoint_1 = client->workerLoad(worker, parameters);
-  EXPECT_EQ(endpoint_1, "echo-0");
+  const auto expected_endpoint = worker + "-0";
+  EXPECT_EQ(endpoint_1, expected_endpoint);
 
   parameters.put("share", false);
   endpoint_1 = client->workerLoad(worker, parameters);
-  EXPECT_EQ(endpoint_1, "echo-0");
+  EXPECT_EQ(endpoint_1, expected_endpoint);
 
   EXPECT_TRUE(client->modelReady(endpoint));
   EXPECT_TRUE(client->modelReady(endpoint_1));
 
   client->modelUnload(endpoint);    // unload the first
   client->modelUnload(endpoint);    // this will do nothing
-  client->modelUnload(endpoint_1);  // unload first echo-0 worker
-  client->modelUnload(endpoint_1);  // unload second echo-0 worker
+  client->modelUnload(endpoint_1);  // unload first endpoint_1 worker
+  client->modelUnload(endpoint_1);  // unload second endpoint_1 worker
 
   while (!client->modelList().empty()) {
     std::this_thread::yield();
@@ -65,7 +68,7 @@ TEST_F(GrpcFixture, workerLoad) { test(client_.get()); }
 
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST_F(BaseFixture, workerLoad) {
-  amdinfer::NativeClient client(&server_);
+  NativeClient client(&server_);
   test(&client);
 }
 
@@ -73,3 +76,5 @@ TEST_F(BaseFixture, workerLoad) {
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST_F(HttpFixture, workerLoad) { test(client_.get()); }
 #endif
+
+}  // namespace amdinfer

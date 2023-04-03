@@ -16,6 +16,8 @@
 version: '3.7'
 services:
   amdinfer-autotest:
+    # don't load repository on startup
+    command: amdinfer-server
     devices: []
     extra_hosts:
       - "amdinfer-autotest:127.0.1.1"
@@ -27,6 +29,7 @@ services:
       # for test artifacts
       - $PWD/external:/workspace/amdinfer/external:ro
       - $PWD/external/artifacts:/opt/xilinx/amdinfer/artifacts:ro
+      - $PWD/external/artifacts/repository:/mnt/models:ro
       - $PWD/tests/assets:/workspace/amdinfer/tests/assets:ro
       - /opt/xilinx/overlaybins:/opt/xilinx/overlaybins:ro
     working_dir: /home/amdinfer-user

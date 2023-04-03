@@ -21,5 +21,5 @@ These examples demonstrate how to perform some basic tasks with the Inference Se
 echo.py
 ^^^^^^^
 
-This example describes making a simple inference to the "echo" worker on the Inference Server.
+This example describes making a simple inference to a C++-based worker running a trivial model on the Inference Server.
 It shows you how to start the server from Python, construct an HTTP/REST client, make a request, and process the results.

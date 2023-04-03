@@ -1041,7 +1041,7 @@ if __name__ == "__main__":
         # if pytest is disabled, run anyway with a small test suite to create a
         # new benchmark file that can be populated by later benchmarks
         tmp = config.benchmarks
-        config.benchmarks = "echo"
+        config.benchmarks = "cplusplus"
         pytest_benchmarks(config, True)
         config.benchmarks = tmp
         benchmarks = get_benchmark(normalize=True)

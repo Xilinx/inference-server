@@ -34,8 +34,11 @@ std::byte *copy(const T &src, std::byte *dst,
     std::memcpy(dst, src, count);
     return dst + count;
   }
-  std::memcpy(dst, &src, sizeof(T));
-  return dst + sizeof(T);
+  if (count == 0) {
+    count = sizeof(T);
+  }
+  std::memcpy(dst, &src, count);
+  return dst + count;
 }
 
 }  // namespace amdinfer::util

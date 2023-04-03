@@ -134,6 +134,7 @@ TEST_P(Fixture, TestRequestToProto) {  // NOLINT
   input.setData(data.data());
   switchOverTypes(AssignData(), datatype, data.data());
   input.setDatatype(datatype);
+  input.setShape({1});
   request.addInputTensor(input);
 
   inference::ModelInferRequest proto_request;

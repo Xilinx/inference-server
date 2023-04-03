@@ -62,7 +62,9 @@ void terminate() {
 
 Server::Server() {
   initializeServerLogging();
-  this->impl_ = std::make_unique<Server::ServerImpl>();
+  impl_ = std::make_unique<Server::ServerImpl>();
+
+  impl_->state.workerLoad("responder", {});
 
 #ifdef AMDINFER_ENABLE_TRACING
   startTracer();
@@ -82,6 +84,7 @@ Server::Server() {
 }
 
 Server::~Server() {
+  impl_->state.workerUnload("responder");
   stopHttp();
   stopGrpc();
   terminate();

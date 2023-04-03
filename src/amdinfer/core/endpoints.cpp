@@ -28,6 +28,7 @@
 #include "amdinfer/core/parameters.hpp"         // for ParameterMap
 #include "amdinfer/core/request_container.hpp"  // for RequestContainer
 #include "amdinfer/core/worker_info.hpp"        // for WorkerInfo
+#include "amdinfer/util/string.hpp"             // for startsWith
 #include "amdinfer/util/thread.hpp"             // for setThreadName
 
 namespace amdinfer {
@@ -234,13 +235,30 @@ std::string Endpoints::unsafeLoad(const std::string& worker,
   std::string worker_name = endpoint;
   if (parameters->has("worker")) {
     worker_name = parameters->get<std::string>("worker");
+  } else {
+    parameters->put("worker", worker_name);
   }
 
   // if the worker doesn't exist yet, we need to create it
   try {
     if (worker_info == nullptr) {
-      auto new_worker =
-        std::make_unique<WorkerInfo>(worker_name, parameters, &pool_);
+      BatchPtrQueue* next = nullptr;
+      std::vector<MemoryAllocators> next_allocators;
+      if (parameters->has("next")) {
+        auto next_endpoint = parameters->get<std::string>("next");
+        const auto* next_info = this->unsafeGet(next_endpoint);
+        next = next_info->getInputQueue();
+        next_allocators = next_info->getAllocators();
+      } else if (worker != "responder") {
+        const auto* next_info = this->unsafeGet("responder");
+        next = next_info->getInputQueue();
+        next_allocators = next_info->getAllocators();
+      } else {
+        // worker being loaded is the responder so we don't do anything
+      }
+
+      auto new_worker = std::make_unique<WorkerInfo>(
+        worker_name, parameters, &pool_, next, next_allocators);
       this->workers_.try_emplace(endpoint, std::move(new_worker));
       // if the worker exists but the share parameter is false, we need to add
       // one
@@ -301,7 +319,9 @@ void Endpoints::unsafeList(std::vector<std::string>* list) const {
   assert(list->empty());
   list->reserve(workers_.size());
   for (const auto& [worker, _] : workers_) {
-    list->push_back(worker);
+    if (!util::startsWith(worker, "responder")) {
+      list->push_back(worker);
+    }
   }
 }
 

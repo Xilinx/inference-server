@@ -56,14 +56,11 @@ void setData(amdinfer::InferenceRequestInput &self, py::array_t<T> &b) {
 void wrapInferenceRequestInput(py::module_ &m) {
   py::class_<InferenceRequestInput, InferenceTensor>(m, "InferenceRequestInput")
     .def(py::init<>(), DOCS(InferenceRequestInput, InferenceRequestInput))
-    .def(py::init<const InferenceTensor &>(),
+    .def(py::init<const Tensor &>(),
          DOCS(InferenceRequestInput, InferenceRequestInput, 2),
          py::arg("tensor"))
-    .def(py::init<const Tensor &>(),
-         DOCS(InferenceRequestInput, InferenceRequestInput, 3),
-         py::arg("tensor"))
     .def(py::init<void *, std::vector<uint64_t>, DataType, std::string>(),
-         DOCS(InferenceRequestInput, InferenceRequestInput, 4), py::arg("data"),
+         DOCS(InferenceRequestInput, InferenceRequestInput, 3), py::arg("data"),
          py::arg("shape"), py::arg("data_type"), py::arg("data") = "")
     .def("setUint8Data", &setData<uint8_t>, KeepAliveAssign())
     .def("setUint16Data", &setData<uint16_t>, KeepAliveAssign())
@@ -120,6 +117,8 @@ void wrapInferenceRequest(py::module_ &m) {
       &InferenceRequest::addInputTensor);
   py::class_<InferenceRequest>(m, "InferenceRequest")
     .def(py::init<>(), DOCS(InferenceRequest, InferenceRequest))
+    .def("propagate", &InferenceRequest::propagate,
+         DOCS(InferenceRequest, propagate))
     .def_property("id", &InferenceRequest::getID, &InferenceRequest::setID)
     .def_property("parameters", &InferenceRequest::getParameters,
                   &InferenceRequest::setParameters)

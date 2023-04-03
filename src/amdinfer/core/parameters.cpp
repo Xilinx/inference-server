@@ -26,24 +26,25 @@
 #include <type_traits>  // for add_const<>::type, decay_t
 #include <vector>       // for vector
 
-#include "amdinfer/util/memory.hpp"  // for copy
+#include "amdinfer/core/exceptions.hpp"  // for invalid_argument
+#include "amdinfer/util/memory.hpp"      // for copy
 
 namespace amdinfer {
 
-void ParameterMap::put(const std::string &key, bool value) {
-  this->parameters_.try_emplace(key, value);
+ParameterMap::ParameterMap(const std::vector<std::string> &keys,
+                           const std::vector<Parameter> &values) {
+  if (keys.size() != values.size()) {
+    throw invalid_argument("Keys and values sizes must match");
+  }
+
+  const auto size = keys.size();
+  for (auto i = 0U; i < size; ++i) {
+    ParameterMap::put(keys.at(i), values.at(i));
+  }
 }
 
-void ParameterMap::put(const std::string &key, double value) {
-  this->parameters_.try_emplace(key, value);
-}
-
-void ParameterMap::put(const std::string &key, int32_t value) {
-  this->parameters_.try_emplace(key, value);
-}
-
-void ParameterMap::put(const std::string &key, const std::string &value) {
-  this->parameters_.try_emplace(key, value);
+void ParameterMap::put(const std::string &key, Parameter value) {
+  this->parameters_.try_emplace(key, std::move(value));
 }
 
 void ParameterMap::put(const std::string &key, const char *value) {
@@ -153,8 +154,6 @@ std::byte *ParameterMap::serialize(std::byte *data_out) const {
  * @tparam Ts: the types of the variant. Order matters!
  * @param i index of the variant type to create
  * @return std::variant<Ts...>
- *
- * https://www.reddit.com/r/cpp/comments/f8cbzs/comment/fimjm2f/?context=3
  */
 template <typename... Ts>
 [[nodiscard]] std::variant<Ts...> expandType(std::size_t i) {

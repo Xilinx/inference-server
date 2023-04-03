@@ -19,6 +19,8 @@
 
 #include "amdinfer/core/memory_pool/pool.hpp"
 
+#include <cassert>
+
 #include "amdinfer/buffers/cpu.hpp"
 #include "amdinfer/core/exceptions.hpp"
 #include "amdinfer/core/memory_pool/cpu_allocator.hpp"
@@ -40,9 +42,12 @@ MemoryPool::MemoryPool() {
 std::unique_ptr<Buffer> MemoryPool::get(
   const std::vector<MemoryAllocators>& allocators, const Tensor& tensor,
   size_t batch_size) const {
+  assert(!allocators.empty());
   for (const auto& allocator : allocators) {
     try {
-      return allocators_.at(allocator)->get(tensor, batch_size);
+      auto buffer = allocators_.at(allocator)->get(tensor, batch_size);
+      buffer->setPool(this);
+      return buffer;
     } catch (const runtime_error&) {
       continue;
     }
@@ -50,10 +55,8 @@ std::unique_ptr<Buffer> MemoryPool::get(
   throw runtime_error("Memory could not be allocated");
 }
 
-void MemoryPool::put(std::unique_ptr<Buffer> memory) const {
-  const auto allocator = memory->getAllocator();
-  const auto* address = memory->data(0);
-  allocators_.at(allocator)->put(address);
+void MemoryPool::put(MemoryAllocators allocator, void* memory) const {
+  allocators_.at(allocator)->put(memory);
 }
 
 }  // namespace amdinfer

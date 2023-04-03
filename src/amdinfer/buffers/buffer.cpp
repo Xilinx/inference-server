@@ -22,6 +22,8 @@
 
 #include <cstring>  // for memcpy, size_t
 
+#include "amdinfer/core/memory_pool/pool.hpp"
+
 namespace amdinfer {
 
 Buffer::Buffer(MemoryAllocators allocator) : allocator_(allocator) {}
@@ -32,5 +34,9 @@ size_t Buffer::write(void* data, size_t offset, size_t size) {
 }
 
 MemoryAllocators Buffer::getAllocator() const { return allocator_; }
+
+void Buffer::setPool(const MemoryPool* pool) { pool_ = pool; }
+
+const MemoryPool* Buffer::getPool() const { return pool_; }
 
 }  // namespace amdinfer

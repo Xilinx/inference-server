@@ -17,6 +17,8 @@ import time
 
 import pytest
 
+import amdinfer
+
 
 @pytest.mark.usefixtures("server", "assign_client")
 class TestModelList:
@@ -31,16 +33,18 @@ class TestModelList:
         models_0 = self.rest_client.modelList()
         assert len(models_0) == 0
 
-        endpoint = self.rest_client.workerLoad("echo")
-        assert endpoint == "echo"
+        parameters = amdinfer.ParameterMap(["model"], ["echo"])
+        endpoint = self.rest_client.workerLoad("cplusplus", parameters)
+        assert endpoint == "cplusplus"
         assert self.rest_client.modelReady(endpoint)
 
         models = self.rest_client.modelList()
         assert len(models) == 1
         assert models[0] == endpoint
 
-        endpoint_2 = self.rest_client.workerLoad("invertimage")
-        assert endpoint_2 == "invertimage"
+        parameters = amdinfer.ParameterMap(["model"], ["echo_multi"])
+        endpoint_2 = self.rest_client.workerLoad("cplusplus", parameters)
+        assert endpoint_2 == "cplusplus-0"
         assert self.rest_client.modelReady(endpoint_2)
 
         models = self.rest_client.modelList()
@@ -48,8 +52,8 @@ class TestModelList:
         assert endpoint in models
         assert endpoint_2 in models
 
-        self.rest_client.modelUnload(endpoint)
-        self.rest_client.modelUnload(endpoint_2)
+        self.rest_client.workerUnload(endpoint)
+        self.rest_client.workerUnload(endpoint_2)
 
         models_3 = self.rest_client.modelList()
         while len(models_3) > 0:

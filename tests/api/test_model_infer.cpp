@@ -20,9 +20,12 @@
 #include "amdinfer/amdinfer.hpp"                // for InferenceResponse, Grp...
 #include "amdinfer/testing/gtest_fixtures.hpp"  // for GrpcFixture
 
-void test(amdinfer::Client* client) {
-  auto endpoint = client->workerLoad("echo", {});
-  EXPECT_EQ(endpoint, "echo");
+namespace amdinfer {
+
+void test(const Client* client) {
+  auto endpoint =
+    client->workerLoad("cplusplus", {{"model"}, {std::string{"echo"}}});
+  EXPECT_EQ(endpoint, "cplusplus");
 
   std::vector<uint32_t> img_data;
   auto shape = {1UL};
@@ -30,9 +33,9 @@ void test(amdinfer::Client* client) {
   img_data.reserve(size);
   img_data.push_back(1);
 
-  amdinfer::InferenceRequest request;
+  InferenceRequest request;
   request.addInputTensor(static_cast<void*>(img_data.data()), shape,
-                         amdinfer::DataType::Uint32);
+                         DataType::Uint32);
 
   auto response = client->modelInfer(endpoint, request);
 
@@ -42,12 +45,12 @@ void test(amdinfer::Client* client) {
 
   auto outputs = response.getOutputs();
   EXPECT_EQ(outputs.size(), 1);
-  for (auto& output : outputs) {
+  for (const auto& output : outputs) {
     const auto* data = static_cast<uint32_t*>(output.getData());
     EXPECT_EQ(data[0], 2);
   }
 
-  client->modelUnload(endpoint);
+  client->workerUnload(endpoint);
 }
 
 #ifdef AMDINFER_ENABLE_GRPC
@@ -57,7 +60,7 @@ TEST_F(GrpcFixture, ModelInfer) { test(client_.get()); }
 
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST_F(BaseFixture, ModelInfer) {
-  amdinfer::NativeClient client(&server_);
+  NativeClient client(&server_);
   test(&client);
 }
 
@@ -65,3 +68,5 @@ TEST_F(BaseFixture, ModelInfer) {
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST_F(HttpFixture, ModelInfer) { test(client_.get()); }
 #endif
+
+}  // namespace amdinfer

@@ -34,7 +34,7 @@ class TestInvertVideo:
     @staticmethod
     def get_config():
         model = "InvertVideo"
-        parameters = None
+        parameters = amdinfer.ParameterMap()
         return (model, parameters)
 
     def construct_request(self, video_path, requested_frames_count):

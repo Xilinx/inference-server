@@ -61,7 +61,7 @@ class EchoParamFixture : public testing::TestWithParam<Params> {
 
     if (params.add_outputs) {
       InferenceRequestOutput output;
-      output.setName("echo");
+      output.setName("");
       if (params.add_input_parameters) {
         ParameterMap parameters;
         parameters.put("key", "another_value");
@@ -102,7 +102,7 @@ class EchoParamFixture : public testing::TestWithParam<Params> {
       const auto* data = static_cast<uint32_t*>(output.getData());
       EXPECT_EQ(data[0], golden_outputs[0]);
       EXPECT_EQ(output.getDatatype(), DataType::Uint32);
-      EXPECT_EQ(output.getName(), "echo");
+      EXPECT_EQ(output.getName(), "");
       EXPECT_TRUE(output.getParameters().empty());
       auto shape = output.getShape();
       EXPECT_EQ(shape.size(), 1);
@@ -119,7 +119,8 @@ class EchoParamFixture : public testing::TestWithParam<Params> {
 
 TEST_P(EchoParamFixture, EchoNative) {  // NOLINT
   amdinfer::NativeClient client(&server);
-  const auto endpoint = client.workerLoad("echo", {});
+  auto endpoint =
+    client.workerLoad("cplusplus", {{"model"}, {std::string{"echo"}}});
 
   auto request = this->constructRequest();
 
@@ -127,7 +128,7 @@ TEST_P(EchoParamFixture, EchoNative) {  // NOLINT
 
   validate(response);
 
-  client.modelUnload(endpoint);
+  client.workerUnload(endpoint);
 }
 
 #ifdef AMDINFER_ENABLE_GRPC
@@ -135,18 +136,17 @@ TEST_P(EchoParamFixture, EchoGrpc) {  // NOLINT
   server.startGrpc(kDefaultGrpcPort);
   auto client =
     amdinfer::GrpcClient("localhost:" + std::to_string(kDefaultGrpcPort));
-  while (!client.serverLive()) {
-    std::this_thread::sleep_for(std::chrono::seconds(1));
-  }
+  waitUntilServerReady(&client);
 
-  const auto endpoint = client.workerLoad("echo", {});
+  auto endpoint =
+    client.workerLoad("cplusplus", {{"model"}, {std::string{"echo"}}});
 
   auto request = this->constructRequest();
 
   auto response = client.modelInfer(endpoint, request);
   validate(response);
 
-  client.modelUnload(endpoint);
+  client.workerUnload(endpoint);
 }
 #endif
 

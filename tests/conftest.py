@@ -210,28 +210,26 @@ def server(xprocess, request):
 def load(request, server):
     test_model, test_parameters = request.cls.get_config()
 
-    assert test_model
+    if isinstance(test_model, str):
+        test_model = [test_model]
+        test_parameters = [test_parameters]
 
-    parameters = amdinfer.ParameterMap()
-    if test_parameters is not None:
-        for key, value in test_parameters.items():
-            parameters.put(key, value)
+    assert test_model
+    assert len(test_model) == len(test_parameters)
 
     request.cls.rest_client = rest_client(request)
     request.cls.ws_client = ws_client(request)
 
-    response = request.cls.rest_client.workerLoad(test_model, parameters)
-    request.cls.endpoint = response
+    endpoints = amdinfer.loadEnsemble(
+        request.cls.rest_client, test_model, test_parameters
+    )
 
-    while not request.cls.rest_client.modelReady(response):
-        time.sleep(1)
+    # update the endpoint with the first worker in the ensemble
+    request.cls.endpoint = endpoints[0]
 
     yield  # perform testing
 
-    request.cls.rest_client.modelUnload(response)
-
-    while request.cls.rest_client.modelReady(response):
-        time.sleep(1)
+    amdinfer.unloadModels(request.cls.rest_client, endpoints)
 
     request.cls.ws_client = None
     request.cls.rest_client = None

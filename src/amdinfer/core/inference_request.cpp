@@ -25,6 +25,18 @@
 
 namespace amdinfer {
 
+InferenceRequestPtr InferenceRequest::propagate() {
+  auto new_request = std::make_shared<InferenceRequest>();
+  new_request->setCallback(this->getCallback());
+  new_request->setID(this->getID());
+  const auto outputs = this->getOutputs();
+  for (const auto &output : outputs) {
+    new_request->addOutputTensor(output);
+  }
+
+  return new_request;
+}
+
 void InferenceRequest::setCallback(Callback &&callback) {
   callback_ = std::move(callback);
 }
@@ -86,8 +98,6 @@ InferenceRequestInput::InferenceRequestInput(void *data,
   : InferenceTensor(std::move(name), std::move(shape), data_type),
     data_(data) {}
 
-InferenceRequestInput::InferenceRequestInput(const InferenceTensor &tensor)
-  : InferenceTensor(tensor) {}
 InferenceRequestInput::InferenceRequestInput(const Tensor &tensor)
   : InferenceTensor(tensor) {}
 

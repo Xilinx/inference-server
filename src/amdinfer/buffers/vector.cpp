@@ -14,29 +14,23 @@
 
 /**
  * @file
- * @brief Implements the CpuBuffer class
+ * @brief Implements the VectorBuffer class
  */
 
-#include "amdinfer/buffers/cpu.hpp"
+#include "amdinfer/buffers/vector.hpp"
 
 #include <algorithm>  // for max
 #include <memory>     // for make_unique
 #include <utility>    // for move
 
-#include "amdinfer/core/memory_pool/pool.hpp"
-
 namespace amdinfer {
 
-CpuBuffer::CpuBuffer(void* data, MemoryAllocators allocator)
-  : Buffer(allocator), data_(static_cast<std::byte*>(data)) {}
-
-void* CpuBuffer::data(size_t offset) { return data_ + offset; }
-
-void CpuBuffer::free() {
-  auto* pool = getPool();
-  if (pool != nullptr) {
-    pool->put(getAllocator(), data_);
-  }
+VectorBuffer::VectorBuffer(size_t size) : Buffer(MemoryAllocators::Cpu) {
+  data_.resize(size);
 }
+
+void* VectorBuffer::data(size_t offset) { return data_.data() + offset; }
+
+void VectorBuffer::free() { data_.clear(); }
 
 }  // namespace amdinfer

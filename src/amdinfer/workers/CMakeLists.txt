@@ -15,7 +15,7 @@
 
 include(GNUInstallDirs)
 
-set(workers Echo EchoMulti InvertImage InvertVideo CPlusPlus)
+set(workers InvertVideo CPlusPlus Responder)
 
 if(${AMDINFER_ENABLE_VITIS})
   list(APPEND workers Xmodel)
@@ -61,9 +61,6 @@ foreach(worker ${workers})
   list(APPEND WORKER_TARGETS ${target})
 endforeach()
 
-target_link_libraries(
-  workerInvertimage PRIVATE base64 opencv_core opencv_imgcodecs
-)
 target_link_libraries(
   workerInvertvideo PRIVATE base64 opencv_core opencv_imgcodecs opencv_videoio
 )
@@ -120,13 +117,6 @@ if(${AMDINFER_ENABLE_AKS})
     workerResnet50stream PRIVATE opencv_imgproc opencv_videoio
   )
   target_link_libraries(workerAksdetectstream PRIVATE opencv_videoio)
-
-  # AKS Worker
-  add_library(workerAks SHARED aks.cpp)
-  target_link_libraries(workerAks PRIVATE buffers aks vart-runner xir timer)
-  target_include_directories(workerAks PRIVATE ${AMDINFER_INCLUDE_DIRS})
-  set_target_options(workerAks)
-  list(APPEND WORKER_TARGETS workerAks)
 else()
   message(STATUS "AKS not enabled, skipping AKS workers")
 endif()

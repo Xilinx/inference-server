@@ -14,31 +14,35 @@
 
 /**
  * @file
- * @brief Defines the VartTensorBuffer class
+ * @brief
  */
 
-#ifndef GUARD_AMDINFER_BUFFERS_VART_TENSOR
-#define GUARD_AMDINFER_BUFFERS_VART_TENSOR
+#ifndef GUARD_AMDINFER_BUFFERS_VECTOR
+#define GUARD_AMDINFER_BUFFERS_VECTOR
 
-#include <cstddef>  // for size_t
+#include <cstddef>  // for size_t, byte
+#include <vector>   // for vector
 
-#include "amdinfer/buffers/buffer.hpp"
-
-namespace vart {
-class TensorBuffer;
-}  // namespace vart
+#include "amdinfer/buffers/buffer.hpp"   // IWYU pragma: export
+#include "amdinfer/core/data_types.hpp"  // for DataType
+#include "amdinfer/util/queue.hpp"       // for BufferPtrsQueue
 
 namespace amdinfer {
 
-class VartTensorBuffer : public Buffer {
+enum class MemoryAllocators;
+
+/**
+ * @brief CpuBuffer uses vectors for storing data
+ *
+ */
+class VectorBuffer : public Buffer {
  public:
   /**
    * @brief Construct a new Vector Buffer object
    *
-   * @param elements number of elements to store
-   * @param data_type type of element to store
+   * @param size size of the buffer in bytes
    */
-  VartTensorBuffer(void* data, MemoryAllocators allocator);
+  explicit VectorBuffer(size_t size);
 
   /**
    * @brief Returns a pointer to the underlying data
@@ -47,14 +51,12 @@ class VartTensorBuffer : public Buffer {
    */
   void* data(size_t offset) override;
 
-  vart::TensorBuffer* getTensorBuffer();
-
   void free() override;
 
  private:
-  vart::TensorBuffer* data_;
+  std::vector<std::byte> data_;
 };
 
 }  // namespace amdinfer
 
-#endif  // GUARD_AMDINFER_BUFFERS_VART_TENSOR
+#endif  // GUARD_AMDINFER_BUFFERS_VECTOR

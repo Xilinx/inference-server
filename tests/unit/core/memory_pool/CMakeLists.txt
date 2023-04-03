@@ -16,7 +16,7 @@ list(APPEND tests cpu_allocator pool)
 
 list(
   APPEND tests_libs
-         "cpu_allocator~buffers~inference_request~data_types~parameters~\
+         "memory_pool~buffers~inference_request~data_types~parameters~\
            data_types_internal~inference_response"
          "memory_pool~buffers~inference_request~data_types~parameters~\
            data_types_internal~inference_response"

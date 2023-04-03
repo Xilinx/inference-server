@@ -38,8 +38,6 @@ class InferenceRequestInput : public InferenceTensor {
   /// Constructs a new InferenceRequestInput object
   InferenceRequestInput();
   /// Constructs a new InferenceRequestInput object
-  explicit InferenceRequestInput(const InferenceTensor &tensor);
-  /// Constructs a new InferenceRequestInput object
   explicit InferenceRequestInput(const Tensor &tensor);
 
   /**
@@ -136,6 +134,8 @@ class InferenceRequest {
  public:
   // Construct a new InferenceRequest object
   InferenceRequest() = default;
+
+  InferenceRequestPtr propagate();
 
   /**
    * @brief Sets the request's callback function used by the last worker to

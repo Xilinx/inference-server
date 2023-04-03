@@ -22,9 +22,10 @@
 #include "amdinfer/amdinfer.hpp"                // for NativeClient, GrpcClient
 #include "amdinfer/testing/gtest_fixtures.hpp"  // for AssertionResult, Suite...
 
-void test(amdinfer::Client* client) {
-  auto metadata = client->serverMetadata();
-  if (metadata.extensions.find("tfzendnn") == metadata.extensions.end()) {
+namespace amdinfer {
+
+void test(const amdinfer::Client* client) {
+  if (!serverHasExtension(client, "tfzendnn")) {
     GTEST_SKIP() << "This test requires TF+ZenDNN support.";
   }
 
@@ -47,12 +48,12 @@ void test(amdinfer::Client* client) {
 #ifdef AMDINFER_ENABLE_GRPC
 // @pytest.mark.extensions(["tfzendnn"])
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
-TEST_F(GrpcFixture, workerLoad) { test(client_.get()); }
+TEST_F(GrpcFixture, modelLoad) { test(client_.get()); }
 #endif
 
 // @pytest.mark.extensions(["tfzendnn"])
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
-TEST_F(BaseFixture, workerLoad) {
+TEST_F(BaseFixture, modelLoad) {
   amdinfer::NativeClient client(&server_);
   test(&client);
 }
@@ -62,3 +63,5 @@ TEST_F(BaseFixture, workerLoad) {
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST_F(HttpFixture, modelLoad) { test(client_.get()); }
 #endif
+
+}  // namespace amdinfer

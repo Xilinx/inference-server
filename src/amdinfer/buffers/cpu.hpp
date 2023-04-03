@@ -40,8 +40,8 @@ class CpuBuffer : public Buffer {
   /**
    * @brief Construct a new Vector Buffer object
    *
-   * @param elements number of elements to store
-   * @param data_type type of element to store
+   * @param data non-owning pointer to data
+   * @param data_type type of memory allocator
    */
   CpuBuffer(void* data, MemoryAllocators allocator);
 
@@ -51,6 +51,8 @@ class CpuBuffer : public Buffer {
    * @return void*
    */
   void* data(size_t offset) override;
+
+  void free() override;
 
  private:
   std::byte* data_;

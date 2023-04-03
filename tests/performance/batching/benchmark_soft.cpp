@@ -87,7 +87,8 @@ class PerfSoftBatcherFixture : public ::benchmark::Fixture {
     this->batcher_->setName("test");
     this->batcher_->setBatchSize(batch_size);
 
-    this->worker_.emplace("", &parameters, &pool_);
+    std::vector<MemoryAllocators> next;
+    this->worker_.emplace("", &parameters, &pool_, nullptr, next);
     // for (size_t i = 0; i < buffer_num; i++) {
     //   BufferPtrs vec;
     //   vec.emplace_back(std::make_unique<VectorBuffer>(batch_size * data_size,

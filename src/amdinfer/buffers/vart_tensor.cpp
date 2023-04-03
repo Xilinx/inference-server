@@ -23,6 +23,8 @@
 #include <vector>                 // for vector
 #include <xir/tensor/tensor.hpp>  // for Tensor
 
+#include "amdinfer/core/memory_pool/pool.hpp"
+
 namespace amdinfer {
 
 VartTensorBuffer::VartTensorBuffer(void* data, MemoryAllocators allocator)
@@ -54,5 +56,12 @@ void* VartTensorBuffer::data(size_t offset) {
 }
 
 vart::TensorBuffer* VartTensorBuffer::getTensorBuffer() { return data_; }
+
+void VartTensorBuffer::free() {
+  auto* pool = getPool();
+  if (pool != nullptr) {
+    pool->put(getAllocator(), data_);
+  }
+}
 
 }  // namespace amdinfer

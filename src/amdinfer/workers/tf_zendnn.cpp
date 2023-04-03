@@ -53,7 +53,7 @@
 #include "amdinfer/declarations.hpp"             // for InferenceResp...
 #include "amdinfer/observation/logging.hpp"      // for Logger, PROTE...
 #include "amdinfer/observation/metrics.hpp"      // for Metrics, Metr...
-#include "amdinfer/observation/tracing.hpp"      // for Trace
+#include "amdinfer/util/memory.hpp"              // for copy
 #include "amdinfer/util/thread.hpp"              // for setThreadName
 #include "amdinfer/util/timer.hpp"               // for Timer
 #include "amdinfer/workers/worker.hpp"           // for Worker, kNumB...
@@ -72,16 +72,15 @@ const int kResNetOutputClasses = 1000;
  * returns the corresponding number of output tensors.
  *
  */
-class TfZendnn : public Worker {
+class TfZendnn : public SingleThreadedWorker {
  public:
-  using Worker::Worker;
-  std::thread spawn(BatchPtrQueue* input_queue) override;
+  using SingleThreadedWorker::SingleThreadedWorker;
   [[nodiscard]] std::vector<MemoryAllocators> getAllocators() const override;
 
  private:
   void doInit(ParameterMap* parameters) override;
   void doAcquire(ParameterMap* parameters) override;
-  void doRun(BatchPtrQueue* input_queue) override;
+  BatchPtr doRun(Batch* batch, const MemoryPool* pool) override;
   void doRelease() override;
   void doDestroy() override;
 
@@ -102,10 +101,6 @@ class TfZendnn : public Worker {
   std::string output_node_{"predict"};
   DataType input_dt_ = DataType::Fp32;
 };
-
-std::thread TfZendnn::spawn(BatchPtrQueue* input_queue) {
-  return std::thread(&TfZendnn::run, this, input_queue);
-}
 
 std::vector<MemoryAllocators> TfZendnn::getAllocators() const {
   return {MemoryAllocators::Cpu};
@@ -211,150 +206,95 @@ void TfZendnn::doAcquire(ParameterMap* parameters) {
   this->metadata_.setName("TfZendnn");
 }
 
-void TfZendnn::doRun(BatchPtrQueue* input_queue) {
-  util::setThreadName("TfZendnn");
+BatchPtr TfZendnn::doRun(Batch* batch, const MemoryPool* pool) {
 #ifdef AMDINFER_ENABLE_LOGGING
   const auto& logger = this->getLogger();
 #endif
 
-  while (true) {
-    std::unique_ptr<Batch> batch;
-    input_queue->wait_dequeue(batch);
-    if (batch == nullptr) {
-      break;
+  util::Timer timer{true};
+
+  // Find total number of images to initialize for TF tensor
+  auto tensor_count = static_cast<int>(batch->size());
+
+  // Initialize a TensorFlow tensor with required shape
+  tf::Tensor input_tensor(
+    tf::DT_FLOAT, tf::TensorShape({tensor_count, image_height_, image_width_,
+                                   image_channels_}));
+
+  uint64_t input_size = image_height_ * image_width_ * image_channels_;
+  size_t vec_size = 0;
+
+  for (unsigned int j = 0; j < batch->size(); j++) {
+    const auto& req = batch->getRequest(j);
+
+    auto inputs = req->getInputs();
+    auto outputs = req->getOutputs();
+    AMDINFER_LOG_DEBUG(logger,
+                       "Size of input: " + std::to_string(inputs.size()));
+
+    // Get all the inputs from the requests and copy to the TensorFlow tensor
+    for (auto& input : inputs) {
+      auto* input_buffer = input.getData();
+      const auto* float_buffer = static_cast<float*>(input_buffer);
+      std::copy(float_buffer, float_buffer + input_size,
+                input_tensor.flat<float>().data() + vec_size);
+      vec_size = vec_size + input_size;
     }
-    AMDINFER_LOG_DEBUG(logger, "Got request in TfZendnn. Size: " +
-                                 std::to_string(batch->size()));
-
-    std::vector<InferenceResponse> responses;
-    responses.reserve(batch->size());
-
-#ifdef AMDINFER_ENABLE_METRICS
-    Metrics::getInstance().incrementCounter(
-      MetricCounterIDs::PipelineIngressWorker);
-#endif
-
-    util::Timer timer{true};
-
-    // Find total number of images to initialize for TF tensor
-    auto tensor_count = static_cast<int>(batch->size());
-
-    // Initialize a TensorFlow tensor with required shape
-    tf::Tensor input_tensor(
-      tf::DT_FLOAT, tf::TensorShape({tensor_count, image_height_, image_width_,
-                                     image_channels_}));
-
-    uint64_t input_size = image_height_ * image_width_ * image_channels_;
-    size_t vec_size = 0;
-
-    for (unsigned int j = 0; j < batch->size(); j++) {
-      const auto& req = batch->getRequest(j);
-
-#ifdef AMDINFER_ENABLE_TRACING
-      const auto& trace = batch->getTrace(j);
-      trace->startSpan("tfzendnn");
-#endif
-      auto& resp = responses.emplace_back();
-      resp.setID(req->getID());
-      resp.setModel("TFModel");
-
-      auto inputs = req->getInputs();
-      auto outputs = req->getOutputs();
-      AMDINFER_LOG_DEBUG(logger,
-                         "Size of input: " + std::to_string(inputs.size()));
-
-      // Get all the inputs from the requests and copy to the TensorFlow tensor
-      for (auto& input : inputs) {
-        auto* input_buffer = input.getData();
-        const auto* float_buffer = static_cast<float*>(input_buffer);
-        std::copy(float_buffer, float_buffer + input_size,
-                  input_tensor.flat<float>().data() + vec_size);
-        vec_size = vec_size + input_size;
-      }
-    }
-
-    AMDINFER_LOG_DEBUG(logger, input_tensor.DebugString());
-
-    // Create the inputs and output tensor
-    std::vector<std::pair<std::string, tf::Tensor>> input_pair = {
-      {input_node_, input_tensor}};
-    std::vector<tensorflow::Tensor> output_tensor;
-
-    // Run the session to get the predictions
-    timer.add("infer_start");
-    status_ =
-      this->session_->Run(input_pair, {output_node_}, {}, &output_tensor);
-    timer.add("infer_stop");
-    [[maybe_unused]] auto duration =
-      timer.count<std::milli>("infer_start", "infer_stop");
-    AMDINFER_LOG_INFO(logger, "Time taken for " + std::to_string(tensor_count) +
-                                " images: " + std::to_string(duration));
-
-    if (!status_.ok()) {
-      AMDINFER_LOG_ERROR(logger, status_.ToString());
-      for (const auto& req : *batch) {
-        req->runCallbackError("Issue with prediction");
-      }
-    }
-    AMDINFER_LOG_DEBUG(logger, output_tensor[0].DebugString());
-
-    // Copy the output from the model to the response object
-    size_t response_size = output_classes_;
-    std::vector<size_t> new_shape = {response_size};
-    for (unsigned int k = 0; k < batch->size(); k++) {
-      const auto& req = batch->getRequest(k);
-      auto inputs = req->getInputs();
-      auto outputs = req->getOutputs();
-      auto& resp = responses[k];
-
-      for (unsigned int i = 0; i < inputs.size(); i++) {
-        InferenceResponseOutput output;
-        std::vector<std::byte> buffer;
-        buffer.resize(response_size * sizeof(float));
-
-        memcpy(buffer.data(),
-               output_tensor[0].flat<float>().data() + (i * response_size),
-               response_size * sizeof(float));
-        output.setData(std::move(buffer));
-
-        std::string output_name;
-        if (i < outputs.size()) {
-          output_name = outputs[i].getName();
-        }
-
-        if (output_name.empty()) {
-          output.setName(inputs[0].getName());
-        } else {
-          output.setName(output_name);
-        }
-
-        output.setShape(new_shape);
-        output.setDatatype(DataType::Fp32);
-        resp.addOutput(output);
-      }
-
-#ifdef AMDINFER_ENABLE_TRACING
-      auto context = batch->getTrace(k)->propagate();
-      resp.setContext(std::move(context));
-#endif
-
-      timer.stop();
-      duration = timer.count<std::milli>();
-      AMDINFER_LOG_DEBUG(logger,
-                         "Total time taken: " + std::to_string(duration));
-
-      req->runCallbackOnce(resp);
-
-#ifdef AMDINFER_ENABLE_METRICS
-      timer.add("metrics", batch->getTime(k));
-      duration = timer.count<std::micro>("metrics", "stop");
-      Metrics::getInstance().observeSummary(MetricSummaryIDs::RequestLatency,
-                                            duration);
-#endif
-    }
-    this->returnInputBuffers(std::move(batch));
   }
-  AMDINFER_LOG_INFO(logger, "TfZendnn ending");
+
+  AMDINFER_LOG_DEBUG(logger, input_tensor.DebugString());
+
+  // Create the inputs and output tensor
+  std::vector<std::pair<std::string, tf::Tensor>> input_pair = {
+    {input_node_, input_tensor}};
+  std::vector<tensorflow::Tensor> output_tensor;
+
+  // Run the session to get the predictions
+  timer.add("infer_start");
+  status_ = this->session_->Run(input_pair, {output_node_}, {}, &output_tensor);
+  timer.add("infer_stop");
+  [[maybe_unused]] auto duration =
+    timer.count<std::milli>("infer_start", "infer_stop");
+  AMDINFER_LOG_INFO(logger, "Time taken for " + std::to_string(tensor_count) +
+                              " images: " + std::to_string(duration));
+
+  if (!status_.ok()) {
+    AMDINFER_LOG_ERROR(logger, status_.ToString());
+    for (const auto& req : *batch) {
+      req->runCallbackError("Issue with prediction");
+    }
+  }
+  AMDINFER_LOG_DEBUG(logger, output_tensor[0].DebugString());
+
+  // Copy the output from the model to the response object
+  size_t response_size = output_classes_;
+  std::vector<size_t> new_shape = {response_size};
+
+  auto new_batch = batch->propagate();
+  std::vector<BufferPtr> input_buffers;
+  input_buffers.push_back(pool->get(next_allocators_,
+                                    Tensor{"name", new_shape, DataType::Fp32},
+                                    batch->size()));
+
+  for (unsigned int k = 0; k < batch->size(); k++) {
+    const auto& req = batch->getRequest(k);
+
+    auto new_request = req->propagate();
+    auto* data_ptr =
+      input_buffers.at(0)->data(k * response_size * DataType("Fp32").size());
+    new_request->addInputTensor(
+      InferenceRequestInput{data_ptr, new_shape, DataType::Fp32, ""});
+    util::copy(output_tensor[0].flat<float>().data() + (k * response_size),
+               static_cast<std::byte*>(data_ptr),
+               response_size * sizeof(float));
+
+    new_batch->addRequest(new_request);
+
+    new_batch->setModel(k, "TFModel");
+  }
+  new_batch->setBuffers(std::move(input_buffers), {});
+
+  return new_batch;
 }
 
 void TfZendnn::doRelease() {
@@ -392,6 +332,6 @@ amdinfer::workers::Worker* getWorker() {
   // symbols before the global scope.
   openLibrary("libtensorflow_cc.so", RTLD_GLOBAL | RTLD_LAZY | RTLD_DEEPBIND);
 
-  return new amdinfer::workers::TfZendnn("TfZendnn", "cpu");
+  return new amdinfer::workers::TfZendnn("TfZendnn", "CPU", true);
 }
 }  // extern C

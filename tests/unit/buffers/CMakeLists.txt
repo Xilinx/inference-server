@@ -15,6 +15,10 @@
 
 list(APPEND tests cpu)
 
-list(APPEND tests_libs "buffer~data_types~fake_observation~cpu_buffer")
+list(
+  APPEND
+    tests_libs
+    "buffers~data_types~fake_observation~memory_pool~data_types_internal~tensor"
+)
 
 amdinfer_add_unit_tests("${tests}" "${tests_libs}")

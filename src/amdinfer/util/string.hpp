@@ -46,6 +46,10 @@ inline bool startsWith(std::string_view str, std::string_view prefix) {
          0 == str.compare(0, prefix.size(), prefix);
 }
 
+inline bool contains(std::string_view str, std::string_view search) {
+  return str.find(search) != std::string::npos;
+}
+
 inline std::vector<std::string> split(std::string_view str,
                                       std::string_view delimiter) {
   auto last = 0UL;

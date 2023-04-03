@@ -50,6 +50,41 @@ def compare_jpgs(test_image, reference_image):
     assert m_norm_per_pixel < 2  # arbitrarily use a threshold of 2 for comparison
 
 
+def construct_request(asTensor):
+    image_path = amdinfer.testing.getPathToAsset("asset_dog-3619020_640.jpg")
+
+    request = amdinfer.ImageInferenceRequest(image_path, asTensor)
+
+    image = cv2.imread(image_path)
+    image = cv2.bitwise_not(image)
+
+    return request, image
+
+
+def validate(response, image):
+    assert not response.isError(), response.getError()
+
+    assert response.model == "invert_image"
+
+    outputs = response.getOutputs()
+    assert len(outputs) == 1
+
+    output = outputs[0]
+    if output.datatype == amdinfer.DataType.STRING:
+        data = output.getStringData()
+        compare_jpgs(data, image)
+        assert output.parameters.empty()
+    else:
+        assert output.shape == [*image.shape]
+        assert output.datatype == amdinfer.DataType.UINT8
+        data = output.getUint8Data()
+        assert len(data) == image.size
+        assert (data == image.flatten().tolist()).all()
+        assert output.parameters.empty()
+
+    return response
+
+
 @pytest.mark.usefixtures("load")
 class TestInvertImage:
     """
@@ -58,8 +93,9 @@ class TestInvertImage:
 
     @staticmethod
     def get_config():
-        model = "InvertImage"
-        parameters = None
+        model = "CPlusPlus"
+        parameters = amdinfer.ParameterMap()
+        parameters.put("model", "invert_image")
         return (model, parameters)
 
     def send_request(self, request, image):
@@ -72,7 +108,7 @@ class TestInvertImage:
             check_asserts (bool): Verify image against golden
 
         Returns:
-            Response: Response as a dictionary
+            Response: Response
         """
 
         try:
@@ -82,65 +118,27 @@ class TestInvertImage:
                 "Connection to the amdinfer server ended without response!", False
             )
 
-        assert not response.isError(), response.getError()
+        validate(response, image)
 
-        assert response.model == "invert_image"
-
-        outputs = response.getOutputs()
-        assert len(outputs) == 1
-
-        output = outputs[0]
-        if output.datatype == amdinfer.DataType.STRING:
-            data = output.getStringData()
-            compare_jpgs(data, image)
-            assert output.parameters.empty()
-        else:
-            assert output.shape == [*image.shape]
-            assert output.datatype == amdinfer.DataType.UINT8
-            data = output.getUint8Data()
-            assert len(data) == image.size
-            assert (data == image.flatten().tolist()).all()
-            assert output.parameters.empty()
-
-        return response
-
-    def construct_request(self, asTensor):
-        image_path = amdinfer.testing.getPathToAsset("asset_dog-3619020_640.jpg")
-
-        request = amdinfer.ImageInferenceRequest(image_path, asTensor)
-
-        image = cv2.imread(image_path)
-        image = cv2.bitwise_not(image)
-
-        return request, image
-
-    def test_invert_image_0(self):
+    def test_invert_image(self):
         """
         Send a request to InvertImage as tensor data
         """
-        request, image = self.construct_request(True)
-        self.send_request(request, image)
-
-    def test_invert_image_1(self):
-        """
-        Send a request to InvertImage as a base64-encoded image
-        """
-
-        request, image = self.construct_request(False)
+        request, image = construct_request(True)
         self.send_request(request, image)
 
     @pytest.mark.benchmark(group="invert_image")
-    def test_benchmark_invert_image_0(self, benchmark):
+    def test_benchmark_invert_image(self, benchmark):
         options = {
             "model": self.model,
             "parameters": self.parameters,
             "type": "rest (pytest)",
             "config": "N/A",
         }
-        run_benchmark_func(benchmark, self.test_invert_image_0, **options)
+        run_benchmark_func(benchmark, self.test_invert_image, **options)
 
     @pytest.mark.benchmark(group="invert_image")
-    def test_benchmark_invert_image_0_request(self, benchmark):
+    def test_benchmark_invert_image_request(self, benchmark):
         request, _ = self.construct_request(True)
         options = {
             "model": self.model,
@@ -152,18 +150,66 @@ class TestInvertImage:
             benchmark, "invert_image_0", self.rest_client.modelInfer, request, **options
         )
 
+
+@pytest.mark.usefixtures("load")
+class TestInvertImage2:
+    """
+    Test the InvertImage worker
+    """
+
+    @staticmethod
+    def get_config():
+        model = ["CPlusPlus", "CPlusPlus", "CPlusPlus"]
+        parameters_0 = amdinfer.ParameterMap()
+        parameters_0.put("model", "base64_decode")
+        parameters_1 = amdinfer.ParameterMap()
+        parameters_1.put("model", "invert_image")
+        parameters_2 = amdinfer.ParameterMap()
+        parameters_2.put("model", "base64_encode")
+        return (model, [parameters_0, parameters_1, parameters_2])
+
+    def send_request(self, request, image):
+        """
+        Sends the given request to the server and asserts common checks
+
+        Args:
+            request (dict): request to send to the server
+            image (np.ndarray): Golden image to check against
+            check_asserts (bool): Verify image against golden
+
+        Returns:
+            Response: Response
+        """
+
+        try:
+            response = self.rest_client.modelInfer(self.endpoint, request)
+        except ConnectionError:
+            pytest.fail(
+                "Connection to the amdinfer server ended without response!", False
+            )
+
+        validate(response, image)
+
+    def test_invert_image(self):
+        """
+        Send a request to InvertImage as a base64-encoded image
+        """
+
+        request, image = construct_request(False)
+        self.send_request(request, image)
+
     @pytest.mark.benchmark(group="invert_image")
-    def test_benchmark_invert_image_1(self, benchmark):
+    def test_benchmark_invert_image(self, benchmark):
         options = {
             "model": self.model,
             "parameters": self.parameters,
             "type": "rest (pytest)",
             "config": "N/A",
         }
-        run_benchmark_func(benchmark, self.test_invert_image_1, **options)
+        run_benchmark_func(benchmark, self.test_invert_image, **options)
 
     @pytest.mark.benchmark(group="invert_image")
-    def test_benchmark_invert_image_1_request(self, benchmark):
+    def test_benchmark_invert_image_request(self, benchmark):
         request, _ = self.construct_request(False)
         options = {
             "model": self.model,

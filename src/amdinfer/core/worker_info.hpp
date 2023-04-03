@@ -29,8 +29,9 @@
 #include <thread>   // for thread, thread::id
 #include <vector>   // for vector
 
-#include "amdinfer/declarations.hpp"  // for BufferPtr
-#include "amdinfer/util/queue.hpp"    // for BufferPtrsQueuePtr
+#include "amdinfer/batching/batcher.hpp"  // for BatchPtrQueue
+#include "amdinfer/declarations.hpp"      // for BufferPtr
+#include "amdinfer/util/queue.hpp"        // for BufferPtrsQueuePtr
 
 namespace amdinfer {
 class Batcher;
@@ -52,7 +53,8 @@ class WorkerInfo {
  public:
   /// Construct a new WorkerInfo object
   WorkerInfo(const std::string& name, ParameterMap* parameters,
-             MemoryPool* pool);
+             MemoryPool* pool, BatchPtrQueue* next,
+             const std::vector<MemoryAllocators>& next_allocators);
   ~WorkerInfo();                           ///> Destroy a WorkerInfo object
   WorkerInfo(WorkerInfo const&) = delete;  ///< Copy constructor
   /// Copy assignment constructor
@@ -67,6 +69,12 @@ class WorkerInfo {
    * @return InferenceRequestPtrQueue*
    */
   Batcher* getBatcher();
+  /**
+   * @brief Get the queue associated with this worker to send it batches
+   *
+   * @return BatchPtrQueue*
+   */
+  BatchPtrQueue* getInputQueue() const;
   /// Blocks until the associated worker's thread joins
   void join(std::thread::id id);
   void joinAll();  ///< Blocks until all workers in the group join
@@ -92,6 +100,8 @@ class WorkerInfo {
   /// get the batch size of the worker group
   [[nodiscard]] auto getBatchSize() const { return this->batch_size_; }
 
+  std::vector<MemoryAllocators> getAllocators() const;
+
   ModelMetadata getMetadata() const;
 
  private:
@@ -99,6 +109,8 @@ class WorkerInfo {
   std::map<std::thread::id, workers::Worker*> workers_;
   std::vector<std::unique_ptr<Batcher>> batchers_;
   size_t batch_size_ = 1;
+  BatchPtrQueue* next_;
+  std::vector<MemoryAllocators> next_allocators_;
 
   friend class Manager;
 };

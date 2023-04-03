@@ -34,12 +34,16 @@ class TestInferImageFacedetectDPUCADF8H:
 
     @staticmethod
     def get_config():
-        model = "AksDetect"
-        parameters = {
-            "aks_graph_name": "facedetect",
-            "aks_graph": "${AKS_ROOT}/graph_zoo/graph_facedetect_u200_u250_amdinfer.json",
-        }
-        return (model, parameters)
+        model = ["CPlusPlus", "AksDetect"]
+        parameters = amdinfer.ParameterMap(["model"], ["base64_decode"])
+
+        aks_parameters = amdinfer.ParameterMap()
+        aks_parameters.put("aks_graph_name", "facedetect")
+        aks_parameters.put(
+            "aks_graph",
+            "${AKS_ROOT}/graph_zoo/graph_facedetect_u200_u250_amdinfer.json",
+        )
+        return (model, [parameters, aks_parameters])
 
     def send_request(self, request, check_asserts=True):
         """
@@ -79,12 +83,12 @@ class TestInferImageFacedetectDPUCADF8H:
             outputs = response.getOutputs()
             assert len(outputs) == num_inputs
             for index, output in enumerate(outputs):
-                assert output.name == "input" + str(index)
+                assert output.name == ""
                 assert output.datatype == amdinfer.DataType.FP32
                 assert output.parameters.empty()
                 data = output.getFp32Data()
                 num_boxes = int(len(data) / 6)
-                assert output.shape == [6, num_boxes]
+                assert output.shape == [num_boxes, 6]
                 assert len(data) == len(
                     gold_response_output
                 ), f"{len(data)} != {len(gold_response_output)}"

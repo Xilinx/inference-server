@@ -32,8 +32,9 @@ class TestModelInfer:
         Test making an inference
         """
 
-        endpoint = self.rest_client.workerLoad("echo")
-        assert endpoint == "echo"
+        parameters = amdinfer.ParameterMap(["model"], ["echo"])
+        endpoint = self.rest_client.workerLoad("cplusplus", parameters)
+        assert endpoint == "cplusplus"
 
         input_data = amdinfer.InferenceRequestInput()
         input_data.shape = [1]
@@ -51,10 +52,6 @@ class TestModelInfer:
         assert len(output_data) == 1
         assert output_data[0] == 2
 
-        self.rest_client.modelUnload(endpoint)
+        self.rest_client.workerUnload(endpoint)
 
-        try:
-            while self.rest_client.modelReady(endpoint):
-                time.sleep(1)
-        except amdinfer.RuntimeError:
-            pass
+        amdinfer.waitUntilModelNotReady(self.rest_client, endpoint)
