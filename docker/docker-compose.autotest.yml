@@ -16,6 +16,8 @@
 version: '3.7'
 services:
   amdinfer-autotest:
+    # don't load repository on startup
+    command: amdinfer-server
     devices: []
     extra_hosts:
       - "amdinfer-autotest:127.0.1.1"

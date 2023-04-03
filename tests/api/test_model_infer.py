@@ -53,3 +53,5 @@ class TestModelInfer:
         assert output_data[0] == 2
 
         self.rest_client.workerUnload(endpoint)
+
+        amdinfer.waitUntilModelNotReady(self.rest_client, endpoint)

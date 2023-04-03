@@ -40,6 +40,8 @@ void wrapClient(py::module_& m) {
   m.def("waitUntilServerReady", &waitUntilServerReady, py::arg("client"));
   m.def("waitUntilModelReady", &waitUntilModelReady, py::arg("client"),
         py::arg("model"));
+  m.def("waitUntilModelNotReady", &waitUntilModelNotReady, py::arg("client"),
+        py::arg("model"));
 
   m.def("inferAsyncOrdered", &inferAsyncOrdered, py::arg("client"),
         py::arg("model"), py::arg("requests"));
