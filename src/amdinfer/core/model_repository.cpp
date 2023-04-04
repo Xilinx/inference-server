@@ -28,6 +28,7 @@
 #include "amdinfer/core/exceptions.hpp"      // for runtime_error
 #include "amdinfer/core/parameters.hpp"      // for ParameterMap
 #include "amdinfer/observation/logging.hpp"  // for AMDINFER_LOG_D...
+#include "amdinfer/util/filesystem.hpp"      // for findFile
 #include "model_config.pb.h"                 // for Config, InferP...
 
 namespace fs = std::filesystem;
@@ -69,21 +70,22 @@ void mapProtoToParameters2(
 
 void parseModel(const fs::path& repository, const std::string& model,
                 ParameterMap* parameters) {
-  const fs::path config_file = "config.pbtxt";
-
   auto model_path = repository / model;
-  auto config_path = model_path / config_file;
+
+  fs::path config_path;
+  try {
+    config_path = util::findFile(model_path, ".pbtxt");
+  } catch (const file_not_found_error&) {
+    // this is okay, try again at a different path as well
+  }
 
   // KServe can sometimes create directories like model/model/config_file
   // so if model/config_file doesn't exist, try searching a directory lower too
-  if (!fs::exists(config_path) &&
-      fs::exists(model_path / model / config_file)) {
+  if (config_path.empty()) {
     model_path /= model;
-    config_path = model_path / config_file;
+    // if this fails, let it throw
+    config_path = util::findFile(model_path / model, ".pbtxt");
   }
-
-  // TODO(varunsh): support other versions than 1/
-  const std::string model_base = model_path / "1/saved_model";
 
   inference::Config config;
 
@@ -102,6 +104,9 @@ void parseModel(const fs::path& repository, const std::string& model,
     throw file_read_error("Config file " + config_path.string() +
                           " could not be parsed");
   }
+
+  // TODO(varunsh): support other versions than 1/
+  const auto model_base = model_path / "1";
 
   if (config.platform() == "tensorflow_graphdef") {
     const auto& inputs = config.inputs();
@@ -125,19 +130,24 @@ void parseModel(const fs::path& repository, const std::string& model,
     }
 
     parameters->put("worker", "tfzendnn");
-    parameters->put("model", model_base + ".pb");
+    const auto model_file = util::findFile(model_base, ".pb");
+    parameters->put("model", model_file.string());
   } else if (config.platform() == "pytorch_torchscript") {
     parameters->put("worker", "ptzendnn");
-    parameters->put("model", model_base + ".pt");
+    const auto model_file = util::findFile(model_base, ".pt");
+    parameters->put("model", model_file.string());
   } else if (config.platform() == "onnx_onnxv1") {
     parameters->put("worker", "migraphx");
-    parameters->put("model", model_base + ".onnx");
+    const auto model_file = util::findFile(model_base, ".onnx");
+    parameters->put("model", model_file.string());
   } else if (config.platform() == "migraphx_mxr") {
     parameters->put("worker", "migraphx");
-    parameters->put("model", model_base + ".mxr");
+    const auto model_file = util::findFile(model_base, ".mxr");
+    parameters->put("model", model_file.string());
   } else if (config.platform() == "vitis_xmodel") {
     parameters->put("worker", "xmodel");
-    parameters->put("model", model_base + ".xmodel");
+    const auto model_file = util::findFile(model_base, ".xmodel");
+    parameters->put("model", model_file.string());
   } else {
     throw invalid_argument("Unknown platform: " + config.platform());
   }

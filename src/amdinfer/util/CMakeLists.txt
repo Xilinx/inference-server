@@ -17,8 +17,9 @@ set(base_targets
     base64
     compression
     ctpl
-    parse_env
     exec
+    filesystem
+    parse_env
     read_nth_line
     timer
 )
