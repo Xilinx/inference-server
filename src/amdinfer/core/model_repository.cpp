@@ -26,6 +26,7 @@
 
 #include "amdinfer/core/endpoints.hpp"       // for Endpoints
 #include "amdinfer/core/exceptions.hpp"      // for runtime_error
+#include "amdinfer/core/model_config.hpp"    // for ModelConfig
 #include "amdinfer/core/parameters.hpp"      // for ParameterMap
 #include "amdinfer/observation/logging.hpp"  // for AMDINFER_LOG_D...
 #include "amdinfer/util/filesystem.hpp"      // for findFile
@@ -87,7 +88,7 @@ void parseModel(const fs::path& repository, const std::string& model,
     config_path = util::findFile(model_path / model, ".pbtxt");
   }
 
-  inference::Config config;
+  inference::Config proto_config;
 
   // NOLINTNEXTLINE(cppcoreguidelines-pro-type-vararg, hicpp-vararg)
   int file_descriptor = open(config_path.c_str(), O_RDONLY | O_CLOEXEC);
@@ -100,7 +101,7 @@ void parseModel(const fs::path& repository, const std::string& model,
   google::protobuf::io::FileInputStream file_input(file_descriptor);
   file_input.SetCloseOnDelete(true);
 
-  if (!google::protobuf::TextFormat::Parse(&file_input, &config)) {
+  if (!google::protobuf::TextFormat::Parse(&file_input, &proto_config)) {
     throw file_read_error("Config file " + config_path.string() +
                           " could not be parsed");
   }
@@ -108,26 +109,30 @@ void parseModel(const fs::path& repository, const std::string& model,
   // TODO(varunsh): support other versions than 1/
   const auto model_base = model_path / "1";
 
+  ModelConfig config{proto_config};
+
   if (config.platform() == "tensorflow_graphdef") {
     const auto& inputs = config.inputs();
-    // currently supporting one input tensor
-    for (const auto& input : inputs) {
-      parameters->put("input_node", input.name());
-      const auto& shape = input.shape();
-      // ZenDNN assumes square image in HWC format
-      parameters->put("input_size", static_cast<int>(shape.at(0)));
-      parameters->put("image_channels",
-                      static_cast<int>(shape.at(shape.size() - 1)));
+    if (inputs.size() != 1) {
+      throw invalid_argument("Currently, there must be one input tensor");
     }
+    const auto& input = inputs.at(0);
+    parameters->put("input_node", input.getName());
+    const auto& input_shape = input.getShape();
+    // ZenDNN assumes square image in HWC format
+    parameters->put("input_size", static_cast<int>(input_shape.at(0)));
+    parameters->put("image_channels",
+                    static_cast<int>(input_shape.at(input_shape.size() - 1)));
 
     const auto& outputs = config.outputs();
-    // currently supporting one output tensor
-    for (const auto& output : outputs) {
-      parameters->put("output_node", output.name());
-      const auto& shape = output.shape();
-      // ZenDNN assumes [X] classes as output
-      parameters->put("output_classes", static_cast<int>(shape.at(0)));
+    if (outputs.size() != 1) {
+      throw invalid_argument("Currently, there must be one output tensor");
     }
+    const auto& output = outputs.at(0);
+    parameters->put("output_node", output.getName());
+    const auto& output_shape = output.getShape();
+    // ZenDNN assumes [X] classes as output
+    parameters->put("output_classes", static_cast<int>(output_shape.at(0)));
 
     parameters->put("worker", "tfzendnn");
     const auto model_file = util::findFile(model_base, ".pb");
@@ -152,7 +157,7 @@ void parseModel(const fs::path& repository, const std::string& model,
     throw invalid_argument("Unknown platform: " + config.platform());
   }
 
-  mapProtoToParameters2(config.parameters(), parameters);
+  mapProtoToParameters2(proto_config.parameters(), parameters);
 }
 
 void ModelRepository::setRepository(const fs::path& repository_path,
@@ -195,7 +200,7 @@ void UpdateListener::handleFileAction(
   AMDINFER_IF_LOGGING(Logger logger{Loggers::Server};)
   // arbitrary delay to make sure filesystem has settled
   const std::chrono::milliseconds delay{100};
-  if (filename == "config.pbtxt") {
+  if (filename == "proto_config.pbtxt") {
     if (action == efsw::Actions::Add) {
       std::this_thread::sleep_for(delay);
       auto model = fs::path(dir).parent_path().filename();

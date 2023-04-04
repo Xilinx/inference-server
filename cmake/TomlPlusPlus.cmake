@@ -1,5 +1,4 @@
-# Copyright 2021 Xilinx, Inc.
-# Copyright 2022 Advanced Micro Devices, Inc.
+# Copyright 2023 Advanced Micro Devices, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,20 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-add_subdirectory(memory_pool)
-
-list(
-  APPEND tests
-         inference_request_input
-         model_config
-         parameter_map
+include(FetchContent)
+FetchContent_Declare(
+  tomlplusplus GIT_REPOSITORY https://github.com/marzer/tomlplusplus.git
+  GIT_TAG v3.3.0
 )
-
-list(APPEND tests_libs "inference_request~parameters~inference_response"
-            "model_config~tensor~data_types" "parameters"
-)
-
-amdinfer_add_unit_tests("${tests}" "${tests_libs}")
-
-amdinfer_get_test_target(target model_config)
-target_link_libraries(${target} PRIVATE tomlplusplus::tomlplusplus)
+FetchContent_MakeAvailable(tomlplusplus)

@@ -26,6 +26,7 @@ function(amdinfer_add_protobuf_target target file build_grpc)
   target_include_directories(${target} PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
   set_target_options(${target})
   protobuf_generate(TARGET ${target} LANGUAGE cpp)
+  target_link_libraries(${target} INTERFACE protobuf::libprotobuf)
   if(${build_grpc})
     protobuf_generate(
       TARGET ${target}
