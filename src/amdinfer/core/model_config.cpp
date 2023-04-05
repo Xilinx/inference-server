@@ -184,6 +184,8 @@ ModelConfig::ModelConfig(const inference::Config& config) {
   configs_.emplace_back(model_name, platform, id, inputs, outputs);
 }
 
+size_t ModelConfig::size() const { return configs_.size(); }
+
 const std::string& ModelConfig::name(size_t index) const {
   return configs_.at(index).name;
 }

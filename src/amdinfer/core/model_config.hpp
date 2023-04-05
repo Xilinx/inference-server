@@ -70,6 +70,8 @@ class ModelConfig {
   explicit ModelConfig(const toml::v3::table& config);
   explicit ModelConfig(const inference::Config& config);
 
+  size_t size() const;
+
   const std::string& name(size_t index = 0) const;
   const std::string& platform(size_t index = 0) const;
   const std::string& id(size_t index = 0) const;
