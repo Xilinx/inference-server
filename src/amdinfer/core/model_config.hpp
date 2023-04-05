@@ -36,21 +36,48 @@ class Config;
 
 namespace amdinfer {
 
+class ModelConfigTensor : public Tensor {
+ public:
+  ModelConfigTensor(std::string name, std::vector<uint64_t> shape,
+                    DataType data_type, std::string id);
+
+  const std::string& id() const&;
+  std::string id() &&;
+
+ private:
+  std::string id_;
+};
+
+struct ModelConfigData {
+  ModelConfigData(std::string name, std::string platform, std::string id,
+                  std::vector<ModelConfigTensor> inputs,
+                  std::vector<ModelConfigTensor> outputs)
+    : name(std::move(name)),
+      platform(std::move(platform)),
+      id(std::move(id)),
+      inputs(std::move(inputs)),
+      outputs(std::move(outputs)) {}
+
+  std::string name;
+  std::string platform;
+  std::string id;
+  std::vector<ModelConfigTensor> inputs;
+  std::vector<ModelConfigTensor> outputs;
+};
+
 class ModelConfig {
  public:
   explicit ModelConfig(const toml::v3::table& config);
   explicit ModelConfig(const inference::Config& config);
 
-  const std::string& name() const;
-  const std::string& platform() const;
-  const std::vector<Tensor>& inputs() const;
-  const std::vector<Tensor>& outputs() const;
+  const std::string& name(size_t index = 0) const;
+  const std::string& platform(size_t index = 0) const;
+  const std::string& id(size_t index = 0) const;
+  const std::vector<ModelConfigTensor>& inputs(size_t index = 0) const;
+  const std::vector<ModelConfigTensor>& outputs(size_t index = 0) const;
 
  private:
-  std::string name_;
-  std::string platform_;
-  std::vector<Tensor> inputs_;
-  std::vector<Tensor> outputs_;
+  std::vector<ModelConfigData> configs_;
 };
 
 }  // namespace amdinfer

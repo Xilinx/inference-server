@@ -23,48 +23,101 @@ using namespace std::string_view_literals;
 
 namespace amdinfer {
 
-static constexpr std::string_view toml_str = R"(
-  name = "mnist"
-  platform = "tensorflow_graphdef"
+void validateMetadata(const ModelConfig& config, const std::string& golden_name,
+                      const std::string& golden_platform,
+                      const std::string& golden_id) {
+  EXPECT_EQ(config.name(), golden_name);
+  EXPECT_EQ(config.platform(), golden_platform);
+  EXPECT_EQ(config.id(), golden_id);
+}
 
-  [[inputs]]
-  name = "images_in"
-  datatype = "FP32"
-  shape = [28, 28, 1]
+void validateTensor(const ModelConfigTensor& tensor,
+                    const Tensor& golden_tensor, const std::string& id) {
+  EXPECT_EQ(tensor.getName(), golden_tensor.getName());
+  EXPECT_EQ(tensor.getDatatype(), golden_tensor.getDatatype());
+  EXPECT_EQ(tensor.getShape(), golden_tensor.getShape());
 
-  [[outputs]]
-  name = "flatten/Reshape"
-  datatype = "FP32"
-  shape = [10]
-)"sv;
+  EXPECT_EQ(tensor.id(), id);
+}
 
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
-TEST(UnitModelConfig, Construction) {
+TEST(UnitModelConfig, Basic) {
+  constexpr std::string_view toml_str = R"(
+    name = "mnist"
+    platform = "tensorflow_graphdef"
+
+    [[inputs]]
+    name = "images_in"
+    datatype = "FP32"
+    shape = [28, 28, 1]
+
+    [[outputs]]
+    name = "flatten/Reshape"
+    datatype = "FP32"
+    shape = [10]
+  )"sv;
+
   const auto toml = toml::parse(toml_str);
   ModelConfig config{toml};
 
-  EXPECT_EQ(config.name(), "mnist");
-  EXPECT_EQ(config.platform(), "tensorflow_graphdef");
+  ASSERT_NO_FATAL_FAILURE(
+    validateMetadata(config, "mnist", "tensorflow_graphdef", ""));
 
   const auto& inputs = config.inputs();
   EXPECT_EQ(inputs.size(), 1);
   const auto& input = inputs.at(0);
-  EXPECT_EQ(input.getName(), "images_in");
-  EXPECT_EQ(input.getDatatype(), DataType::Fp32);
-  const auto& input_shape = input.getShape();
-  EXPECT_EQ(input_shape.size(), 3);
-  const std::vector<uint64_t> golden_input_shape{28, 28, 1};
-  EXPECT_EQ(input_shape, golden_input_shape);
+
+  Tensor golden_input{"images_in", {28, 28, 1}, DataType::Fp32};
+  ASSERT_NO_FATAL_FAILURE(validateTensor(input, golden_input, ""));
 
   const auto& outputs = config.outputs();
   EXPECT_EQ(outputs.size(), 1);
   const auto& output = outputs.at(0);
-  EXPECT_EQ(output.getName(), "flatten/Reshape");
-  EXPECT_EQ(output.getDatatype(), DataType::Fp32);
-  const auto& output_shape = output.getShape();
-  EXPECT_EQ(output_shape.size(), 1);
-  const std::vector<uint64_t> golden_output_shape{10};
-  EXPECT_EQ(output_shape, golden_output_shape);
+
+  Tensor golden_output{"flatten/Reshape", {10}, DataType::Fp32};
+  ASSERT_NO_FATAL_FAILURE(validateTensor(output, golden_output, ""));
+}
+
+// NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
+TEST(UnitModelConfig, SingleEnsemble) {
+  constexpr std::string_view toml_str = R"(
+    [[models]]
+    name = "mnist"
+    platform = "tensorflow_graphdef"
+    id = "bar.pb"
+
+    [[models.inputs]]
+    name = "images_in"
+    datatype = "FP32"
+    shape = [28, 28, 1]
+    id = "image"
+
+    [[models.outputs]]
+    name = "flatten/Reshape"
+    datatype = "FP32"
+    shape = [10]
+    id = "classes"
+  )"sv;
+
+  const auto toml = toml::parse(toml_str);
+  ModelConfig config{toml};
+
+  ASSERT_NO_FATAL_FAILURE(
+    validateMetadata(config, "mnist", "tensorflow_graphdef", "bar.pb"));
+
+  const auto& inputs = config.inputs();
+  EXPECT_EQ(inputs.size(), 1);
+  const auto& input = inputs.at(0);
+
+  Tensor golden_input{"images_in", {28, 28, 1}, DataType::Fp32};
+  ASSERT_NO_FATAL_FAILURE(validateTensor(input, golden_input, "image"));
+
+  const auto& outputs = config.outputs();
+  EXPECT_EQ(outputs.size(), 1);
+  const auto& output = outputs.at(0);
+
+  Tensor golden_output{"flatten/Reshape", {10}, DataType::Fp32};
+  ASSERT_NO_FATAL_FAILURE(validateTensor(output, golden_output, "classes"));
 }
 
 }  // namespace amdinfer

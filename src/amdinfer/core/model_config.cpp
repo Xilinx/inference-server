@@ -48,7 +48,8 @@ std::string extractString(const toml::table& table, const std::string& key,
   return node.value<std::string>().value();
 }
 
-Tensor extractTensor(const toml::table& table);
+ModelConfigTensor extractModelConfigTensor(const toml::table& table);
+ModelConfigData extractConfig(const toml::table& table, bool is_ensemble);
 
 // if we're not explicitly handling the types, use this to catch the failure at
 // compile time
@@ -80,13 +81,20 @@ std::vector<T> extractArray(const toml::table& table, const std::string& key) {
         throw invalid_argument(
           "One or more values could not be converted to integer in " + key);
       }
-    } else if constexpr (std::is_same_v<T, Tensor>) {
+    } else if constexpr (std::is_same_v<T, ModelConfigTensor>) {
       if (!element.is_table()) {
         throw invalid_argument(
           "One or more values could not be converted to a table");
       }
       const auto& tbl = *element.as_table();
-      vector.push_back(extractTensor(tbl));
+      vector.push_back(extractModelConfigTensor(tbl));
+    } else if constexpr (std::is_same_v<T, ModelConfigData>) {
+      if (!element.is_table()) {
+        throw invalid_argument(
+          "One or more values could not be converted to a table");
+      }
+      const auto& tbl = *element.as_table();
+      vector.push_back(extractConfig(tbl, true));
     } else {
       static_assert(templated_false<T>);
     }
@@ -95,31 +103,58 @@ std::vector<T> extractArray(const toml::table& table, const std::string& key) {
   return vector;
 }
 
-Tensor extractTensor(const toml::table& table) {
+ModelConfigTensor extractModelConfigTensor(const toml::table& table) {
   auto name = extractString(table, "name", true);
   auto datatype_str = extractString(table, "datatype", true);
   auto shape = extractArray<uint64_t>(table, "shape");
+  auto id = extractString(table, "id", false);
 
   DataType datatype{datatype_str.c_str()};
 
-  return {name, shape, datatype};
+  return {name, shape, datatype, id};
 }
+
+ModelConfigData extractConfig(const toml::table& table, bool is_ensemble) {
+  auto name = extractString(table, "name", true);
+  auto platform = extractString(table, "platform", true);
+  auto id = extractString(table, "id", is_ensemble);
+
+  auto inputs = extractArray<ModelConfigTensor>(table, "inputs");
+  auto outputs = extractArray<ModelConfigTensor>(table, "outputs");
+
+  return {name, platform, id, inputs, outputs};
+}
+
+ModelConfigTensor::ModelConfigTensor(std::string name,
+                                     std::vector<uint64_t> shape,
+                                     DataType data_type, std::string id)
+  : Tensor(std::move(name), std::move(shape), data_type), id_(std::move(id)) {}
+
+const std::string& ModelConfigTensor::id() const& { return id_; }
+
+std::string ModelConfigTensor::id() && { return std::move(id_); }
 
 ModelConfig::ModelConfig(const toml::table& toml) {
   if (toml.empty()) {
     throw invalid_argument("The configuration cannot be empty");
   }
 
-  name_ = extractString(toml, "name", true);
-  platform_ = extractString(toml, "platform", true);
-
-  inputs_ = extractArray<Tensor>(toml, "inputs");
-  outputs_ = extractArray<Tensor>(toml, "outputs");
+  if (toml.contains("models")) {
+    configs_ = extractArray<ModelConfigData>(toml, "models");
+  } else {
+    configs_.emplace_back(extractConfig(toml, false));
+  }
 }
 
-ModelConfig::ModelConfig(const inference::Config& config)
-  : name_(config.name()), platform_(config.platform()) {
+ModelConfig::ModelConfig(const inference::Config& config) {
+  // proto does not support ensembles so id is fixed to empty
+  const std::string id;
+
+  const auto& model_name = config.name();
+  const auto& platform = config.platform();
+
   const auto& proto_inputs = config.inputs();
+  std::vector<ModelConfigTensor> inputs;
   for (const auto& input : proto_inputs) {
     const auto& name = input.name();
     const DataType datatype{input.datatype().c_str()};
@@ -129,10 +164,11 @@ ModelConfig::ModelConfig(const inference::Config& config)
     for (const auto& index : proto_shape) {
       shape.push_back(index);
     }
-    inputs_.emplace_back(name, shape, datatype);
+    inputs.emplace_back(name, shape, datatype, id);
   }
 
   const auto& proto_outputs = config.outputs();
+  std::vector<ModelConfigTensor> outputs;
   for (const auto& output : proto_outputs) {
     const auto& name = output.name();
     const DataType datatype{output.datatype().c_str()};
@@ -142,13 +178,26 @@ ModelConfig::ModelConfig(const inference::Config& config)
     for (const auto& index : proto_shape) {
       shape.push_back(index);
     }
-    outputs_.emplace_back(name, shape, datatype);
+    outputs.emplace_back(name, shape, datatype, id);
   }
+
+  configs_.emplace_back(model_name, platform, id, inputs, outputs);
 }
 
-const std::string& ModelConfig::name() const { return name_; }
-const std::string& ModelConfig::platform() const { return platform_; }
-const std::vector<Tensor>& ModelConfig::inputs() const { return inputs_; }
-const std::vector<Tensor>& ModelConfig::outputs() const { return outputs_; }
+const std::string& ModelConfig::name(size_t index) const {
+  return configs_.at(index).name;
+}
+const std::string& ModelConfig::platform(size_t index) const {
+  return configs_.at(index).platform;
+}
+const std::string& ModelConfig::id(size_t index) const {
+  return configs_.at(index).id;
+}
+const std::vector<ModelConfigTensor>& ModelConfig::inputs(size_t index) const {
+  return configs_.at(index).inputs;
+}
+const std::vector<ModelConfigTensor>& ModelConfig::outputs(size_t index) const {
+  return configs_.at(index).outputs;
+}
 
 }  // namespace amdinfer
