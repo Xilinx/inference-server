@@ -44,11 +44,14 @@ ParameterMap::ParameterMap(const std::vector<std::string> &keys,
 }
 
 void ParameterMap::put(const std::string &key, Parameter value) {
-  this->parameters_.try_emplace(key, std::move(value));
+  auto [iter, emplaced] = this->parameters_.try_emplace(key, std::move(value));
+  if (!emplaced) {
+    iter->second = value;
+  }
 }
 
 void ParameterMap::put(const std::string &key, const char *value) {
-  this->parameters_.try_emplace(key, std::string{value});
+  put(key, std::string{value});
 }
 
 void ParameterMap::erase(const std::string &key) {
