@@ -32,7 +32,7 @@ Added
 * Google Benchmark for writing performance-tracking tests (:pr:`147`)
 * Custom memory storage classes in the memory pool (:pr:`166`)
 * C++ worker for executing C++ "models" (:pr:`172`)
-* Model chaining (:pr:`176`)
+* Model chaining (:pr:`176`) and loading chains from ``modelLoad`` ()
 
 Changed
 ^^^^^^^
@@ -46,6 +46,7 @@ Changed
 * Refactor inference request objects and tensors (:pr:`172`)
 * Use const references throughout for ParameterMap (:pr:`172`)
 * Update workers' ``doRun`` method signature to produce and return a batch (:pr:`176`)
+* Use TOML-based configuration files in the repository by default ()
 
 Deprecated
 ^^^^^^^^^^

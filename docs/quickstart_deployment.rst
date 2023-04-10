@@ -39,16 +39,16 @@ The format of the directory is as follows:
     /
     ├─ model_a/
     │  ├─ 1/
-    │  │  ├─ saved_model.x
-    │  ├─ config.pbtxt
+    │  │  ├─ <model>.x
+    │  ├─ config.toml
     | model_b/
     |  ...
 
 The model name, ``model_a`` in this template, must be unique among the models loaded on a particular server.
 This name is used to name the endpoint used to make inference requests to.
-Under this directory, there must be a directory named ``1/`` containing the model file itself and a text file named ``config.pbtxt``.
-The model file must be named ``saved_model`` and the file extension depends on the type of the model.
-The ``config.pbtxt`` file contains metadata for the model.
+Under this directory, there must be a directory named ``1/`` containing the model file itself and a TOML file containing the metadata for the model.
+This file may be named anything but ``config.toml`` is suggested and used throughout this documentation.
+The model file can have an arbitrary name and the file extension depends on the type of the model.
 
 As an example, consider a deployment of a single ResNet50 model.
 
@@ -74,66 +74,54 @@ As an example, consider a deployment of a single ResNet50 model.
         $ mkdir -p /tmp/model_repository/resnet50/1
         $ mv ./resnet_v1_50_tf/resnet_v1_50_tf.xmodel /tmp/model_repository/resnet50/1/saved_model.xmodel
 
-For the models used here, their corresponding ``config.pbtxt`` should be placed in the chosen model repository (``/tmp/model_repository/resnet50/``):
+For the models used here, their corresponding ``config.toml`` should be placed in the chosen model repository (``/tmp/model_repository/resnet50/``):
 
 .. tabs::
 
-    .. code-tab:: text CPU
+    .. code-tab:: toml CPU
 
-        name: "resnet50"
-        platform: "tensorflow_graphdef"
-        inputs [
-            {
-                name: "input"
-                datatype: "FP32"
-                shape: [224,224,3]
-            }
-        ]
-        outputs [
-            {
-                name: "resnet_v1_50/predictions/Reshape_1"
-                datatype: "FP32"
-                shape: [1000]
-            }
-        ]
+        name = "resnet50"
+        platform = "tensorflow_graphdef"
+
+        [[inputs]]
+        name = "input"
+        datatype = "FP32"
+        shape = [224, 224, 3]
+
+        [[outputs]]
+        name = "resnet_v1_50/predictions/Reshape_1"
+        datatype = "FP32"
+        shape = [1000]
 
     .. code-tab:: text GPU
 
-        name: "resnet50"
-        platform: "onnx_onnxv1"
-        inputs [
-            {
-                name: "input"
-                datatype: "FP32"
-                shape: [224,224,3]
-            }
-        ]
-        outputs [
-            {
-                name: "output"
-                datatype: "FP32"
-                shape: [1000]
-            }
-        ]
+        name = "resnet50"
+        platform = "onnx_onnxv1"
+
+        [[inputs]]
+        name = "input"
+        datatype = "FP32"
+        shape = [224, 224, 3]
+
+        [[outputs]]
+        name = "output"
+        datatype = "FP32"
+        shape = [1000]
 
     .. code-tab:: console FPGA
 
-        name: "resnet50"
-        platform: "vitis_xmodel"
-        inputs [
-            {
-                name: "input"
-                datatype: "INT8"
-                shape: [224,224,3]
-            }
-        ]
-        outputs [
-            {
-                name: "output"
-                datatype: "INT8"
-                shape: [1000]
-            }
-        ]
+        name = "resnet50"
+        platform = "vitis_xmodel"
+
+        [[inputs]]
+        name = "input"
+        datatype = "INT8"
+        shape = [224, 224, 3]
+
+        [[outputs]]
+        name = "output"
+        datatype = "INT8"
+        shape = [1000]
 
 The name must match the name of the model directory.
 The platform identifies the type of the model and determines the file extension of the model file.
@@ -148,6 +136,8 @@ The supported platforms are:
     ``pytorch_torchscript``,``.pt``
     ``vitis_xmodel``,``.xmodel``
     ``onnx_onnxv1``,``.onnx``
+    ``migraphx_mxr``,``.mxr``
+    ``amdinfer_cpp``,``.so``
 
 The inputs and outputs define the list of input and output tensors for the model.
 The names of the tensors may be significant if the platform needs them to perform inference.
@@ -171,7 +161,7 @@ You can pull the deployment image with Docker if it exists or :ref:`build it you
 
     .. code-tab:: console FPGA
 
-        # this image is not currently pre-built
+        # this image is not currently pre-built but you can build it yourself
 
 Start the image
 ---------------
@@ -202,6 +192,6 @@ By default, the container will start the server executable in the container that
 The ``--publish`` flags will map ports 8998 and 50051 in the container to arbitrary free ports on the host machine for HTTP and gRPC requests, respectively.
 You can use ``docker ps`` to show the running containers and what ports on the host machine are used by the container.
 Your clients will need these port numbers to make requests to the server.
-The endpoints for each model will be the name of the model in the ``config.pbtxt``, which should match the name of the parent directory in the model repository.
+The endpoints for each model will be the name of the model in the ``config.toml``, which should match the name of the parent directory in the model repository.
 In this example, it would be "resnet50".
 Once the container is started, you and any clients can :ref:`make requests to it <quickstart_inference:Quickstart - Inference>`.

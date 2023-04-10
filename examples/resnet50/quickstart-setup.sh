@@ -22,23 +22,20 @@ wget -O tensorflow.zip https://www.xilinx.com/bin/public/openDownload?filename=t
 unzip -j "tensorflow.zip" "tf_resnetv1_50_imagenet_224_224_6.97G_2.5/float/resnet_v1_50_baseline_6.96B_922.pb" -d .
 mkdir -p model_repository/resnet50/1
 mv ./resnet_v1_50_baseline_6.96B_922.pb model_repository/resnet50/1/saved_model.pb
-echo 'name: "resnet50"
-platform: "tensorflow_graphdef"
-inputs [
-    {
-        name: "input"
-        datatype: "FP32"
-        shape: [224,224,3]
-    }
-]
-outputs [
-    {
-        name: "resnet_v1_50/predictions/Reshape_1"
-        datatype: "FP32"
-        shape: [1000]
-    }
-]' > model_repository/resnet50/config.pbtxt
+cat << EOF > model_repository/resnet50/config.toml
+name = "mnist"
+platform = "tensorflow_graphdef"
 
+[[inputs]]
+name = "images_in"
+datatype = "FP32"
+shape = [28, 28, 1]
+
+[[outputs]]
+name = "flatten/Reshape"
+datatype = "FP32"
+shape = [10]
+EOF
 
 # Download the class labels for this model
 wget https://github.com/Xilinx/inference-server/raw/main/examples/resnet50/imagenet_classes.txt

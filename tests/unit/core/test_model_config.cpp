@@ -85,14 +85,14 @@ TEST(UnitModelConfig, SingleEnsemble) {
 TEST(UnitModelConfig, Chain) {
   constexpr std::string_view toml_str = R"(
     [[models]]
-    name = "preprocess"
+    name = "invert_image"
     platform = "amdinfer_cpp"
     id = "base64_decode.so"
 
     [[models.inputs]]
     name = "image_in"
-    datatype = "INT8"
-    shape = [1080, 1920, 3]
+    datatype = "STRING"
+    shape = [1048576]
     id = ""
 
     [[models.outputs]]
@@ -102,7 +102,7 @@ TEST(UnitModelConfig, Chain) {
     id = "preprocessed_image"
 
     [[models]]
-    name = "invert_image"
+    name = "execute"
     platform = "amdinfer_cpp"
     id = "invert_image.so"
 
@@ -119,7 +119,7 @@ TEST(UnitModelConfig, Chain) {
     id = "inverted_image"
 
     [[models]]
-    name = "postprocess"
+    name = "invert_image_postprocess"
     platform = "amdinfer_cpp"
     id = "base64_encode.so"
 
@@ -131,8 +131,8 @@ TEST(UnitModelConfig, Chain) {
 
     [[models.outputs]]
     name = "image_out"
-    datatype = "INT8"
-    shape = [1080, 1920, 3]
+    datatype = "STRING"
+    shape = [1048576]
     id = "postprocessed_image"
   )"sv;
 

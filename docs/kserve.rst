@@ -63,34 +63,32 @@ The model format for the AMD Inference Server is the following:
     /
     ├─ model_a/
     │  ├─ 1/
-    │  │  ├─ saved_model.x
-    │  ├─ config.pbtxt
+    │  │  ├─ <model>.x
+    │  ├─ <config>.toml
 
 The model name, ``model_a`` in this template, must be unique among the models loaded on a particular server.
 This name is used to name the endpoint used to make inference requests to.
-Under this directory, there must be a directory named ``1/`` containing the model file itself and a text file named ``config.pbtxt``.
-The model file must be named ``saved_model`` and the file extension depends on the type of the model.
-The ``config.pbtxt`` file contains metadata for the model.
+Under this directory, there must be a directory named ``1/`` containing the model file itself and a TOML file describing the configuration.
+This file, ``<config>.toml`` in this template, can have any name though ``config.toml`` is suggested and will be used in this documentation.
+You can also use ``.pbtxt`` format for single models as well.
+The model file can have an arbitrary name and the file extension depends on the type of the model.
+The ``config.toml`` file contains metadata for the model.
 Consider this example of an MNIST TensorFlow model:
 
-.. code-block:: text
+.. code-block:: toml
 
-    name: "mnist"
-    platform: "tensorflow_graphdef"
-    inputs [
-      {
-        name: "images_in"
-        datatype: "FP32"
-        shape: [28,28,1]
-      }
-    ]
-    outputs [
-      {
-        name: "flatten/Reshape"
-        datatype: "FP32"
-        shape: [10]
-      }
-    ]
+    name = "mnist"
+    platform = "tensorflow_graphdef"
+
+    [[inputs]]
+    name = "images_in"
+    datatype = "FP32"
+    shape = [28, 28, 1]
+
+    [[outputs]]
+    name = "flatten/Reshape"
+    datatype = "FP32"
+    shape = [10]
 
 The name must match the name of the model directory, i.e. ``model_a``.
 The platform identifies the type of the model and determines the file extension of the model file.
@@ -105,6 +103,8 @@ The supported platforms are:
     ``pytorch_torchscript``,``.pt``
     ``vitis_xmodel``,``.xmodel``
     ``onnx_onnxv1``,``.onnx``
+    ``migraphx_mxr``,``.mxr``
+    ``amdinfer_cpp``,``.so``
 
 The inputs and outputs define the list of input and output tensors for the model.
 The names of the tensors may be significant if the platform needs them to perform inference.

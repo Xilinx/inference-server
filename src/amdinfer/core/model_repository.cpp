@@ -31,6 +31,7 @@
 #include "amdinfer/core/parameters.hpp"      // for ParameterMap
 #include "amdinfer/observation/logging.hpp"  // for AMDINFER_LOG_D...
 #include "amdinfer/util/filesystem.hpp"      // for findFile
+#include "amdinfer/util/string.hpp"          // for endsWith
 #include "model_config.hpp"                  // for ModelConfig
 #include "model_config.pb.h"                 // for Config, InferP...
 
@@ -176,7 +177,7 @@ void UpdateListener::handleFileAction(
   AMDINFER_IF_LOGGING(Logger logger{Loggers::Server};)
   // arbitrary delay to make sure filesystem has settled
   const std::chrono::milliseconds delay{100};
-  if (filename == "proto_config.pbtxt") {
+  if (filename == "config.pbtxt" || util::endsWith(filename, "toml")) {
     if (action == efsw::Actions::Add) {
       std::this_thread::sleep_for(delay);
       auto model_name = fs::path(dir).parent_path().filename();
