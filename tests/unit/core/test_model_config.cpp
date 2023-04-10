@@ -140,8 +140,8 @@ TEST(UnitModelConfig, Chain) {
   ModelConfig config{toml};
 
   ASSERT_EQ(config.size(), 3);
-  std::array<std::string, 3> models{"preprocess", "invert_image",
-                                    "postprocess"};
+  std::array<std::string, 3> models{"invert_image", "execute",
+                                    "invert_image_postprocess"};
 
   auto index = 0;
   for (const auto& [model, parameters] : config) {
