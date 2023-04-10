@@ -22,7 +22,8 @@ namespace amdinfer::util {
 /**
  * @brief Get the path to the file in a directory with the given extension. If
  * there is more than one file in the directory that matches, only the first one
- * found is returned. Subdirectories are not searched.
+ * found is returned. If extension is empty, then the first found file is
+ * returned. Subdirectories are not searched.
  *
  * @param directory path to search in
  * @param extension extension of the file to search for
@@ -30,6 +31,8 @@ namespace amdinfer::util {
  */
 std::filesystem::path findFile(const std::filesystem::path& directory,
                                const std::string& extension);
+
+std::string readFile(const std::string& path);
 
 }  // namespace amdinfer::util
 

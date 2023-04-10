@@ -14,6 +14,8 @@
 
 #include "amdinfer/util/filesystem.hpp"
 
+#include <fstream>
+
 #include "amdinfer/core/exceptions.hpp"
 
 namespace fs = std::filesystem;
@@ -21,21 +23,39 @@ namespace fs = std::filesystem;
 namespace amdinfer::util {
 
 fs::path findFile(const fs::path& directory, const std::string& extension) {
+  if (!fs::exists(directory)) {
+    return "";
+  }
+
   fs::path found_path;
   for (const auto& entry : fs::directory_iterator(directory)) {
     if (entry.is_directory()) {
       continue;
     }
     const auto& path = entry.path();
-    if (path.extension().string() != extension) {
+    if (!extension.empty() && path.extension().string() != extension) {
       continue;
     }
 
     return path;
   }
 
-  throw file_not_found_error("No file found in " + directory.string() +
-                             " with the extension " + extension);
+  return "";
+}
+
+std::string readFile(const std::string& path) {
+  const size_t block_size = 4096;  // arbitrary value for block size
+  std::ifstream stream{path};
+  // throw exception in case irrecoverable read error
+  stream.exceptions(std::ios_base::badbit);
+
+  std::string out;
+  std::string buffer(block_size, '\0');
+  while (stream.read(buffer.data(), block_size)) {
+    out.append(buffer, 0, stream.gcount());
+  }
+  out.append(buffer, 0, stream.gcount());
+  return out;
 }
 
 }  // namespace amdinfer::util

@@ -40,7 +40,9 @@ amdinfer_add_protobuf_target(lib_config model_config.proto OFF)
 target_include_directories(
   model_repository PRIVATE $<TARGET_PROPERTY:lib_config,INCLUDE_DIRECTORIES>
 )
-target_link_libraries(model_repository INTERFACE efsw lib_config)
+target_link_libraries(
+  model_repository PRIVATE tomlplusplus::tomlplusplus INTERFACE efsw lib_config
+)
 add_dependencies(model_repository lib_config)
 
 target_include_directories(

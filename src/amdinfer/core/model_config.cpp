@@ -24,6 +24,7 @@
 #include <filesystem>
 
 #include "amdinfer/core/exceptions.hpp"
+#include "amdinfer/util/filesystem.hpp"
 #include "model_config.pb.h"  // for Config, InferP...
 
 namespace fs = std::filesystem;
@@ -134,6 +135,58 @@ const std::string& ModelConfigTensor::id() const& { return id_; }
 
 std::string ModelConfigTensor::id() && { return std::move(id_); }
 
+void ModelConfig::createModels() {
+  for (const auto& config : configs_) {
+    models_.emplace_back(config.name, ParameterMap{});
+    auto& parameters = std::get<1>(models_.back());
+    std::string extension;
+    if (config.platform == "tensorflow_graphdef") {
+      const auto& inputs = config.inputs;
+      if (inputs.size() != 1) {
+        throw invalid_argument("Currently, there must be one input tensor");
+      }
+      const auto& input = inputs.at(0);
+      parameters.put("input_node", input.getName());
+      const auto& input_shape = input.getShape();
+      // ZenDNN assumes square image in HWC format
+      parameters.put("input_size", static_cast<int>(input_shape.at(0)));
+      parameters.put("image_channels",
+                     static_cast<int>(input_shape.at(input_shape.size() - 1)));
+
+      const auto& outputs = config.outputs;
+      if (outputs.size() != 1) {
+        throw invalid_argument("Currently, there must be one output tensor");
+      }
+      const auto& output = outputs.at(0);
+      parameters.put("output_node", output.getName());
+      const auto& output_shape = output.getShape();
+      // ZenDNN assumes [X] classes as output
+      parameters.put("output_classes", static_cast<int>(output_shape.at(0)));
+
+      parameters.put("worker", "tfzendnn");
+    } else if (config.platform == "pytorch_torchscript") {
+      parameters.put("worker", "ptzendnn");
+    } else if (config.platform == "onnx_onnxv1") {
+      parameters.put("worker", "migraphx");
+    } else if (config.platform == "migraphx_mxr") {
+      parameters.put("worker", "migraphx");
+    } else if (config.platform == "vitis_xmodel") {
+      parameters.put("worker", "xmodel");
+    } else if (config.platform == "amdinfer_cpp") {
+      parameters.put("worker", "cplusplus");
+    } else {
+      throw invalid_argument("Unknown platform: " + config.platform);
+    }
+  }
+
+  // assuming a static chain for now so define it in reverse order
+  for (auto i = models_.size() - 1; i-- > 0;) {
+    const auto& model = std::get<0>(models_.at(i + 1));
+    auto& parameters = std::get<1>(models_.at(i));
+    parameters.put("next", model);
+  }
+}
+
 ModelConfig::ModelConfig(const toml::table& toml) {
   if (toml.empty()) {
     throw invalid_argument("The configuration cannot be empty");
@@ -144,6 +197,8 @@ ModelConfig::ModelConfig(const toml::table& toml) {
   } else {
     configs_.emplace_back(extractConfig(toml, false));
   }
+
+  this->createModels();
 }
 
 ModelConfig::ModelConfig(const inference::Config& config) {
@@ -182,24 +237,54 @@ ModelConfig::ModelConfig(const inference::Config& config) {
   }
 
   configs_.emplace_back(model_name, platform, id, inputs, outputs);
+
+  this->createModels();
+}
+
+void ModelConfig::setModelFiles(const std::filesystem::path& base_path) {
+  auto i = 0;
+  for (auto& [_, parameters] : models_) {
+    const auto& config = configs_.at(i);
+    if (config.id.empty()) {
+      auto model = util::findFile(base_path, "");
+      parameters.put("model", model.string());
+    } else {
+      parameters.put("model", (base_path / config.id).string());
+    }
+    i++;
+  }
 }
 
 size_t ModelConfig::size() const { return configs_.size(); }
 
-const std::string& ModelConfig::name(size_t index) const {
-  return configs_.at(index).name;
+std::pair<std::string, ParameterMap> ModelConfig::get(size_t index) {
+  return models_.at(index);
 }
-const std::string& ModelConfig::platform(size_t index) const {
-  return configs_.at(index).platform;
+
+ModelConfig::Iterator ModelConfig::begin() { return models_.begin(); }
+ModelConfig::ConstIterator ModelConfig::begin() const {
+  return models_.cbegin();
 }
-const std::string& ModelConfig::id(size_t index) const {
-  return configs_.at(index).id;
+ModelConfig::ConstIterator ModelConfig::cbegin() const {
+  return models_.cbegin();
 }
-const std::vector<ModelConfigTensor>& ModelConfig::inputs(size_t index) const {
-  return configs_.at(index).inputs;
+ModelConfig::ReverseIterator ModelConfig::rbegin() { return models_.rbegin(); }
+ModelConfig::ConstReverseIterator ModelConfig::rbegin() const {
+  return models_.crbegin();
 }
-const std::vector<ModelConfigTensor>& ModelConfig::outputs(size_t index) const {
-  return configs_.at(index).outputs;
+ModelConfig::ConstReverseIterator ModelConfig::crbegin() const {
+  return models_.crbegin();
+}
+
+ModelConfig::Iterator ModelConfig::end() { return models_.end(); }
+ModelConfig::ConstIterator ModelConfig::end() const { return models_.cend(); }
+ModelConfig::ConstIterator ModelConfig::cend() const { return models_.cend(); }
+ModelConfig::ReverseIterator ModelConfig::rend() { return models_.rend(); }
+ModelConfig::ConstReverseIterator ModelConfig::rend() const {
+  return models_.crend();
+}
+ModelConfig::ConstReverseIterator ModelConfig::crend() const {
+  return models_.crend();
 }
 
 }  // namespace amdinfer

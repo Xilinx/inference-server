@@ -19,6 +19,7 @@
 #include <google/protobuf/io/zero_copy_stream_impl.h>  // for FileInputStream
 #include <google/protobuf/repeated_ptr_field.h>        // for RepeatedPtrField
 #include <google/protobuf/text_format.h>               // for TextFormat
+#include <toml++/toml.h>
 
 #include <chrono>      // for milliseconds
 #include <filesystem>  // for path, operator/
@@ -30,6 +31,7 @@
 #include "amdinfer/core/parameters.hpp"      // for ParameterMap
 #include "amdinfer/observation/logging.hpp"  // for AMDINFER_LOG_D...
 #include "amdinfer/util/filesystem.hpp"      // for findFile
+#include "model_config.hpp"                  // for ModelConfig
 #include "model_config.pb.h"                 // for Config, InferP...
 
 namespace fs = std::filesystem;
@@ -69,95 +71,69 @@ void mapProtoToParameters2(
   }
 }
 
-void parseModel(const fs::path& repository, const std::string& model,
-                ParameterMap* parameters) {
+fs::path findConfigFile(const fs::path& model_path, const std::string& model) {
+  std::array extensions{".toml", ".pbtxt"};
+  for (const auto* extension : extensions) {
+    auto config_path = util::findFile(model_path, extension);
+    if (!config_path.empty()) {
+      return config_path;
+    }
+
+    // KServe can sometimes create directories like model/model/config_file
+    // so if model/config_file doesn't exist, try searching a directory lower
+    // too
+    config_path = util::findFile(model_path / model, extension);
+    if (!config_path.empty()) {
+      return config_path;
+    }
+  }
+
+  throw file_not_found_error("No configuration file could be loaded in " +
+                             model_path.string());
+}
+
+ModelConfig openConfigFile(const fs::path& config_path) {
+  if (config_path.extension() == ".pbtxt") {
+    inference::Config proto_config;
+
+    // NOLINTNEXTLINE(cppcoreguidelines-pro-type-vararg, hicpp-vararg)
+    int file_descriptor = open(config_path.c_str(), O_RDONLY | O_CLOEXEC);
+    if (file_descriptor < 0) {
+      throw file_not_found_error("Config file " + config_path.string() +
+                                 " could not be opened");
+    }
+
+    google::protobuf::io::FileInputStream file_input(file_descriptor);
+    file_input.SetCloseOnDelete(true);
+
+    if (!google::protobuf::TextFormat::Parse(&file_input, &proto_config)) {
+      throw file_read_error("Config file " + config_path.string() +
+                            " could not be parsed");
+    }
+
+    return ModelConfig{proto_config};
+  } else if (config_path.extension() == ".toml") {
+    auto toml = toml::parse_file(config_path.string());
+
+    return ModelConfig{toml};
+  }
+  throw invalid_argument(
+    "Unknown config file extension passed to openConfigFile: " +
+    config_path.extension().string());
+}
+
+ModelConfig parseModel(const fs::path& repository, const std::string& model) {
+  AMDINFER_IF_LOGGING(Logger logger{Loggers::Server};)
   auto model_path = repository / model;
 
-  fs::path config_path;
-  try {
-    config_path = util::findFile(model_path, ".pbtxt");
-  } catch (const file_not_found_error&) {
-    // this is okay, try again at a different path as well
-  }
-
-  // KServe can sometimes create directories like model/model/config_file
-  // so if model/config_file doesn't exist, try searching a directory lower too
-  if (config_path.empty()) {
-    model_path /= model;
-    // if this fails, let it throw
-    config_path = util::findFile(model_path / model, ".pbtxt");
-  }
-
-  inference::Config proto_config;
-
-  // NOLINTNEXTLINE(cppcoreguidelines-pro-type-vararg, hicpp-vararg)
-  int file_descriptor = open(config_path.c_str(), O_RDONLY | O_CLOEXEC);
-  AMDINFER_IF_LOGGING(Logger logger{Loggers::Server};)
-  if (file_descriptor < 0) {
-    throw file_not_found_error("Config file " + config_path.string() +
-                               " could not be opened");
-  }
-
-  google::protobuf::io::FileInputStream file_input(file_descriptor);
-  file_input.SetCloseOnDelete(true);
-
-  if (!google::protobuf::TextFormat::Parse(&file_input, &proto_config)) {
-    throw file_read_error("Config file " + config_path.string() +
-                          " could not be parsed");
-  }
+  auto config_path = findConfigFile(model_path, model);
+  auto config = openConfigFile(config_path);
 
   // TODO(varunsh): support other versions than 1/
-  const auto model_base = model_path / "1";
+  const auto model_base = config_path.parent_path() / "1";
 
-  ModelConfig config{proto_config};
-
-  if (config.platform() == "tensorflow_graphdef") {
-    const auto& inputs = config.inputs();
-    if (inputs.size() != 1) {
-      throw invalid_argument("Currently, there must be one input tensor");
-    }
-    const auto& input = inputs.at(0);
-    parameters->put("input_node", input.getName());
-    const auto& input_shape = input.getShape();
-    // ZenDNN assumes square image in HWC format
-    parameters->put("input_size", static_cast<int>(input_shape.at(0)));
-    parameters->put("image_channels",
-                    static_cast<int>(input_shape.at(input_shape.size() - 1)));
-
-    const auto& outputs = config.outputs();
-    if (outputs.size() != 1) {
-      throw invalid_argument("Currently, there must be one output tensor");
-    }
-    const auto& output = outputs.at(0);
-    parameters->put("output_node", output.getName());
-    const auto& output_shape = output.getShape();
-    // ZenDNN assumes [X] classes as output
-    parameters->put("output_classes", static_cast<int>(output_shape.at(0)));
-
-    parameters->put("worker", "tfzendnn");
-    const auto model_file = util::findFile(model_base, ".pb");
-    parameters->put("model", model_file.string());
-  } else if (config.platform() == "pytorch_torchscript") {
-    parameters->put("worker", "ptzendnn");
-    const auto model_file = util::findFile(model_base, ".pt");
-    parameters->put("model", model_file.string());
-  } else if (config.platform() == "onnx_onnxv1") {
-    parameters->put("worker", "migraphx");
-    const auto model_file = util::findFile(model_base, ".onnx");
-    parameters->put("model", model_file.string());
-  } else if (config.platform() == "migraphx_mxr") {
-    parameters->put("worker", "migraphx");
-    const auto model_file = util::findFile(model_base, ".mxr");
-    parameters->put("model", model_file.string());
-  } else if (config.platform() == "vitis_xmodel") {
-    parameters->put("worker", "xmodel");
-    const auto model_file = util::findFile(model_base, ".xmodel");
-    parameters->put("model", model_file.string());
-  } else {
-    throw invalid_argument("Unknown platform: " + config.platform());
-  }
-
-  mapProtoToParameters2(proto_config.parameters(), parameters);
+  config.setModelFiles(model_base);
+  return config;
 }
 
 void ModelRepository::setRepository(const fs::path& repository_path,
@@ -203,13 +179,14 @@ void UpdateListener::handleFileAction(
   if (filename == "proto_config.pbtxt") {
     if (action == efsw::Actions::Add) {
       std::this_thread::sleep_for(delay);
-      auto model = fs::path(dir).parent_path().filename();
-      ParameterMap params;
+      auto model_name = fs::path(dir).parent_path().filename();
       try {
-        parseModel(repository_, model, &params);
-        endpoints_->load(model, params);
+        auto config = parseModel(repository_, model_name);
+        for (const auto& [model, parameters] : config) {
+          endpoints_->load(model, parameters);
+        }
       } catch (const runtime_error&) {
-        AMDINFER_LOG_INFO(logger, "Error loading " + model.string());
+        AMDINFER_LOG_INFO(logger, "Error loading " + model_name.string());
       }
     } else if (action == efsw::Actions::Delete) {
       // arbitrary delay to make sure filesystem has settled

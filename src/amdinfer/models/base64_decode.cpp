@@ -80,7 +80,7 @@ amdinfer::BatchPtr run(amdinfer::Batch* batch) {
 
     auto new_request = req->propagate();
 
-    auto* input_data = static_cast<char*>(input.getData());
+    const auto* input_data = static_cast<char*>(input.getData());
     auto decoded_str = amdinfer::util::base64Decode(input_data, input_size);
     std::vector<char> data(decoded_str.begin(), decoded_str.end());
     cv::Mat img;

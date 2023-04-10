@@ -23,7 +23,7 @@ list(
 )
 
 list(APPEND tests_libs "inference_request~parameters~inference_response"
-            "model_config~tensor~data_types" "parameters"
+            "model_config~tensor~data_types~parameters~util" "parameters"
 )
 
 amdinfer_add_unit_tests("${tests}" "${tests_libs}")

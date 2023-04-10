@@ -20,9 +20,13 @@
 #ifndef GUARD_AMDINFER_CORE_MODEL_CONFIG
 #define GUARD_AMDINFER_CORE_MODEL_CONFIG
 
-#include <amdinfer/core/tensor.hpp>
+#include <filesystem>
 #include <string>
+#include <unordered_map>
 #include <vector>
+
+#include "amdinfer/core/parameters.hpp"
+#include "amdinfer/core/tensor.hpp"
 
 namespace toml {
 inline namespace v3 {
@@ -66,20 +70,52 @@ struct ModelConfigData {
 };
 
 class ModelConfig {
+  using Container = std::vector<std::pair<std::string, ParameterMap>>;
+  using Iterator = Container::iterator;
+  using ConstIterator = Container::const_iterator;
+  using ReverseIterator = Container::reverse_iterator;
+  using ConstReverseIterator = Container::const_reverse_iterator;
+
  public:
   explicit ModelConfig(const toml::v3::table& config);
   explicit ModelConfig(const inference::Config& config);
 
+  std::pair<std::string, ParameterMap> get(size_t index);
+  void setModelFiles(const std::filesystem::path& base_path);
+
   size_t size() const;
 
-  const std::string& name(size_t index = 0) const;
-  const std::string& platform(size_t index = 0) const;
-  const std::string& id(size_t index = 0) const;
-  const std::vector<ModelConfigTensor>& inputs(size_t index = 0) const;
-  const std::vector<ModelConfigTensor>& outputs(size_t index = 0) const;
+  /// Returns a read/write iterator to the first parameter in the object
+  Iterator begin();
+  /// Returns a read iterator to the first parameter in the object
+  [[nodiscard]] ConstIterator begin() const;
+  /// Returns a read iterator to the first parameter in the object
+  [[nodiscard]] ConstIterator cbegin() const;
+  /// Returns a read/write iterator to the first parameter in the object
+  ReverseIterator rbegin();
+  /// Returns a read iterator to the first parameter in the object
+  [[nodiscard]] ConstReverseIterator rbegin() const;
+  /// Returns a read iterator to the first parameter in the object
+  [[nodiscard]] ConstReverseIterator crbegin() const;
+
+  /// Returns a read/write iterator to one past the last parameter in the object
+  Iterator end();
+  /// Returns a read iterator to one past the last parameter in the object
+  [[nodiscard]] ConstIterator end() const;
+  /// Returns a read iterator to one past the last parameter in the object
+  [[nodiscard]] ConstIterator cend() const;
+  /// Returns a read/write iterator to the first parameter in the object
+  ReverseIterator rend();
+  /// Returns a read iterator to the first parameter in the object
+  [[nodiscard]] ConstReverseIterator rend() const;
+  /// Returns a read iterator to the first parameter in the object
+  [[nodiscard]] ConstReverseIterator crend() const;
 
  private:
   std::vector<ModelConfigData> configs_;
+  Container models_;
+
+  void createModels();
 };
 
 }  // namespace amdinfer

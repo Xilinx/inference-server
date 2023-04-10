@@ -23,24 +23,6 @@ using namespace std::string_view_literals;
 
 namespace amdinfer {
 
-void validateMetadata(const ModelConfig& config, size_t index,
-                      const std::string& golden_name,
-                      const std::string& golden_platform,
-                      const std::string& golden_id) {
-  EXPECT_EQ(config.name(index), golden_name);
-  EXPECT_EQ(config.platform(index), golden_platform);
-  EXPECT_EQ(config.id(index), golden_id);
-}
-
-void validateTensor(const ModelConfigTensor& tensor,
-                    const Tensor& golden_tensor, const std::string& id) {
-  EXPECT_EQ(tensor.getName(), golden_tensor.getName());
-  EXPECT_EQ(tensor.getDatatype(), golden_tensor.getDatatype());
-  EXPECT_EQ(tensor.getShape(), golden_tensor.getShape());
-
-  EXPECT_EQ(tensor.id(), id);
-}
-
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST(UnitModelConfig, Basic) {
   constexpr std::string_view toml_str = R"(
@@ -61,22 +43,11 @@ TEST(UnitModelConfig, Basic) {
   const auto toml = toml::parse(toml_str);
   ModelConfig config{toml};
 
-  ASSERT_NO_FATAL_FAILURE(
-    validateMetadata(config, 0, "mnist", "tensorflow_graphdef", ""));
-
-  const auto& inputs = config.inputs();
-  EXPECT_EQ(inputs.size(), 1);
-  const auto& input = inputs.at(0);
-
-  Tensor golden_input{"images_in", {28, 28, 1}, DataType::Fp32};
-  ASSERT_NO_FATAL_FAILURE(validateTensor(input, golden_input, ""));
-
-  const auto& outputs = config.outputs();
-  EXPECT_EQ(outputs.size(), 1);
-  const auto& output = outputs.at(0);
-
-  Tensor golden_output{"flatten/Reshape", {10}, DataType::Fp32};
-  ASSERT_NO_FATAL_FAILURE(validateTensor(output, golden_output, ""));
+  ASSERT_EQ(config.size(), 1);
+  for (const auto& [model, parameters] : config) {
+    ASSERT_EQ(model, "mnist");
+    ASSERT_EQ(parameters.get<std::string>("worker"), "tfzendnn");
+  }
 }
 
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
@@ -103,22 +74,11 @@ TEST(UnitModelConfig, SingleEnsemble) {
   const auto toml = toml::parse(toml_str);
   ModelConfig config{toml};
 
-  ASSERT_NO_FATAL_FAILURE(
-    validateMetadata(config, 0, "mnist", "tensorflow_graphdef", "bar.pb"));
-
-  const auto& inputs = config.inputs();
-  EXPECT_EQ(inputs.size(), 1);
-  const auto& input = inputs.at(0);
-
-  Tensor golden_input{"images_in", {28, 28, 1}, DataType::Fp32};
-  ASSERT_NO_FATAL_FAILURE(validateTensor(input, golden_input, "image"));
-
-  const auto& outputs = config.outputs();
-  EXPECT_EQ(outputs.size(), 1);
-  const auto& output = outputs.at(0);
-
-  Tensor golden_output{"flatten/Reshape", {10}, DataType::Fp32};
-  ASSERT_NO_FATAL_FAILURE(validateTensor(output, golden_output, "classes"));
+  ASSERT_EQ(config.size(), 1);
+  for (const auto& [model, parameters] : config) {
+    ASSERT_EQ(model, "mnist");
+    ASSERT_EQ(parameters.get<std::string>("worker"), "tfzendnn");
+  }
 }
 
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
@@ -177,38 +137,17 @@ TEST(UnitModelConfig, Chain) {
   )"sv;
 
   const auto toml = toml::parse(toml_str);
-  std::cout << toml::json_formatter{toml} << std::endl;
   ModelConfig config{toml};
 
-  ASSERT_NO_FATAL_FAILURE(validateMetadata(config, 0, "preprocess",
-                                           "amdinfer_cpp", "base64_decode.so"));
-  ASSERT_NO_FATAL_FAILURE(validateMetadata(config, 1, "invert_image",
-                                           "amdinfer_cpp", "invert_image.so"));
-  ASSERT_NO_FATAL_FAILURE(validateMetadata(config, 2, "postprocess",
-                                           "amdinfer_cpp", "base64_encode.so"));
+  ASSERT_EQ(config.size(), 3);
+  std::array<std::string, 3> models{"preprocess", "invert_image",
+                                    "postprocess"};
 
-  const auto count = 3;
-
-  ASSERT_EQ(config.size(), count);
-
-  std::array<std::string, count> golden_input_ids{"", "preprocessed_image",
-                                                  "inverted_image"};
-  std::array<std::string, count> golden_output_ids{
-    "preprocessed_image", "inverted_image", "postprocessed_image"};
-
-  for (auto i = 0; i < count; ++i) {
-    const auto& inputs = config.inputs(i);
-    ASSERT_EQ(inputs.size(), 1);
-    const auto& outputs = config.outputs(i);
-    ASSERT_EQ(outputs.size(), 1);
-    const auto& input = inputs.at(0);
-    const auto& output = outputs.at(0);
-    Tensor golden_input{"image_in", {1080, 1920, 3}, DataType::Int8};
-    ASSERT_NO_FATAL_FAILURE(
-      validateTensor(input, golden_input, golden_input_ids.at(i)));
-    Tensor golden_output{"image_out", {1080, 1920, 3}, DataType::Int8};
-    ASSERT_NO_FATAL_FAILURE(
-      validateTensor(output, golden_output, golden_output_ids.at(i)));
+  auto index = 0;
+  for (const auto& [model, parameters] : config) {
+    ASSERT_EQ(model, models.at(index));
+    ASSERT_EQ(parameters.get<std::string>("worker"), "cplusplus");
+    index++;
   }
 }
 

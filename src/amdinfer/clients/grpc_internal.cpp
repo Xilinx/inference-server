@@ -182,7 +182,7 @@ struct SetOutputData {
     data.resize(bytes_to_copy);
     const auto* contents = getTensorContents<T>(tensor);
     if constexpr (std::is_same_v<T, char>) {
-      std::memcpy(data.data(), contents, size * sizeof(std::byte));
+      std::memcpy(data.data(), (*contents)->data(), size * sizeof(T));
       output->setData(std::move(data));
     } else {
       if constexpr (util::is_any_v<T, int8_t, uint8_t, int16_t, uint16_t,
