@@ -43,6 +43,7 @@
 #include "amdinfer/observation/tracing.hpp"  // for startFollowSpan, SpanPtr
 #include "amdinfer/util/containers.hpp"      // for containerSum
 #include "amdinfer/util/queue.hpp"           // for BufferPtrsQueue
+#include "amdinfer/util/string.hpp"          // for endsWith
 #include "amdinfer/util/thread.hpp"          // for setThreadName
 #include "amdinfer/util/timer.hpp"           // for Timer
 #include "amdinfer/workers/worker.hpp"       // for Worker
@@ -149,7 +150,11 @@ void CPlusPlus::doInit(ParameterMap* parameters) {
     throw invalid_argument("No model specified");
   }
 
-  handle_ = openModel("lib" + model + "_model.so");
+  if (!util::endsWith(model, ".so")) {
+    model = "lib" + model + ".so";
+  }
+
+  handle_ = openModel(model);
 }
 
 void CPlusPlus::doAcquire([[maybe_unused]] ParameterMap* parameters) {

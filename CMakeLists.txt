@@ -73,6 +73,7 @@ include(CTest)
 include(SetTargetOptions)
 include(AddOption)
 include(AddTargets)
+include(TomlPlusPlus)
 
 # check requirements
 find_package(Drogon CONFIG)

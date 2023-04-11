@@ -18,7 +18,7 @@ set(filenames base64_encode base64_decode echo echo_multi invert_image)
 set(targets "")
 
 function(amdinfer_get_target_name target filename)
-  set(${target} ${filename}_model PARENT_SCOPE)
+  set(${target} ${filename} PARENT_SCOPE)
 endfunction()
 
 foreach(filename ${filenames})

@@ -33,6 +33,7 @@
 #include "amdinfer/build_options.hpp"          // for AMDINFER_ENABLE_VITIS
 #include "amdinfer/core/endpoints.hpp"         // for Endpoints
 #include "amdinfer/core/exceptions.hpp"        // for external_error, invalid...
+#include "amdinfer/core/model_config.hpp"      // for ModelConfig
 #include "amdinfer/core/model_repository.hpp"  // for ModelRepository
 #include "amdinfer/core/parameters.hpp"        // for ParameterMap
 #include "amdinfer/core/request_container.hpp"  // for ServerMetadata, ModelMe...
@@ -75,10 +76,17 @@ void SharedState::modelLoad(const std::string& model,
                             const ParameterMap& parameters) {
   assert(util::isLower(model));
 
-  ParameterMap updated_parameters = parameters;
-
-  parseModel(repository_.getRepository(), model, &updated_parameters);
-  endpoints_.load(model, updated_parameters);
+  auto model_config = parseModel(repository_.getRepository(), model);
+  const auto end = model_config.crend();
+  for (auto it = model_config.crbegin(); it != end; ++it) {
+    const auto& [model_name, model_parameters] = *it;
+    // merge the runtime provided parameters with those from the model file
+    ParameterMap updated_parameters = model_parameters;
+    for (const auto& [key, value] : parameters) {
+      updated_parameters.put(key, value);
+    }
+    endpoints_.load(model_name, updated_parameters);
+  }
 }
 
 void SharedState::modelUnload(const std::string& model) {

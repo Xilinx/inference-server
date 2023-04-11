@@ -505,10 +505,11 @@ void HttpServer::modelInfer(
   } catch (const invalid_argument &e) {
     AMDINFER_LOG_INFO(logger_, e.what());
     auto resp = errorHttpResponse(e.what(), HttpStatusCode::k400BadRequest);
-#ifdef AMDINFER_ENABLE_TRACING
-    auto context = trace->propagate();
-    propagate(resp.get(), context);
-#endif
+    // TODO(varunsh): could use after move here from the try block
+    // #ifdef AMDINFER_ENABLE_TRACING
+    //     auto context = trace->propagate();
+    //     propagate(resp.get(), context);
+    // #endif
     callback(resp);
   }
 }

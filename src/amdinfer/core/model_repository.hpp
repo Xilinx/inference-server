@@ -25,6 +25,7 @@ namespace amdinfer {
 
 class Endpoints;
 class ParameterMap;
+class ModelConfig;
 
 class UpdateListener : public efsw::FileWatchListener {
  public:
@@ -39,8 +40,8 @@ class UpdateListener : public efsw::FileWatchListener {
   Endpoints* endpoints_;
 };
 
-void parseModel(const std::filesystem::path& repository,
-                const std::string& model, ParameterMap* parameters);
+ModelConfig parseModel(const std::filesystem::path& repository,
+                       const std::string& model);
 
 class ModelRepository {
  public:
