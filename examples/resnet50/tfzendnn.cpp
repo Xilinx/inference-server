@@ -162,7 +162,7 @@ Args getArgs(int argc, char** argv) {
     assert(root_str != nullptr);
     fs::path root{root_str};
     args.path_to_model =
-      root / "external/artifacts/tensorflow/resnet_v1_50_baseline_6.96B_922.pb";
+      root / "external/artifacts/resnet50/resnet_v1_50_baseline_6.96B_922.pb";
   }
 
   if (args.input_node.empty()) {

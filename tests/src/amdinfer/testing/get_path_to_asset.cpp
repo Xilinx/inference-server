@@ -35,7 +35,7 @@ std::string getPathToAsset(const std::string& key) {
     throw environment_not_set_error("AMDINFER_ROOT not found in the env");
   }
   const fs::path root_path{root_env};
-  const auto models_txt = root_path / "external/artifacts/artifacts.txt";
+  const auto models_txt = root_path / "tests/assets/artifacts.txt";
 
   std::ifstream models_file;
   models_file.open(models_txt);

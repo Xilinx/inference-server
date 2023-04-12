@@ -78,7 +78,7 @@ struct PtzendnnWorker : public Workers {
     extension = "ptzendnn";
     name = "ptzendnn";
     graph =
-      fs::path{root} / "external/artifacts/pytorch/resnet50_pretrained.pt";
+      fs::path{root} / "external/artifacts/resnet50/resnet50_pretrained.pt";
 
     parameters.put("model", graph.string());
 
@@ -106,7 +106,7 @@ struct TfzendnnWorker : public Workers {
     extension = "tfzendnn";
     name = "tfzendnn";
     graph = fs::path{root} /
-            "external/artifacts/tensorflow/resnet_v1_50_baseline_6.96B_922.pb";
+            "external/artifacts/resnet50/resnet_v1_50_baseline_6.96B_922.pb";
 
     // arbitrarily set to 64
     const int inter_op = 64;

@@ -168,7 +168,7 @@ def get_args():
     if (not args.model) and (not args.endpoint):
         root = os.getenv("AMDINFER_ROOT")
         assert root is not None
-        args.model = root + "/external/artifacts/onnx/resnet50v2/resnet50-v2-7.onnx"
+        args.model = root + "/external/artifacts/resnet50/resnet50-v2-7.onnx"
 
     return args
 

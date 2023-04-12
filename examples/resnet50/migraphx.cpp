@@ -181,7 +181,7 @@ Args getArgs(int argc, char** argv) {
     assert(root_str != nullptr);
     fs::path root{root_str};
     args.path_to_model =
-      root / "external/artifacts/onnx/resnet50v2/resnet50-v2-7.onnx";
+      root / "external/artifacts/resnet50/resnet50-v2-7.onnx";
   }
 
   return args;

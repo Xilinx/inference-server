@@ -45,6 +45,7 @@ tmp.*
 tests/assets/Physicsworks.ogv
 tests/assets/adas.webm
 tests/assets/girl-1867092_640.jpg
+tests/assets/artifacts.txt
 *.xmodel
 *.pb
 *.pth
