@@ -15,15 +15,15 @@
 import argparse
 from pathlib import Path
 
-from main import repository_dir, test_assets_dir
+from main import test_assets_dir
 from model import LocalFile
 
 
 def get(args: argparse.Namespace):
+    directory = args.destination / "repository"
+
     models = {}
     if args.tfzendnn:
-        models["tf_mnist"] = LocalFile(
-            test_assets_dir / "mnist.zip", repository_dir, ""
-        )
+        models["tf_mnist"] = LocalFile(test_assets_dir / "mnist.zip", directory, "")
 
     return models

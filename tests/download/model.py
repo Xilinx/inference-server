@@ -45,7 +45,7 @@ def _get_filename_from_url(url: str) -> str:
     return os.path.basename(urllib.parse.urlparse(url).path)
 
 
-def extract(filepath: Path, destination: Path, source_path=None):
+def extract(filepath: Path, destination: Path, _source_path=None):
     """
     Given a path to a file (regular or an archive), copy it to another location.
     If the path is an archive format, it is extracted to the location. If the
@@ -85,9 +85,6 @@ def extract_one_file(archive_path: Path, destination: Path, source_path: Path):
 
 
 class Model:
-    # file endings used to find supported models
-    # models = ["pt", "pb", "xmodel", "onnx"]
-
     def __init__(self, url: str, location: Path, source_path: Path, extractor=extract):
         self.url = url
         self.location = location
@@ -107,7 +104,6 @@ class Model:
 
 
 class File(Model):
-    # models = []
     pass
 
 
@@ -117,8 +113,6 @@ class Archive(Model):
 
 
 class XModelOpenDownload(Model):
-    # models = ["xmodel"]
-
     def __init__(self, filename: str, location: Path, source_path: Path):
         """
         Create an XModel downloaded from Xilinx Open Download
@@ -133,8 +127,6 @@ class XModelOpenDownload(Model):
 
 
 class FloatOpenDownload(XModelOpenDownload):
-    # models = ["pt", "pb"]
-
     def __init__(self, filename: str, location: Path, source_path: Path):
         super().__init__(filename, location, source_path)
 
@@ -160,6 +152,8 @@ class FloatOpenDownload(XModelOpenDownload):
             converter_args = argparse.Namespace
             converter_args.graph = str(destination)
             converter.main(converter_args)
+
+            self.source_path = self.source_path.stem + ".pt"
 
 
 class LocalFile(Model):
