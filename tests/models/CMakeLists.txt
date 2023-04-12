@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-list(APPEND tests mnist)
+list(APPEND tests invert_image mnist)
 
 foreach(test ${tests})
   amdinfer_add_system_test(${test})
