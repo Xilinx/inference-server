@@ -28,9 +28,10 @@ import models as Repository
 
 repository_path = os.getenv("AMDINFER_ROOT")
 if repository_path is None:
-    print("AMDINFER_ROOT not defined in the environment")
-    sys.exit(1)
-repository_path = Path(repository_path)
+    print("AMDINFER_ROOT not defined in the environment. Using working directory")
+    repository_path = Path.cwd()
+else:
+    repository_path = Path(repository_path)
 
 tmp_dir = Path.cwd() / "tmp_downloader"
 artifact_dir = repository_path / "external/artifacts"
