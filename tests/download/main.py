@@ -28,7 +28,6 @@ import models as Repository
 
 repository_path = os.getenv("AMDINFER_ROOT")
 if repository_path is None:
-    print("AMDINFER_ROOT not defined in the environment. Using working directory")
     repository_path = Path.cwd()
 else:
     repository_path = Path(repository_path)
@@ -91,24 +90,26 @@ def create_package(model_file: str, metadata: Path, repository_dir: Path):
 
 
 def download(model, args: argparse.Namespace):
-    print(f"Downloading {model.source_path} from {model.url} to {model.location}")
+    downloaded_file: Path = model.get_path_to_file()
+    print(f"Downloading {model.source_path} from {model.url} to {downloaded_file}")
     if args.dry_run:
-        return model.location
+        return downloaded_file
 
     # always extract local files
     if model.url.startswith("file://"):
         model.extract(model.filename)
+        return downloaded_file
 
-    if model.get_path_to_file().exists():
-        print(f"{model.get_path_to_file()} already exists, skipping download")
-        return model.get_path_to_file()
+    if downloaded_file.exists():
+        print(f"{downloaded_file} already exists, skipping download")
+        return downloaded_file
 
     if model.url.startswith("http://") or model.url.startswith("https://"):
         download_http(model)
     else:
         raise NotImplementedError(f"Unknown URL protocol: {model.url}")
 
-    return model.get_path_to_file()
+    return downloaded_file
 
 
 def get_models(args):
@@ -133,7 +134,6 @@ def strip_path_to_repository(absolute_path):
 
 def main(args: argparse.Namespace):
     args = update_args(args)
-    print(args)
 
     if not args.dry_run:
         if not os.path.exists(tmp_dir):
@@ -175,7 +175,7 @@ def main(args: argparse.Namespace):
                 f.write(f"{key}:{path}\n")
         shutil.rmtree(tmp_dir)
     else:
-        print(f"Saving artifact data to {str(artifact_data)}:")
+        print(f"Saving artifact data to {str(artifact_data)}")
         print(model_paths)
 
 
@@ -203,7 +203,7 @@ def get_parser(parser=None):
         action="store",
         default=artifact_dir,
         type=Path,
-        help="path to save the downloaded files to",
+        help=f"path to save the downloaded files to. Defaults to {str(artifact_dir)}",
     )
     if top_level:
         options.add_argument(
@@ -229,7 +229,7 @@ def get_parser(parser=None):
         "--tfzendnn", action="store_true", help="download all tfzendnn-related files"
     )
     platforms.add_argument(
-        "--zendnn", action="store_true", help="download all zendnn-related files"
+        "--zendnn", action="store_true", help="alias for --ptzendnn --tfzendnn"
     )
     platforms.add_argument(
         "--migraphx", action="store_true", help="download all migraphx-related files"
@@ -269,7 +269,6 @@ def update_args(args):
 
     if args.all_models:
         model_names = get_model_names()
-        print(model_names)
         for model_name in model_names:
             setattr(args, model_name, True)
 

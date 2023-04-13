@@ -153,7 +153,9 @@ class FloatOpenDownload(XModelOpenDownload):
             converter_args.graph = str(destination)
             converter.main(converter_args)
 
-            self.source_path = self.source_path.stem + ".pt"
+            os.remove(str(destination))
+
+            self.source_path = self.source_path.parent / (self.source_path.stem + ".pt")
 
 
 class LocalFile(Model):
