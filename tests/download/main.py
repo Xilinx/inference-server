@@ -90,26 +90,30 @@ def create_package(model_file: str, metadata: Path, repository_dir: Path):
 
 
 def download(model, args: argparse.Namespace):
-    downloaded_file: Path = model.get_path_to_file()
-    print(f"Downloading {model.source_path} from {model.url} to {downloaded_file}")
+    # model.get_path_to_file() shouldn't be cached to a variable because the extraction
+    # can overwrite the model's source_path which affects the name of the file.
+    # this is used, for example, to deal with auto-converting .pth files to .pt
+    print(
+        f"Downloading {model.source_path} from {model.url} to {model.get_path_to_file()}"
+    )
     if args.dry_run:
-        return downloaded_file
+        return model.get_path_to_file()
 
     # always extract local files
     if model.url.startswith("file://"):
         model.extract(model.filename)
-        return downloaded_file
+        return model.get_path_to_file()
 
-    if downloaded_file.exists():
-        print(f"{downloaded_file} already exists, skipping download")
-        return downloaded_file
+    if model.get_path_to_file().exists():
+        print(f"{model.get_path_to_file()} already exists, skipping download")
+        return model.get_path_to_file()
 
     if model.url.startswith("http://") or model.url.startswith("https://"):
         download_http(model)
     else:
         raise NotImplementedError(f"Unknown URL protocol: {model.url}")
 
-    return downloaded_file
+    return model.get_path_to_file()
 
 
 def get_models(args):
