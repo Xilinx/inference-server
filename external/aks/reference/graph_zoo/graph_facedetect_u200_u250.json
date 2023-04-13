@@ -27,7 +27,7 @@
       "node_name": "facedetect_fpga",
       "node_params": {
         "DPURunner": {
-          "model_file": "artifacts/u200_u250/densebox_320_320/densebox_320_320.xmodel",
+          "model_file": "artifacts/densebox/densebox_320_320.xmodel",
           "num_runners": 4
         }
       }

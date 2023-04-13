@@ -35,7 +35,7 @@ std::string getPathToAsset(const std::string& key) {
     throw environment_not_set_error("AMDINFER_ROOT not found in the env");
   }
   const fs::path root_path{root_env};
-  const auto models_txt = root_path / "external/artifacts/artifacts.txt";
+  const auto models_txt = root_path / "tests/assets/artifacts.txt";
 
   std::ifstream models_file;
   models_file.open(models_txt);
@@ -49,8 +49,14 @@ std::string getPathToAsset(const std::string& key) {
     if (util::startsWith(line, key)) {
       auto substrings = util::split(line, ":");
       assert(substrings.size() == 2);
-      if (substrings[1].empty()) {
+      const auto& path = substrings[1];
+      if (path.empty()) {
         throw invalid_argument("No path found for key: " + key);
+      }
+      // if the path is absolute, return it as is. Otherwise, prefix it with
+      // the path to the repository
+      if (util::startsWith(path, "/")) {
+        return path;
       }
       return root_path / substrings[1];
     }

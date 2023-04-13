@@ -165,7 +165,7 @@ Args getArgs(int argc, char** argv) {
     assert(root_str != nullptr);
     fs::path root{root_str};
     args.path_to_model =
-      root / "external/artifacts/pytorch/resnet50_pretrained.pt";
+      root / "external/artifacts/resnet50/resnet50_pretrained.pt";
   }
 
   return args;

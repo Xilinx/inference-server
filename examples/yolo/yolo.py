@@ -112,10 +112,10 @@ def parse_args():
         # args.model is unset and set by each example
 
         if not args.labels:
-            args.labels = root + "/external/artifacts/onnx/yolov4/coco.names"
+            args.labels = root + "/external/artifacts/yolov4/coco.names"
 
         if not args.anchors:
-            args.anchors = root + "/external/artifacts/onnx/yolov4/yolov4_anchors.txt"
+            args.anchors = root + "/external/artifacts/yolov4/yolov4_anchors.txt"
 
     return args
 

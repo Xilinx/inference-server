@@ -56,7 +56,7 @@ import amdinfer
 from bert import parse_args
 
 base_path = pathlib.Path(__file__).parent.resolve()
-download_dir = base_path / "../../external/artifacts/onnx/bert"
+download_dir = base_path / "../../external/artifacts/bert"
 sys.path.append(str(download_dir))
 try:
     from run_onnx_squad import (
@@ -185,13 +185,13 @@ def get_args():
 
     # assign default values if these are unset
     if not args.model:
-        args.model = root + "/external/artifacts/onnx/bert/bertsquad-10.onnx"
+        args.model = root + "/external/artifacts/bert/bertsquad-10.onnx"
 
     if not args.input:
-        args.input = root + "/external/artifacts/onnx/bert/inputs_amd.json"
+        args.input = root + "/external/artifacts/bert/inputs_amd.json"
 
     if not args.vocab:
-        args.vocab = root + "/external/artifacts/onnx/bert/vocab.txt"
+        args.vocab = root + "/external/artifacts/bert/vocab.txt"
 
     return args
 

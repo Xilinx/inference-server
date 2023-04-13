@@ -22,7 +22,7 @@
       "node_name": "yolov3_fpga",
       "node_params": {
         "DPURunner": {
-          "model_file": "artifacts/u200_u250/yolov3_voc_tf/yolov3_voc_tf.xmodel",
+          "model_file": "artifacts/yolov3/yolov3_voc_tf.xmodel",
           "num_runners": 1
         }
       }

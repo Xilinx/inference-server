@@ -35,7 +35,7 @@ import urllib.request
 import zipfile
 from pathlib import Path
 
-import tests.download
+import tests.download.main as downloader
 import tests.test
 
 
@@ -733,7 +733,7 @@ class Get:
             print("  $ git lfs pull")
             sys.exit(1)
 
-        tests.download.main(args)
+        downloader.main(args)
 
     @classmethod
     def add(cls, parser):
@@ -743,7 +743,7 @@ class Get:
             add_help=False,
         )
 
-        subparser = tests.download.get_parser(subparser)
+        subparser = downloader.get_parser(subparser)
 
         subparser.set_defaults(func=cls.parse)
 

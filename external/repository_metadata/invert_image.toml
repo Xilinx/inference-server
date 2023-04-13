@@ -1,0 +1,50 @@
+[[models]]
+name = "invert_image"
+platform = "amdinfer_cpp"
+id = "base64_decode.so"
+
+[[models.inputs]]
+name = "image_in"
+datatype = "STRING"
+shape = [1048576]
+id = ""
+
+[[models.outputs]]
+name = "image_out"
+datatype = "INT8"
+shape = [1080, 1920, 3]
+id = "preprocessed_image"
+
+[[models]]
+name = "execute"
+platform = "amdinfer_cpp"
+id = "invert_image.so"
+
+[[models.inputs]]
+name = "image_in"
+datatype = "INT8"
+shape = [1080, 1920, 3]
+id = "preprocessed_image"
+
+[[models.outputs]]
+name = "image_out"
+datatype = "INT8"
+shape = [1080, 1920, 3]
+id = "inverted_image"
+
+[[models]]
+name = "invert_image_postprocess"
+platform = "amdinfer_cpp"
+id = "base64_encode.so"
+
+[[models.inputs]]
+name = "image_in"
+datatype = "INT8"
+shape = [1080, 1920, 3]
+id = "inverted_image"
+
+[[models.outputs]]
+name = "image_out"
+datatype = "STRING"
+shape = [1048576]
+id = "postprocessed_image"

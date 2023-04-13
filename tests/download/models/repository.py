@@ -1,5 +1,4 @@
-# Copyright 2021 Xilinx, Inc.
-# Copyright 2022 Advanced Micro Devices, Inc.
+# Copyright 2023 Advanced Micro Devices, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,12 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-list(APPEND tests invert_image mnist)
+import argparse
+from pathlib import Path
 
-foreach(test ${tests})
-  amdinfer_add_system_test(${test})
-  amdinfer_get_test_target(target ${test})
-  target_link_libraries(
-    ${target} PRIVATE opencv_imgcodecs opencv_imgproc opencv_core
-  )
-endforeach()
+from main import test_assets_dir
+from model import LocalFile
+
+
+def get(args: argparse.Namespace):
+    directory = args.destination / "repository"
+
+    models = {}
+    if args.tfzendnn:
+        models["tf_mnist"] = LocalFile(test_assets_dir / "mnist.zip", directory, "")
+
+    return models
