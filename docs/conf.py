@@ -67,6 +67,8 @@ extensions = [
     "sphinx_copybutton",
     "sphinx_issues",
     "sphinx_tabs.tabs",
+    # adds tooltips
+    "sphinx_tippy",
     "sphinxcontrib.openapi",
 ]
 
@@ -104,6 +106,14 @@ autodoc_default_options = {
     "members": True,
     "special-members": "__init__",
 }
+
+tippy_add_class = "has-tippy"
+tippy_skip_urls = [
+    # skip all URLs except those pointing to the glossary
+    r"^((?!glossary\.html).)*$"
+]
+tippy_enable_wikitips = False
+tippy_enable_doitips = False
 
 
 def hide_private_module(app, what, name, obj, options, signature, return_annotation):

@@ -139,6 +139,7 @@ The following packages (and any dependencies) are installed from the Python Pack
     :pypiPackages:`sphinx-copybutton`,latest,MIT,Adds copy button for code blocks\ :superscript:`d 0`
     :pypiPackages:`sphinx-issues`,latest,MIT,Sphinx plugin for links to the project's Github issue tracker\ :superscript:`d 0`
     :pypiPackages:`sphinx-tabs`,latest,MIT,Sphinx plugin to create tabs\ :superscript:`d 0`
+    :pypiPackages:`sphinx-tippy`,latest,MIT,Sphinx plugin to create tooltips\ :superscript:`d 0`
     :pypiPackages:`sphinxcontrib-confluencebuilder`,latest,BSD-2,Sphinx plugin to export documentation to Confluence\ :superscript:`d 0`
     :pypiPackages:`sphinxcontrib-jquery`,latest,BSD-0,Sphinx plugin to add JQuery\ :superscript:`d 0`
     :pypiPackages:`sphinxcontrib-openapi`,latest,BSD-2,Sphinx plugin to build OpenAPI docs\ :superscript:`d 0`

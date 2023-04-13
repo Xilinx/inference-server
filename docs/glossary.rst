@@ -18,8 +18,8 @@ Glossary
 
 .. glossary::
 
-    Xilinx Runtime
+    Xilinx Runtime Library
         An open-source standardized software interface that facilitates communication between the application code and the accelerated-kernels deployed on the reconfigurable portion of PCIe-based Alveo accelerator cards, Zynq-7000, Zynq UltraScale+ MPSoC based embedded platforms or Versal ACAPs.
 
     XRT
-        See :term:`Xilinx Runtime`
+        See :term:`Xilinx Runtime Library`

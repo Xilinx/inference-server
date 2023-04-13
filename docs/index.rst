@@ -87,3 +87,4 @@ To see other versions, you can use "Read the Docs" panel on the bottom-left, vis
     metrics
     tracing
     cpp_api/cpp_root
+    glossary
