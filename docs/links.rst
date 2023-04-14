@@ -13,7 +13,10 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 
+.. _DockerInstallLinux: https://docs.docker.com/engine/install/
+.. _DockerRun: https://docs.docker.com/engine/reference/commandline/run/
 .. _InferenceServerRepository: https://github.com/Xilinx/inference-server
+.. _InferenceServerDocumentation: https://xilinx.github.io/inference-server/
 .. _ZenDNN: https://www.amd.com/en/developer/zendnn.html
 .. _ZenDNN_download: https://www.amd.com/en/developer/zendnn.html#downloads
 .. _ZenDNN_guide: https://www.amd.com/en/developer/zendnn.html#documentation

@@ -1,5 +1,5 @@
 ..
-    Copyright 2022 Advanced Micro Devices, Inc.
+    Copyright 2023 Advanced Micro Devices, Inc.
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -13,13 +13,4 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 
-Glossary
-========
-
-.. glossary::
-
-    Xilinx Runtime Library
-        An open-source standardized software interface that facilitates communication between the application code and the accelerated-kernels deployed on the reconfigurable portion of PCIe-based Alveo accelerator cards, Zynq-7000, Zynq UltraScale+ MPSoC based embedded platforms or Versal ACAPs.
-
-    XRT
-        See :term:`Xilinx Runtime Library`
+.. |define_deployment| replace:: the act of making the AMD Inference Server available to respond to inference requests from clients

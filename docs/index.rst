@@ -19,7 +19,8 @@ AMD Inference Server
 
 Welcome to the official documentation for the AMD Inference Server: an open-source tool to deploy your machine learning models and make them accessible to clients for inference.
 
-If you are new to the project, start with the :ref:`Introduction <introduction:introduction>` to get an overview of what it's about and how this documentation is organized.
+If you are new to the project, start with the :ref:`Introduction <introduction:introduction>` and the :ref:`Overview <overview:overview>` to get a high-level look at the features, documentation organization and important concepts.
+Reading through all the pages in the **About** section is recommended to familiarize yourself with the project and its terminology.
 
 Use the sidebar to navigate through the different pages in the documentation.
 Note that the documentation is versioned.
@@ -32,28 +33,8 @@ To see other versions, you can use "Read the Docs" panel on the bottom-left, vis
     :caption: About
 
     introduction
-    dependencies
-    roadmap
-    changelog
-
-.. toctree::
-    :maxdepth: 2
-    :hidden:
-    :caption: Quickstart
-
-    Inference <quickstart_inference>
-    Deployment <quickstart_deployment>
-    Development <quickstart_development>
-
-.. toctree::
-    :maxdepth: 2
-    :hidden:
-    :caption: Libraries and API
-
-    cpp_user_api
-    python
-    rest
-    cli
+    terminology
+    quickstart
 
 .. toctree::
     :maxdepth: 2
@@ -80,6 +61,7 @@ To see other versions, you can use "Read the Docs" panel on the bottom-left, vis
     :caption: Developers
 
     contributing
+    dependencies
     architecture
     aks
     logging
@@ -87,4 +69,15 @@ To see other versions, you can use "Read the Docs" panel on the bottom-left, vis
     metrics
     tracing
     cpp_api/cpp_root
-    glossary
+    changelog
+    roadmap
+
+.. toctree::
+    :maxdepth: 2
+    :hidden:
+    :caption: Libraries and API
+
+    cpp_user_api
+    python
+    rest
+    cli

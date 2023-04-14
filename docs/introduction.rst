@@ -31,6 +31,7 @@ Features
 * C++ library with Python bindings to simplify making requests to the server
 * Incoming requests are transparently batched based on the user specifications
 * Users can define how many models, and how many instances of each, to run in parallel
+* Users can define a linear chain of models to perform a series of steps such as pre-processing, inference, and post-processing on the server
 
 The AMD Inference Server is integrated with the following libraries out of the gate:
 
@@ -44,7 +45,7 @@ Documentation overview
 
 The remainder of this documentation is organized as follows:
 
-* The **About** section continues to talk about the dependencies, licenses, roadmap and the changelog for the project
+* The **About** section continues to talk about the project at a high-level
 * The **Quickstart** section presents quick starts for different types of users
 * The **Libraries and API** section goes over the different libraries, APIs and tools available to users
 * The **Examples** section provides more commentary around the examples in the repository

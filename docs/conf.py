@@ -52,7 +52,7 @@ else:
 extensions = [
     "sphinxcontrib.jquery",
     "breathe",
-    "exhale",
+    # "exhale",
     # adds argparse directive to parse CLIs
     "sphinxarg.ext",
     "sphinxcontrib.confluencebuilder",
@@ -166,6 +166,14 @@ nitpicky = True
 
 # number all figures with captions
 numfig = True
+
+rst_prolog = """
+.. include:: substitutions.rst
+"""
+
+rst_epilog = """
+.. include:: links.rst
+"""
 
 # Configure 'Edit on GitHub' extension
 edit_on_github_project = "Xilinx/inference-server"
