@@ -30,11 +30,23 @@ To see other versions, you can use "Read the Docs" panel on the bottom-left, vis
 .. toctree::
     :maxdepth: 2
     :hidden:
-    :caption: About
+    :caption: Getting started
 
     introduction
     terminology
     quickstart
+
+.. toctree::
+    :maxdepth: 2
+    :hidden:
+    :caption: User guide
+
+    model_repository
+    ensembles
+    Deploying with Docker <docker>
+    Deploying with KServe <kserve>
+    performance_factors
+    troubleshooting
 
 .. toctree::
     :maxdepth: 2
@@ -48,20 +60,16 @@ To see other versions, you can use "Read the Docs" panel on the bottom-left, vis
 .. toctree::
     :maxdepth: 2
     :hidden:
-    :caption: Using the Server
+    :caption: Backends
+    :glob:
 
-    platforms
-    Deploying with Docker <docker>
-    Deploying with KServe <kserve>
-    performance_factors
+    backends/*
 
 .. toctree::
     :maxdepth: 2
     :hidden:
     :caption: Developers
 
-    contributing
-    dependencies
     architecture
     aks
     logging
@@ -69,6 +77,14 @@ To see other versions, you can use "Read the Docs" panel on the bottom-left, vis
     metrics
     tracing
     cpp_api/cpp_root
+
+.. toctree::
+    :maxdepth: 2
+    :hidden:
+    :caption: About
+
+    contributing
+    dependencies
     changelog
     roadmap
 

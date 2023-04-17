@@ -56,61 +56,9 @@ KServe provides a number of Custom Resource Definitions (CRDs) that you can use 
 The current recommended approach from KServe is to use the ``ServingRuntime`` method.
 
 As you start an inference service, you will need models to serve.
-The model format for the AMD Inference Server is the following:
-
-.. code-block:: text
-
-    /
-    ├─ model_a/
-    │  ├─ 1/
-    │  │  ├─ <model>.x
-    │  ├─ <config>.toml
-
-The model name, ``model_a`` in this template, must be unique among the models loaded on a particular server.
-This name is used to name the endpoint used to make inference requests to.
-Under this directory, there must be a directory named ``1/`` containing the model file itself and a TOML file describing the configuration.
-This file, ``<config>.toml`` in this template, can have any name though ``config.toml`` is suggested and will be used in this documentation.
-You can also use ``.pbtxt`` format for single models as well.
-The model file can have an arbitrary name and the file extension depends on the type of the model.
-The ``config.toml`` file contains metadata for the model.
-Consider this example of an MNIST TensorFlow model:
-
-.. code-block:: toml
-
-    name = "mnist"
-    platform = "tensorflow_graphdef"
-
-    [[inputs]]
-    name = "images_in"
-    datatype = "FP32"
-    shape = [28, 28, 1]
-
-    [[outputs]]
-    name = "flatten/Reshape"
-    datatype = "FP32"
-    shape = [10]
-
-The name must match the name of the model directory, i.e. ``model_a``.
-The platform identifies the type of the model and determines the file extension of the model file.
-The supported platforms are:
-
-.. csv-table::
-    :header: Platform,Model file extension
-    :widths: 90, 10
-    :width: 22em
-
-    ``tensorflow_graphdef``,``.pb``
-    ``pytorch_torchscript``,``.pt``
-    ``vitis_xmodel``,``.xmodel``
-    ``onnx_onnxv1``,``.onnx``
-    ``migraphx_mxr``,``.mxr``
-    ``amdinfer_cpp``,``.so``
-
-The inputs and outputs define the list of input and output tensors for the model.
-The names of the tensors may be significant if the platform needs them to perform inference.
-
+These models should be in the format that the inference server expects for its :ref:`model repository <model_repository>`.
 You can put the model up on any of the cloud storage platforms that KServe supports like GCS, S3 and HTTP.
-If you use HTTP, the model should be zipped.
+If you use HTTP, the model should be zipped and should unzip in the expected model repository directory structure.
 Other archive formats such as ``.tar.gz`` may not work as expected.
 Wherever you store it, the URI will be needed to start inference services.
 

@@ -13,8 +13,8 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 
-GPUs - MIGraphX
-===============
+MIGraphX - GPU
+==============
 
 Using the AMD Inference Server with MIGraphX and GPUs requires some additional setup prior to use.
 
@@ -22,7 +22,7 @@ Set up the host and GPUs
 ------------------------
 
 Prior to installing the Inference Server, first ensure your system recognizes your GPU(s).
-Start by following the `ROCm installation instructions <https://docs.amd.com/category/ROCm%E2%84%A2%20v5.x>`__ for version 5.4.1 or newer.
+Start by following the `ROCm installation instructions <https://docs.amd.com/category/ROCm_v5.4.1>`__ for version 5.4.1 or newer.
 Once your system recognizes your GPU(s), proceed to the next step.
 
 Build an image

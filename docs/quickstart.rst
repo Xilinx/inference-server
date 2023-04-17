@@ -43,19 +43,20 @@ This guide assumes that inference will be made from the same machine where the s
 Prepare the model repository
 ----------------------------
 
-The model repository exists on the machine where the server is running and it will hold your models and their associated metadata.
+A model repository is
+.. include:: dry.rst
+    :start-after: +define_model_repository
+    :end-before: -define_model_repository
 
 .. code-block:: text
 
     /
-    ├─ model_a/
+    ├─ resnet50/
     │  ├─ 1/
     │  │  ├─ <model>
-    │  ├─ <config>.toml
-    | model_b/
-    |  ...
+    │  ├─ config.toml
 
-The model name, ``model_a`` in this template, must be unique among the models loaded on a particular server and it must match the name used in the configuration TOML file.
+The model name, ``resnet50`` in this template, must be unique among the models loaded on a particular server and it must match the name used in the configuration TOML file.
 This name is used to name the endpoint that clients use to make inference requests.
 Under this directory, there must be a directory named ``1/`` containing the model file itself and a TOML file containing the metadata for the model.
 This TOML file may be named anything but ``config.toml`` is suggested and used throughout this documentation.
@@ -292,3 +293,5 @@ The server responds to the request and you can examine the results to take furth
 
 Next steps
 ----------
+
+TBD

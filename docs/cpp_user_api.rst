@@ -1,6 +1,6 @@
 ..
     Copyright 2021 Xilinx, Inc.
-    Copyright 2022, Advanced Micro Devices, Inc.
+    Copyright 2022 Advanced Micro Devices, Inc.
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -25,6 +25,12 @@ Clients
 .. doxygenfunction:: amdinfer::waitUntilServerReady
 
 .. doxygenfunction:: amdinfer::waitUntilModelReady
+
+.. doxygenfunction:: amdinfer::waitUntilModelNotReady
+
+.. doxygenfunction:: amdinfer::loadEnsemble
+
+.. doxygenfunction:: amdinfer::unloadModels
 
 .. doxygenfunction:: amdinfer::inferAsyncOrdered
 

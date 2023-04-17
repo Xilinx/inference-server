@@ -15,6 +15,7 @@
 
 .. _DockerInstallLinux: https://docs.docker.com/engine/install/
 .. _DockerRun: https://docs.docker.com/engine/reference/commandline/run/
+.. _InferenceServerDockerHub: https://hub.docker.com/r/amdih/serve
 .. _InferenceServerRepository: https://github.com/Xilinx/inference-server
 .. _InferenceServerDocumentation: https://xilinx.github.io/inference-server/
 .. _ZenDNN: https://www.amd.com/en/developer/zendnn.html

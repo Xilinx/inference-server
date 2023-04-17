@@ -13,14 +13,14 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 
-Platforms
-=========
+Backends
+========
 
-The AMD Inference Server supports a number of platforms:
+The AMD Inference Server supports a number of backends.
+This page serves as a landing page for all of them:
 
 .. toctree::
     :titlesonly:
+    :glob:
 
-    zendnn
-    migraphx
-    vitis_ai
+    backends/*
