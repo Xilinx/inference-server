@@ -1,0 +1,170 @@
+
+.. _program_listing_file__workspace_amdinfer_src_amdinfer_observation_metrics.hpp:
+
+Program Listing for File metrics.hpp
+====================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__workspace_amdinfer_src_amdinfer_observation_metrics.hpp>` (``/workspace/amdinfer/src/amdinfer/observation/metrics.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   // Copyright 2021 Xilinx, Inc.
+   // Copyright 2022 Advanced Micro Devices, Inc.
+   //
+   // Licensed under the Apache License, Version 2.0 (the "License");
+   // you may not use this file except in compliance with the License.
+   // You may obtain a copy of the License at
+   //
+   //      http://www.apache.org/licenses/LICENSE-2.0
+   //
+   // Unless required by applicable law or agreed to in writing, software
+   // distributed under the License is distributed on an "AS IS" BASIS,
+   // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   // See the License for the specific language governing permissions and
+   // limitations under the License.
+   
+   #ifndef GUARD_AMDINFER_OBSERVATION_METRICS
+   #define GUARD_AMDINFER_OBSERVATION_METRICS
+   
+   #include <prometheus/registry.h>    // for Registry
+   #include <prometheus/serializer.h>  // for Serializer
+   #include <prometheus/summary.h>     // for Summary, BuildSummary, Summa...
+   
+   #include <cstddef>        // for size_t
+   #include <map>            // for map
+   #include <memory>         // for weak_ptr, shared_ptr, uni...
+   #include <mutex>          // for mutex
+   #include <string>         // for string
+   #include <unordered_map>  // for unordered_map
+   #include <vector>         // for vector
+   
+   #include "amdinfer/build_options.hpp"  // for AMDINFER_ENABLE_METRICS
+   
+   #ifdef AMDINFER_ENABLE_METRICS
+   
+   namespace prometheus {
+   class Collectable;
+   class Counter;
+   class Gauge;
+   template <class T>
+   class Family;
+   }  // namespace prometheus
+   
+   namespace amdinfer {
+   
+   enum class MetricCounterIDs {
+     RestGet,
+     RestPost,
+     CppNative,
+     PipelineIngressBatcher,
+     PipelineIngressWorker,
+     PipelineEgressBatcher,
+     PipelineEgressWorker,
+     TransferredBytes,
+     MetricScrapes,
+   };
+   
+   enum class MetricGaugeIDs {
+     QueuesBatcherInput,
+     QueuesBatcherOutput,
+     QueuesBufferInput,
+     QueuesBufferOutput,
+   };
+   
+   enum class MetricSummaryIDs {
+     MetricLatency,
+     RequestLatency,
+   };
+   
+   class CounterFamily {
+    public:
+     CounterFamily(
+       const std::string& name, const std::string& help,
+       prometheus::Registry* registry,
+       const std::unordered_map<MetricCounterIDs,
+                                std::map<std::string, std::string>>& labels);
+   
+     void increment(MetricCounterIDs id);
+     void increment(MetricCounterIDs id, size_t increment);
+   
+    private:
+     prometheus::Family<prometheus::Counter>& family_;
+     std::unordered_map<MetricCounterIDs, prometheus::Counter&> counters_;
+   };
+   
+   class GaugeFamily {
+    public:
+     GaugeFamily(const std::string& name, const std::string& help,
+                 prometheus::Registry* registry,
+                 const std::unordered_map<
+                   MetricGaugeIDs, std::map<std::string, std::string>>& labels);
+   
+     void set(MetricGaugeIDs id, double value);
+   
+    private:
+     prometheus::Family<prometheus::Gauge>& family_;
+     std::unordered_map<MetricGaugeIDs, prometheus::Gauge&> gauges_;
+   };
+   
+   class SummaryFamily {
+    public:
+     SummaryFamily(
+       const std::string& name, const std::string& help,
+       prometheus::Registry* registry,
+       const std::unordered_map<MetricSummaryIDs, prometheus::Summary::Quantiles>&
+         quantiles);
+   
+     void observe(MetricSummaryIDs id, double value);
+   
+    private:
+     prometheus::Family<prometheus::Summary>& family_;
+     std::unordered_map<MetricSummaryIDs, prometheus::Summary&> summaries_;
+   };
+   
+   class Metrics {
+    public:
+     static Metrics& getInstance() {
+       // Guaranteed to be destroyed. Instantiated on first use.
+       static Metrics instance;
+       return instance;
+     }
+     Metrics(Metrics const&) = delete;             
+     Metrics& operator=(const Metrics&) = delete;  
+     Metrics(Metrics&& other) = delete;            
+     Metrics& operator=(Metrics&& other) =
+       delete;  
+   
+     std::string getMetrics();
+     void incrementCounter(MetricCounterIDs id, size_t increment = 1);
+   
+     void setGauge(MetricGaugeIDs id, double value);
+   
+     void observeSummary(MetricSummaryIDs id, double value);
+   
+    private:
+     Metrics();
+     ~Metrics() = default;
+   
+     std::shared_ptr<prometheus::Registry> registry_ =
+       std::make_shared<prometheus::Registry>();
+     std::unique_ptr<prometheus::Serializer> serializer_;
+     std::vector<std::weak_ptr<prometheus::Collectable>> collectables_;
+     std::mutex collectables_mutex_;
+   
+     CounterFamily ingress_requests_total_;
+     CounterFamily pipeline_ingress_total_;
+     CounterFamily pipeline_egress_total_;
+     CounterFamily bytes_transferred_;
+     CounterFamily num_scrapes_;
+     GaugeFamily queue_sizes_total_;
+     SummaryFamily metric_latency_;
+     SummaryFamily request_latency_;
+   };
+   
+   }  // namespace amdinfer
+   
+   #endif
+   
+   #endif  // GUARD_AMDINFER_OBSERVATION_METRICS

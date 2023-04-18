@@ -1,0 +1,13 @@
+.. _exhale_function_model__repository_8cpp_1a8a80f1f2c5954b017a5bd047957a638f:
+
+Function amdinfer::mapProtoToParameters2
+========================================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_core_model_repository.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: amdinfer::mapProtoToParameters2(const google::protobuf::Map<std::string, inference::InferParameter2>&, ParameterMap *)

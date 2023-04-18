@@ -1,0 +1,13 @@
+.. _exhale_typedef_declarations_8hpp_1aa722db0b3b3c1bb8e56367ff9b0390ab:
+
+Typedef amdinfer::BufferPtr
+===========================
+
+- Defined in :ref:`file__workspace_amdinfer_include_amdinfer_declarations.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: amdinfer::BufferPtr

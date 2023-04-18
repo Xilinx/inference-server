@@ -1,0 +1,40 @@
+.. _exhale_class_classamdinfer_1_1workers_1_1SingleThreadedWorker:
+
+Class SingleThreadedWorker
+==========================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_workers_worker.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public amdinfer::workers::Worker`` (:ref:`exhale_class_classamdinfer_1_1workers_1_1Worker`)
+
+
+Derived Types
+*************
+
+- ``public amdinfer::workers::AksDetect`` (:ref:`exhale_class_classamdinfer_1_1workers_1_1AksDetect`)
+- ``public amdinfer::workers::AksDetectStream`` (:ref:`exhale_class_classamdinfer_1_1workers_1_1AksDetectStream`)
+- ``public amdinfer::workers::CPlusPlus`` (:ref:`exhale_class_classamdinfer_1_1workers_1_1CPlusPlus`)
+- ``public amdinfer::workers::InvertVideo`` (:ref:`exhale_class_classamdinfer_1_1workers_1_1InvertVideo`)
+- ``public amdinfer::workers::MIGraphXWorker`` (:ref:`exhale_class_classamdinfer_1_1workers_1_1MIGraphXWorker`)
+- ``public amdinfer::workers::PtZendnn`` (:ref:`exhale_class_classamdinfer_1_1workers_1_1PtZendnn`)
+- ``public amdinfer::workers::ResNet50`` (:ref:`exhale_class_classamdinfer_1_1workers_1_1ResNet50`)
+- ``public amdinfer::workers::ResNet50Stream`` (:ref:`exhale_class_classamdinfer_1_1workers_1_1ResNet50Stream`)
+- ``public amdinfer::workers::Responder`` (:ref:`exhale_class_classamdinfer_1_1workers_1_1Responder`)
+- ``public amdinfer::workers::TfZendnn`` (:ref:`exhale_class_classamdinfer_1_1workers_1_1TfZendnn`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: amdinfer::workers::SingleThreadedWorker
+   :members:
+   :protected-members:
+   :undoc-members:

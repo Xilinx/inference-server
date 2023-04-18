@@ -1,0 +1,13 @@
+.. _exhale_enum_batcher_8hpp_1a5277d7d1a11facb999262c1ffa1cf5a8:
+
+Enum BatcherStatus
+==================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_batching_batcher.hpp`
+
+
+Enum Documentation
+------------------
+
+
+.. doxygenenum:: amdinfer::BatcherStatus

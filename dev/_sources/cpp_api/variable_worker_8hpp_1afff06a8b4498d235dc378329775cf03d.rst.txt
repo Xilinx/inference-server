@@ -1,0 +1,13 @@
+.. _exhale_variable_worker_8hpp_1afff06a8b4498d235dc378329775cf03d:
+
+Variable amdinfer::kNumBufferAuto
+=================================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_workers_worker.hpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: amdinfer::kNumBufferAuto

@@ -1,0 +1,101 @@
+
+.. _file__workspace_amdinfer_src_amdinfer_clients_http.cpp:
+
+File http.cpp
+=============
+
+|exhale_lsh| :ref:`Parent directory <dir__workspace_amdinfer_src_amdinfer_clients>` (``/workspace/amdinfer/src/amdinfer/clients``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+Implements the methods for interacting with the server with HTTP/REST. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/workspace/amdinfer/src/amdinfer/clients/http.cpp``)
+------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__workspace_amdinfer_src_amdinfer_clients_http.cpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``amdinfer/clients/http.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_clients_http.hpp`)
+
+- ``amdinfer/clients/http_internal.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_clients_http_internal.hpp`)
+
+- ``amdinfer/core/exceptions.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_exceptions.hpp`)
+
+- ``amdinfer/core/inference_request.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_inference_request.hpp`)
+
+- ``amdinfer/core/inference_response.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_inference_response.hpp`)
+
+- ``cassert``
+
+- ``drogon/HttpClient.h``
+
+- ``drogon/HttpRequest.h``
+
+- ``drogon/HttpResponse.h``
+
+- ``drogon/HttpTypes.h``
+
+- ``future``
+
+- ``json/value.h``
+
+- ``trantor/net/EventLoopThread.h``
+
+- ``unordered_set``
+
+- ``utility``
+
+- ``vector`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector.cpp`)
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_amdinfer`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classamdinfer_1_1HttpClient_1_1HttpClientImpl`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_http_8cpp_1a91a52b2ef7f7d2a26cbad3cc60dab78d`
+
+- :ref:`exhale_function_http_8cpp_1a7d42e4a864836a32004fefea13cbd07f`
+
+- :ref:`exhale_function_http_8cpp_1aa8d7b351b03d53ab0f5801ffd061f79d`
+
+- :ref:`exhale_function_http_8cpp_1abb11c7992ffb6339af08d1ff6e0353ba`
+
+- :ref:`exhale_function_http_8cpp_1a32e9fc9ef05556e7d000554f8752678b`
+

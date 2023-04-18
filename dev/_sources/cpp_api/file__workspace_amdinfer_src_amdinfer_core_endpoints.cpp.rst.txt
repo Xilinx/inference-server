@@ -1,0 +1,64 @@
+
+.. _file__workspace_amdinfer_src_amdinfer_core_endpoints.cpp:
+
+File endpoints.cpp
+==================
+
+|exhale_lsh| :ref:`Parent directory <dir__workspace_amdinfer_src_amdinfer_core>` (``/workspace/amdinfer/src/amdinfer/core``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/workspace/amdinfer/src/amdinfer/core/endpoints.cpp``)
+--------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__workspace_amdinfer_src_amdinfer_core_endpoints.cpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``amdinfer/batching/batcher.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_batching_batcher.hpp`)
+
+- ``amdinfer/build_options.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_build_options.hpp`)
+
+- ``amdinfer/core/endpoints.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_endpoints.hpp`)
+
+- ``amdinfer/core/exceptions.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_exceptions.hpp`)
+
+- ``amdinfer/core/parameters.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_parameters.hpp`)
+
+- ``amdinfer/core/request_container.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_request_container.hpp`)
+
+- ``amdinfer/core/worker_info.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_worker_info.hpp`)
+
+- ``amdinfer/util/string.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_string.hpp`)
+
+- ``amdinfer/util/thread.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_thread.hpp`)
+
+- ``cassert``
+
+- ``type_traits``
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_amdinfer`
+

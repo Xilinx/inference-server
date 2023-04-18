@@ -1,0 +1,176 @@
+
+.. _file__workspace_amdinfer_include_amdinfer_core_predict_api.hpp:
+
+File predict_api.hpp
+====================
+
+|exhale_lsh| :ref:`Parent directory <dir__workspace_amdinfer_include_amdinfer_core>` (``/workspace/amdinfer/include/amdinfer/core``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+
+Defines the objects used to hold inference requests and responses. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/workspace/amdinfer/include/amdinfer/core/predict_api.hpp``)
+--------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__workspace_amdinfer_include_amdinfer_core_predict_api.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``amdinfer/build_options.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_build_options.hpp`)
+
+- ``amdinfer/core/data_types.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_data_types.hpp`)
+
+- ``amdinfer/core/mixins.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_mixins.hpp`)
+
+- ``amdinfer/core/parameters.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_parameters.hpp`)
+
+- ``amdinfer/declarations.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_declarations.hpp`)
+
+- ``cstddef``
+
+- ``cstdint``
+
+- ``functional``
+
+- ``future``
+
+- ``initializer_list``
+
+- ``map``
+
+- ``memory`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_memory.hpp`)
+
+- ``sstream``
+
+- ``string`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_string.hpp`)
+
+- ``string_view``
+
+- ``unordered_set``
+
+- ``utility``
+
+- ``variant``
+
+- ``vector`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector_buffer.cpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_clients_native_internal.hpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_endpoints.hpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_predict_api.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_predict_api_internal.hpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_shared_state.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_shared_state.hpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_worker_info.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_aks.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_aks_detect.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_aks_detect_stream.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_echo.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_echo_multi.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_invert_image.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_invert_video.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_migraphx.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_pt_zendnn.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_resnet50.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_resnet50_stream.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_tf_zendnn.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_worker.hpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_xmodel.cpp`
+
+- :ref:`file__workspace_amdinfer_include_amdinfer_amdinfer.hpp`
+
+- :ref:`file__workspace_amdinfer_include_amdinfer_clients_client.hpp`
+
+- :ref:`file__workspace_amdinfer_include_amdinfer_clients_grpc.hpp`
+
+- :ref:`file__workspace_amdinfer_include_amdinfer_clients_http.hpp`
+
+- :ref:`file__workspace_amdinfer_include_amdinfer_clients_native.hpp`
+
+- :ref:`file__workspace_amdinfer_include_amdinfer_clients_websocket.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_amdinfer`
+
+- :ref:`namespace_std`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structamdinfer_1_1ServerMetadata`
+
+- :ref:`exhale_struct_structstd_1_1less_3_01amdinfer_1_1ParameterMap_01_4`
+
+- :ref:`exhale_class_classamdinfer_1_1InferenceRequest`
+
+- :ref:`exhale_class_classamdinfer_1_1InferenceRequestInput`
+
+- :ref:`exhale_class_classamdinfer_1_1InferenceRequestOutput`
+
+- :ref:`exhale_class_classamdinfer_1_1InferenceResponse`
+
+- :ref:`exhale_class_classamdinfer_1_1ModelMetadata`
+
+- :ref:`exhale_class_classamdinfer_1_1ModelMetadataTensor`
+
+
+Typedefs
+--------
+
+
+- :ref:`exhale_typedef_predict__api_8hpp_1a08788239a50c8739700f08f0a6ede4e5`
+
+- :ref:`exhale_typedef_predict__api_8hpp_1a68c2a90f38823c9713e56fd203b2b88d`
+

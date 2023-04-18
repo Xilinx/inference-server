@@ -1,0 +1,130 @@
+
+.. _file__workspace_amdinfer_src_amdinfer_workers_invert_image.cpp:
+
+File invert_image.cpp
+=====================
+
+|exhale_lsh| :ref:`Parent directory <dir__workspace_amdinfer_src_amdinfer_workers>` (``/workspace/amdinfer/src/amdinfer/workers``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+Implements the InvertImage worker. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/workspace/amdinfer/src/amdinfer/workers/invert_image.cpp``)
+--------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__workspace_amdinfer_src_amdinfer_workers_invert_image.cpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``algorithm``
+
+- ``amdinfer/batching/batcher.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_batching_batcher.hpp`)
+
+- ``amdinfer/build_options.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_build_options.hpp`)
+
+- ``amdinfer/core/data_types.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_data_types.hpp`)
+
+- ``amdinfer/core/inference_request.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_inference_request.hpp`)
+
+- ``amdinfer/core/inference_response.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_inference_response.hpp`)
+
+- ``amdinfer/core/parameters.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_parameters.hpp`)
+
+- ``amdinfer/declarations.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_declarations.hpp`)
+
+- ``amdinfer/observation/logging.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_observation_logging.hpp`)
+
+- ``amdinfer/observation/metrics.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_observation_metrics.hpp`)
+
+- ``amdinfer/observation/tracing.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_observation_tracing.hpp`)
+
+- ``amdinfer/util/base64.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_base64.hpp`)
+
+- ``amdinfer/util/containers.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_containers.hpp`)
+
+- ``amdinfer/util/thread.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_thread.hpp`)
+
+- ``amdinfer/util/timer.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_timer.hpp`)
+
+- ``amdinfer/workers/worker.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_workers_worker.hpp`)
+
+- ``climits``
+
+- ``cstddef``
+
+- ``cstdint``
+
+- ``cstring``
+
+- ``memory`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_memory_pool_cpu_allocator.cpp`)
+
+- ``opencv2/core.hpp``
+
+- ``opencv2/imgcodecs.hpp``
+
+- ``ratio`` (:ref:`file__workspace_amdinfer_include_amdinfer_declarations.hpp`)
+
+- ``string`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_string.hpp`)
+
+- ``thread`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_thread.hpp`)
+
+- ``utility``
+
+- ``vector``
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_amdinfer`
+
+- :ref:`namespace_amdinfer__workers`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classamdinfer_1_1workers_1_1InvertImage`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_invert__image_8cpp_1a601552e385edb19c4596c0c81cabb7fe`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_invert__image_8cpp_1a778cfb0679cd1b44d77c94cc1e64cf74`
+
+- :ref:`exhale_variable_invert__image_8cpp_1a3fe6b60514f224d88012b81a72f206b0`
+
+- :ref:`exhale_variable_invert__image_8cpp_1ab862f12385b964a9f52578ce2b45f91a`
+

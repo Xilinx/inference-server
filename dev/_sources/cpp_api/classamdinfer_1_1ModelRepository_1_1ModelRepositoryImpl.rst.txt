@@ -1,0 +1,23 @@
+.. _exhale_class_classamdinfer_1_1ModelRepository_1_1ModelRepositoryImpl:
+
+Class ModelRepository::ModelRepositoryImpl
+==========================================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_core_model_repository.hpp`
+
+
+Nested Relationships
+--------------------
+
+This class is a nested type of :ref:`exhale_class_classamdinfer_1_1ModelRepository`.
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: amdinfer::ModelRepository::ModelRepositoryImpl
+   :project: amdinfer
+   :members:
+   :protected-members:
+   :undoc-members:

@@ -1,0 +1,13 @@
+.. _exhale_typedef_grpc__server_8cpp_1a0795844bf8bd399665e38979b3bbe186:
+
+Typedef ServerContext
+=====================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_servers_grpc_server.cpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: ServerContext

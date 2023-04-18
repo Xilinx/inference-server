@@ -1,0 +1,17 @@
+.. _exhale_class_classamdinfer_1_1InferenceRequestInputBuilder_3_01InferenceRequestInput_01_4:
+
+Template Class InferenceRequestInputBuilder< InferenceRequestInput >
+====================================================================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_clients_native_internal.cpp`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: amdinfer::InferenceRequestInputBuilder< InferenceRequestInput >
+   :project: amdinfer
+   :members:
+   :protected-members:
+   :undoc-members:

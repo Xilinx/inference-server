@@ -1,0 +1,22 @@
+.. _exhale_struct_structamdinfer_1_1Server_1_1ServerImpl:
+
+Struct Server::ServerImpl
+=========================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_servers_server_internal.hpp`
+
+
+Nested Relationships
+--------------------
+
+This struct is a nested type of :ref:`exhale_class_classamdinfer_1_1Server`.
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: amdinfer::Server::ServerImpl
+   :members:
+   :protected-members:
+   :undoc-members:

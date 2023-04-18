@@ -1,0 +1,13 @@
+.. _exhale_function_thread_8hpp_1a1f755ec0f69754bbf457b2c7f68a16c7:
+
+Function amdinfer::util::setThreadName(const char \*)
+=====================================================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_util_thread.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: amdinfer::util::setThreadName(const char *)

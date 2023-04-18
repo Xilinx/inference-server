@@ -1,0 +1,82 @@
+
+.. _program_listing_file__workspace_amdinfer_src_amdinfer_servers_websocket_server.hpp:
+
+Program Listing for File websocket_server.hpp
+=============================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__workspace_amdinfer_src_amdinfer_servers_websocket_server.hpp>` (``/workspace/amdinfer/src/amdinfer/servers/websocket_server.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   // Copyright 2021 Xilinx, Inc.
+   // Copyright 2022 Advanced Micro Devices, Inc.
+   //
+   // Licensed under the Apache License, Version 2.0 (the "License");
+   // you may not use this file except in compliance with the License.
+   // You may obtain a copy of the License at
+   //
+   //      http://www.apache.org/licenses/LICENSE-2.0
+   //
+   // Unless required by applicable law or agreed to in writing, software
+   // distributed under the License is distributed on an "AS IS" BASIS,
+   // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   // See the License for the specific language governing permissions and
+   // limitations under the License.
+   
+   #ifndef GUARD_AMDINFER_SERVERS_WEBSOCKET_SERVER
+   #define GUARD_AMDINFER_SERVERS_WEBSOCKET_SERVER
+   
+   #include <drogon/HttpRequest.h>          // for HttpRequestPtr
+   #include <drogon/HttpTypes.h>            // for Get, WebSocketMessageType
+   #include <drogon/WebSocketConnection.h>  // for WebSocketConnectionPtr
+   #include <drogon/WebSocketController.h>  // for WS_PATH_ADD, WS_PATH_LIST...
+   
+   #include <cstddef>    // for size_t
+   #include <exception>  // for exception
+   #include <memory>     // for shared_ptr, allocator
+   #include <string>     // for string
+   #include <vector>     // for vector
+   
+   #include "amdinfer/build_options.hpp"        // for AMDINFER_ENABLE_LOGGING
+   #include "amdinfer/declarations.hpp"         // for BufferRawPtrs
+   #include "amdinfer/observation/logging.hpp"  // for LoggerPtr
+   
+   namespace Json {  // NOLINT(readability-identifier-naming)
+   class Value;
+   }  // namespace Json
+   
+   namespace amdinfer {
+   class InferenceRequest;
+   class SharedState;
+   }  // namespace amdinfer
+   
+   namespace amdinfer::http {
+   
+   class WebsocketServer
+     : public drogon::WebSocketController<WebsocketServer, false> {
+    public:
+     explicit WebsocketServer(SharedState *state);  
+   
+     void handleNewMessage(const drogon::WebSocketConnectionPtr &conn,
+                           std::string &&message,
+                           const drogon::WebSocketMessageType &type) override;
+     void handleConnectionClosed(
+       const drogon::WebSocketConnectionPtr &conn) override;
+     void handleNewConnection(const drogon::HttpRequestPtr &req,
+                              const drogon::WebSocketConnectionPtr &conn) override;
+     WS_PATH_LIST_BEGIN
+     WS_PATH_ADD("/models/infer", drogon::Get);
+     WS_PATH_LIST_END
+   
+    private:
+   #ifdef AMDINFER_ENABLE_LOGGING
+     Logger logger_{Loggers::Server};
+   #endif
+     SharedState *state_;
+   };
+   
+   }  // namespace amdinfer::http
+   
+   #endif  // GUARD_AMDINFER_SERVERS_WEBSOCKET_SERVER

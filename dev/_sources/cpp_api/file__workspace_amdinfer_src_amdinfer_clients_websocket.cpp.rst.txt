@@ -1,0 +1,90 @@
+
+.. _file__workspace_amdinfer_src_amdinfer_clients_websocket.cpp:
+
+File websocket.cpp
+==================
+
+|exhale_lsh| :ref:`Parent directory <dir__workspace_amdinfer_src_amdinfer_clients>` (``/workspace/amdinfer/src/amdinfer/clients``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+Implements the methods for interacting with the server with WebSocket. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/workspace/amdinfer/src/amdinfer/clients/websocket.cpp``)
+-----------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__workspace_amdinfer_src_amdinfer_clients_websocket.cpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``amdinfer/clients/http.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_clients_http.hpp`)
+
+- ``amdinfer/clients/http_internal.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_clients_http_internal.hpp`)
+
+- ``amdinfer/clients/websocket.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_clients_websocket.hpp`)
+
+- ``amdinfer/core/inference_request.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_inference_request.hpp`)
+
+- ``amdinfer/core/inference_response.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_inference_response.hpp`)
+
+- ``cassert``
+
+- ``chrono``
+
+- ``concurrentqueue/blockingconcurrentqueue.h``
+
+- ``drogon/HttpRequest.h``
+
+- ``drogon/HttpResponse.h``
+
+- ``drogon/HttpTypes.h``
+
+- ``drogon/WebSocketClient.h``
+
+- ``drogon/WebSocketConnection.h``
+
+- ``json/value.h``
+
+- ``json/writer.h``
+
+- ``thread`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_thread.hpp`)
+
+- ``trantor/net/EventLoop.h``
+
+- ``trantor/net/EventLoopThread.h``
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_amdinfer`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classamdinfer_1_1WebSocketClient_1_1WebSocketClientImpl`
+

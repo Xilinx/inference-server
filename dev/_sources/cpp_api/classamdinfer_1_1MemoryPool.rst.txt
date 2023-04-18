@@ -1,0 +1,16 @@
+.. _exhale_class_classamdinfer_1_1MemoryPool:
+
+Class MemoryPool
+================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_core_memory_pool_pool.hpp`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: amdinfer::MemoryPool
+   :members:
+   :protected-members:
+   :undoc-members:

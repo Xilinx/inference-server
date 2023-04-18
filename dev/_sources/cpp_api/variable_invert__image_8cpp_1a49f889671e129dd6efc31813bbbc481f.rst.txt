@@ -1,0 +1,13 @@
+.. _exhale_variable_invert__image_8cpp_1a49f889671e129dd6efc31813bbbc481f:
+
+Variable kMaxImageChannels
+==========================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_models_invert_image.cpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: kMaxImageChannels

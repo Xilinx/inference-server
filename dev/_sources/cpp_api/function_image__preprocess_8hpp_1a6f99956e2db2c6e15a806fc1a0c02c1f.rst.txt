@@ -1,0 +1,13 @@
+.. _exhale_function_image__preprocess_8hpp_1a6f99956e2db2c6e15a806fc1a0c02c1f:
+
+Template Function amdinfer::pre_post::imagePreprocess
+=====================================================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_pre_post_image_preprocess.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: amdinfer::pre_post::imagePreprocess(const std::vector<std::string>&, const ImagePreprocessOptions<T, 3>&)

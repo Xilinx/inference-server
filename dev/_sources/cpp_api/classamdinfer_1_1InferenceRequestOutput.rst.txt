@@ -1,0 +1,16 @@
+.. _exhale_class_classamdinfer_1_1InferenceRequestOutput:
+
+Class InferenceRequestOutput
+============================
+
+- Defined in :ref:`file__workspace_amdinfer_include_amdinfer_core_inference_request.hpp`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: amdinfer::InferenceRequestOutput
+   :members:
+   :protected-members:
+   :undoc-members:

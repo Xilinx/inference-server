@@ -1,0 +1,25 @@
+.. _exhale_class_classamdinfer_1_1InferenceRequestInput:
+
+Class InferenceRequestInput
+===========================
+
+- Defined in :ref:`file__workspace_amdinfer_include_amdinfer_core_inference_request.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public amdinfer::InferenceTensor`` (:ref:`exhale_class_classamdinfer_1_1InferenceTensor`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: amdinfer::InferenceRequestInput
+   :members:
+   :protected-members:
+   :undoc-members:

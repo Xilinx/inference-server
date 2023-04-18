@@ -1,0 +1,22 @@
+selector_to_html = {"a[href=\"file__workspace_amdinfer_src_amdinfer_core_memory_pool_memory_allocator.hpp.html#file-workspace-amdinfer-src-amdinfer-core-memory-pool-memory-allocator-hpp\"]": "<h1 class=\"tippy-header\" style=\"margin-top: 0;\">File memory_allocator.hpp<a class=\"headerlink\" href=\"#file-memory-allocator-hpp\" title=\"Permalink to this heading\">\u00b6</a></h1><p>\u21b0 <a class=\"reference internal\" href=\"dir__workspace_amdinfer_src_amdinfer_core_memory_pool.html#dir-workspace-amdinfer-src-amdinfer-core-memory-pool\"><span class=\"std std-ref\">Parent directory</span></a> (<code class=\"docutils literal notranslate\"><span class=\"pre\">/workspace/amdinfer/src/amdinfer/core/memory_pool</span></code>)</p>", "a[href=\"#_CPPv4N8amdinfer16MemoryAllocators10VartTensorE\"]": "<dt class=\"sig sig-object cpp\" id=\"_CPPv4N8amdinfer16MemoryAllocators10VartTensorE\">\n<span id=\"_CPPv3N8amdinfer16MemoryAllocators10VartTensorE\"></span><span id=\"_CPPv2N8amdinfer16MemoryAllocators10VartTensorE\"></span><span class=\"target\" id=\"memory__allocator_8hpp_1a7c5b9c96a6c33be879d5f8b8eb3cd8d9ac4644559a568292d23cd6a3cce03e400\"></span><span class=\"k\"><span class=\"pre\">enumerator</span></span><span class=\"w\"> </span><span class=\"sig-name descname\"><span class=\"n\"><span class=\"pre\">VartTensor</span></span></span><br/></dt><dd></dd>", "a[href=\"#_CPPv4N8amdinfer16MemoryAllocatorsE\"]": "<dt class=\"sig sig-object cpp\" id=\"_CPPv4N8amdinfer16MemoryAllocatorsE\">\n<span id=\"_CPPv3N8amdinfer16MemoryAllocatorsE\"></span><span id=\"_CPPv2N8amdinfer16MemoryAllocatorsE\"></span><span class=\"target\" id=\"memory__allocator_8hpp_1a7c5b9c96a6c33be879d5f8b8eb3cd8d9\"></span><span class=\"k\"><span class=\"pre\">enum</span></span><span class=\"w\"> </span><span class=\"k\"><span class=\"pre\">class</span></span><span class=\"w\"> </span><span class=\"sig-prename descclassname\"><a class=\"reference internal\" href=\"../cpp_user_api.html#_CPPv48amdinfer\" title=\"amdinfer\"><span class=\"n\"><span class=\"pre\">amdinfer</span></span></a><span class=\"p\"><span class=\"pre\">::</span></span></span><span class=\"sig-name descname\"><span class=\"n\"><span class=\"pre\">MemoryAllocators</span></span></span><br/></dt><dd><p><em>Values:</em></p></dd>", "a[href=\"#_CPPv4N8amdinfer16MemoryAllocators3CpuE\"]": "<dt class=\"sig sig-object cpp\" id=\"_CPPv4N8amdinfer16MemoryAllocators3CpuE\">\n<span id=\"_CPPv3N8amdinfer16MemoryAllocators3CpuE\"></span><span id=\"_CPPv2N8amdinfer16MemoryAllocators3CpuE\"></span><span class=\"target\" id=\"memory__allocator_8hpp_1a7c5b9c96a6c33be879d5f8b8eb3cd8d9a54c82ef76ecbbd4c2293e09bae01b54e\"></span><span class=\"k\"><span class=\"pre\">enumerator</span></span><span class=\"w\"> </span><span class=\"sig-name descname\"><span class=\"n\"><span class=\"pre\">Cpu</span></span></span><br/></dt><dd></dd>", "a[href=\"../cpp_user_api.html#_CPPv48amdinfer\"]": "<dt class=\"sig sig-object cpp\" id=\"_CPPv48amdinfer\">\n<span id=\"_CPPv38amdinfer\"></span><span id=\"_CPPv28amdinfer\"></span><span id=\"amdinfer\"></span><span class=\"target\" id=\"namespaceamdinfer\"></span><span class=\"k\"><span class=\"pre\">namespace</span></span><span class=\"w\"> </span><span class=\"sig-name descname\"><span class=\"n\"><span class=\"pre\">amdinfer</span></span></span><br/></dt><dd></dd>", "a[href=\"#enum-memoryallocators\"]": "<h1 class=\"tippy-header\" style=\"margin-top: 0;\">Enum MemoryAllocators<a class=\"headerlink\" href=\"#enum-memoryallocators\" title=\"Permalink to this heading\">\u00b6</a></h1><h2>Enum Documentation<a class=\"headerlink\" href=\"#enum-documentation\" title=\"Permalink to this heading\">\u00b6</a></h2>", "a[href=\"#enum-documentation\"]": "<h2 class=\"tippy-header\" style=\"margin-top: 0;\">Enum Documentation<a class=\"headerlink\" href=\"#enum-documentation\" title=\"Permalink to this heading\">\u00b6</a></h2>"}
+skip_classes = ["headerlink", "sd-stretched-link"]
+
+window.onload = function () {
+    for (const [select, tip_html] of Object.entries(selector_to_html)) {
+        const links = document.querySelectorAll(` ${select}`);
+        for (const link of links) {
+            if (skip_classes.some(c => link.classList.contains(c))) {
+                continue;
+            }
+
+            tippy(link, {
+                content: tip_html,
+                allowHTML: true,
+                arrow: true,
+                placement: 'auto-start', maxWidth: 500, interactive: false,
+
+            });
+        };
+    };
+    console.log("tippy tips loaded!");
+};

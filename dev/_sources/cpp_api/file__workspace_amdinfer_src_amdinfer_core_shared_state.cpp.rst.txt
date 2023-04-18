@@ -1,0 +1,82 @@
+
+.. _file__workspace_amdinfer_src_amdinfer_core_shared_state.cpp:
+
+File shared_state.cpp
+=====================
+
+|exhale_lsh| :ref:`Parent directory <dir__workspace_amdinfer_src_amdinfer_core>` (``/workspace/amdinfer/src/amdinfer/core``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/workspace/amdinfer/src/amdinfer/core/shared_state.cpp``)
+-----------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__workspace_amdinfer_src_amdinfer_core_shared_state.cpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``amdinfer/build_options.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_build_options.hpp`)
+
+- ``amdinfer/core/endpoints.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_endpoints.hpp`)
+
+- ``amdinfer/core/exceptions.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_exceptions.hpp`)
+
+- ``amdinfer/core/model_config.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_model_config.hpp`)
+
+- ``amdinfer/core/model_repository.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_model_repository.hpp`)
+
+- ``amdinfer/core/parameters.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_parameters.hpp`)
+
+- ``amdinfer/core/request_container.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_request_container.hpp`)
+
+- ``amdinfer/core/shared_state.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_shared_state.hpp`)
+
+- ``amdinfer/observation/observer.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_observation_observer.hpp`)
+
+- ``amdinfer/util/string.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_string.hpp`)
+
+- ``amdinfer/version.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_version.hpp`)
+
+- ``cassert``
+
+- ``filesystem`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_filesystem.cpp`)
+
+- ``iostream``
+
+- ``jsoncpp/json/reader.h``
+
+- ``jsoncpp/json/value.h``
+
+- ``string`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_string.hpp`)
+
+- ``unordered_map``
+
+- ``unordered_set``
+
+- ``utility``
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_amdinfer`
+

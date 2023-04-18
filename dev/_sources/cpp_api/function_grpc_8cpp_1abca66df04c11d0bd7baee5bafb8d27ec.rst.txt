@@ -1,0 +1,13 @@
+.. _exhale_function_grpc_8cpp_1abca66df04c11d0bd7baee5bafb8d27ec:
+
+Function amdinfer::mapProtoToModelMetadata
+==========================================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_clients_grpc.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: amdinfer::mapProtoToModelMetadata(const inference::ModelMetadataResponse&)

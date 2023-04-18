@@ -1,0 +1,13 @@
+.. _exhale_function_model__config_8cpp_1a8760611469261389e290e73112952772:
+
+Function amdinfer::extractModelConfigTensor
+===========================================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_core_model_config.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: amdinfer::extractModelConfigTensor(const toml::table&)

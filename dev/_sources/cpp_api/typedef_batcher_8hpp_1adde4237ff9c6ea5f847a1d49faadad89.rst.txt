@@ -1,0 +1,13 @@
+.. _exhale_typedef_batcher_8hpp_1adde4237ff9c6ea5f847a1d49faadad89:
+
+Typedef amdinfer::BatchPtrQueue
+===============================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_batching_batcher.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: amdinfer::BatchPtrQueue

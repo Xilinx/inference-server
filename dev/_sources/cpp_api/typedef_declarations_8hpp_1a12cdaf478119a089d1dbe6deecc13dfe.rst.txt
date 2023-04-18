@@ -1,0 +1,13 @@
+.. _exhale_typedef_declarations_8hpp_1a12cdaf478119a089d1dbe6deecc13dfe:
+
+Typedef amdinfer::InferenceRequestPtr
+=====================================
+
+- Defined in :ref:`file__workspace_amdinfer_include_amdinfer_declarations.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: amdinfer::InferenceRequestPtr

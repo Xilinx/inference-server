@@ -1,0 +1,25 @@
+.. _exhale_class_classamdinfer_1_1environment__not__set__error:
+
+Class environment_not_set_error
+===============================
+
+- Defined in :ref:`file__workspace_amdinfer_include_amdinfer_core_exceptions.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public amdinfer::runtime_error`` (:ref:`exhale_class_classamdinfer_1_1runtime__error`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: amdinfer::environment_not_set_error
+   :members:
+   :protected-members:
+   :undoc-members:

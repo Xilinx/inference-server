@@ -1,0 +1,13 @@
+.. _exhale_variable_build__options_8hpp_1a002b97a750e7bcc073424b03ebb1dcb5:
+
+Variable kDefaultHttpPort
+=========================
+
+- Defined in :ref:`file__workspace_amdinfer_include_amdinfer_build_options.hpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: kDefaultHttpPort

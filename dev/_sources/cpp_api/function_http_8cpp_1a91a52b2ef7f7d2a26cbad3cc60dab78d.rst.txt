@@ -1,0 +1,13 @@
+.. _exhale_function_http_8cpp_1a91a52b2ef7f7d2a26cbad3cc60dab78d:
+
+Function amdinfer::addHeaders
+=============================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_clients_http.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: amdinfer::addHeaders(const drogon::HttpRequestPtr&, const StringMap&)

@@ -1,0 +1,59 @@
+
+.. _file__workspace_amdinfer_src_amdinfer_pre_post_softmax.hpp:
+
+File softmax.hpp
+================
+
+|exhale_lsh| :ref:`Parent directory <dir__workspace_amdinfer_src_amdinfer_pre_post>` (``/workspace/amdinfer/src/amdinfer/pre_post``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/workspace/amdinfer/src/amdinfer/pre_post/softmax.hpp``)
+----------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__workspace_amdinfer_src_amdinfer_pre_post_softmax.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``cstddef``
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_pre_post_resnet50_postprocess.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_amdinfer`
+
+- :ref:`namespace_amdinfer__pre_post`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_softmax_8hpp_1acab8d186d21c38a86ed76bb9246a58da`
+

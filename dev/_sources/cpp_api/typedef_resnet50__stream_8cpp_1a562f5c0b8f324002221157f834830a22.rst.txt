@@ -1,0 +1,13 @@
+.. _exhale_typedef_resnet50__stream_8cpp_1a562f5c0b8f324002221157f834830a22:
+
+Typedef VidProps
+================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_workers_resnet50_stream.cpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: VidProps

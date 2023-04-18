@@ -1,0 +1,13 @@
+.. _exhale_variable_c__plus__plus_8cpp_1a71667fd42c5cef1a3e32e5c03ae40091:
+
+Variable amdinfer::kInputLengths
+================================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_workers_c_plus_plus.cpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: amdinfer::kInputLengths

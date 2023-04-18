@@ -1,0 +1,132 @@
+
+.. _program_listing_file__workspace_amdinfer_include_amdinfer_core_parameters.hpp:
+
+Program Listing for File parameters.hpp
+=======================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__workspace_amdinfer_include_amdinfer_core_parameters.hpp>` (``/workspace/amdinfer/include/amdinfer/core/parameters.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   // Copyright 2023 Advanced Micro Devices, Inc.
+   //
+   // Licensed under the Apache License, Version 2.0 (the "License");
+   // you may not use this file except in compliance with the License.
+   // You may obtain a copy of the License at
+   //
+   //      http://www.apache.org/licenses/LICENSE-2.0
+   //
+   // Unless required by applicable law or agreed to in writing, software
+   // distributed under the License is distributed on an "AS IS" BASIS,
+   // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   // See the License for the specific language governing permissions and
+   // limitations under the License.
+   
+   #include <cstddef>     // for byte, size_t
+   #include <cstdint>     // for int32_t
+   #include <functional>  // for less
+   #include <map>         // for map
+   #include <memory>      // for shared_ptr
+   #include <sstream>     // for operator<<, basic_ostream, strin...
+   #include <string>      // for string, operator<<, char_traits
+   #include <variant>     // for visit, variant
+   
+   #include "amdinfer/core/mixins.hpp"  // for Serializable
+   
+   #ifndef GUARD_AMDINFER_CORE_PARAMETERS
+   #define GUARD_AMDINFER_CORE_PARAMETERS
+   
+   namespace amdinfer {
+   
+   using Parameter = std::variant<bool, int32_t, double, std::string>;
+   
+   class ParameterMap : public Serializable {
+     using Container = std::map<std::string, Parameter, std::less<>>;
+     using Iterator = Container::iterator;
+     using ConstIterator = Container::const_iterator;
+   
+    public:
+     ParameterMap() = default;
+     ParameterMap(const std::vector<std::string> &keys,
+                  const std::vector<Parameter> &values);
+   
+     void put(const std::string &key, Parameter value);
+     void put(const std::string &key, const char *value);
+     template <typename T>
+     T get(const std::string &key) const {
+       auto &value = this->parameters_.at(key);
+       return std::get<T>(value);
+     }
+   
+     bool has(const std::string &key) const;
+   
+     void rename(const std::string &key, const std::string &new_key);
+   
+     void erase(const std::string &key);
+     [[nodiscard]] size_t size() const;
+     [[nodiscard]] bool empty() const;
+     [[nodiscard]] std::map<std::string, Parameter, std::less<>> data() const;
+   
+     Iterator begin();
+     [[nodiscard]] ConstIterator begin() const;
+     [[nodiscard]] ConstIterator cbegin() const;
+   
+     Iterator end();
+     [[nodiscard]] ConstIterator end() const;
+     [[nodiscard]] ConstIterator cend() const;
+   
+     [[nodiscard]] size_t serializeSize() const override;
+     std::byte *serialize(std::byte *data_out) const override;
+     const std::byte *deserialize(const std::byte *data_in) override;
+   
+     friend std::ostream &operator<<(std::ostream &os, const ParameterMap &self) {
+       std::stringstream ss;
+       ss << "ParameterMap(" << &self << "):\n";
+       for (const auto &[key, value] : self.parameters_) {
+         ss << "  " << key << ": ";
+         std::visit([&](const auto &c) { ss << c; }, value);
+         ss << "\n";
+       }
+       auto tmp = ss.str();
+       tmp.pop_back();  // delete trailing newline
+       os << tmp;
+       return os;
+     }
+   
+    private:
+     Container parameters_;
+   };
+   
+   using ParameterMapPtr = std::shared_ptr<ParameterMap>;
+   
+   }  // namespace amdinfer
+   
+   namespace std {
+   template <>
+   struct less<amdinfer::ParameterMap> {
+     bool operator()(const amdinfer::ParameterMap &lhs,
+                     const amdinfer::ParameterMap &rhs) const {
+       auto lhs_size = lhs.size();
+       auto rhs_size = rhs.size();
+       auto lhs_map = lhs.data();
+       auto rhs_map = rhs.data();
+       if (lhs_size == rhs_size) {
+         for (const auto &[key, lhs_value] : lhs_map) {
+           if (rhs_map.find(key) == rhs_map.end()) {
+             return true;
+           }
+           const auto &rhs_value = rhs_map.at(key);
+           if (lhs_value != rhs_value) {
+             return lhs_value < rhs_value;
+           }
+         }
+         return false;
+       }
+       return lhs_size < rhs_size;
+     }
+   };
+   }  // namespace std
+   
+   #endif  // GUARD_AMDINFER_CORE_PARAMETERS

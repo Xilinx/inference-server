@@ -1,0 +1,137 @@
+
+.. _program_listing_file__workspace_amdinfer_include_amdinfer_core_inference_request.hpp:
+
+Program Listing for File inference_request.hpp
+==============================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__workspace_amdinfer_include_amdinfer_core_inference_request.hpp>` (``/workspace/amdinfer/include/amdinfer/core/inference_request.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   // Copyright 2023 Advanced Micro Devices, Inc.
+   //
+   // Licensed under the Apache License, Version 2.0 (the "License");
+   // you may not use this file except in compliance with the License.
+   // You may obtain a copy of the License at
+   //
+   //      http://www.apache.org/licenses/LICENSE-2.0
+   //
+   // Unless required by applicable law or agreed to in writing, software
+   // distributed under the License is distributed on an "AS IS" BASIS,
+   // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   // See the License for the specific language governing permissions and
+   // limitations under the License.
+   
+   #ifndef GUARD_AMDINFER_CORE_INFERENCE_REQUEST
+   #define GUARD_AMDINFER_CORE_INFERENCE_REQUEST
+   
+   #include <string>
+   #include <vector>
+   
+   #include "amdinfer/core/data_types.hpp"
+   #include "amdinfer/core/inference_tensor.hpp"
+   #include "amdinfer/core/parameters.hpp"
+   #include "amdinfer/declarations.hpp"
+   
+   namespace amdinfer {
+   
+   class InferenceRequestInput : public InferenceTensor {
+    public:
+     InferenceRequestInput();
+     explicit InferenceRequestInput(const Tensor &tensor);
+   
+     InferenceRequestInput(void *data, std::vector<uint64_t> shape,
+                           DataType data_type, std::string name = "");
+   
+     void setData(void *buffer);
+     [[nodiscard]] void *getData() const;
+   
+     [[nodiscard]] size_t serializeSize() const override;
+     std::byte *serialize(std::byte *data_out) const override;
+     const std::byte *deserialize(const std::byte *data_in) override;
+   
+     friend std::ostream &operator<<(std::ostream &os,
+                                     InferenceRequestInput const &my_class);
+   
+    private:
+     void *data_ = nullptr;
+   };
+   
+   class InferenceRequestOutput {
+    public:
+     InferenceRequestOutput();
+   
+     void setData(void *buffer) { this->data_ = buffer; }
+   
+     void *getData() { return this->data_; }
+   
+     [[nodiscard]] std::string getName() const { return this->name_; }
+     void setName(const std::string &name);
+   
+     void setParameters(ParameterMap parameters) {
+       parameters_ = std::move(parameters);
+     }
+     const ParameterMap &getParameters() const & { return parameters_; }
+     ParameterMap getParameters() && { return std::move(parameters_); }
+   
+    private:
+     std::string name_;
+     ParameterMap parameters_;
+     void *data_;
+   };
+   
+   class InferenceRequest {
+    public:
+     // Construct a new InferenceRequest object
+     InferenceRequest() = default;
+   
+     InferenceRequestPtr propagate();
+   
+     void setCallback(Callback &&callback);
+     Callback getCallback();
+     void runCallback(const InferenceResponse &response);
+     void runCallbackOnce(const InferenceResponse &response);
+     void runCallbackError(std::string_view error_msg);
+   
+     void addInputTensor(void *data, const std::vector<uint64_t> &shape,
+                         DataType data_type, const std::string &name = "");
+   
+     void addInputTensor(InferenceRequestInput input);
+   
+     void setInputTensorData(size_t index, void *data);
+     void addOutputTensor(const InferenceRequestOutput &output);
+   
+     [[nodiscard]] const std::vector<InferenceRequestInput> &getInputs() const;
+     [[nodiscard]] size_t getInputSize() const;
+   
+     [[nodiscard]] const std::vector<InferenceRequestOutput> &getOutputs() const;
+   
+     [[nodiscard]] const std::string &getID() const { return id_; }
+     void setID(std::string_view id) { id_ = id; }
+   
+     [[nodiscard]] const ParameterMap &getParameters() const & {
+       return parameters_;
+     }
+     [[nodiscard]] ParameterMap getParameters() && {
+       return std::move(parameters_);
+     }
+     void setParameters(ParameterMap parameters) {
+       parameters_ = std::move(parameters);
+     }
+   
+    private:
+     std::string id_;
+     ParameterMap parameters_;
+     std::vector<InferenceRequestInput> inputs_;
+     std::vector<InferenceRequestOutput> outputs_;
+     Callback callback_;
+   
+     // TODO(varunsh): do we need this still?
+     friend class FakeInferenceRequest;
+   };
+   
+   }  // namespace amdinfer
+   
+   #endif  // GUARD_AMDINFER_CORE_INFERENCE_REQUEST

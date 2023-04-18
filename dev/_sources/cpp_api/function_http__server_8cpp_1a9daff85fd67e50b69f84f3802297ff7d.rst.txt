@@ -1,0 +1,13 @@
+.. _exhale_function_http__server_8cpp_1a9daff85fd67e50b69f84f3802297ff7d:
+
+Function amdinfer::parseJson
+============================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_servers_http_server.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: amdinfer::parseJson(const drogon::HttpRequest *)

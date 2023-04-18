@@ -1,0 +1,119 @@
+
+.. _file__workspace_amdinfer_src_amdinfer_clients_grpc_internal.cpp:
+
+File grpc_internal.cpp
+======================
+
+|exhale_lsh| :ref:`Parent directory <dir__workspace_amdinfer_src_amdinfer_clients>` (``/workspace/amdinfer/src/amdinfer/clients``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+Implements the internal objects used for gRPC. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/workspace/amdinfer/src/amdinfer/clients/grpc_internal.cpp``)
+---------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__workspace_amdinfer_src_amdinfer_clients_grpc_internal.cpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``amdinfer/build_options.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_build_options.hpp`)
+
+- ``amdinfer/clients/grpc_internal.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_clients_grpc_internal.hpp`)
+
+- ``amdinfer/core/data_types.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_data_types.hpp`)
+
+- ``amdinfer/core/inference_request.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_inference_request.hpp`)
+
+- ``amdinfer/core/inference_response.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_inference_response.hpp`)
+
+- ``amdinfer/core/model_metadata.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_model_metadata.hpp`)
+
+- ``amdinfer/core/request_container.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_request_container.hpp`)
+
+- ``amdinfer/declarations.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_declarations.hpp`)
+
+- ``amdinfer/observation/observer.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_observation_observer.hpp`)
+
+- ``amdinfer/util/traits.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_traits.hpp`)
+
+- ``cstddef``
+
+- ``cstdint``
+
+- ``cstring``
+
+- ``google/protobuf/repeated_ptr_field.h``
+
+- ``google/protobuf/stubs/common.h``
+
+- ``inference.pb.h``
+
+- ``memory`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_memory_pool_cpu_allocator.cpp`)
+
+- ``utility``
+
+- ``variant``
+
+- ``vector`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector.cpp`)
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_amdinfer`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structamdinfer_1_1AddDataToTensor`
+
+- :ref:`exhale_struct_structamdinfer_1_1Overloaded`
+
+- :ref:`exhale_struct_structamdinfer_1_1SetOutputData`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_grpc__internal_8cpp_1a9529bfb0905d019214381197735cb2bf`
+
+- :ref:`exhale_function_grpc__internal_8cpp_1a47a63870c628bbcc0f88a7da1e3c3580`
+
+- :ref:`exhale_function_grpc__internal_8cpp_1a810895b7fc432ac1fdda46f6b426644a`
+
+- :ref:`exhale_function_grpc__internal_8cpp_1a976514706c6b64c1fdd73fc85fa7a917`
+
+- :ref:`exhale_function_grpc__internal_8cpp_1a95af9e6fefbe2dd323562124a33284a9`
+
+- :ref:`exhale_function_grpc__internal_8cpp_1a9571eec4e243504a9649a5d1817db835`
+
+- :ref:`exhale_function_grpc__internal_8cpp_1a757a8b0dc668948c0d7536e955a2fcd6`
+
+- :ref:`exhale_function_grpc__internal_8cpp_1aedf702344a580ab5481f76a200fe60e5`
+

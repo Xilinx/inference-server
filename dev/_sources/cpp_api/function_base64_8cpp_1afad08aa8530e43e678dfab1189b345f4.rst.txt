@@ -1,0 +1,13 @@
+.. _exhale_function_base64_8cpp_1afad08aa8530e43e678dfab1189b345f4:
+
+Function amdinfer::util::minEncodeLength
+========================================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_util_base64.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: amdinfer::util::minEncodeLength(size_t)

@@ -1,0 +1,13 @@
+.. _exhale_function_read__nth__line_8cpp_1ab24290f139bfd0ba4a626bdd7d5412d4:
+
+Function amdinfer::util::readNthLine
+====================================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_util_read_nth_line.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: amdinfer::util::readNthLine(const std::string&, int)

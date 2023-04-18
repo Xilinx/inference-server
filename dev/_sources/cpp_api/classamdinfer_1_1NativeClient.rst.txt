@@ -1,0 +1,35 @@
+.. _exhale_class_classamdinfer_1_1NativeClient:
+
+Class NativeClient
+==================
+
+- Defined in :ref:`file__workspace_amdinfer_include_amdinfer_clients_native.hpp`
+
+
+Nested Relationships
+--------------------
+
+
+Nested Types
+************
+
+- :ref:`exhale_struct_structamdinfer_1_1NativeClient_1_1NativeClientImpl`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public amdinfer::Client`` (:ref:`exhale_class_classamdinfer_1_1Client`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: amdinfer::NativeClient
+   :members:
+   :protected-members:
+   :undoc-members:

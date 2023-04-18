@@ -1,0 +1,54 @@
+
+.. _program_listing_file__workspace_amdinfer_include_amdinfer_build_options.hpp:
+
+Program Listing for File build_options.hpp
+==========================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__workspace_amdinfer_include_amdinfer_build_options.hpp>` (``/workspace/amdinfer/include/amdinfer/build_options.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   // Copyright 2021 Xilinx, Inc.
+   // Copyright 2022 Advanced Micro Devices, Inc.
+   //
+   // Licensed under the Apache License, Version 2.0 (the "License");
+   // you may not use this file except in compliance with the License.
+   // You may obtain a copy of the License at
+   //
+   //      http://www.apache.org/licenses/LICENSE-2.0
+   //
+   // Unless required by applicable law or agreed to in writing, software
+   // distributed under the License is distributed on an "AS IS" BASIS,
+   // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   // See the License for the specific language governing permissions and
+   // limitations under the License.
+   
+   #ifndef GUARD_AMDINFER_BUILD_OPTIONS_HPP
+   #define GUARD_AMDINFER_BUILD_OPTIONS_HPP
+   
+   #define AMDINFER_BUILD_TESTING
+   #define AMDINFER_ENABLE_METRICS
+   #define AMDINFER_ENABLE_HTTP
+   #define AMDINFER_ENABLE_GRPC
+   #define AMDINFER_ENABLE_TRACING
+   #define AMDINFER_ENABLE_LOGGING
+   #define AMDINFER_ENABLE_AKS
+   #define AMDINFER_ENABLE_VITIS
+   #define AMDINFER_ENABLE_TFZENDNN
+   #define AMDINFER_ENABLE_PTZENDNN
+   #define AMDINFER_ENABLE_MIGRAPHX
+   
+   constexpr auto kDefaultHttpPort = 8998;
+   
+   constexpr auto kDefaultGrpcPort = 50051;
+   
+   constexpr auto kDefaultDrogonThreads = 16;
+   
+   constexpr auto kMaxClientBodySize = 419430400;
+   
+   constexpr auto kMaxGrpcMessageSize = 20971520;
+   
+   constexpr auto kMaxModelNameSize = 64;
+   #endif  // GUARD_AMDINFER_BUILD_OPTIONS_HPP

@@ -1,0 +1,25 @@
+.. _exhale_class_classamdinfer_1_1CallDataModelList:
+
+Class CallDataModelList
+=======================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_servers_grpc_server.cpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public amdinfer::CallDataUnary< inference::ModelListRequest, inference::ModelListResponse >`` (:ref:`exhale_class_classamdinfer_1_1CallDataUnary`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: amdinfer::CallDataModelList
+   :members:
+   :protected-members:
+   :undoc-members:

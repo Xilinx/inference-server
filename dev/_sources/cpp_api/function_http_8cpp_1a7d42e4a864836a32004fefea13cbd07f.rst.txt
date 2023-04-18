@@ -1,0 +1,13 @@
+.. _exhale_function_http_8cpp_1a7d42e4a864836a32004fefea13cbd07f:
+
+Function amdinfer::checkError
+=============================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_clients_http.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: amdinfer::checkError(drogon::ReqResult)

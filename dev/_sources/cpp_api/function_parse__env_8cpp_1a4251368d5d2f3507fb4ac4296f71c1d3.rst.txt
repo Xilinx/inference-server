@@ -1,0 +1,13 @@
+.. _exhale_function_parse__env_8cpp_1a4251368d5d2f3507fb4ac4296f71c1d3:
+
+Function amdinfer::util::autoExpandEnvironmentVariables
+=======================================================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_util_parse_env.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: amdinfer::util::autoExpandEnvironmentVariables(std::string&)

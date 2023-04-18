@@ -1,0 +1,132 @@
+
+.. _file__workspace_amdinfer_include_amdinfer_core_exceptions.hpp:
+
+File exceptions.hpp
+===================
+
+|exhale_lsh| :ref:`Parent directory <dir__workspace_amdinfer_include_amdinfer_core>` (``/workspace/amdinfer/include/amdinfer/core``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+Defines the exception classes. Exception classes follow lower-case snake case name syntax of the standard exceptions in std. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/workspace/amdinfer/include/amdinfer/core/exceptions.hpp``)
+-------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__workspace_amdinfer_include_amdinfer_core_exceptions.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``stdexcept``
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_batching_hard.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_batching_soft.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_clients_client.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_clients_grpc.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_clients_http.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_clients_http_internal.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_clients_native.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_data_types_internal.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_endpoints.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_memory_pool_cpu_allocator.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_memory_pool_pool.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_memory_pool_vart_tensor_allocator.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_model_config.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_model_repository.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_parameters.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_shared_state.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_worker_info.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_observation_logging.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_servers_grpc_server.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_servers_http_server.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_servers_server.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_servers_websocket_server.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_util_filesystem.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_migraphx.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_pt_zendnn.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_tf_zendnn.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_xmodel.cpp`
+
+- :ref:`file__workspace_amdinfer_include_amdinfer_amdinfer.hpp`
+
+- :ref:`file__workspace_amdinfer_include_amdinfer_core_data_types.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_amdinfer`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classamdinfer_1_1bad__status`
+
+- :ref:`exhale_class_classamdinfer_1_1connection__error`
+
+- :ref:`exhale_class_classamdinfer_1_1environment__not__set__error`
+
+- :ref:`exhale_class_classamdinfer_1_1external__error`
+
+- :ref:`exhale_class_classamdinfer_1_1file__not__found__error`
+
+- :ref:`exhale_class_classamdinfer_1_1file__read__error`
+
+- :ref:`exhale_class_classamdinfer_1_1invalid__argument`
+
+- :ref:`exhale_class_classamdinfer_1_1runtime__error`
+

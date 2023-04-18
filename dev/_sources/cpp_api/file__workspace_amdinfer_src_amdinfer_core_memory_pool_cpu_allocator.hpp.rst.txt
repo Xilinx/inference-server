@@ -1,0 +1,67 @@
+
+.. _file__workspace_amdinfer_src_amdinfer_core_memory_pool_cpu_allocator.hpp:
+
+File cpu_allocator.hpp
+======================
+
+|exhale_lsh| :ref:`Parent directory <dir__workspace_amdinfer_src_amdinfer_core_memory_pool>` (``/workspace/amdinfer/src/amdinfer/core/memory_pool``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/workspace/amdinfer/src/amdinfer/core/memory_pool/cpu_allocator.hpp``)
+------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__workspace_amdinfer_src_amdinfer_core_memory_pool_cpu_allocator.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``amdinfer/core/memory_pool/memory_allocator.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_memory_pool_memory_allocator.hpp`)
+
+- ``cstddef``
+
+- ``list``
+
+- ``mutex``
+
+- ``vector`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector.cpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_memory_pool_cpu_allocator.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_memory_pool_pool.cpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_amdinfer`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classamdinfer_1_1CpuAllocator`
+

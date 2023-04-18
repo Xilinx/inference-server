@@ -1,0 +1,13 @@
+.. _exhale_function_base64__encode_8cpp_1a88e88f0ce7df9ffadac20aec94d1db2c:
+
+Function getOutputs()
+=====================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_models_base64_encode.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: getOutputs()

@@ -1,0 +1,88 @@
+
+.. _file__workspace_amdinfer_src_amdinfer_observation_metrics.cpp:
+
+File metrics.cpp
+================
+
+|exhale_lsh| :ref:`Parent directory <dir__workspace_amdinfer_src_amdinfer_observation>` (``/workspace/amdinfer/src/amdinfer/observation``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+Implements what metrics are defined and how they're are gathered. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/workspace/amdinfer/src/amdinfer/observation/metrics.cpp``)
+-------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__workspace_amdinfer_src_amdinfer_observation_metrics.cpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``amdinfer/observation/metrics.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_observation_metrics.hpp`)
+
+- ``amdinfer/util/timer.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_timer.hpp`)
+
+- ``iterator``
+
+- ``memory`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_memory_pool_cpu_allocator.cpp`)
+
+- ``prometheus/collectable.h``
+
+- ``prometheus/counter.h``
+
+- ``prometheus/family.h``
+
+- ``prometheus/gauge.h``
+
+- ``prometheus/metric_family.h``
+
+- ``prometheus/serializer.h``
+
+- ``prometheus/summary.h``
+
+- ``prometheus/text_serializer.h``
+
+- ``ratio`` (:ref:`file__workspace_amdinfer_include_amdinfer_declarations.hpp`)
+
+- ``string`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_string.hpp`)
+
+- ``vector`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector.cpp`)
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_amdinfer`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_metrics_8cpp_1ade316533d688f2811817fa7a1a73f084`
+
+- :ref:`exhale_variable_metrics_8cpp_1a214ca5f30222281458498214a0d9300c`
+
+- :ref:`exhale_variable_metrics_8cpp_1ab6051d51a6bd12208f6574272fac9117`
+

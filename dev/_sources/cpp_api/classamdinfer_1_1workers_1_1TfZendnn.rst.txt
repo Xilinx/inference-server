@@ -1,0 +1,25 @@
+.. _exhale_class_classamdinfer_1_1workers_1_1TfZendnn:
+
+Class TfZendnn
+==============
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_workers_tf_zendnn.cpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public amdinfer::workers::SingleThreadedWorker`` (:ref:`exhale_class_classamdinfer_1_1workers_1_1SingleThreadedWorker`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: amdinfer::workers::TfZendnn
+   :members:
+   :protected-members:
+   :undoc-members:

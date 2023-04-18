@@ -1,0 +1,61 @@
+
+.. _file__workspace_amdinfer_include_amdinfer_amdinfer.hpp:
+
+File amdinfer.hpp
+=================
+
+|exhale_lsh| :ref:`Parent directory <dir__workspace_amdinfer_include_amdinfer>` (``/workspace/amdinfer/include/amdinfer``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/workspace/amdinfer/include/amdinfer/amdinfer.hpp``)
+------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__workspace_amdinfer_include_amdinfer_amdinfer.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``amdinfer/build_options.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_build_options.hpp`)
+
+- ``amdinfer/clients/grpc.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_clients_grpc.hpp`)
+
+- ``amdinfer/clients/http.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_clients_http.hpp`)
+
+- ``amdinfer/clients/native.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_clients_native.hpp`)
+
+- ``amdinfer/core/data_types.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_data_types.hpp`)
+
+- ``amdinfer/core/exceptions.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_exceptions.hpp`)
+
+- ``amdinfer/core/inference_request.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_inference_request.hpp`)
+
+- ``amdinfer/core/inference_response.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_inference_response.hpp`)
+
+- ``amdinfer/core/model_metadata.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_model_metadata.hpp`)
+
+- ``amdinfer/core/parameters.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_parameters.hpp`)
+
+- ``amdinfer/core/server_metadata.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_server_metadata.hpp`)
+
+- ``amdinfer/declarations.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_declarations.hpp`)
+
+- ``amdinfer/servers/server.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_servers_server.hpp`)
+
+
+
+
+

@@ -1,0 +1,14 @@
+.. _exhale_variable_echo__multi_8cpp_1a99f0d6272c799cd29afc336c68feb898:
+
+Variable amdinfer::kInputTensors
+================================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_workers_echo_multi.cpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: amdinfer::kInputTensors
+   :project: amdinfer

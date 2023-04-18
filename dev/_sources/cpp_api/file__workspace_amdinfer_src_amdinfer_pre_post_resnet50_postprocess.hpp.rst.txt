@@ -1,0 +1,57 @@
+
+.. _file__workspace_amdinfer_src_amdinfer_pre_post_resnet50_postprocess.hpp:
+
+File resnet50_postprocess.hpp
+=============================
+
+|exhale_lsh| :ref:`Parent directory <dir__workspace_amdinfer_src_amdinfer_pre_post>` (``/workspace/amdinfer/src/amdinfer/pre_post``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/workspace/amdinfer/src/amdinfer/pre_post/resnet50_postprocess.hpp``)
+-----------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__workspace_amdinfer_src_amdinfer_pre_post_resnet50_postprocess.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``amdinfer/pre_post/get_top_k.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_pre_post_get_top_k.hpp`)
+
+- ``amdinfer/pre_post/softmax.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_pre_post_softmax.hpp`)
+
+- ``vector`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector.cpp`)
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_amdinfer`
+
+- :ref:`namespace_amdinfer__pre_post`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_resnet50__postprocess_8hpp_1a50359236db961994e219d8eff7ae2aec`
+

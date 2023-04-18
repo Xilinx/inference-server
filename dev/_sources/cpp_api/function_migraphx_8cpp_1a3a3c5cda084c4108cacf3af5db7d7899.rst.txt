@@ -1,0 +1,13 @@
+.. _exhale_function_migraphx_8cpp_1a3a3c5cda084c4108cacf3af5db7d7899:
+
+Function amdinfer::workers::toDataType
+======================================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_workers_migraphx.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: amdinfer::workers::toDataType(migraphx_shape_datatype_t)

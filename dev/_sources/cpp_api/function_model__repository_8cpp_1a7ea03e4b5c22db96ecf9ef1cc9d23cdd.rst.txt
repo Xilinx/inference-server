@@ -1,0 +1,13 @@
+.. _exhale_function_model__repository_8cpp_1a7ea03e4b5c22db96ecf9ef1cc9d23cdd:
+
+Function amdinfer::findConfigFile
+=================================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_core_model_repository.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: amdinfer::findConfigFile(const fs::path&, const std::string&)

@@ -1,0 +1,85 @@
+
+.. _file__workspace_amdinfer_src_amdinfer_servers_websocket_server.hpp:
+
+File websocket_server.hpp
+=========================
+
+|exhale_lsh| :ref:`Parent directory <dir__workspace_amdinfer_src_amdinfer_servers>` (``/workspace/amdinfer/src/amdinfer/servers``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/workspace/amdinfer/src/amdinfer/servers/websocket_server.hpp``)
+------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__workspace_amdinfer_src_amdinfer_servers_websocket_server.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``amdinfer/build_options.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_build_options.hpp`)
+
+- ``amdinfer/declarations.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_declarations.hpp`)
+
+- ``amdinfer/observation/logging.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_observation_logging.hpp`)
+
+- ``cstddef``
+
+- ``drogon/HttpRequest.h``
+
+- ``drogon/HttpTypes.h``
+
+- ``drogon/WebSocketConnection.h``
+
+- ``drogon/WebSocketController.h``
+
+- ``exception`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_exceptions.hpp`)
+
+- ``memory`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_memory_pool_cpu_allocator.cpp`)
+
+- ``string`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_string.hpp`)
+
+- ``vector`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector.cpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_servers_http_server.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_servers_websocket_server.cpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_amdinfer`
+
+- :ref:`namespace_amdinfer__http`
+
+- :ref:`namespace_Json`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classamdinfer_1_1http_1_1WebsocketServer`
+

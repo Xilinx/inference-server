@@ -1,0 +1,16 @@
+.. _exhale_class_classamdinfer_1_1WorkerInfo:
+
+Class WorkerInfo
+================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_core_worker_info.hpp`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: amdinfer::WorkerInfo
+   :members:
+   :protected-members:
+   :undoc-members:

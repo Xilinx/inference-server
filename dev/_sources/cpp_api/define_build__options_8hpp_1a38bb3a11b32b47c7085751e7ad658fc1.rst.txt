@@ -1,0 +1,13 @@
+.. _exhale_define_build__options_8hpp_1a38bb3a11b32b47c7085751e7ad658fc1:
+
+Define AMDINFER_ENABLE_PTZENDNN
+===============================
+
+- Defined in :ref:`file__workspace_amdinfer_include_amdinfer_build_options.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: AMDINFER_ENABLE_PTZENDNN

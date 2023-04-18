@@ -1,0 +1,13 @@
+.. _exhale_typedef_data__types_8hpp_1ae6aa5769eb83832379c792c300d4566c:
+
+Typedef amdinfer::fp16
+======================
+
+- Defined in :ref:`file__workspace_amdinfer_include_amdinfer_core_data_types.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: amdinfer::fp16

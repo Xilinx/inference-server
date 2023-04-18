@@ -1,0 +1,37 @@
+.. _exhale_class_classamdinfer_1_1CallDataBase:
+
+Class CallDataBase
+==================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_servers_grpc_server.cpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Derived Types
+*************
+
+- ``public amdinfer::CallData< RequestType, ReplyType >`` (:ref:`exhale_class_classamdinfer_1_1CallData`)
+- ``public amdinfer::CallData< inference::HasHardwareRequest, inference::HasHardwareResponse >`` (:ref:`exhale_class_classamdinfer_1_1CallData`)
+- ``public amdinfer::CallData< inference::ModelInferRequest, inference::ModelInferResponse >`` (:ref:`exhale_class_classamdinfer_1_1CallData`)
+- ``public amdinfer::CallData< inference::ModelListRequest, inference::ModelListResponse >`` (:ref:`exhale_class_classamdinfer_1_1CallData`)
+- ``public amdinfer::CallData< inference::ModelLoadRequest, inference::ModelLoadResponse >`` (:ref:`exhale_class_classamdinfer_1_1CallData`)
+- ``public amdinfer::CallData< inference::ModelMetadataRequest, inference::ModelMetadataResponse >`` (:ref:`exhale_class_classamdinfer_1_1CallData`)
+- ``public amdinfer::CallData< inference::ModelReadyRequest, inference::ModelReadyResponse >`` (:ref:`exhale_class_classamdinfer_1_1CallData`)
+- ``public amdinfer::CallData< inference::ModelUnloadRequest, inference::ModelUnloadResponse >`` (:ref:`exhale_class_classamdinfer_1_1CallData`)
+- ``public amdinfer::CallData< inference::ServerLiveRequest, inference::ServerLiveResponse >`` (:ref:`exhale_class_classamdinfer_1_1CallData`)
+- ``public amdinfer::CallData< inference::ServerMetadataRequest, inference::ServerMetadataResponse >`` (:ref:`exhale_class_classamdinfer_1_1CallData`)
+- ``public amdinfer::CallData< inference::ServerReadyRequest, inference::ServerReadyResponse >`` (:ref:`exhale_class_classamdinfer_1_1CallData`)
+- ``public amdinfer::CallData< inference::WorkerLoadRequest, inference::WorkerLoadResponse >`` (:ref:`exhale_class_classamdinfer_1_1CallData`)
+- ``public amdinfer::CallData< inference::WorkerUnloadRequest, inference::WorkerUnloadResponse >`` (:ref:`exhale_class_classamdinfer_1_1CallData`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: amdinfer::CallDataBase
+   :members:
+   :protected-members:
+   :undoc-members:

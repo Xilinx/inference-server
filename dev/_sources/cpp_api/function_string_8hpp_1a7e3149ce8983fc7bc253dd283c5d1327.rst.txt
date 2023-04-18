@@ -1,0 +1,13 @@
+.. _exhale_function_string_8hpp_1a7e3149ce8983fc7bc253dd283c5d1327:
+
+Function amdinfer::util::endsWith
+=================================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_util_string.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: amdinfer::util::endsWith(std::string_view, std::string_view)

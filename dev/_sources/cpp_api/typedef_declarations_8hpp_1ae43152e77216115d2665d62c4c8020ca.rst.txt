@@ -1,0 +1,14 @@
+.. _exhale_typedef_declarations_8hpp_1ae43152e77216115d2665d62c4c8020ca:
+
+Typedef amdinfer::BufferRawPtrs
+===============================
+
+- Defined in :ref:`file__workspace_amdinfer_include_amdinfer_declarations.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: amdinfer::BufferRawPtrs
+   :project: amdinfer

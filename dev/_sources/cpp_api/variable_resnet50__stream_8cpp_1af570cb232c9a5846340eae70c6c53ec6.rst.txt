@@ -1,0 +1,13 @@
+.. _exhale_variable_resnet50__stream_8cpp_1af570cb232c9a5846340eae70c6c53ec6:
+
+Variable amdinfer::workers::kResnetClassifications
+==================================================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_workers_resnet50_stream.cpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: amdinfer::workers::kResnetClassifications

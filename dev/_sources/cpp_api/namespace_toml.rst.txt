@@ -1,0 +1,20 @@
+
+.. _namespace_toml:
+
+Namespace toml
+==============
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_toml__v3`

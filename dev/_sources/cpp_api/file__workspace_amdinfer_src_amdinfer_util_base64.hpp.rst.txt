@@ -1,0 +1,75 @@
+
+.. _file__workspace_amdinfer_src_amdinfer_util_base64.hpp:
+
+File base64.hpp
+===============
+
+|exhale_lsh| :ref:`Parent directory <dir__workspace_amdinfer_src_amdinfer_util>` (``/workspace/amdinfer/src/amdinfer/util``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+Defines base64 encoding/decoding. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/workspace/amdinfer/src/amdinfer/util/base64.hpp``)
+-----------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__workspace_amdinfer_src_amdinfer_util_base64.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``cstddef``
+
+- ``string`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_string.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_models_base64_decode.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_models_base64_encode.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_models_invert_image.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_util_base64.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_aks_detect.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_aks_detect_stream.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_invert_video.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_resnet50.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_resnet50_stream.cpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_amdinfer`
+
+- :ref:`namespace_amdinfer__util`
+

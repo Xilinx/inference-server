@@ -1,0 +1,64 @@
+
+.. _file__workspace_amdinfer_src_amdinfer_batching_soft.hpp:
+
+File soft.hpp
+=============
+
+|exhale_lsh| :ref:`Parent directory <dir__workspace_amdinfer_src_amdinfer_batching>` (``/workspace/amdinfer/src/amdinfer/batching``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+Defines the soft batcher implementation. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/workspace/amdinfer/src/amdinfer/batching/soft.hpp``)
+-------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__workspace_amdinfer_src_amdinfer_batching_soft.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``amdinfer/batching/batcher.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_batching_batcher.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_batching_soft.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_worker.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_amdinfer`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classamdinfer_1_1SoftBatcher`
+

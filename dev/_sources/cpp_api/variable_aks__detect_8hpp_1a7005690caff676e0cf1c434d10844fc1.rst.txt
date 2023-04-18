@@ -1,0 +1,13 @@
+.. _exhale_variable_aks__detect_8hpp_1a7005690caff676e0cf1c434d10844fc1:
+
+Variable amdinfer::workers::kAksDetectResponseSize
+==================================================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_workers_aks_detect.hpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: amdinfer::workers::kAksDetectResponseSize

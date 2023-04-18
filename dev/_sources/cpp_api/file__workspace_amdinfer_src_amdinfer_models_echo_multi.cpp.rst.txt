@@ -1,0 +1,86 @@
+
+.. _file__workspace_amdinfer_src_amdinfer_models_echo_multi.cpp:
+
+File echo_multi.cpp
+===================
+
+|exhale_lsh| :ref:`Parent directory <dir__workspace_amdinfer_src_amdinfer_models>` (``/workspace/amdinfer/src/amdinfer/models``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+Implements the echo_multi model. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/workspace/amdinfer/src/amdinfer/models/echo_multi.cpp``)
+-----------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__workspace_amdinfer_src_amdinfer_models_echo_multi.cpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``amdinfer/batching/batch.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_batching_batch.hpp`)
+
+- ``amdinfer/buffers/vector.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector.hpp`)
+
+- ``amdinfer/core/inference_request.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_inference_request.hpp`)
+
+- ``amdinfer/core/inference_response.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_inference_response.hpp`)
+
+- ``amdinfer/core/parameters.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_parameters.hpp`)
+
+- ``amdinfer/observation/logging.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_observation_logging.hpp`)
+
+- ``amdinfer/observation/metrics.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_observation_metrics.hpp`)
+
+- ``amdinfer/observation/tracing.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_observation_tracing.hpp`)
+
+- ``amdinfer/util/containers.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_containers.hpp`)
+
+- ``amdinfer/util/memory.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_memory.hpp`)
+
+- ``amdinfer/util/timer.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_timer.hpp`)
+
+
+
+
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_echo__multi_8cpp_1af012751791b00fabf8dae7f38f076e18`
+
+- :ref:`exhale_function_echo__multi_8cpp_1a88e88f0ce7df9ffadac20aec94d1db2c`
+
+- :ref:`exhale_function_echo__multi_8cpp_1a14bb289162f3834ebc18cdcffd4472e2`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_echo__multi_8cpp_1afbb86105d54d5a6d56b02d0ffabfebe8`
+
+- :ref:`exhale_variable_echo__multi_8cpp_1a8b03977cd93d9bb002e89d614bbbfdb9`
+
+- :ref:`exhale_variable_echo__multi_8cpp_1aef1d8b9952b78ddeb8bb591cbd16eb5d`
+
+- :ref:`exhale_variable_echo__multi_8cpp_1a295e485ab5ea3732dd7360c47e974d44`
+

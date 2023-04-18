@@ -1,0 +1,13 @@
+.. _exhale_typedef_declarations_8hpp_1a416c17e218dbbbba993f2f383a003ecf:
+
+Typedef amdinfer::StringMap
+===========================
+
+- Defined in :ref:`file__workspace_amdinfer_include_amdinfer_declarations.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: amdinfer::StringMap

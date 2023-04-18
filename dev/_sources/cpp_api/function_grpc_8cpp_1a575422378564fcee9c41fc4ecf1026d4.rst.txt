@@ -1,0 +1,13 @@
+.. _exhale_function_grpc_8cpp_1a575422378564fcee9c41fc4ecf1026d4:
+
+Function amdinfer::runInference
+===============================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_clients_grpc.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: amdinfer::runInference(inference::GRPCInferenceService::Stub *, const std::string&, const InferenceRequest&)

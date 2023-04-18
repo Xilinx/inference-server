@@ -1,0 +1,16 @@
+.. _dir__workspace_amdinfer_include:
+
+
+Directory include
+=================
+
+
+*Directory path:* ``/workspace/amdinfer/include``
+
+Subdirectories
+--------------
+
+- :ref:`dir__workspace_amdinfer_include_amdinfer`
+
+
+

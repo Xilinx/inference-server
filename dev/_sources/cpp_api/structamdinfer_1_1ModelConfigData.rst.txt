@@ -1,0 +1,16 @@
+.. _exhale_struct_structamdinfer_1_1ModelConfigData:
+
+Struct ModelConfigData
+======================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_core_model_config.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: amdinfer::ModelConfigData
+   :members:
+   :protected-members:
+   :undoc-members:

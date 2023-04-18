@@ -1,0 +1,13 @@
+.. _exhale_define_base64_8cpp_1ac3146f1e9227301bb4aa518f4d336cee:
+
+Define BUFFERSIZE
+=================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_util_base64.cpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: BUFFERSIZE

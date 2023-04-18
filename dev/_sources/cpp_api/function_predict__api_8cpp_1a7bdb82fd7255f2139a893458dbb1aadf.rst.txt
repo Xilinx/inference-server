@@ -1,0 +1,14 @@
+.. _exhale_function_predict__api_8cpp_1a7bdb82fd7255f2139a893458dbb1aadf:
+
+Template Function amdinfer::copy
+================================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_core_predict_api.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: amdinfer::copy(const T&, std::byte *, size_t)
+   :project: amdinfer

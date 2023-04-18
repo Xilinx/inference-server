@@ -1,0 +1,43 @@
+
+.. _program_listing_file__workspace_amdinfer_include_amdinfer_core_server_metadata.hpp:
+
+Program Listing for File server_metadata.hpp
+============================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__workspace_amdinfer_include_amdinfer_core_server_metadata.hpp>` (``/workspace/amdinfer/include/amdinfer/core/server_metadata.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   // Copyright 2023 Advanced Micro Devices, Inc.
+   //
+   // Licensed under the Apache License, Version 2.0 (the "License");
+   // you may not use this file except in compliance with the License.
+   // You may obtain a copy of the License at
+   //
+   //      http://www.apache.org/licenses/LICENSE-2.0
+   //
+   // Unless required by applicable law or agreed to in writing, software
+   // distributed under the License is distributed on an "AS IS" BASIS,
+   // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   // See the License for the specific language governing permissions and
+   // limitations under the License.
+   
+   #ifndef GUARD_AMDINFER_CORE_SERVER_METADATA
+   #define GUARD_AMDINFER_CORE_SERVER_METADATA
+   
+   #include <string>
+   #include <unordered_set>
+   
+   namespace amdinfer {
+   
+   struct ServerMetadata {
+     std::string name;
+     std::string version;
+     std::unordered_set<std::string> extensions;
+   };
+   
+   }  // namespace amdinfer
+   
+   #endif  // GUARD_AMDINFER_CORE_SERVER_METADATA

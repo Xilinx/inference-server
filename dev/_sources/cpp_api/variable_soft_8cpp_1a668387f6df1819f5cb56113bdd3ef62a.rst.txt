@@ -1,0 +1,13 @@
+.. _exhale_variable_soft_8cpp_1a668387f6df1819f5cb56113bdd3ef62a:
+
+Variable kDefaultTimeout
+========================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_batching_soft.cpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: kDefaultTimeout

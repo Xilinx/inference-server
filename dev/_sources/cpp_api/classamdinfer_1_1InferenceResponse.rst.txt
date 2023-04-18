@@ -1,0 +1,16 @@
+.. _exhale_class_classamdinfer_1_1InferenceResponse:
+
+Class InferenceResponse
+=======================
+
+- Defined in :ref:`file__workspace_amdinfer_include_amdinfer_core_inference_response.hpp`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: amdinfer::InferenceResponse
+   :members:
+   :protected-members:
+   :undoc-members:

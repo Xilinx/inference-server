@@ -1,0 +1,29 @@
+.. _exhale_class_classamdinfer_1_1Interface:
+
+Class Interface
+===============
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_core_interface.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Derived Types
+*************
+
+- ``public amdinfer::CppNativeApi`` (:ref:`exhale_class_classamdinfer_1_1CppNativeApi`)
+- ``public amdinfer::DrogonHttp`` (:ref:`exhale_class_classamdinfer_1_1DrogonHttp`)
+- ``public amdinfer::GrpcApiUnary`` (:ref:`exhale_class_classamdinfer_1_1GrpcApiUnary`)
+- ``public amdinfer::http::DrogonWs`` (:ref:`exhale_class_classamdinfer_1_1http_1_1DrogonWs`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: amdinfer::Interface
+   :project: amdinfer
+   :members:
+   :protected-members:
+   :undoc-members:

@@ -1,0 +1,25 @@
+.. _exhale_class_classamdinfer_1_1InferenceResponseOutput:
+
+Class InferenceResponseOutput
+=============================
+
+- Defined in :ref:`file__workspace_amdinfer_include_amdinfer_core_inference_response.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public amdinfer::InferenceTensor`` (:ref:`exhale_class_classamdinfer_1_1InferenceTensor`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: amdinfer::InferenceResponseOutput
+   :members:
+   :protected-members:
+   :undoc-members:

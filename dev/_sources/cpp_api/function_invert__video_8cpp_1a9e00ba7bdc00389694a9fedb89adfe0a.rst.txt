@@ -1,0 +1,13 @@
+.. _exhale_function_invert__video_8cpp_1a9e00ba7bdc00389694a9fedb89adfe0a:
+
+Function amdinfer::constructMessage(const std::string&, const std::string&)
+===========================================================================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_workers_invert_video.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: amdinfer::constructMessage(const std::string&, const std::string&)

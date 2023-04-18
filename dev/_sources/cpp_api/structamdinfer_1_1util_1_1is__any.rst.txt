@@ -1,0 +1,25 @@
+.. _exhale_struct_structamdinfer_1_1util_1_1is__any:
+
+Template Struct is_any
+======================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_util_traits.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public std::disjunction< std::is_same< T, Ts >... >``
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: amdinfer::util::is_any
+   :members:
+   :protected-members:
+   :undoc-members:

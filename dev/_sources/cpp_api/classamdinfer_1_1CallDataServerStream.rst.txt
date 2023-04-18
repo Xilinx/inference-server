@@ -1,0 +1,25 @@
+.. _exhale_class_classamdinfer_1_1CallDataServerStream:
+
+Template Class CallDataServerStream
+===================================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_servers_grpc_server.cpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public amdinfer::CallData< RequestType, ReplyType >`` (:ref:`exhale_class_classamdinfer_1_1CallData`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: amdinfer::CallDataServerStream
+   :members:
+   :protected-members:
+   :undoc-members:

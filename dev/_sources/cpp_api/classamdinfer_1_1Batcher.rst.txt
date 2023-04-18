@@ -1,0 +1,26 @@
+.. _exhale_class_classamdinfer_1_1Batcher:
+
+Class Batcher
+=============
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_batching_batcher.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Derived Types
+*************
+
+- ``public amdinfer::HardBatcher`` (:ref:`exhale_class_classamdinfer_1_1HardBatcher`)
+- ``public amdinfer::SoftBatcher`` (:ref:`exhale_class_classamdinfer_1_1SoftBatcher`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: amdinfer::Batcher
+   :members:
+   :protected-members:
+   :undoc-members:

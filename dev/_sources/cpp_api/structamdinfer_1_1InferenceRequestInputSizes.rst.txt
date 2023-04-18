@@ -1,0 +1,16 @@
+.. _exhale_struct_structamdinfer_1_1InferenceRequestInputSizes:
+
+Struct InferenceRequestInputSizes
+=================================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_core_inference_request.cpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: amdinfer::InferenceRequestInputSizes
+   :members:
+   :protected-members:
+   :undoc-members:

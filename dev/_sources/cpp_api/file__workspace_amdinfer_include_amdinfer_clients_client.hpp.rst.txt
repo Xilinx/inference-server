@@ -1,0 +1,80 @@
+
+.. _file__workspace_amdinfer_include_amdinfer_clients_client.hpp:
+
+File client.hpp
+===============
+
+|exhale_lsh| :ref:`Parent directory <dir__workspace_amdinfer_include_amdinfer_clients>` (``/workspace/amdinfer/include/amdinfer/clients``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+Defines the base class for all clients. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/workspace/amdinfer/include/amdinfer/clients/client.hpp``)
+------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__workspace_amdinfer_include_amdinfer_clients_client.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``amdinfer/core/model_metadata.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_model_metadata.hpp`)
+
+- ``amdinfer/core/server_metadata.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_server_metadata.hpp`)
+
+- ``amdinfer/declarations.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_declarations.hpp`)
+
+- ``cstddef``
+
+- ``string`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_string.hpp`)
+
+- ``vector`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector.cpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_clients_client.cpp`
+
+- :ref:`file__workspace_amdinfer_include_amdinfer_clients_grpc.hpp`
+
+- :ref:`file__workspace_amdinfer_include_amdinfer_clients_http.hpp`
+
+- :ref:`file__workspace_amdinfer_include_amdinfer_clients_native.hpp`
+
+- :ref:`file__workspace_amdinfer_include_amdinfer_clients_websocket.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_amdinfer`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classamdinfer_1_1Client`
+

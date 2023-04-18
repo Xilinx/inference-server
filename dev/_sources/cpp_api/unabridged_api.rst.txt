@@ -1,0 +1,1364 @@
+
+Full API
+--------
+
+Namespaces
+**********
+
+
+.. toctree::
+   :maxdepth: 5
+
+   namespace_AKS.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   namespace_amdinfer.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   namespace_amdinfer__detail.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   namespace_amdinfer__grpc.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   namespace_amdinfer__http.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   namespace_amdinfer__pre_post.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   namespace_amdinfer__pre_post__detail.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   namespace_amdinfer__util.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   namespace_amdinfer__workers.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   namespace_google.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   namespace_google__protobuf.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   namespace_grpc.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   namespace_inference.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   namespace_Json.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   namespace_std.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   namespace_toml.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   namespace_toml__v3.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   namespace_vart.rst
+
+Classes and Structs
+*******************
+
+
+.. toctree::
+   :maxdepth: 5
+
+   structamdinfer_1_1AddDataToTensor.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structamdinfer_1_1InferenceRequestInputSizes.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structamdinfer_1_1InferenceResponseOutputSizes.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structamdinfer_1_1MemoryHeader.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structamdinfer_1_1ModelConfigData.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structamdinfer_1_1NativeClient_1_1NativeClientImpl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structamdinfer_1_1Observer.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structamdinfer_1_1Overloaded.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structamdinfer_1_1pre__post_1_1ImagePreprocessOptions.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structamdinfer_1_1RequestContainer.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structamdinfer_1_1Server_1_1ServerImpl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structamdinfer_1_1ServerMetadata.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structamdinfer_1_1SetInputData.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structamdinfer_1_1SetOutputData.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structamdinfer_1_1TensorSizes.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structamdinfer_1_1UpdateCommand.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structamdinfer_1_1util_1_1is__any.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structamdinfer_1_1workers_1_1DetectResponse.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structamdinfer_1_1WriteData.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structstd_1_1less_3_01amdinfer_1_1ParameterMap_01_4.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1bad__status.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1Batch.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1Batcher.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1Buffer.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1CallData.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1CallDataBase.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1CallDataHasHardware.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1CallDataModelInfer.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1CallDataModelList.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1CallDataModelLoad.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1CallDataModelMetadata.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1CallDataModelReady.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1CallDataModelUnload.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1CallDataServerLive.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1CallDataServerMetadata.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1CallDataServerReady.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1CallDataServerStream.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1CallDataUnary.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1CallDataWorkerLoad.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1CallDataWorkerUnload.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1Client.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1connection__error.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1CpuAllocator.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1CpuBuffer.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1DataType.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1Endpoints.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1environment__not__set__error.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1external__error.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1file__not__found__error.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1file__read__error.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1GrpcClient.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1GrpcClient_1_1GrpcClientImpl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1GrpcServer.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1HardBatcher.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1http_1_1WebsocketServer.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1HttpClient.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1HttpClient_1_1HttpClientImpl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1InferenceRequest.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1InferenceRequestInput.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1InferenceRequestOutput.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1InferenceResponse.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1InferenceResponseOutput.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1InferenceTensor.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1invalid__argument.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1MemoryAllocator.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1MemoryPool.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1ModelConfig.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1ModelConfigTensor.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1ModelMetadata.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1ModelRepository.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1NativeClient.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1ParameterMap.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1runtime__error.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1Serializable.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1Server.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1SharedState.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1SoftBatcher.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1Tensor.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1UpdateListener.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1util_1_1ThreadPool.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1util_1_1Timer.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1VartTensorBuffer.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1VectorBuffer.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1WebSocketClient.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1WebSocketClient_1_1WebSocketClientImpl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1WorkerInfo.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1workers_1_1AksDetect.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1workers_1_1AksDetectStream.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1workers_1_1CPlusPlus.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1workers_1_1InvertVideo.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1workers_1_1MIGraphXWorker.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1workers_1_1MultiThreadedWorker.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1workers_1_1PtZendnn.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1workers_1_1ResNet50.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1workers_1_1ResNet50Stream.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1workers_1_1Responder.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1workers_1_1SingleThreadedWorker.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1workers_1_1TfZendnn.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1workers_1_1Worker.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1workers_1_1XModel.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classgoogle_1_1protobuf_1_1Map.rst
+
+Enums
+*****
+
+
+.. toctree::
+   :maxdepth: 5
+
+   enum_batcher_8hpp_1a5277d7d1a11facb999262c1ffa1cf5a8.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   enum_memory__allocator_8hpp_1a7c5b9c96a6c33be879d5f8b8eb3cd8d9.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   enum_image__preprocess_8hpp_1a004b461de156262bc78b132c472c322a.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   enum_image__preprocess_8hpp_1adfe0be75a84efed14a2b0142cda01473.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   enum_status_8hpp_1a913436294d314192e3d1ef856c142de3.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   enum_endpoints_8hpp_1ad90f89e55716c00f4cc911e76a9a3fe3.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   enum_worker_8hpp_1acca0b4f2273421d4b08225b868692370.rst
+
+Functions
+*********
+
+
+.. toctree::
+   :maxdepth: 5
+
+   function_http_8cpp_1a91a52b2ef7f7d2a26cbad3cc60dab78d.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_http_8cpp_1a7d42e4a864836a32004fefea13cbd07f.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_aks__detect__stream_8cpp_1ab13e3cee19b709c1dc339ff1ecae8d66.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_invert__video_8cpp_1a9e00ba7bdc00389694a9fedb89adfe0a.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_http_8cpp_1aa8d7b351b03d53ab0f5801ffd061f79d.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_http_8cpp_1abb11c7992ffb6339af08d1ff6e0353ba.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_http_8cpp_1a32e9fc9ef05556e7d000554f8752678b.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_data__types_8hpp_1a9f421600e40d463aae440ef86d990f77.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_http__server_8cpp_1a90265777686e06d56b25b0bc843eef9e.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_parameters_8cpp_1a43d2d4f52769bcfbcab2d793d13256a3.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_model__config_8cpp_1ad916117711673111272b87bd7b015dd5.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_model__config_8cpp_1ad993b803c47e24e374682aaec45416f4.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_model__config_8cpp_1a8760611469261389e290e73112952772.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_model__config_8cpp_1a93caf19e0a08474fcdcbfa7d2d660353.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_model__repository_8cpp_1a7ea03e4b5c22db96ecf9ef1cc9d23cdd.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_worker__info_8cpp_1a0b90dba241fba26f6e1bc8bea0e55a9e.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_c__plus__plus_8cpp_1ad50576352aa9fe95a1f335068a150f86.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_grpc__server_8cpp_1ad7d47b9afef4ed43ad59aa45f592737e.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_logging_8cpp_1ab42e9688a184d4c25b0809fd75c21465.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_logging_8cpp_1abf296c165ec250f986192b7ec61a0eeb.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_grpc__server_8cpp_1aa8dbb41520acad4bc0f3590a62f516dd.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_native_8cpp_1a3b9123d1a7ba3f8791dd743f14e97bb8.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_grpc__server_8cpp_1ac8a8307a4bb6284d0c08ecf50abe9013.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_grpc__internal_8hpp_1a060fbd208a90079d68fd5a5bb0d21ac6.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_worker__info_8cpp_1a19798ed33ad0cecb53ca678f47d8fb95.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_grpc__server_8cpp_1acd5880aba6baa79251eba9aa507f2dd4.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_grpc__server_8cpp_1a15ea0fa3e0ee2783642361b4e46de4b1.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_grpc__server_8cpp_1a17fb6a89fb9a16380c4f07f999c78fb6.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_websocket__server_8cpp_1a59635d29a247f707bb9a44d0fb6aea2d.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_http__server_8cpp_1a51d427f7d55612404bc5ed3f0441efb7.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_http__server_8cpp_1a024aac815aaac4c7a062bd1afa1d5efc.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_client_8cpp_1a7db4f7d3cc3c76913a04f054545e45a1.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_client_8cpp_1a4d4441bcf3855f2e944fa25af8295257.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_client_8cpp_1a7c8a24453d2c9aeaa2457ee1a5b13f93.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_server_8cpp_1acea43796a83b9ee6de28c969539154a4.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_logging_8cpp_1a1171fedba9c753ea529e1fc6c164e4f2.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_http__internal_8hpp_1afa990983f0c809168a33aae411a99f8b.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_client_8cpp_1a7a32761519bbb3ac1d86b2b3ec7d3900.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_http__internal_8cpp_1a427f4954da74353ed225bf6ca403908b.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_http__internal_8cpp_1ab552d950b2047e8257bf47b64521a3d1.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_http__internal_8cpp_1a58c5a95db890610b34f3464e91ba15c3.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_grpc__internal_8cpp_1a9529bfb0905d019214381197735cb2bf.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_http__internal_8cpp_1ac5e6afcc5f724e1759b2bfe6db7e7ec0.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_grpc__internal_8cpp_1a47a63870c628bbcc0f88a7da1e3c3580.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_grpc_8cpp_1abca66df04c11d0bd7baee5bafb8d27ec.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_grpc__internal_8cpp_1a810895b7fc432ac1fdda46f6b426644a.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_grpc__internal_8cpp_1a976514706c6b64c1fdd73fc85fa7a917.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_model__repository_8cpp_1a8a80f1f2c5954b017a5bd047957a638f.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_grpc__internal_8cpp_1a95af9e6fefbe2dd323562124a33284a9.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_http__internal_8cpp_1af7e38eb03ed3321e8e914b4d6e855537.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_grpc__internal_8cpp_1a9571eec4e243504a9649a5d1817db835.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_grpc__internal_8hpp_1a6fd8519162462f9576d293681ebc625d.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_grpc__internal_8cpp_1a757a8b0dc668948c0d7536e955a2fcd6.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_http__internal_8cpp_1a263e4c7efb3c93d6fc48499bc4a46548.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_http__internal_8cpp_1a20f514dbb8f33ccf800d6fe95d9dc475.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_model__repository_8cpp_1ad3799a9788bef596e2144c16b8e3626f.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_c__plus__plus_8cpp_1a9e6917e8d658979c637569428360219e.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_data__types_8cpp_1a704e42ab497bfe5b6f257eb423d6df49.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_inference__request_8cpp_1ac5a218218c06390bff837a4d000785c0.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_inference__response_8cpp_1a91b7e6ea3d7b34694d38e2d596167625.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_inference__response_8cpp_1a290fdc985518c3879979b4c24a4622dc.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_grpc__internal_8cpp_1aedf702344a580ab5481f76a200fe60e5.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_http__server_8cpp_1a9daff85fd67e50b69f84f3802297ff7d.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_model__repository_8cpp_1acb79361ac48cfb11a0480445e7e6cfc2.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_model__repository_8hpp_1a7bc7cc4b44f85f930556634ea7efe912.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_http__server_8cpp_1acbfb678bfa4431649f17750ea346f33c.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_softmax_8hpp_1acab8d186d21c38a86ed76bb9246a58da.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_center__crop_8hpp_1a38fcd76500e2a2a6f82b483f40898886.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_image__preprocess_8hpp_1afc409bcd827fd1219cc6844e0e07ed62.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_image__preprocess_8hpp_1a85688ea858ae957a61a92a169608ff0c.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_get__top__k_8hpp_1ae80f6fce372daf2a6692cedafc970557.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_image__preprocess_8hpp_1a6f99956e2db2c6e15a806fc1a0c02c1f.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_resnet50__postprocess_8hpp_1a50359236db961994e219d8eff7ae2aec.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_grpc_8cpp_1a575422378564fcee9c41fc4ecf1026d4.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_client_8cpp_1a6354412b0cacb2c302d12c19ff0037f2.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_native_8cpp_1a909af7a914df81895bf0a4dda591f13d.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_grpc__server_8cpp_1af023a215479a2732eb486a97860222cb.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_data__types_8hpp_1a4b401163a3bc8d860d096ab1b00a87eb.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_server_8cpp_1a73eba955b7057fe278a31fb16c5cae39.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_client_8cpp_1aeca57ac6adc6191c9209e19e70b2c95f.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_string_8hpp_1ab7c84c671182f8c47329d59fbc06fc66.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_parse__env_8cpp_1a4251368d5d2f3507fb4ac4296f71c1d3.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_base64_8cpp_1a3fab927a4086e187790fddf5d7356625.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_base64_8cpp_1a726cc9124c561dfd45dfbeceeb78f3be.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_base64_8cpp_1ac5e3a230a657bc4195e886fc328f4adf.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_base64_8cpp_1a6c38e256b28c2a5348ef810fe4e96067.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_containers_8hpp_1a1d706def706e8040615295c1696f5355.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_containers_8hpp_1ab77948aa3101edea0ef3a53b3a9bba4f.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_containers_8hpp_1a99c908436f0a0b8939e1e31b73d1e8a2.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_containers_8hpp_1a95954e812c96e615ffc44e525f706868.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_string_8hpp_1a9e3dd8f418d6151cf89a6db45423e1f8.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_memory_8hpp_1a297476d933ddb20b1462132df4bf2b7c.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_string_8hpp_1a7e3149ce8983fc7bc253dd283c5d1327.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_exec_8cpp_1ad2f76a0098c3445320c56f8208b66a8f.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_filesystem_8cpp_1a9c139c7eb99db1b4be48805a5452548a.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_filesystem_8hpp_1add898d9050c402d6683c871b2417f4b9.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_timer_8cpp_1a8a0c21722d4843898884016ab59ba783.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_string_8hpp_1af7be5da4787523697f32822ac12bfaef.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_base64_8cpp_1a0b2049369714bfeecd9db0b350eba210.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_base64_8cpp_1afad08aa8530e43e678dfab1189b345f4.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_filesystem_8cpp_1a376d9403c48cc8e17b3db68c8193e6ee.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_read__nth__line_8cpp_1ab24290f139bfd0ba4a626bdd7d5412d4.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_thread_8hpp_1a1f755ec0f69754bbf457b2c7f68a16c7.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_thread_8hpp_1a9f542ca1a9ee9128a5871d146acf8b1b.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_string_8hpp_1ae4e85f841d4470eb0040ff4bef5adb52.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_string_8hpp_1a23ca4a0fca976cf704e73ba9c454edf9.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_string_8hpp_1a66dcea22803a394e9d697db2110f57b1.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_string_8hpp_1a4414f2322f12277f964e4a7cc3ae6733.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_compression_8cpp_1a927c584d5b765b2f1d3ffab394fbfcac.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_client_8cpp_1a3501853447c1ef78603637fb6b0f16ca.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_client_8cpp_1ad928316a941cc1f5371da1e90085bfdd.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_client_8cpp_1ad8b991d3a2a0e2f19e1937cafa34a724.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_tf__zendnn_8cpp_1adf504d05611a1a3b28113b6eb6e2eb59.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_migraphx_8cpp_1a3a3c5cda084c4108cacf3af5db7d7899.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_base64__decode_8cpp_1af012751791b00fabf8dae7f38f076e18.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_base64__encode_8cpp_1af012751791b00fabf8dae7f38f076e18.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_echo_8cpp_1af012751791b00fabf8dae7f38f076e18.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_echo__multi_8cpp_1af012751791b00fabf8dae7f38f076e18.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_invert__image_8cpp_1af012751791b00fabf8dae7f38f076e18.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_base64__decode_8cpp_1a88e88f0ce7df9ffadac20aec94d1db2c.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_base64__encode_8cpp_1a88e88f0ce7df9ffadac20aec94d1db2c.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_echo_8cpp_1a88e88f0ce7df9ffadac20aec94d1db2c.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_echo__multi_8cpp_1a88e88f0ce7df9ffadac20aec94d1db2c.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_invert__image_8cpp_1a88e88f0ce7df9ffadac20aec94d1db2c.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_aks__detect_8cpp_1a601552e385edb19c4596c0c81cabb7fe.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_aks__detect__stream_8cpp_1a601552e385edb19c4596c0c81cabb7fe.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_c__plus__plus_8cpp_1a601552e385edb19c4596c0c81cabb7fe.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_invert__video_8cpp_1a601552e385edb19c4596c0c81cabb7fe.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_migraphx_8cpp_1a601552e385edb19c4596c0c81cabb7fe.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_pt__zendnn_8cpp_1a601552e385edb19c4596c0c81cabb7fe.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_resnet50_8cpp_1a601552e385edb19c4596c0c81cabb7fe.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_resnet50__stream_8cpp_1a601552e385edb19c4596c0c81cabb7fe.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_responder_8cpp_1a601552e385edb19c4596c0c81cabb7fe.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_tf__zendnn_8cpp_1a601552e385edb19c4596c0c81cabb7fe.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_xmodel_8cpp_1a601552e385edb19c4596c0c81cabb7fe.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_invert__image_8cpp_1a681cf77e6cac2cb4fc75279984b2436b.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_main_8cpp_1a0ddf1224851353fc92bfbff6f499fa97.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_base64__decode_8cpp_1a14bb289162f3834ebc18cdcffd4472e2.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_base64__encode_8cpp_1a14bb289162f3834ebc18cdcffd4472e2.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_echo_8cpp_1ad728fc7115f1ac5380a1f5b4cae39526.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_echo__multi_8cpp_1a14bb289162f3834ebc18cdcffd4472e2.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_invert__image_8cpp_1a14bb289162f3834ebc18cdcffd4472e2.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_main_8cpp_1ac6ad5461171288abe55dfb76ea2b9118.rst

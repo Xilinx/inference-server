@@ -1,0 +1,25 @@
+.. _exhale_class_classamdinfer_1_1workers_1_1AksDetectStream:
+
+Class AksDetectStream
+=====================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_workers_aks_detect_stream.cpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public amdinfer::workers::SingleThreadedWorker`` (:ref:`exhale_class_classamdinfer_1_1workers_1_1SingleThreadedWorker`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: amdinfer::workers::AksDetectStream
+   :members:
+   :protected-members:
+   :undoc-members:

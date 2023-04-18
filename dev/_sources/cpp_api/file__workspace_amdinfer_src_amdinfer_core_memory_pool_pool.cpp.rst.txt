@@ -1,0 +1,61 @@
+
+.. _file__workspace_amdinfer_src_amdinfer_core_memory_pool_pool.cpp:
+
+File pool.cpp
+=============
+
+|exhale_lsh| :ref:`Parent directory <dir__workspace_amdinfer_src_amdinfer_core_memory_pool>` (``/workspace/amdinfer/src/amdinfer/core/memory_pool``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/workspace/amdinfer/src/amdinfer/core/memory_pool/pool.cpp``)
+---------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__workspace_amdinfer_src_amdinfer_core_memory_pool_pool.cpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``amdinfer/buffers/cpu.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_cpu.hpp`)
+
+- ``amdinfer/core/exceptions.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_exceptions.hpp`)
+
+- ``amdinfer/core/memory_pool/cpu_allocator.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_memory_pool_cpu_allocator.hpp`)
+
+- ``amdinfer/core/memory_pool/pool.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_memory_pool_pool.hpp`)
+
+- ``amdinfer/core/memory_pool/vart_tensor_allocator.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_memory_pool_vart_tensor_allocator.hpp`)
+
+- ``cassert``
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_amdinfer`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_pool_8cpp_1a5cecd49087cfcb52ba4aa002d391c321`
+

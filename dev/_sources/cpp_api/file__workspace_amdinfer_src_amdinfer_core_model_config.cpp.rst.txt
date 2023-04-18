@@ -1,0 +1,74 @@
+
+.. _file__workspace_amdinfer_src_amdinfer_core_model_config.cpp:
+
+File model_config.cpp
+=====================
+
+|exhale_lsh| :ref:`Parent directory <dir__workspace_amdinfer_src_amdinfer_core>` (``/workspace/amdinfer/src/amdinfer/core``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/workspace/amdinfer/src/amdinfer/core/model_config.cpp``)
+-----------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__workspace_amdinfer_src_amdinfer_core_model_config.cpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``amdinfer/core/exceptions.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_exceptions.hpp`)
+
+- ``amdinfer/core/model_config.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_model_config.hpp`)
+
+- ``amdinfer/util/filesystem.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_filesystem.hpp`)
+
+- ``filesystem`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_filesystem.cpp`)
+
+- ``model_config.pb.h``
+
+- ``toml++/toml.h``
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_amdinfer`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_model__config_8cpp_1ad916117711673111272b87bd7b015dd5`
+
+- :ref:`exhale_function_model__config_8cpp_1ad993b803c47e24e374682aaec45416f4`
+
+- :ref:`exhale_function_model__config_8cpp_1a8760611469261389e290e73112952772`
+
+- :ref:`exhale_function_model__config_8cpp_1a93caf19e0a08474fcdcbfa7d2d660353`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_model__config_8cpp_1a7a1019f8d96c09cf752492a9f28f907c`
+

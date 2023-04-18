@@ -1,0 +1,83 @@
+
+.. _file__workspace_amdinfer_src_amdinfer_batching_hard.cpp:
+
+File hard.cpp
+=============
+
+|exhale_lsh| :ref:`Parent directory <dir__workspace_amdinfer_src_amdinfer_batching>` (``/workspace/amdinfer/src/amdinfer/batching``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+Implements the hard batcher. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/workspace/amdinfer/src/amdinfer/batching/hard.cpp``)
+-------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__workspace_amdinfer_src_amdinfer_batching_hard.cpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``amdinfer/batching/hard.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_batching_hard.hpp`)
+
+- ``amdinfer/buffers/cpu.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_cpu.hpp`)
+
+- ``amdinfer/build_options.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_build_options.hpp`)
+
+- ``amdinfer/core/exceptions.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_exceptions.hpp`)
+
+- ``amdinfer/core/inference_request.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_inference_request.hpp`)
+
+- ``amdinfer/core/memory_pool/pool.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_memory_pool_pool.hpp`)
+
+- ``amdinfer/core/request_container.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_request_container.hpp`)
+
+- ``amdinfer/core/worker_info.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_worker_info.hpp`)
+
+- ``amdinfer/declarations.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_declarations.hpp`)
+
+- ``amdinfer/observation/metrics.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_observation_metrics.hpp`)
+
+- ``amdinfer/observation/tracing.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_observation_tracing.hpp`)
+
+- ``amdinfer/util/queue.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_queue.hpp`)
+
+- ``amdinfer/util/thread.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_thread.hpp`)
+
+- ``cstddef``
+
+- ``memory`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_memory_pool_cpu_allocator.cpp`)
+
+- ``string`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_string.hpp`)
+
+- ``utility``
+
+- ``vector`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector.cpp`)
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_amdinfer`
+

@@ -1,0 +1,13 @@
+.. _exhale_function_grpc__server_8cpp_1acd5880aba6baa79251eba9aa507f2dd4:
+
+Function amdinfer::grpc::start
+==============================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_servers_grpc_server.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: amdinfer::grpc::start(SharedState *, int)

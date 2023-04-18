@@ -1,0 +1,92 @@
+
+.. _file__workspace_amdinfer_src_amdinfer_observation_tracing.hpp:
+
+File tracing.hpp
+================
+
+|exhale_lsh| :ref:`Parent directory <dir__workspace_amdinfer_src_amdinfer_observation>` (``/workspace/amdinfer/src/amdinfer/observation``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+Defines tracing. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/workspace/amdinfer/src/amdinfer/observation/tracing.hpp``)
+-------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__workspace_amdinfer_src_amdinfer_observation_tracing.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``amdinfer/build_options.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_build_options.hpp`)
+
+- ``amdinfer/core/parameters.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_parameters.hpp`)
+
+- ``amdinfer/declarations.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_declarations.hpp`)
+
+- ``memory`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_memory_pool_cpu_allocator.cpp`)
+
+- ``stack``
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_batching_batch.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_batching_batcher.hpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_batching_hard.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_batching_soft.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_clients_native.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_models_base64_decode.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_models_base64_encode.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_models_echo.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_models_echo_multi.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_models_invert_image.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_observation_observer.hpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_observation_tracing.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_servers_http_server.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_servers_server.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_servers_websocket_server.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_aks_detect_stream.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_c_plus_plus.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_invert_video.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_responder.cpp`
+
+
+

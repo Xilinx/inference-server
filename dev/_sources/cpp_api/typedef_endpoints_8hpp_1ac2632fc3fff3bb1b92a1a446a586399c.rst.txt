@@ -1,0 +1,13 @@
+.. _exhale_typedef_endpoints_8hpp_1ac2632fc3fff3bb1b92a1a446a586399c:
+
+Typedef amdinfer::UpdateCommandQueue
+====================================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_core_endpoints.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: amdinfer::UpdateCommandQueue

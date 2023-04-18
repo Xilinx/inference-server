@@ -1,0 +1,90 @@
+
+.. _program_listing_file__workspace_amdinfer_src_amdinfer_buffers_buffer.hpp:
+
+Program Listing for File buffer.hpp
+===================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__workspace_amdinfer_src_amdinfer_buffers_buffer.hpp>` (``/workspace/amdinfer/src/amdinfer/buffers/buffer.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   // Copyright 2021 Xilinx, Inc.
+   // Copyright 2022 Advanced Micro Devices, Inc.
+   //
+   // Licensed under the Apache License, Version 2.0 (the "License");
+   // you may not use this file except in compliance with the License.
+   // You may obtain a copy of the License at
+   //
+   //      http://www.apache.org/licenses/LICENSE-2.0
+   //
+   // Unless required by applicable law or agreed to in writing, software
+   // distributed under the License is distributed on an "AS IS" BASIS,
+   // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   // See the License for the specific language governing permissions and
+   // limitations under the License.
+   
+   #ifndef GUARD_AMDINFER_BUFFERS_BUFFER
+   #define GUARD_AMDINFER_BUFFERS_BUFFER
+   
+   #include <cstddef>  // for size_t, byte
+   #include <cstring>  // for memcpy
+   #include <string>   // for string
+   
+   #include "amdinfer/core/memory_pool/memory_allocator.hpp"
+   
+   // IWYU is creating a cycle with adding/removing this header
+   // IWYU pragma: no_include <algorithm>
+   
+   namespace amdinfer {
+   
+   class MemoryPool;
+   
+   class Buffer {
+    public:
+     explicit Buffer(MemoryAllocators allocator);
+   
+     virtual ~Buffer() = default;
+   
+     virtual void* data(size_t offset) = 0;
+   
+     virtual size_t write(void* data, size_t offset, size_t size);
+   
+     template <typename T>
+     size_t write(T value, size_t offset) {
+       if constexpr (std::is_same_v<std::string, T>) {
+         // not quite sure what the best way to do this is. The commented out code
+         // is other attempts. This works but may be non-optimal.
+         char null_term = '\0';
+         std::copy(value.begin(), value.end(),
+                   static_cast<char*>(this->data(offset)));
+         // strcpy(reinterpret_cast<char*>(static_cast<std::byte*>(this->data()) +
+         // this->write_counter_),
+         // value.c_str());
+         std::memcpy(static_cast<std::byte*>(this->data(offset)) + value.length(),
+                     &null_term, 1);
+   
+         // this->write_counter_ += value.length() + 1;
+         return offset + value.length() + 1;
+       } else {
+         return this->write(&value, offset, sizeof(T));
+       }
+     }
+   
+     MemoryAllocators getAllocator() const;
+   
+     void setPool(const MemoryPool* pool);
+   
+     virtual void free() = 0;
+   
+    protected:
+     const MemoryPool* getPool() const;
+   
+    private:
+     MemoryAllocators allocator_;
+     const MemoryPool* pool_ = nullptr;
+   };
+   
+   }  // namespace amdinfer
+   #endif  // GUARD_AMDINFER_BUFFERS_BUFFER

@@ -1,0 +1,98 @@
+
+.. _file__workspace_amdinfer_src_amdinfer_util_memory.hpp:
+
+File memory.hpp
+===============
+
+|exhale_lsh| :ref:`Parent directory <dir__workspace_amdinfer_src_amdinfer_util>` (``/workspace/amdinfer/src/amdinfer/util``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+Defines helper functions associated with managing memory. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/workspace/amdinfer/src/amdinfer/util/memory.hpp``)
+-----------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__workspace_amdinfer_src_amdinfer_util_memory.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``cassert``
+
+- ``cstddef``
+
+- ``cstring``
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_inference_request.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_inference_response.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_inference_tensor.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_parameters.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_tensor.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_models_base64_decode.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_models_base64_encode.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_models_echo.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_models_echo_multi.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_models_invert_image.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_aks_detect.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_migraphx.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_pt_zendnn.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_resnet50.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_tf_zendnn.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_xmodel.cpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_amdinfer`
+
+- :ref:`namespace_amdinfer__util`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_memory_8hpp_1a297476d933ddb20b1462132df4bf2b7c`
+

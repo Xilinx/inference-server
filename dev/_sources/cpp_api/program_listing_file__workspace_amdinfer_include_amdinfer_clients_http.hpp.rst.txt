@@ -1,0 +1,85 @@
+
+.. _program_listing_file__workspace_amdinfer_include_amdinfer_clients_http.hpp:
+
+Program Listing for File http.hpp
+=================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__workspace_amdinfer_include_amdinfer_clients_http.hpp>` (``/workspace/amdinfer/include/amdinfer/clients/http.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   // Copyright 2022 Xilinx, Inc.
+   // Copyright 2022 Advanced Micro Devices, Inc.
+   //
+   // Licensed under the Apache License, Version 2.0 (the "License");
+   // you may not use this file except in compliance with the License.
+   // You may obtain a copy of the License at
+   //
+   //      http://www.apache.org/licenses/LICENSE-2.0
+   //
+   // Unless required by applicable law or agreed to in writing, software
+   // distributed under the License is distributed on an "AS IS" BASIS,
+   // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   // See the License for the specific language governing permissions and
+   // limitations under the License.
+   
+   #ifndef GUARD_AMDINFER_CLIENTS_HTTP
+   #define GUARD_AMDINFER_CLIENTS_HTTP
+   
+   #include <memory>  // for unique_ptr
+   #include <string>  // for string
+   #include <vector>  // for vector
+   
+   #include "amdinfer/clients/client.hpp"  // IWYU pragma: export
+   #include "amdinfer/declarations.hpp"    // for StringMap
+   
+   namespace amdinfer {
+   
+   class ParameterMap;
+   
+   class HttpClient : public Client {
+    public:
+     explicit HttpClient(const std::string& address);
+     HttpClient(const std::string& address, const StringMap& headers,
+                int parallelism);
+   
+     HttpClient(HttpClient const&) = delete;
+     HttpClient& operator=(const HttpClient&) = delete;
+     HttpClient(HttpClient&& other) = default;
+     HttpClient& operator=(HttpClient&& other) = default;
+     ~HttpClient() override;
+   
+     [[nodiscard]] ServerMetadata serverMetadata() const override;
+     [[nodiscard]] bool serverLive() const override;
+     [[nodiscard]] bool serverReady() const override;
+     [[nodiscard]] bool modelReady(const std::string& model) const override;
+     [[nodiscard]] ModelMetadata modelMetadata(
+       const std::string& model) const override;
+   
+     void modelLoad(const std::string& model,
+                    const ParameterMap& parameters) const override;
+     void modelUnload(const std::string& model) const override;
+   
+     [[nodiscard]] InferenceResponse modelInfer(
+       const std::string& model, const InferenceRequest& request) const override;
+     [[nodiscard]] InferenceResponseFuture modelInferAsync(
+       const std::string& model, const InferenceRequest& request) const override;
+     [[nodiscard]] std::vector<std::string> modelList() const override;
+   
+     [[nodiscard]] std::string workerLoad(
+       const std::string& worker, const ParameterMap& parameters) const override;
+     void workerUnload(const std::string& worker) const override;
+   
+     [[nodiscard]] bool hasHardware(const std::string& name,
+                                    int num) const override;
+   
+    private:
+     class HttpClientImpl;
+     std::unique_ptr<HttpClientImpl> impl_;
+   };
+   
+   }  // namespace amdinfer
+   
+   #endif  // GUARD_AMDINFER_CLIENTS_HTTP

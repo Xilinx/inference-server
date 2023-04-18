@@ -1,0 +1,16 @@
+.. _dir__workspace_amdinfer_src:
+
+
+Directory src
+=============
+
+
+*Directory path:* ``/workspace/amdinfer/src``
+
+Subdirectories
+--------------
+
+- :ref:`dir__workspace_amdinfer_src_amdinfer`
+
+
+

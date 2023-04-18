@@ -1,0 +1,13 @@
+.. _exhale_variable_main_8cpp_1a17ace24a7aa554efe78b7d28fc83e129:
+
+Variable usr_interrupt
+======================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_main.cpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: usr_interrupt

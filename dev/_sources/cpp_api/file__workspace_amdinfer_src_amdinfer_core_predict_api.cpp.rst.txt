@@ -1,0 +1,71 @@
+
+.. _file__workspace_amdinfer_src_amdinfer_core_predict_api.cpp:
+
+File predict_api.cpp
+====================
+
+|exhale_lsh| :ref:`Parent directory <dir__workspace_amdinfer_src_amdinfer_core>` (``/workspace/amdinfer/src/amdinfer/core``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+
+Implements the objects used to hold incoming inference requests. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/workspace/amdinfer/src/amdinfer/core/predict_api.cpp``)
+----------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__workspace_amdinfer_src_amdinfer_core_predict_api.cpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``algorithm``
+
+- ``amdinfer/build_options.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_build_options.hpp`)
+
+- ``amdinfer/core/predict_api.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_predict_api.hpp`)
+
+- ``amdinfer/util/containers.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_containers.hpp`)
+
+- ``amdinfer/util/memory.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_memory.hpp`)
+
+- ``cstring``
+
+- ``iterator``
+
+- ``utility``
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_amdinfer`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structamdinfer_1_1InferenceRequestInputSizes`
+

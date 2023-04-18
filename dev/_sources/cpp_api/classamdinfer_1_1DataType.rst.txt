@@ -1,0 +1,16 @@
+.. _exhale_class_classamdinfer_1_1DataType:
+
+Class DataType
+==============
+
+- Defined in :ref:`file__workspace_amdinfer_include_amdinfer_core_data_types.hpp`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: amdinfer::DataType
+   :members:
+   :protected-members:
+   :undoc-members:

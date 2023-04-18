@@ -1,0 +1,105 @@
+
+.. _file__workspace_amdinfer_src_amdinfer_core_endpoints.hpp:
+
+File endpoints.hpp
+==================
+
+|exhale_lsh| :ref:`Parent directory <dir__workspace_amdinfer_src_amdinfer_core>` (``/workspace/amdinfer/src/amdinfer/core``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/workspace/amdinfer/src/amdinfer/core/endpoints.hpp``)
+--------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__workspace_amdinfer_src_amdinfer_core_endpoints.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``amdinfer/build_options.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_build_options.hpp`)
+
+- ``amdinfer/core/memory_pool/pool.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_memory_pool_pool.hpp`)
+
+- ``amdinfer/core/model_metadata.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_model_metadata.hpp`)
+
+- ``amdinfer/core/parameters.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_parameters.hpp`)
+
+- ``amdinfer/observation/logging.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_observation_logging.hpp`)
+
+- ``amdinfer/util/queue.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_queue.hpp`)
+
+- ``exception`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_exceptions.hpp`)
+
+- ``map``
+
+- ``memory`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_memory_pool_cpu_allocator.cpp`)
+
+- ``string`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_string.hpp`)
+
+- ``thread`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_thread.hpp`)
+
+- ``unordered_map``
+
+- ``utility``
+
+- ``vector`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector.cpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_endpoints.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_model_repository.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_shared_state.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_shared_state.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_amdinfer`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structamdinfer_1_1UpdateCommand`
+
+- :ref:`exhale_class_classamdinfer_1_1Endpoints`
+
+
+Enums
+-----
+
+
+- :ref:`exhale_enum_endpoints_8hpp_1ad90f89e55716c00f4cc911e76a9a3fe3`
+
+
+Typedefs
+--------
+
+
+- :ref:`exhale_typedef_endpoints_8hpp_1ac2632fc3fff3bb1b92a1a446a586399c`
+

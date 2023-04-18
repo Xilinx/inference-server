@@ -1,0 +1,71 @@
+
+.. _file__workspace_amdinfer_include_amdinfer_core_tensor.hpp:
+
+File tensor.hpp
+===============
+
+|exhale_lsh| :ref:`Parent directory <dir__workspace_amdinfer_include_amdinfer_core>` (``/workspace/amdinfer/include/amdinfer/core``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/workspace/amdinfer/include/amdinfer/core/tensor.hpp``)
+---------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__workspace_amdinfer_include_amdinfer_core_tensor.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``amdinfer/core/data_types.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_data_types.hpp`)
+
+- ``amdinfer/core/mixins.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_mixins.hpp`)
+
+- ``string`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_string.hpp`)
+
+- ``vector`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector.cpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_memory_pool_memory_allocator.hpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_model_config.hpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_tensor.cpp`
+
+- :ref:`file__workspace_amdinfer_include_amdinfer_core_inference_tensor.hpp`
+
+- :ref:`file__workspace_amdinfer_include_amdinfer_core_model_metadata.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_amdinfer`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classamdinfer_1_1Tensor`
+
