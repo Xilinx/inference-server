@@ -19,8 +19,7 @@ AMD Inference Server
 
 Welcome to the official documentation for the AMD Inference Server: an open-source tool to deploy your machine learning models and make them accessible to clients for inference.
 
-If you are new to the project, start with the :ref:`Introduction <introduction:introduction>` and the :ref:`Overview <overview:overview>` to get a high-level look at the features, documentation organization and important concepts.
-Reading through all the pages in the **About** section is recommended to familiarize yourself with the project and its terminology.
+If you are new to the project, start with the :ref:`Introduction <introduction:introduction>` and the rest of the **Getting Started** section to get a high-level look at the features, documentation organization and important concepts.
 
 Use the sidebar to navigate through the different pages in the documentation.
 Note that the documentation is versioned.
@@ -41,6 +40,7 @@ To see other versions, you can use "Read the Docs" panel on the bottom-left, vis
     :hidden:
     :caption: User guide
 
+    backends
     model_repository
     ensembles
     Deploying with Docker <docker>
@@ -60,23 +60,16 @@ To see other versions, you can use "Read the Docs" panel on the bottom-left, vis
 .. toctree::
     :maxdepth: 2
     :hidden:
-    :caption: Backends
-    :glob:
-
-    backends/*
-
-.. toctree::
-    :maxdepth: 2
-    :hidden:
     :caption: Developers
 
+    quickstart_development
+    testing
     architecture
     aks
     logging
     benchmarking
     metrics
     tracing
-    cpp_api/cpp_root
 
 .. toctree::
     :maxdepth: 2
@@ -93,7 +86,8 @@ To see other versions, you can use "Read the Docs" panel on the bottom-left, vis
     :hidden:
     :caption: Libraries and API
 
+    amdinfer_script
     cpp_user_api
     python
     rest
-    cli
+    .. cpp_api/cpp_root

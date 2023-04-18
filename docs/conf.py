@@ -52,6 +52,7 @@ else:
 extensions = [
     "sphinxcontrib.jquery",
     "breathe",
+    # omitting the full C++ documentation generation for now
     # "exhale",
     # adds argparse directive to parse CLIs
     "sphinxarg.ext",
@@ -69,6 +70,8 @@ extensions = [
     "sphinx_tabs.tabs",
     # adds tooltips
     "sphinx_tippy",
+    # add emoji
+    "sphinxemoji.sphinxemoji",
     "sphinxcontrib.openapi",
 ]
 
@@ -114,6 +117,8 @@ tippy_skip_urls = [
 ]
 tippy_enable_wikitips = False
 tippy_enable_doitips = False
+
+sphinxemoji_style = "twemoji"
 
 
 def hide_private_module(app, what, name, obj, options, signature, return_annotation):
@@ -168,11 +173,11 @@ nitpicky = True
 numfig = True
 
 rst_prolog = """
-.. include:: substitutions.rst
+.. include:: /prolog.rst
 """
 
 rst_epilog = """
-.. include:: links.rst
+.. include:: /epilog.rst
 """
 
 # Configure 'Edit on GitHub' extension
@@ -185,7 +190,15 @@ templates_path = ["_templates"]
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", "**/build/**", "**/uploads/**"]
+exclude_patterns = [
+    "_build",
+    "Thumbs.db",
+    ".DS_Store",
+    "**/build/**",
+    "**/uploads/**",
+    "epilog.rst",
+    "prolog.rst",
+]
 
 
 # -- Options for HTML output -------------------------------------------------

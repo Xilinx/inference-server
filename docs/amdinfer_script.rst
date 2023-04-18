@@ -1,4 +1,5 @@
 ..
+    Copyright 2021 Xilinx, Inc.
     Copyright 2022 Advanced Micro Devices, Inc.
 
     Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,11 +14,13 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 
-.. _DockerInstallLinux: https://docs.docker.com/engine/install/
-.. _DockerRun: https://docs.docker.com/engine/reference/commandline/run/
-.. _InferenceServerDockerHub: https://hub.docker.com/r/amdih/serve
-.. _InferenceServerRepository: https://github.com/Xilinx/inference-server
-.. _InferenceServerDocumentation: https://xilinx.github.io/inference-server/
-.. _ZenDNN: https://www.amd.com/en/developer/zendnn.html
-.. _ZenDNN_download: https://www.amd.com/en/developer/zendnn.html#downloads
-.. _ZenDNN_guide: https://www.amd.com/en/developer/zendnn.html#documentation
+amdinfer Script
+===============
+
+The *amdinfer* script provides an easy way to launch containers and build the server during development.
+The documentation for the options available in this Python script can be seen here or on the terminal using the ``--help`` flag.
+
+.. argparse::
+   :module: amdinfer_cli
+   :func: get_parser
+   :prog: amdinfer

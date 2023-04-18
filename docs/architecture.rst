@@ -97,7 +97,7 @@ gRPC
 ^^^^
 
 The gRPC functionality is provided through a custom implementation of a gRPC server.
-There are some examples in the `gRPC repository on Github <https://github.com/grpc/grpc/blob/master/examples/cpp>`__ that can be used for reference.
+There are some examples in the :github:`gRPC repository on Github <grpc/grpc/blob/master/examples/cpp>` that can be used for reference.
 It makes new dynamic objects to keep track of the incoming requests and a state machine is embedded inside to track state.
 A pointer to this object, ``CallData``, is put into the callback for the request so when the worker finishes this request, it will use it to respond to the request.
 After the response, the state machine is marked to finish and the object deallocates itself.

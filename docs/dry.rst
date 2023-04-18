@@ -24,11 +24,3 @@
 ..* labels must be entirely unique i.e. if you use "foobar" as a label, you
 ..* cannot use "foobar" at the start of any other label. Therefore, prefer
 ..* verbose labels to prevent unintentional matching.
-
-+define_ensembles
-a logical pipeline of workers to execute a graph of computations where the output tensors of one model are passed as input to others
--define_ensembles
-
-+define_model_repository
-a directory that exists on the host machine where the server :term:`container <Container (Docker)>`` is running and it holds the models you want to serve and their associated metadata in a standard structure
--define_model_repository

@@ -13,7 +13,7 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 
-CPlusPlus - CPU\|GPU\|FPGA
-==========================
+CPlusPlus
+=========
 
 The CPlusPlus backend can run arbitrary C++ code targeting any hardware accelerator that adheres to the interface.

@@ -18,6 +18,13 @@ Troubleshooting
 
 If things don't work as expected, use this page to help guide your debugging.
 The more information you can gather, the easier it will be for you to fix the problem yourself or provide detailed information in a bug report.
+If you're running into backend-specific errors, also take a look at the troubleshooting section for your :ref:`backend <backends:Backends>`.
+
+Use the latest version
+----------------------
+
+The inference server is in continuous development and every commit to the repository is tested so using the ``main`` branch directly should be the best way to get the latest features and bug fixes.
+Make sure you are using the latest version and that your container and source code versions match.
 
 Use server logs
 ---------------
@@ -28,4 +35,4 @@ Instead, you should look at the server logs, if they are enabled.
 By default, the server logs are in ``~/.amdinfer/logs/server.log``.
 The home directory where the logs are located depend on how the server was started.
 If it is running as root, as is the case in deployment containers, the root user's home directory is in ``/root/*``.
-If it is running as the non-root user in the container, the home directory is in ``/home/amdinfer-user/*``.
+If it is running as the non-root user in the development container, the home directory is in ``/home/amdinfer-user/*``.

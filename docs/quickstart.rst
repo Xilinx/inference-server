@@ -19,7 +19,7 @@ Quickstart
 This quickstart shows you how to deploy the server locally and send inference requests to it.
 These steps elaborate on the quick start example described in the project :github:`README <Xilinx/inference-server#quick-start-deployment-and-inference>`.
 The README example uses a script that takes care of the setup that is manually performed here but this guide should help you better understand what is needed to deploy the server and use it.
-If you already have the server deployed somewhere, you can skip ahead to the :ref:`inference section <Server deployment summary>`.
+If you already have the server deployed somewhere, you can skip ahead to the :ref:`inference section <deploymentSummary>`.
 
 .. note::
 
@@ -35,7 +35,7 @@ For making an inference:
 
 For deploying the server:
 
-* A Linux host machine with `DockerInstallLinux`_ installed
+* A Linux host machine with `Docker <LinkDockerInstallLinux>`_ installed
 * Sufficient disk space to host your models
 
 This guide assumes that inference will be made from the same machine where the server is deployed.
@@ -43,10 +43,7 @@ This guide assumes that inference will be made from the same machine where the s
 Prepare the model repository
 ----------------------------
 
-A model repository is
-.. include:: dry.rst
-    :start-after: +define_model_repository
-    :end-before: -define_model_repository
+A model repository is |define_model_repository|.
 
 .. code-block:: text
 
@@ -70,7 +67,6 @@ The CPU version has no special hardware requirements to run so you can always ru
 .. tabs::
 
     .. code-tab:: console CPU
-
 
         $ wget -O tensorflow.zip https://www.xilinx.com/bin/public/openDownload?filename=tf_resnetv1_50_imagenet_224_224_6.97G_2.5.zip
         $ unzip -j "tensorflow.zip" "tf_resnetv1_50_imagenet_224_224_6.97G_2.5/float/resnet_v1_50_baseline_6.96B_922.pb" -d .
@@ -170,7 +166,7 @@ Start the image
 ---------------
 
 You can start a container from the deployment image with ``docker run`` as any other image.
-For more information about these flags and other options you can use, refer to its `documentation <DockerRun>`_.
+For more information about these flags and other options you can use, refer to its `documentation <LinkDockerRun>`_.
 The flags used in this sample command are:
 
 * ``--volume $(pwd)/model_repository:/mnt/models:rw``: mount the model repository you created above into the container to where the server expects it to be. This allows the server to load these models at startup.
@@ -179,7 +175,7 @@ The flags used in this sample command are:
 
 .. tip::
 
-    Using ``--net=host`` will not work if ports 8998 and 50051 are unavailable on your host machine.
+    Using ``--net=host`` will not work if the default ports are unavailable on your host machine.
     In this case, you can omit this flag and use ``--publish`` to map these ports in the container to other ports on your host machine.
     Refer to the ``docker run`` documentation for more information.
 
@@ -200,6 +196,8 @@ The flags used in this sample command are:
 The endpoints for each model will be the name of the model in the ``config.toml``, which should match the name of the parent directory in the model repository.
 In this example, it would be "resnet50".
 You are now ready to make requests to this server.
+
+.. _deploymentSummary:
 
 Server deployment summary
 -------------------------
@@ -227,7 +225,7 @@ In this example, you will use the Python library, which you can install with ``p
 Running an example
 ------------------
 
-The `AMD Inference Server repository <InferenceServerRepository_>`_ includes examples that demonstrate running an end-to-end inference request.
+The `AMD Inference Server repository <LinkInferenceServerRepository_>`_ includes examples that demonstrate running an end-to-end inference request.
 This particular example targets the ResNet50 model you've already deployed on the server above.
 To perform the inference, you will need some files that are available in the repository:
 
@@ -294,4 +292,4 @@ The server responds to the request and you can examine the results to take furth
 Next steps
 ----------
 
-TBD
+To learn more about the Python script you ran to run the inference, walk through the script in this :ref:`example <example_resnet50_python:Running ResNet50 - Python>`.

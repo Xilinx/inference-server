@@ -16,10 +16,7 @@
 Ensembles
 =========
 
-Ensembles are
-.. include:: dry.rst
-    :start-after: +define_ensembles
-    :end-before: -define_ensembles
+Ensembles are |define_ensemble|.
 You can use ensembles to define a pipeline like pre-processing, inference, and post-processing on the server.
 
 .. note::

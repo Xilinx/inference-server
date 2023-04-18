@@ -13,8 +13,8 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 
-MIGraphX - GPU
-==============
+MIGraphX
+========
 
 Using the AMD Inference Server with MIGraphX and GPUs requires some additional setup prior to use.
 
@@ -24,6 +24,15 @@ Set up the host and GPUs
 Prior to installing the Inference Server, first ensure your system recognizes your GPU(s).
 Start by following the `ROCm installation instructions <https://docs.amd.com/category/ROCm_v5.4.1>`__ for version 5.4.1 or newer.
 Once your system recognizes your GPU(s), proceed to the next step.
+
+Get assets and models
+---------------------
+
+You can download the assets and models used for tests and examples with:
+
+.. code-block:: console
+
+    $ ./amdinfer get --migraphx --all-models
 
 Build an image
 --------------
@@ -35,7 +44,10 @@ To build an image with MIGraphX enabled, you need to add the ``--migraphx`` to t
     # create the Dockerfile
     python3 docker/generate.py
 
-    # build the dev image $(whoami)/amdinfer-dev-migraphx:latest
+    # build the development image $(whoami)/amdinfer-dev:latest
+    ./amdinfer dockerize --migraphx
+
+    # build the development image $(whoami)/amdinfer-dev-migraphx:latest
     ./amdinfer dockerize --migraphx --suffix="-migraphx"
 
     # build the deployment image $(whoami)/amdinfer-migraphx:latest
@@ -59,12 +71,3 @@ You can start the :ref:`deployment container on Docker <docker:start the contain
     $ docker run --device /dev/kfd --device /dev/dri [--volume ...]
 
 These ``--device`` flags pass the GPU to the container and you can mount other directories as needed to make models available.
-
-Get assets and models
----------------------
-
-You can download the assets and models used for tests and examples with:
-
-.. code-block:: console
-
-    $ ./amdinfer get --migraphx

@@ -17,10 +17,20 @@ Backends
 ========
 
 The AMD Inference Server supports a number of backends.
-This page serves as a landing page for all of them:
+Each backend has its own sets of features and capabilities, which are summarized at a high-level in the table below.
+You can see more information about each backend on its own page.
+
+.. csv-table::
+    :header: Backend,Hardware,Model Formats,Model Support
+
+    :ref:`CPlusPlus <cplusplus:CPlusPlus>`,CPU \| GPU \| FPGA,.so,✔
+    :ref:`MIGraphX <migraphx:MIGraphX>`,GPU,.mxr \| .onnx,✔
+    :ref:`PT+ZenDNN <zendnn:ZenDNN>`,CPU,.pt,⚠
+    :ref:`TF+ZenDNN <zendnn:ZenDNN>`,CPU,.tf,⚠
+    :ref:`Vitis AI <vitis_ai:Vitis AI>`,FPGA,.xmodel,✔
 
 .. toctree::
-    :titlesonly:
+    :hidden:
     :glob:
 
     backends/*

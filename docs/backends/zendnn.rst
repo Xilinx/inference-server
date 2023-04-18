@@ -13,10 +13,19 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 
-ZenDNN - CPU
-============
+ZenDNN
+======
 
-AMD Inference Server is integrated with `ZenDNN <ZenDNN_>`_ optimized libraries for running inference on AMD EPYC processors with TensorFlow and PyTorch.
+AMD Inference Server is integrated with `ZenDNN <LinkZenDNN>`_ optimized libraries for running inference on AMD EPYC processors with TensorFlow and PyTorch.
+
+Get assets and models
+---------------------
+
+You can download the assets and models used for tests and examples with:
+
+.. code-block:: console
+
+   $ ./amdinfer get --tfzendnn --ptzendnn --all-models
 
 Build an image
 --------------
@@ -26,8 +35,8 @@ To build an image with TensorFlow/Pytorch + ZenDNN enabled, you need to download
 Download the ZenDNN packages
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-You can download the TF+ZenDNN and/or PT+ZenDNN packages from the `ZenDNN developer downloads <ZenDNN_download_>`_.
-Before downloading these packages, you will be required to read and agree to the End User License Agreement (EULA).
+You can download the TF+ZenDNN and/or PT+ZenDNN packages from the `ZenDNN developer downloads <ZenDNN_download>`_.
+Before downloading these packages, you will be required to read and agree to the :term:`EULA`.
 
 1. For TensorFlow: download ``TF_v2.10_ZenDNN_v4.0_C++_API.zip``
 2. For PyTorch: download ``PT_v1.12_ZenDNN_v4.0_C++_API.zip``
@@ -45,7 +54,10 @@ To build an image with ZenDNN enabled, you need to add the the appropriate flag(
     # create the Dockerfile
     python3 docker/generate.py
 
-    # build the dev image $(whoami)/amdinfer-dev-zendnn:latest
+    # build the development image $(whoami)/amdinfer-dev:latest
+    ./amdinfer dockerize --tfzendnn=./TF_v2.10_ZenDNN_v4.0_C++_API.zip --ptzendnn=./PT_v1.12_ZenDNN_v4.0_C++_API.zip
+
+    # build the development image $(whoami)/amdinfer-dev-zendnn:latest
     ./amdinfer dockerize --tfzendnn=./TF_v2.10_ZenDNN_v4.0_C++_API.zip --ptzendnn=./PT_v1.12_ZenDNN_v4.0_C++_API.zip --suffix="-zendnn"
 
     # build the deployment image $(whoami)/amdinfer-zendnn:latest
@@ -57,15 +69,6 @@ You can choose to build a image with just TF+ZenDNN or just PT+ZenDNN by only pa
 
     The downloaded ZenDNN packages will be used by the Docker build process so they must be in the inference server repository directory and in a location that is not excluded by the ``.dockerignore`` file.
     These instructions suggest using the repository root but any path that meets this criteria will work.
-
-Get assets and models
----------------------
-
-You can download the assets and models used for tests and examples with:
-
-.. code-block:: console
-
-   $ ./amdinfer get --tfzendnn --ptzendnn
 
 Freezing PyTorch models
 -----------------------
@@ -93,4 +96,4 @@ This test will load a model and run with a sample image and assert the output.
 Tune performance
 ----------------
 
-For tuning ZenDNN performance, you can refer to the TensorFlow + ZenDNN and PyTorch + ZenDNN `user guides <ZenDNN_guide_>`_.
+For tuning ZenDNN performance, you can refer to the TensorFlow + ZenDNN and PyTorch + ZenDNN `user guides <ZenDNN_guide>`_.

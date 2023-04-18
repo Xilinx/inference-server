@@ -56,7 +56,7 @@ KServe provides a number of Custom Resource Definitions (CRDs) that you can use 
 The current recommended approach from KServe is to use the ``ServingRuntime`` method.
 
 As you start an inference service, you will need models to serve.
-These models should be in the format that the inference server expects for its :ref:`model repository <model_repository>`.
+These models should be in the format that the inference server expects for its :ref:`model repository <model_repository:Model Repository>`.
 You can put the model up on any of the cloud storage platforms that KServe supports like GCS, S3 and HTTP.
 If you use HTTP, the model should be zipped and should unzip in the expected model repository directory structure.
 Other archive formats such as ``.tar.gz`` may not work as expected.

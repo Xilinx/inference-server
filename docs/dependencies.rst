@@ -137,6 +137,7 @@ The following packages (and any dependencies) are installed from the Python Pack
     :pypiPackages:`Sphinx`,latest,BSD-2 + others,Building documentation\ :superscript:`d 0`
     :pypiPackages:`sphinx-argparse`,latest,MIT,Sphinx plugin for documenting CLIs\ :superscript:`d 0`
     :pypiPackages:`sphinx-copybutton`,latest,MIT,Adds copy button for code blocks\ :superscript:`d 0`
+    :pypiPackages:`sphinxemoji`,latest,BSD-3,Sphinx plugin for enabling emoji\ :superscript:`d 0`
     :pypiPackages:`sphinx-issues`,latest,MIT,Sphinx plugin for links to the project's Github issue tracker\ :superscript:`d 0`
     :pypiPackages:`sphinx-tabs`,latest,MIT,Sphinx plugin to create tabs\ :superscript:`d 0`
     :pypiPackages:`sphinx-tippy`,latest,MIT,Sphinx plugin to create tooltips\ :superscript:`d 0`

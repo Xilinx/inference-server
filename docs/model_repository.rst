@@ -16,10 +16,7 @@
 Model Repository
 ================
 
-A model repository is
-.. include:: dry.rst
-    :start-after: +define_model_repository
-    :end-before: -define_model_repository
+A model repository is |define_model_repository|.
 
 Single models
 -------------
@@ -100,12 +97,12 @@ The equivalent configuration file as a ``.pbtxt`` file would be:
         }
     ]
 
-While the inference server will accept a configuration file in this format, note that TOML files take priority if both are present and this format does not support defining :ref:`ensembles <ensembles>`.
+While the inference server will accept a configuration file in this format, note that TOML files take priority if both are present and this format does not support defining :ref:`ensembles <ensembles:Ensembles>`.
 
 Ensembles
 ---------
 
-With :term:`ensembles <Ensembles>`, the "model" actually consists of a set of models.
+With :term:`ensembles <Ensemble>`, the "model" actually consists of a set of models.
 The directory structure for the model repository for ensembles is:
 
 .. code-block:: text

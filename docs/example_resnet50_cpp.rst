@@ -21,7 +21,7 @@ These examples are intended to run in the development container because you need
 You can see the full source files used here in the :amdinferTree:`repository <examples/resnet50>` for more details.
 
 The inference server binds its C++ API to Python so the Python usage and functions look similar to their C++ counterparts but there are some differences due to the available features in both languages.
-You can read the :ref:`Python version of this example <example_resnet50_python:Running ResNet50 - Python` to better compare these two.
+You can read the :ref:`Python version of this example <example_resnet50_python:Running ResNet50 - Python>` to better compare these two.
 
 .. note::
     These examples are intended to demonstrate the API and how to communicate with the server.

@@ -51,22 +51,23 @@ Deployment images contain only the the compiled server executable and its run-ti
 They are optimized for size and used to deploy the server locally, on Kubernetes or on KServe.
 By default, as deployment images start, they start the server executable automatically with the default arguments.
 You can override these values by setting your own when you start a container from this image.
-The published images for the AMD Inference Server on `Docker Hub <InferenceServerDockerHub>`_ are deployment images.
+The published images for the AMD Inference Server on `Docker Hub <LinkInferenceServerDockerHub>`_ are deployment images.
 
 Types of users
 --------------
 
 Different *users* of the AMD Inference Server have different needs.
-There are three groups of users for the inference server: *clients*, *administrators* and *developers*, each with increasing levels of responsibility.
+There are three overlapping sets of users for the inference server: *clients*, *administrators* and *developers*.
 Where appropriate, the documentation will note the intended audience of the content.
 
 Clients
 ^^^^^^^
 
-Clients make inference requests to the server but they are not responsible for starting or managing the server.
-For clients, the server is already running somewhere and is accessible over a network.
-As such, clients must be given an address at which to reach the server as well as endpoints to send requests to.
-They use the AMD Inference Server's client libraries to write programs to send inference requests to this server.
+Clients interact with the server using its APIs to send it inference requests.
+The server also provides additional methods to check its status or that of the running models that clients can use.
+Clients can talk to the server over any of the protocols that the server exposes for communication such as HTTP/REST or gRPC.
+Using the server's C++ API, clients can write custom applications that use the server backend directly.
+The easiest way for clients to communicate to the server is using one of the provided client libraries but they can also use the supported protocols directly.
 
 Administrators
 ^^^^^^^^^^^^^^
@@ -80,38 +81,42 @@ Choosing the appropriate machine(s) to host the server is important because it d
 Backends define how to execute a model.
 For example, the MIGraphX backend uses the MIGraphX library to execute ONNX models on AMD GPUs and it is only usable if the host machine has compatible GPUs.
 
-Administrators may also need to send requests to the inference server they are managing so they are a superset of clients.
-
 Developers
 ^^^^^^^^^^
 
 Developers tinker with the server executable itself by compiling it from source.
 Building the server from source requires using a development container.
-In the development container, the developer can build the server executable and run tests using the executable directly.
+In the development container, developers can build the server executable and run tests using the executable directly.
 The AMD Inference Server uses CMake to build the executables and tests.
-The build process makes the inference server's C++ and Python libraries available so developers can write custom applications using the API.
 After testing, developers build the deployment images containing the server executable, backends, and the needed run-time dependencies using the *amdinfer* script.
-
-Developers are a superset of clients and administrators.
-They must be familiar with all stages of building, testing and deploying the inference server.
 
 Glossary
 --------
 
 .. glossary::
 
+    Administrator (User)
+        a :term:`user <User>` that sets up and maintains the inference server deployment container(s)
+
     Chain
         a linear :term:`ensemble <Ensemble>` where all the output tensors of one stage are inputs to the same next stage without having loops, broadcasts or concatenations
+
+    Client (User)
+        a :term:`user <User>` that interacts with a running server using its APIs to send it inference requests
 
     Container (Docker)
         a standard unit of software that packages up code and all its dependencies so the application runs quickly and reliably from one computing environment to another [1]_
 
         see also: :term:`image <Image (Docker)>`
 
+    Developer (User)
+        a :term:`user <User>` that uses the development container to build and test the server executable
+
     Ensemble
-        .. include:: dry.rst
-            :start-after: +define_ensembles
-            :end-before: -define_ensembles
+        |define_ensemble|
+
+    EULA
+        End User License Agreement
 
     Image (Docker)
         a lightweight, standalone, executable package of software that includes everything needed to run an application: code, runtime, system tools, system libraries and settings [1]_
@@ -119,17 +124,13 @@ Glossary
         see also: :term:`containers <Container (Docker)>`
 
     Model repository
-        .. include:: dry.rst
-            :start-after: +define_model_repository
-            :end-before: -define_model_repository
+        |define_model_repository|
 
-    Users
-        anyone who uses the AMD Inference Server. There are three groups of users: :term:`clients`, :term:`administrators`, or :term:`developers`
-
-    Xilinx Runtime Library
-        an open-source standardized software interface that facilitates communication between the application code and the accelerated-kernels deployed on the reconfigurable portion of PCIe-based Alveo accelerator cards, Zynq-7000, Zynq UltraScale+ MPSoC based embedded platforms or Versal ACAPs
+    User
+        anything or anyone that uses the AMD Inference Server i.e. :term:`clients <Client (User)>`, :term:`administrators <Administrator (User)>`, or :term:`developers <Developer (User)>`
 
     XRT
-        see :term:`Xilinx Runtime Library`
+        Xilinx Runtime Library: an open-source standardized software interface that facilitates communication between the application code and the accelerated-kernels deployed on the reconfigurable portion of PCIe-based Alveo accelerator cards, Zynq-7000, Zynq UltraScale+ MPSoC based embedded platforms or Versal ACAPs
+
 
 .. [1] https://www.docker.com/resources/what-container/
