@@ -21,6 +21,9 @@
 .. _LinkZenDNN: https://www.amd.com/en/developer/zendnn.html
 .. _LinkZenDNNdownload: https://www.amd.com/en/developer/zendnn.html#downloads
 .. _LinkZenDNNguide: https://www.amd.com/en/developer/zendnn.html#documentation
+.. _LinkZenDNNptGuide: https://www.amd.com/content/dam/amd/en/documents/developer/pytorch-zendnn-user-guide-4.0.pdf
+.. _LinkZenDNNtfGuide: https://www.amd.com/content/dam/amd/en/documents/developer/tensorflow-zendnn-user-guide-4.0.pdf
+
 
 .. |define_deployment| replace:: the act of making the AMD Inference Server available to respond to inference requests from clients
 

@@ -24,7 +24,7 @@ If you are new to the project, start with the :ref:`Introduction <introduction:i
 Use the sidebar to navigate through the different pages in the documentation.
 Note that the documentation is versioned.
 By default, it shows the latest documentation corresponding to the current state of the `code <https://github.com/Xilinx/inference-server>`__.
-To see other versions, you can use "Read the Docs" panel on the bottom-left, visit this `landing page <https://xilinx.github.io/inference-server/>`__ or edit the version in the URL directly.
+To see other versions, you can use "Read the Docs" panel on the bottom-left or edit the version in the URL directly.
 
 .. toctree::
     :maxdepth: 2

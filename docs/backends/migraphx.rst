@@ -16,23 +16,40 @@
 MIGraphX
 ========
 
-Using the AMD Inference Server with MIGraphX and GPUs requires some additional setup prior to use.
+The MIGraphX backend executes an ONNX or MXR model on an AMD GPU.
 
-Set up the host and GPUs
-------------------------
+Model support
+-------------
 
-Prior to installing the Inference Server, first ensure your system recognizes your GPU(s).
-Start by following the `ROCm installation instructions <https://docs.amd.com/category/ROCm_v5.4.1>`__ for version 5.4.1 or newer.
-Once your system recognizes your GPU(s), proceed to the next step.
+The MIGraphX backend should support most ONNX files and it supports models with multiple input and output tensors.
+The tested models are listed below:
 
-Get assets and models
----------------------
+.. csv-table::
+    :header: Model type,Tested models
 
-You can download the assets and models used for tests and examples with:
+    Classification,ResNet50
+    Object detection,YOLOv4
 
-.. code-block:: console
+Other models should also work but are currently untested.
 
-    $ ./amdinfer get --migraphx --all-models
+Hardware support
+----------------
+
+While not every model is tested on every GPU, the MIGraphX backend has run at least one model on the following devices:
+
+.. csv-table::
+    :header: Classification,Name,ID
+
+    CDNA,MI100,gfx908
+
+Other devices and DPUs may also work but are currently untested.
+
+Host setup
+----------
+
+Follow the `ROCm installation instructions <https://docs.amd.com/category/Release%20Documentation>`__ to install ROCm on your host machine.
+Your ROCm version should ideally match the version installed in the inference server container but mismatching versions may work as well in some cases.
+Ensure you can detect the GPUs on your host machine with ``/opt/rocm/bin/rocminfo``.
 
 Build an image
 --------------
@@ -53,10 +70,23 @@ To build an image with MIGraphX enabled, you need to add the ``--migraphx`` to t
     # build the deployment image $(whoami)/amdinfer-migraphx:latest
     ./amdinfer dockerize --migraphx --suffix="-migraphx" --production
 
-Start an image
---------------
+Start a container
+-----------------
 
-The development container can be started with:
+Depending on your use case and how you are using the server, you can start a container to use this backend in multiple ways.
+
+Deployment
+^^^^^^^^^^
+
+You can start a deployment container with something like:
+
+.. code-block:: console
+
+    $ docker run --device /dev/kfd --device /dev/dri [--volume ...]
+
+These ``--device`` flags pass the GPU to the container and you can mount other directories as needed to make models available.
+
+A development container can be started with:
 
 .. code-block:: console
 
@@ -64,10 +94,59 @@ The development container can be started with:
 
 This automatically adds the detected devices, publishes ports, and mounts some convenient directories, such as your SSH directory, and drops you into a terminal in the container.
 
-You can start the :ref:`deployment container on Docker <docker:start the container>` with something like:
+Get test assets
+---------------
+
+You can download the assets and models used with this backend for tests and examples with:
 
 .. code-block:: console
 
-    $ docker run --device /dev/kfd --device /dev/dri [--volume ...]
+    $ ./amdinfer get --migraphx --all-models
 
-These ``--device`` flags pass the GPU to the container and you can mount other directories as needed to make models available.
+Loading the backend
+-------------------
+
+.. include:: /dry.rst
+    :start-after: +loading_the_backend_intro
+    :end-before: -loading_the_backend_intro
+
+.. tabs::
+
+    .. code-tab:: c++ C++
+
+        // amdinfer::Client* client;
+        // amdinfer::ParameterMap parameters;
+        std::string endpoint = client->workerLoad("migraphx", parameters)
+
+    .. code-tab:: python Python
+
+        # client = amdinfer.Client()
+        # parameters = amdinfer.ParameterMap()
+        endpoint = client.workerLoad("migraphx", parameters)
+
+.. include:: /dry.rst
+    :start-after: +loading_the_backend_modelLoad
+    :end-before: -loading_the_backend_modelLoad
+
+Parameters
+^^^^^^^^^^
+
+You can provide the following backend-specific parameters at load-time:
+
+.. csv-table::
+    :header: Parameter,Type,Usage
+
+    ``batch``,integer,Requested batch size for incoming batches. Defaults to 64.
+    ``model``,string,Full path to the model file to load
+    ``pad_batch``,boolean,Use the first request to pad out the incoming batch if it contains fewer requests than the batch size. Defaults to true.
+
+Troubleshooting
+---------------
+
+If you run into problems, first check the :ref:`general troubleshooting guide <troubleshooting:Troubleshooting>` guide.
+Then continue on to this XModel specific troubleshooting guide.
+You will need access to the machine where the inference server is running to debug.
+
+TODO
+
+.. |platform| replace:: ``onnx_onnxv1`` or ``migraphx_mxr``

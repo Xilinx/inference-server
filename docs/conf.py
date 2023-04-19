@@ -39,7 +39,7 @@ author = "Advanced Micro Devices, Inc."
 # override this value to build different versions
 version = "main"
 
-if version != "main":
+if version != "main" and version != "dev":
     release = f"v{version}"
 else:
     release = version
@@ -147,6 +147,7 @@ blob_path = f"https://github.com/Xilinx/inference-server/blob/{release}/%s"
 raw_path = f"https://github.com/Xilinx/inference-server/raw/{release}/%s"
 xilinx_download = "https://www.xilinx.com/bin/public/openDownload?filename=%s"
 github_onnx = "https://github.com/onnx/models/raw/main/%s"
+vitis_ai_path = "https://github.com/Xilinx/Vitis-AI/tree/3.0/%s"
 
 # sphinx.ext.extlinks configuration. syntax is key: (url, caption). The key should not have underscores.
 extlinks = {
@@ -158,6 +159,7 @@ extlinks = {
     "github": ("https://github.com/%s", "%s"),
     "xilinxDownload": (xilinx_download, "%s"),
     "githubOnnx": (github_onnx, None),
+    "vitisAItree": (vitis_ai_path, None),
 }
 
 # sphinx-issues configuration

@@ -24,3 +24,32 @@
 ..* labels must be entirely unique i.e. if you use "foobar" as a label, you
 ..* cannot use "foobar" at the start of any other label. Therefore, prefer
 ..* verbose labels to prevent unintentional matching.
+
++loading_the_backend_intro
+There are multiple ways to load this backend to make it available for inference requests from clients.
+If you are using a client's ``workerLoad()`` method:
+-loading_the_backend_intro
+
+
++loading_the_backend_modelLoad
+With a client's ``modelLoad()`` method or using the repository approach, you need to create a :ref:`model repository <model_repository:Model Repository>` and put a model in it.
+To use this backend with your model, use |platform| as the platform for your model.
+
+Then, you can load the model from the server after setting up the path to the model repository.
+The server may be set to automatically load all models from the configured model repository or you can load it manually using ``modelLoad()``.
+In this case, the endpoint is defined in the model's configuration file in the repository and it is used as the argument to ``modelLoad()``.
+
+.. tabs::
+
+    .. code-tab:: c++ C++
+
+        // amdinfer::Client* client;
+        // amdinfer::ParameterMap parameters;
+        client->modelLoad(<model>, parameters)
+
+    .. code-tab:: python Python
+
+        # client = amdinfer.Client()
+        # parameters = amdinfer.ParameterMap()
+        client.modelLoad(<model>, parameters)
+-loading_the_backend_modelLoad
