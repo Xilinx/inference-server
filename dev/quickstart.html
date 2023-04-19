@@ -19,7 +19,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','GTM-5RHQV7');</script>
 <!-- End Google Tag Manager -->
-  <title>Quickstart &mdash; AMD Inference Server vdev documentation</title>
+  <title>Quickstart &mdash; AMD Inference Server dev documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
@@ -42,7 +42,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <script src="_static/tabs.js"></script>
         <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
         <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
-        <script defer="defer" src="_static/tippy/quickstart.677229fc-720e-4954-927c-d1a5c2a88930.js"></script>
+        <script defer="defer" src="_static/tippy/quickstart.669257c9-b7ba-4644-88ab-21c0b1e994c6.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -674,9 +674,9 @@ In this example, you will use the Python library, which you can install with <co
 <p>The <a class="reference external" href="https://github.com/Xilinx/inference-server">AMD Inference Server repository</a> includes examples that demonstrate running an end-to-end inference request.
 This particular example targets the ResNet50 model you’ve already deployed on the server above.
 To perform the inference, you will need some files that are available in the repository:</p>
-<pre class="literal-block">$ wget <a class="reference external" href="https://github.com/Xilinx/inference-server/raw/vdev/examples/resnet50/imagenet_classes.txt">https://github.com/Xilinx/inference-server/raw/vdev/examples/resnet50/imagenet_classes.txt</a>
-$ wget <a class="reference external" href="https://github.com/Xilinx/inference-server/raw/vdev/tests/assets/dog-3619020_640.jpg">https://github.com/Xilinx/inference-server/raw/vdev/tests/assets/dog-3619020_640.jpg</a>
-$ wget <a class="reference external" href="https://github.com/Xilinx/inference-server/raw/vdev/examples/resnet50/resnet.py">https://github.com/Xilinx/inference-server/raw/vdev/examples/resnet50/resnet.py</a></pre>
+<pre class="literal-block">$ wget <a class="reference external" href="https://github.com/Xilinx/inference-server/raw/dev/examples/resnet50/imagenet_classes.txt">https://github.com/Xilinx/inference-server/raw/dev/examples/resnet50/imagenet_classes.txt</a>
+$ wget <a class="reference external" href="https://github.com/Xilinx/inference-server/raw/dev/tests/assets/dog-3619020_640.jpg">https://github.com/Xilinx/inference-server/raw/dev/tests/assets/dog-3619020_640.jpg</a>
+$ wget <a class="reference external" href="https://github.com/Xilinx/inference-server/raw/dev/examples/resnet50/resnet.py">https://github.com/Xilinx/inference-server/raw/dev/examples/resnet50/resnet.py</a></pre>
 <p>These files provide the class labels, a sample image and a helper Python script.
 You will also need the particular example file corresponding to the same hardware your server is intended for.
 You can download this file and run it to perform an inference on the server.
@@ -684,11 +684,11 @@ At a high-level, the example script performs pre-processing on the image, constr
 The server responds with the results of the inference.
 These results are post-processed and the top 5 labels for the image are printed.</p>
 <div class="sphinx-tabs docutils container">
-<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-4-Q1BV" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-4-Q1BV" name="Q1BV" role="tab" tabindex="0">CPU</button><button aria-controls="panel-4-R1BV" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-4-R1BV" name="R1BV" role="tab" tabindex="-1">GPU</button><button aria-controls="panel-4-RlBHQQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-4-RlBHQQ==" name="RlBHQQ==" role="tab" tabindex="-1">FPGA</button></div><div aria-labelledby="tab-4-Q1BV" class="sphinx-tabs-panel group-tab" id="panel-4-Q1BV" name="Q1BV" role="tabpanel" tabindex="0"><pre class="literal-block">$ wget <a class="reference external" href="https://github.com/Xilinx/inference-server/raw/vdev/examples/resnet50/tfzendnn.py">https://github.com/Xilinx/inference-server/raw/vdev/examples/resnet50/tfzendnn.py</a>
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-4-Q1BV" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-4-Q1BV" name="Q1BV" role="tab" tabindex="0">CPU</button><button aria-controls="panel-4-R1BV" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-4-R1BV" name="R1BV" role="tab" tabindex="-1">GPU</button><button aria-controls="panel-4-RlBHQQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-4-RlBHQQ==" name="RlBHQQ==" role="tab" tabindex="-1">FPGA</button></div><div aria-labelledby="tab-4-Q1BV" class="sphinx-tabs-panel group-tab" id="panel-4-Q1BV" name="Q1BV" role="tabpanel" tabindex="0"><pre class="literal-block">$ wget <a class="reference external" href="https://github.com/Xilinx/inference-server/raw/dev/examples/resnet50/tfzendnn.py">https://github.com/Xilinx/inference-server/raw/dev/examples/resnet50/tfzendnn.py</a>
 $ python3 tfzendnn.py --ip 127.0.0.1 --grpc-port 50051 --endpoint resnet50 --image ./dog-3619020_640.jpg --labels ./imagenet_classes.txt</pre>
-</div><div aria-labelledby="tab-4-R1BV" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-4-R1BV" name="R1BV" role="tabpanel" tabindex="0"><pre class="literal-block">$ wget <a class="reference external" href="https://github.com/Xilinx/inference-server/raw/vdev/examples/resnet50/migraphx.py">https://github.com/Xilinx/inference-server/raw/vdev/examples/resnet50/migraphx.py</a>
+</div><div aria-labelledby="tab-4-R1BV" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-4-R1BV" name="R1BV" role="tabpanel" tabindex="0"><pre class="literal-block">$ wget <a class="reference external" href="https://github.com/Xilinx/inference-server/raw/dev/examples/resnet50/migraphx.py">https://github.com/Xilinx/inference-server/raw/dev/examples/resnet50/migraphx.py</a>
 $ python3 migraphx.py --ip 127.0.0.1 --http-port 8998 --endpoint resnet50 --image ./dog-3619020_640.jpg --labels ./imagenet_classes.txt</pre>
-</div><div aria-labelledby="tab-4-RlBHQQ==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-4-RlBHQQ==" name="RlBHQQ==" role="tabpanel" tabindex="0"><pre class="literal-block">$ wget <a class="reference external" href="https://github.com/Xilinx/inference-server/raw/vdev/examples/resnet50/vitis.py">https://github.com/Xilinx/inference-server/raw/vdev/examples/resnet50/vitis.py</a>
+</div><div aria-labelledby="tab-4-RlBHQQ==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-4-RlBHQQ==" name="RlBHQQ==" role="tabpanel" tabindex="0"><pre class="literal-block">$ wget <a class="reference external" href="https://github.com/Xilinx/inference-server/raw/dev/examples/resnet50/vitis.py">https://github.com/Xilinx/inference-server/raw/dev/examples/resnet50/vitis.py</a>
 $ python3 vitis.py --ip 127.0.0.1 --http-port 8998 --endpoint resnet50 --image ./dog-3619020_640.jpg --labels ./imagenet_classes.txt</pre>
 </div></div>
 <p>After running the script, you should get output similar to the following.

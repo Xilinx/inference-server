@@ -23,11 +23,11 @@ You can see more information about each backend on its own page.
 .. csv-table::
     :header: Backend,Hardware,Model Formats,Model Support
 
-    :ref:`CPlusPlus <cplusplus:CPlusPlus>`,CPU \| GPU \| FPGA,.so,✔
-    :ref:`MIGraphX <migraphx:MIGraphX>`,GPU,.mxr \| .onnx,✔
-    :ref:`PT+ZenDNN <zendnn:ZenDNN>`,CPU,.pt,⚠
-    :ref:`TF+ZenDNN <zendnn:ZenDNN>`,CPU,.tf,⚠
-    :ref:`Vitis AI <vitis_ai:Vitis AI>`,FPGA,.xmodel,✔
+    :ref:`CPlusPlus <backends/cplusplus:CPlusPlus>`,CPU \| GPU \| FPGA,.so,✔
+    :ref:`MIGraphX <backends/migraphx:MIGraphX>`,GPU,.mxr \| .onnx,✔
+    :ref:`PT+ZenDNN <backends/zendnn:ZenDNN>`,CPU,.pt,⚠
+    :ref:`TF+ZenDNN <backends/zendnn:ZenDNN>`,CPU,.tf,⚠
+    :ref:`Vitis AI <backends/vitis_ai:Vitis AI>`,FPGA,.xmodel,✔
 
 .. toctree::
     :hidden:
