@@ -51,6 +51,7 @@ target_include_directories(
 target_link_libraries(
   model_config PRIVATE tomlplusplus::tomlplusplus INTERFACE lib_config
 )
+add_dependencies(model_config lib_config)
 
 target_link_libraries(inference_tensor INTERFACE $<TARGET_OBJECTS:tensor>)
 target_link_libraries(
