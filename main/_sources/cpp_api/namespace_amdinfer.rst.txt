@@ -42,6 +42,8 @@ Classes
 
 - :ref:`exhale_struct_structamdinfer_1_1MemoryHeader`
 
+- :ref:`exhale_struct_structamdinfer_1_1ModelConfigData`
+
 - :ref:`exhale_struct_structamdinfer_1_1NativeClient_1_1NativeClientImpl`
 
 - :ref:`exhale_struct_structamdinfer_1_1Observer`
@@ -154,6 +156,10 @@ Classes
 
 - :ref:`exhale_class_classamdinfer_1_1MemoryPool`
 
+- :ref:`exhale_class_classamdinfer_1_1ModelConfig`
+
+- :ref:`exhale_class_classamdinfer_1_1ModelConfigTensor`
+
 - :ref:`exhale_class_classamdinfer_1_1ModelMetadata`
 
 - :ref:`exhale_class_classamdinfer_1_1ModelRepository`
@@ -177,6 +183,8 @@ Classes
 - :ref:`exhale_class_classamdinfer_1_1UpdateListener`
 
 - :ref:`exhale_class_classamdinfer_1_1VartTensorBuffer`
+
+- :ref:`exhale_class_classamdinfer_1_1VectorBuffer`
 
 - :ref:`exhale_class_classamdinfer_1_1WebSocketClient`
 
@@ -206,9 +214,9 @@ Functions
 
 - :ref:`exhale_function_http_8cpp_1a7d42e4a864836a32004fefea13cbd07f`
 
-- :ref:`exhale_function_aks__detect__stream_8cpp_1ab13e3cee19b709c1dc339ff1ecae8d66`
-
 - :ref:`exhale_function_invert__video_8cpp_1a9e00ba7bdc00389694a9fedb89adfe0a`
+
+- :ref:`exhale_function_aks__detect__stream_8cpp_1ab13e3cee19b709c1dc339ff1ecae8d66`
 
 - :ref:`exhale_function_http_8cpp_1aa8d7b351b03d53ab0f5801ffd061f79d`
 
@@ -219,6 +227,16 @@ Functions
 - :ref:`exhale_function_http__server_8cpp_1a90265777686e06d56b25b0bc843eef9e`
 
 - :ref:`exhale_function_parameters_8cpp_1a43d2d4f52769bcfbcab2d793d13256a3`
+
+- :ref:`exhale_function_model__config_8cpp_1ad916117711673111272b87bd7b015dd5`
+
+- :ref:`exhale_function_model__config_8cpp_1ad993b803c47e24e374682aaec45416f4`
+
+- :ref:`exhale_function_model__config_8cpp_1a8760611469261389e290e73112952772`
+
+- :ref:`exhale_function_model__config_8cpp_1a93caf19e0a08474fcdcbfa7d2d660353`
+
+- :ref:`exhale_function_model__repository_8cpp_1a7ea03e4b5c22db96ecf9ef1cc9d23cdd`
 
 - :ref:`exhale_function_worker__info_8cpp_1a0b90dba241fba26f6e1bc8bea0e55a9e`
 
@@ -254,6 +272,8 @@ Functions
 
 - :ref:`exhale_function_http__internal_8hpp_1afa990983f0c809168a33aae411a99f8b`
 
+- :ref:`exhale_function_client_8cpp_1a7a32761519bbb3ac1d86b2b3ec7d3900`
+
 - :ref:`exhale_function_http__internal_8cpp_1a427f4954da74353ed225bf6ca403908b`
 
 - :ref:`exhale_function_http__internal_8cpp_1ab552d950b2047e8257bf47b64521a3d1`
@@ -288,6 +308,8 @@ Functions
 
 - :ref:`exhale_function_http__internal_8cpp_1a20f514dbb8f33ccf800d6fe95d9dc475`
 
+- :ref:`exhale_function_model__repository_8cpp_1ad3799a9788bef596e2144c16b8e3626f`
+
 - :ref:`exhale_function_c__plus__plus_8cpp_1a9e6917e8d658979c637569428360219e`
 
 - :ref:`exhale_function_data__types_8cpp_1a704e42ab497bfe5b6f257eb423d6df49`
@@ -302,9 +324,9 @@ Functions
 
 - :ref:`exhale_function_http__server_8cpp_1a9daff85fd67e50b69f84f3802297ff7d`
 
-- :ref:`exhale_function_model__repository_8cpp_1a05cd20aa1908b4475961f21cbdaf1e76`
+- :ref:`exhale_function_model__repository_8cpp_1acb79361ac48cfb11a0480445e7e6cfc2`
 
-- :ref:`exhale_function_model__repository_8hpp_1a94c9f9dd875588ecd02da3459c46da36`
+- :ref:`exhale_function_model__repository_8hpp_1a7bc7cc4b44f85f930556634ea7efe912`
 
 - :ref:`exhale_function_http__server_8cpp_1acbfb678bfa4431649f17750ea346f33c`
 
@@ -319,6 +341,10 @@ Functions
 - :ref:`exhale_function_data__types_8hpp_1a4b401163a3bc8d860d096ab1b00a87eb`
 
 - :ref:`exhale_function_server_8cpp_1a73eba955b7057fe278a31fb16c5cae39`
+
+- :ref:`exhale_function_client_8cpp_1aeca57ac6adc6191c9209e19e70b2c95f`
+
+- :ref:`exhale_function_client_8cpp_1a3501853447c1ef78603637fb6b0f16ca`
 
 - :ref:`exhale_function_client_8cpp_1ad928316a941cc1f5371da1e90085bfdd`
 
@@ -401,3 +427,5 @@ Variables
 - :ref:`exhale_variable_metrics_8cpp_1a214ca5f30222281458498214a0d9300c`
 
 - :ref:`exhale_variable_metrics_8cpp_1ab6051d51a6bd12208f6574272fac9117`
+
+- :ref:`exhale_variable_model__config_8cpp_1a7a1019f8d96c09cf752492a9f28f907c`

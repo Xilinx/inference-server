@@ -74,7 +74,9 @@ Program Listing for File server.cpp
    
    Server::Server() {
      initializeServerLogging();
-     this->impl_ = std::make_unique<Server::ServerImpl>();
+     impl_ = std::make_unique<Server::ServerImpl>();
+   
+     impl_->state.workerLoad("responder", {});
    
    #ifdef AMDINFER_ENABLE_TRACING
      startTracer();
@@ -94,6 +96,7 @@ Program Listing for File server.cpp
    }
    
    Server::~Server() {
+     impl_->state.workerUnload("responder");
      stopHttp();
      stopGrpc();
      terminate();

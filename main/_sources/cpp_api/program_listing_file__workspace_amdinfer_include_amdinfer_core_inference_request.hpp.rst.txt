@@ -40,7 +40,6 @@ Program Listing for File inference_request.hpp
    class InferenceRequestInput : public InferenceTensor {
     public:
      InferenceRequestInput();
-     explicit InferenceRequestInput(const InferenceTensor &tensor);
      explicit InferenceRequestInput(const Tensor &tensor);
    
      InferenceRequestInput(void *data, std::vector<uint64_t> shape,
@@ -87,6 +86,8 @@ Program Listing for File inference_request.hpp
     public:
      // Construct a new InferenceRequest object
      InferenceRequest() = default;
+   
+     InferenceRequestPtr propagate();
    
      void setCallback(Callback &&callback);
      Callback getCallback();

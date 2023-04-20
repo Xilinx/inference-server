@@ -39,6 +39,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <script src="../_static/copybutton.js"></script>
         <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
         <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+        <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
+        <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
+        <script defer="defer" src="../_static/tippy/cpp_api/namespace_amdinfer.c1d4a45f-1ed8-48b4-9ebe-47b8e5b4e7a6.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -221,10 +224,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.inferAsyncOrdered"><code class="docutils literal notranslate"><span class="pre">inferAsyncOrdered()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.inferAsyncOrderedBatched"><code class="docutils literal notranslate"><span class="pre">inferAsyncOrderedBatched()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.inference_request_to_dict"><code class="docutils literal notranslate"><span class="pre">inference_request_to_dict()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.loadEnsemble"><code class="docutils literal notranslate"><span class="pre">loadEnsemble()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.parallel_infer"><code class="docutils literal notranslate"><span class="pre">parallel_infer()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.serverHasExtension"><code class="docutils literal notranslate"><span class="pre">serverHasExtension()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.start_http_client_server"><code class="docutils literal notranslate"><span class="pre">start_http_client_server()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.stringToArray"><code class="docutils literal notranslate"><span class="pre">stringToArray()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.unloadModels"><code class="docutils literal notranslate"><span class="pre">unloadModels()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.waitUntilModelNotReady"><code class="docutils literal notranslate"><span class="pre">waitUntilModelNotReady()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.waitUntilModelReady"><code class="docutils literal notranslate"><span class="pre">waitUntilModelReady()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.waitUntilServerReady"><code class="docutils literal notranslate"><span class="pre">waitUntilServerReady()</span></code></a></li>
 </ul>
@@ -482,6 +488,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li><p><a class="reference internal" href="structamdinfer_1_1InferenceRequestInputSizes.html#exhale-struct-structamdinfer-1-1inferencerequestinputsizes"><span class="std std-ref">Struct InferenceRequestInputSizes</span></a></p></li>
 <li><p><a class="reference internal" href="structamdinfer_1_1InferenceResponseOutputSizes.html#exhale-struct-structamdinfer-1-1inferenceresponseoutputsizes"><span class="std std-ref">Struct InferenceResponseOutputSizes</span></a></p></li>
 <li><p><a class="reference internal" href="structamdinfer_1_1MemoryHeader.html#exhale-struct-structamdinfer-1-1memoryheader"><span class="std std-ref">Struct MemoryHeader</span></a></p></li>
+<li><p><a class="reference internal" href="structamdinfer_1_1ModelConfigData.html#exhale-struct-structamdinfer-1-1modelconfigdata"><span class="std std-ref">Struct ModelConfigData</span></a></p></li>
 <li><p><a class="reference internal" href="structamdinfer_1_1NativeClient_1_1NativeClientImpl.html#exhale-struct-structamdinfer-1-1nativeclient-1-1nativeclientimpl"><span class="std std-ref">Struct NativeClient::NativeClientImpl</span></a></p></li>
 <li><p><a class="reference internal" href="structamdinfer_1_1Observer.html#exhale-struct-structamdinfer-1-1observer"><span class="std std-ref">Struct Observer</span></a></p></li>
 <li><p><a class="reference internal" href="structamdinfer_1_1Overloaded.html#exhale-struct-structamdinfer-1-1overloaded"><span class="std std-ref">Template Struct Overloaded</span></a></p></li>
@@ -538,6 +545,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li><p><a class="reference internal" href="classamdinfer_1_1invalid__argument.html#exhale-class-classamdinfer-1-1invalid-argument"><span class="std std-ref">Class invalid_argument</span></a></p></li>
 <li><p><a class="reference internal" href="classamdinfer_1_1MemoryAllocator.html#exhale-class-classamdinfer-1-1memoryallocator"><span class="std std-ref">Class MemoryAllocator</span></a></p></li>
 <li><p><a class="reference internal" href="classamdinfer_1_1MemoryPool.html#exhale-class-classamdinfer-1-1memorypool"><span class="std std-ref">Class MemoryPool</span></a></p></li>
+<li><p><a class="reference internal" href="classamdinfer_1_1ModelConfig.html#exhale-class-classamdinfer-1-1modelconfig"><span class="std std-ref">Class ModelConfig</span></a></p></li>
+<li><p><a class="reference internal" href="classamdinfer_1_1ModelConfigTensor.html#exhale-class-classamdinfer-1-1modelconfigtensor"><span class="std std-ref">Class ModelConfigTensor</span></a></p></li>
 <li><p><a class="reference internal" href="classamdinfer_1_1ModelMetadata.html#exhale-class-classamdinfer-1-1modelmetadata"><span class="std std-ref">Class ModelMetadata</span></a></p></li>
 <li><p><a class="reference internal" href="classamdinfer_1_1ModelRepository.html#exhale-class-classamdinfer-1-1modelrepository"><span class="std std-ref">Class ModelRepository</span></a></p></li>
 <li><p><a class="reference internal" href="classamdinfer_1_1NativeClient.html#exhale-class-classamdinfer-1-1nativeclient"><span class="std std-ref">Class NativeClient</span></a></p></li>
@@ -550,6 +559,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li><p><a class="reference internal" href="classamdinfer_1_1Tensor.html#exhale-class-classamdinfer-1-1tensor"><span class="std std-ref">Class Tensor</span></a></p></li>
 <li><p><a class="reference internal" href="classamdinfer_1_1UpdateListener.html#exhale-class-classamdinfer-1-1updatelistener"><span class="std std-ref">Class UpdateListener</span></a></p></li>
 <li><p><a class="reference internal" href="classamdinfer_1_1VartTensorBuffer.html#exhale-class-classamdinfer-1-1varttensorbuffer"><span class="std std-ref">Class VartTensorBuffer</span></a></p></li>
+<li><p><a class="reference internal" href="classamdinfer_1_1VectorBuffer.html#exhale-class-classamdinfer-1-1vectorbuffer"><span class="std std-ref">Class VectorBuffer</span></a></p></li>
 <li><p><a class="reference internal" href="classamdinfer_1_1WebSocketClient.html#exhale-class-classamdinfer-1-1websocketclient"><span class="std std-ref">Class WebSocketClient</span></a></p></li>
 <li><p><a class="reference internal" href="classamdinfer_1_1WebSocketClient_1_1WebSocketClientImpl.html#exhale-class-classamdinfer-1-1websocketclient-1-1websocketclientimpl"><span class="std std-ref">Class WebSocketClient::WebSocketClientImpl</span></a></p></li>
 <li><p><a class="reference internal" href="classamdinfer_1_1WorkerInfo.html#exhale-class-classamdinfer-1-1workerinfo"><span class="std std-ref">Class WorkerInfo</span></a></p></li>
@@ -569,13 +579,18 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <ul class="simple">
 <li><p><a class="reference internal" href="function_http_8cpp_1a91a52b2ef7f7d2a26cbad3cc60dab78d.html#exhale-function-http-8cpp-1a91a52b2ef7f7d2a26cbad3cc60dab78d"><span class="std std-ref">Function amdinfer::addHeaders</span></a></p></li>
 <li><p><a class="reference internal" href="function_http_8cpp_1a7d42e4a864836a32004fefea13cbd07f.html#exhale-function-http-8cpp-1a7d42e4a864836a32004fefea13cbd07f"><span class="std std-ref">Function amdinfer::checkError</span></a></p></li>
-<li><p><a class="reference internal" href="function_aks__detect__stream_8cpp_1ab13e3cee19b709c1dc339ff1ecae8d66.html#exhale-function-aks-detect-stream-8cpp-1ab13e3cee19b709c1dc339ff1ecae8d66"><span class="std std-ref">Function amdinfer::constructMessage(const std::string&amp;, const std::string&amp;, const std::string&amp;)</span></a></p></li>
 <li><p><a class="reference internal" href="function_invert__video_8cpp_1a9e00ba7bdc00389694a9fedb89adfe0a.html#exhale-function-invert-video-8cpp-1a9e00ba7bdc00389694a9fedb89adfe0a"><span class="std std-ref">Function amdinfer::constructMessage(const std::string&amp;, const std::string&amp;)</span></a></p></li>
+<li><p><a class="reference internal" href="function_aks__detect__stream_8cpp_1ab13e3cee19b709c1dc339ff1ecae8d66.html#exhale-function-aks-detect-stream-8cpp-1ab13e3cee19b709c1dc339ff1ecae8d66"><span class="std std-ref">Function amdinfer::constructMessage(const std::string&amp;, const std::string&amp;, const std::string&amp;)</span></a></p></li>
 <li><p><a class="reference internal" href="function_http_8cpp_1aa8d7b351b03d53ab0f5801ffd061f79d.html#exhale-function-http-8cpp-1aa8d7b351b03d53ab0f5801ffd061f79d"><span class="std std-ref">Function amdinfer::createGetRequest</span></a></p></li>
 <li><p><a class="reference internal" href="function_http_8cpp_1abb11c7992ffb6339af08d1ff6e0353ba.html#exhale-function-http-8cpp-1abb11c7992ffb6339af08d1ff6e0353ba"><span class="std std-ref">Function amdinfer::createInferenceRequest</span></a></p></li>
 <li><p><a class="reference internal" href="function_http_8cpp_1a32e9fc9ef05556e7d000554f8752678b.html#exhale-function-http-8cpp-1a32e9fc9ef05556e7d000554f8752678b"><span class="std std-ref">Function amdinfer::createPostRequest</span></a></p></li>
 <li><p><a class="reference internal" href="function_http__server_8cpp_1a90265777686e06d56b25b0bc843eef9e.html#exhale-function-http-server-8cpp-1a90265777686e06d56b25b0bc843eef9e"><span class="std std-ref">Function amdinfer::errorHttpResponse</span></a></p></li>
 <li><p><a class="reference internal" href="function_parameters_8cpp_1a43d2d4f52769bcfbcab2d793d13256a3.html#exhale-function-parameters-8cpp-1a43d2d4f52769bcfbcab2d793d13256a3"><span class="std std-ref">Template Function amdinfer::expandType</span></a></p></li>
+<li><p><a class="reference internal" href="function_model__config_8cpp_1ad916117711673111272b87bd7b015dd5.html#exhale-function-model-config-8cpp-1ad916117711673111272b87bd7b015dd5"><span class="std std-ref">Template Function amdinfer::extractArray</span></a></p></li>
+<li><p><a class="reference internal" href="function_model__config_8cpp_1ad993b803c47e24e374682aaec45416f4.html#exhale-function-model-config-8cpp-1ad993b803c47e24e374682aaec45416f4"><span class="std std-ref">Function amdinfer::extractConfig</span></a></p></li>
+<li><p><a class="reference internal" href="function_model__config_8cpp_1a8760611469261389e290e73112952772.html#exhale-function-model-config-8cpp-1a8760611469261389e290e73112952772"><span class="std std-ref">Function amdinfer::extractModelConfigTensor</span></a></p></li>
+<li><p><a class="reference internal" href="function_model__config_8cpp_1a93caf19e0a08474fcdcbfa7d2d660353.html#exhale-function-model-config-8cpp-1a93caf19e0a08474fcdcbfa7d2d660353"><span class="std std-ref">Function amdinfer::extractString</span></a></p></li>
+<li><p><a class="reference internal" href="function_model__repository_8cpp_1a7ea03e4b5c22db96ecf9ef1cc9d23cdd.html#exhale-function-model-repository-8cpp-1a7ea03e4b5c22db96ecf9ef1cc9d23cdd"><span class="std std-ref">Function amdinfer::findConfigFile</span></a></p></li>
 <li><p><a class="reference internal" href="function_worker__info_8cpp_1a0b90dba241fba26f6e1bc8bea0e55a9e.html#exhale-function-worker-info-8cpp-1a0b90dba241fba26f6e1bc8bea0e55a9e"><span class="std std-ref">Function amdinfer::findFunc</span></a></p></li>
 <li><p><a class="reference internal" href="function_c__plus__plus_8cpp_1ad50576352aa9fe95a1f335068a150f86.html#exhale-function-c-plus-plus-8cpp-1ad50576352aa9fe95a1f335068a150f86"><span class="std std-ref">Function amdinfer::getFunction</span></a></p></li>
 <li><p><a class="reference internal" href="function_grpc__server_8cpp_1ad7d47b9afef4ed43ad59aa45f592737e.html#exhale-function-grpc-server-8cpp-1ad7d47b9afef4ed43ad59aa45f592737e"><span class="std std-ref">Function amdinfer::getInput</span></a></p></li>
@@ -593,6 +608,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li><p><a class="reference internal" href="function_server_8cpp_1acea43796a83b9ee6de28c969539154a4.html#exhale-function-server-8cpp-1acea43796a83b9ee6de28c969539154a4"><span class="std std-ref">Function amdinfer::initializeServerLogging</span></a></p></li>
 <li><p><a class="reference internal" href="function_logging_8cpp_1a1171fedba9c753ea529e1fc6c164e4f2.html#exhale-function-logging-8cpp-1a1171fedba9c753ea529e1fc6c164e4f2"><span class="std std-ref">Function amdinfer::initLogger</span></a></p></li>
 <li><p><a class="reference internal" href="function_http__internal_8hpp_1afa990983f0c809168a33aae411a99f8b.html#exhale-function-http-internal-8hpp-1afa990983f0c809168a33aae411a99f8b"><span class="std std-ref">Template Function amdinfer::jsonValueToType</span></a></p></li>
+<li><p><a class="reference internal" href="function_client_8cpp_1a7a32761519bbb3ac1d86b2b3ec7d3900.html#exhale-function-client-8cpp-1a7a32761519bbb3ac1d86b2b3ec7d3900"><span class="std std-ref">Function amdinfer::loadEnsemble</span></a></p></li>
 <li><p><a class="reference internal" href="function_http__internal_8cpp_1a427f4954da74353ed225bf6ca403908b.html#exhale-function-http-internal-8cpp-1a427f4954da74353ed225bf6ca403908b"><span class="std std-ref">Function amdinfer::mapJsonToModelMetadata</span></a></p></li>
 <li><p><a class="reference internal" href="function_http__internal_8cpp_1ab552d950b2047e8257bf47b64521a3d1.html#exhale-function-http-internal-8cpp-1ab552d950b2047e8257bf47b64521a3d1"><span class="std std-ref">Function amdinfer::mapJsonToParameters</span></a></p></li>
 <li><p><a class="reference internal" href="function_http__internal_8cpp_1a58c5a95db890610b34f3464e91ba15c3.html#exhale-function-http-internal-8cpp-1a58c5a95db890610b34f3464e91ba15c3"><span class="std std-ref">Function amdinfer::mapJsonToResponse</span></a></p></li>
@@ -610,6 +626,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li><p><a class="reference internal" href="function_grpc__internal_8cpp_1a757a8b0dc668948c0d7536e955a2fcd6.html#exhale-function-grpc-internal-8cpp-1a757a8b0dc668948c0d7536e955a2fcd6"><span class="std std-ref">Function amdinfer::mapResponseToProto</span></a></p></li>
 <li><p><a class="reference internal" href="function_http__internal_8cpp_1a263e4c7efb3c93d6fc48499bc4a46548.html#exhale-function-http-internal-8cpp-1a263e4c7efb3c93d6fc48499bc4a46548"><span class="std std-ref">Function amdinfer::modelMetadataTensorToJson</span></a></p></li>
 <li><p><a class="reference internal" href="function_http__internal_8cpp_1a20f514dbb8f33ccf800d6fe95d9dc475.html#exhale-function-http-internal-8cpp-1a20f514dbb8f33ccf800d6fe95d9dc475"><span class="std std-ref">Function amdinfer::modelMetadataToJson</span></a></p></li>
+<li><p><a class="reference internal" href="function_model__repository_8cpp_1ad3799a9788bef596e2144c16b8e3626f.html#exhale-function-model-repository-8cpp-1ad3799a9788bef596e2144c16b8e3626f"><span class="std std-ref">Function amdinfer::openConfigFile</span></a></p></li>
 <li><p><a class="reference internal" href="function_c__plus__plus_8cpp_1a9e6917e8d658979c637569428360219e.html#exhale-function-c-plus-plus-8cpp-1a9e6917e8d658979c637569428360219e"><span class="std std-ref">Function amdinfer::openModel</span></a></p></li>
 <li><p><a class="reference internal" href="function_data__types_8cpp_1a704e42ab497bfe5b6f257eb423d6df49.html#exhale-function-data-types-8cpp-1a704e42ab497bfe5b6f257eb423d6df49"><span class="std std-ref">Function amdinfer::operator&lt;&lt;(std::ostream&amp;, const DataType&amp;)</span></a></p></li>
 <li><p><a class="reference internal" href="function_inference__request_8cpp_1ac5a218218c06390bff837a4d000785c0.html#exhale-function-inference-request-8cpp-1ac5a218218c06390bff837a4d000785c0"><span class="std std-ref">Function amdinfer::operator&lt;&lt;(std::ostream&amp;, InferenceRequestInput const&amp;)</span></a></p></li>
@@ -617,8 +634,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li><p><a class="reference internal" href="function_inference__response_8cpp_1a290fdc985518c3879979b4c24a4622dc.html#exhale-function-inference-response-8cpp-1a290fdc985518c3879979b4c24a4622dc"><span class="std std-ref">Function amdinfer::operator&lt;&lt;(std::ostream&amp;, InferenceResponseOutput const&amp;)</span></a></p></li>
 <li><p><a class="reference internal" href="function_grpc__internal_8cpp_1aedf702344a580ab5481f76a200fe60e5.html#exhale-function-grpc-internal-8cpp-1aedf702344a580ab5481f76a200fe60e5"><span class="std std-ref">Template Function amdinfer::Overloaded</span></a></p></li>
 <li><p><a class="reference internal" href="function_http__server_8cpp_1a9daff85fd67e50b69f84f3802297ff7d.html#exhale-function-http-server-8cpp-1a9daff85fd67e50b69f84f3802297ff7d"><span class="std std-ref">Function amdinfer::parseJson</span></a></p></li>
-<li><p><a class="reference internal" href="function_model__repository_8cpp_1a05cd20aa1908b4475961f21cbdaf1e76.html#exhale-function-model-repository-8cpp-1a05cd20aa1908b4475961f21cbdaf1e76"><span class="std std-ref">Function amdinfer::parseModel(const fs::path&amp;, const std::string&amp;, ParameterMap *)</span></a></p></li>
-<li><p><a class="reference internal" href="function_model__repository_8hpp_1a94c9f9dd875588ecd02da3459c46da36.html#exhale-function-model-repository-8hpp-1a94c9f9dd875588ecd02da3459c46da36"><span class="std std-ref">Function amdinfer::parseModel(const std::filesystem::path&amp;, const std::string&amp;, ParameterMap *)</span></a></p></li>
+<li><p><a class="reference internal" href="function_model__repository_8cpp_1acb79361ac48cfb11a0480445e7e6cfc2.html#exhale-function-model-repository-8cpp-1acb79361ac48cfb11a0480445e7e6cfc2"><span class="std std-ref">Function amdinfer::parseModel(const fs::path&amp;, const std::string&amp;)</span></a></p></li>
+<li><p><a class="reference internal" href="function_model__repository_8hpp_1a7bc7cc4b44f85f930556634ea7efe912.html#exhale-function-model-repository-8hpp-1a7bc7cc4b44f85f930556634ea7efe912"><span class="std std-ref">Function amdinfer::parseModel(const std::filesystem::path&amp;, const std::string&amp;)</span></a></p></li>
 <li><p><a class="reference internal" href="function_http__server_8cpp_1acbfb678bfa4431649f17750ea346f33c.html#exhale-function-http-server-8cpp-1acbfb678bfa4431649f17750ea346f33c"><span class="std std-ref">Function amdinfer::parseResponse</span></a></p></li>
 <li><p><a class="reference internal" href="function_grpc_8cpp_1a575422378564fcee9c41fc4ecf1026d4.html#exhale-function-grpc-8cpp-1a575422378564fcee9c41fc4ecf1026d4"><span class="std std-ref">Function amdinfer::runInference</span></a></p></li>
 <li><p><a class="reference internal" href="function_client_8cpp_1a6354412b0cacb2c302d12c19ff0037f2.html#exhale-function-client-8cpp-1a6354412b0cacb2c302d12c19ff0037f2"><span class="std std-ref">Function amdinfer::serverHasExtension</span></a></p></li>
@@ -626,6 +643,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li><p><a class="reference internal" href="function_grpc__server_8cpp_1af023a215479a2732eb486a97860222cb.html#exhale-function-grpc-server-8cpp-1af023a215479a2732eb486a97860222cb"><span class="std std-ref">Function amdinfer::setCallback(InferenceRequest *, CallDataModelInfer *)</span></a></p></li>
 <li><p><a class="reference internal" href="function_data__types_8hpp_1a4b401163a3bc8d860d096ab1b00a87eb.html#exhale-function-data-types-8hpp-1a4b401163a3bc8d860d096ab1b00a87eb"><span class="std std-ref">Template Function amdinfer::switchOverTypes</span></a></p></li>
 <li><p><a class="reference internal" href="function_server_8cpp_1a73eba955b7057fe278a31fb16c5cae39.html#exhale-function-server-8cpp-1a73eba955b7057fe278a31fb16c5cae39"><span class="std std-ref">Function amdinfer::terminate</span></a></p></li>
+<li><p><a class="reference internal" href="function_client_8cpp_1aeca57ac6adc6191c9209e19e70b2c95f.html#exhale-function-client-8cpp-1aeca57ac6adc6191c9209e19e70b2c95f"><span class="std std-ref">Function amdinfer::unloadModels</span></a></p></li>
+<li><p><a class="reference internal" href="function_client_8cpp_1a3501853447c1ef78603637fb6b0f16ca.html#exhale-function-client-8cpp-1a3501853447c1ef78603637fb6b0f16ca"><span class="std std-ref">Function amdinfer::waitUntilModelNotReady</span></a></p></li>
 <li><p><a class="reference internal" href="function_client_8cpp_1ad928316a941cc1f5371da1e90085bfdd.html#exhale-function-client-8cpp-1ad928316a941cc1f5371da1e90085bfdd"><span class="std std-ref">Function amdinfer::waitUntilModelReady</span></a></p></li>
 <li><p><a class="reference internal" href="function_client_8cpp_1ad8b991d3a2a0e2f19e1937cafa34a724.html#exhale-function-client-8cpp-1ad8b991d3a2a0e2f19e1937cafa34a724"><span class="std std-ref">Function amdinfer::waitUntilServerReady</span></a></p></li>
 </ul>
@@ -672,6 +691,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li><p><a class="reference internal" href="variable_metrics_8cpp_1ade316533d688f2811817fa7a1a73f084.html#exhale-variable-metrics-8cpp-1ade316533d688f2811817fa7a1a73f084"><span class="std std-ref">Variable amdinfer::kPercentile50</span></a></p></li>
 <li><p><a class="reference internal" href="variable_metrics_8cpp_1a214ca5f30222281458498214a0d9300c.html#exhale-variable-metrics-8cpp-1a214ca5f30222281458498214a0d9300c"><span class="std std-ref">Variable amdinfer::kPercentile90</span></a></p></li>
 <li><p><a class="reference internal" href="variable_metrics_8cpp_1ab6051d51a6bd12208f6574272fac9117.html#exhale-variable-metrics-8cpp-1ab6051d51a6bd12208f6574272fac9117"><span class="std std-ref">Variable amdinfer::kPercentile99</span></a></p></li>
+<li><p><a class="reference internal" href="variable_model__config_8cpp_1a7a1019f8d96c09cf752492a9f28f907c.html#exhale-variable-model-config-8cpp-1a7a1019f8d96c09cf752492a9f28f907c"><span class="std std-ref">Variable amdinfer::templated_false</span></a></p></li>
 </ul>
 </section>
 </section>
@@ -698,7 +718,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on March 20, 2023.
+      <span class="lastupdated">Last updated on April 13, 2023.
       </span></p>
   </div>
 

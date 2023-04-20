@@ -43,7 +43,7 @@ Includes
 
 - ``iostream``
 
-- ``vector``
+- ``vector`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector.cpp`)
 
 - ``xir/util/data_type.hpp``
 

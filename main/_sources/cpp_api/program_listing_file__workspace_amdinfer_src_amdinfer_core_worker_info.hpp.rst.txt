@@ -35,8 +35,9 @@ Program Listing for File worker_info.hpp
    #include <thread>   // for thread, thread::id
    #include <vector>   // for vector
    
-   #include "amdinfer/declarations.hpp"  // for BufferPtr
-   #include "amdinfer/util/queue.hpp"    // for BufferPtrsQueuePtr
+   #include "amdinfer/batching/batcher.hpp"  // for BatchPtrQueue
+   #include "amdinfer/declarations.hpp"      // for BufferPtr
+   #include "amdinfer/util/queue.hpp"        // for BufferPtrsQueuePtr
    
    namespace amdinfer {
    class Batcher;
@@ -53,7 +54,8 @@ Program Listing for File worker_info.hpp
    class WorkerInfo {
     public:
      WorkerInfo(const std::string& name, ParameterMap* parameters,
-                MemoryPool* pool);
+                MemoryPool* pool, BatchPtrQueue* next,
+                const std::vector<MemoryAllocators>& next_allocators);
      ~WorkerInfo();                           
      WorkerInfo(WorkerInfo const&) = delete;  
      WorkerInfo& operator=(const WorkerInfo&) = delete;
@@ -61,6 +63,7 @@ Program Listing for File worker_info.hpp
      WorkerInfo& operator=(WorkerInfo&& other) = delete;
    
      Batcher* getBatcher();
+     BatchPtrQueue* getInputQueue() const;
      void join(std::thread::id id);
      void joinAll();  
    
@@ -74,6 +77,8 @@ Program Listing for File worker_info.hpp
    
      [[nodiscard]] auto getBatchSize() const { return this->batch_size_; }
    
+     std::vector<MemoryAllocators> getAllocators() const;
+   
      ModelMetadata getMetadata() const;
    
     private:
@@ -81,6 +86,8 @@ Program Listing for File worker_info.hpp
      std::map<std::thread::id, workers::Worker*> workers_;
      std::vector<std::unique_ptr<Batcher>> batchers_;
      size_t batch_size_ = 1;
+     BatchPtrQueue* next_;
+     std::vector<MemoryAllocators> next_allocators_;
    
      friend class Manager;
    };

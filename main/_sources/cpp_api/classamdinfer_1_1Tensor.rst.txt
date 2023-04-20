@@ -15,10 +15,11 @@ Base Type
 - ``public amdinfer::Serializable`` (:ref:`exhale_class_classamdinfer_1_1Serializable`)
 
 
-Derived Type
-************
+Derived Types
+*************
 
 - ``public amdinfer::InferenceTensor`` (:ref:`exhale_class_classamdinfer_1_1InferenceTensor`)
+- ``public amdinfer::ModelConfigTensor`` (:ref:`exhale_class_classamdinfer_1_1ModelConfigTensor`)
 
 
 Class Documentation

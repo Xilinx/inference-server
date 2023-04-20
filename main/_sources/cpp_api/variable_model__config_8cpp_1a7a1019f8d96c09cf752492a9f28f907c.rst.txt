@@ -1,0 +1,13 @@
+.. _exhale_variable_model__config_8cpp_1a7a1019f8d96c09cf752492a9f28f907c:
+
+Variable amdinfer::templated_false
+==================================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_core_model_config.cpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: amdinfer::templated_false

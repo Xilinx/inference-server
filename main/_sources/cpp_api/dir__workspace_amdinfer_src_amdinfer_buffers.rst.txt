@@ -21,5 +21,7 @@ Files
 - :ref:`file__workspace_amdinfer_src_amdinfer_buffers_cpu.hpp`
 - :ref:`file__workspace_amdinfer_src_amdinfer_buffers_vart_tensor.cpp`
 - :ref:`file__workspace_amdinfer_src_amdinfer_buffers_vart_tensor.hpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector.cpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector.hpp`
 
 

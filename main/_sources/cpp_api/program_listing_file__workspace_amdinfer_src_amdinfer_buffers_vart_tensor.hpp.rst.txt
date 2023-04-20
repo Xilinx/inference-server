@@ -45,6 +45,8 @@ Program Listing for File vart_tensor.hpp
    
      vart::TensorBuffer* getTensorBuffer();
    
+     void free() override;
+   
     private:
      vart::TensorBuffer* data_;
    };

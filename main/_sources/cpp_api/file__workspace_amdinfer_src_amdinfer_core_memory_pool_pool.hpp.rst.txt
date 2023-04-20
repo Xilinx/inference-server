@@ -41,7 +41,7 @@ Includes
 
 - ``unordered_map``
 
-- ``vector``
+- ``vector`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector.cpp`)
 
 
 
@@ -54,6 +54,12 @@ Included By
 - :ref:`file__workspace_amdinfer_src_amdinfer_batching_hard.cpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_batching_soft.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_buffers_buffer.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_buffers_cpu.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_buffers_vart_tensor.cpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_core_endpoints.hpp`
 

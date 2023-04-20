@@ -39,6 +39,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <script src="../_static/copybutton.js"></script>
         <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
         <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+        <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
+        <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
+        <script defer="defer" src="../_static/tippy/cpp_api/classamdinfer_1_1Batch.03fa8e2d-d254-44a5-9088-8a7e9d2ed9e3.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -221,10 +224,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.inferAsyncOrdered"><code class="docutils literal notranslate"><span class="pre">inferAsyncOrdered()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.inferAsyncOrderedBatched"><code class="docutils literal notranslate"><span class="pre">inferAsyncOrderedBatched()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.inference_request_to_dict"><code class="docutils literal notranslate"><span class="pre">inference_request_to_dict()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.loadEnsemble"><code class="docutils literal notranslate"><span class="pre">loadEnsemble()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.parallel_infer"><code class="docutils literal notranslate"><span class="pre">parallel_infer()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.serverHasExtension"><code class="docutils literal notranslate"><span class="pre">serverHasExtension()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.start_http_client_server"><code class="docutils literal notranslate"><span class="pre">start_http_client_server()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.stringToArray"><code class="docutils literal notranslate"><span class="pre">stringToArray()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.unloadModels"><code class="docutils literal notranslate"><span class="pre">unloadModels()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.waitUntilModelNotReady"><code class="docutils literal notranslate"><span class="pre">waitUntilModelNotReady()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.waitUntilModelReady"><code class="docutils literal notranslate"><span class="pre">waitUntilModelReady()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.waitUntilServerReady"><code class="docutils literal notranslate"><span class="pre">waitUntilServerReady()</span></code></a></li>
 </ul>
@@ -470,6 +476,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <dd></dd></dl>
 
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer5Batch9propagateEv">
+<span id="_CPPv3N8amdinfer5Batch9propagateEv"></span><span id="_CPPv2N8amdinfer5Batch9propagateEv"></span><span id="amdinfer::Batch::propagate"></span><span class="target" id="classamdinfer_1_1Batch_1a1b5b62b37767bdcb4d6f091fc78611dc"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">unique_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N8amdinfer5BatchE" title="amdinfer::Batch"><span class="n"><span class="pre">Batch</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">propagate</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer5Batch9propagateEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N8amdinfer5Batch10setBuffersE10BufferPtrs10BufferPtrs">
 <span id="_CPPv3N8amdinfer5Batch10setBuffersE10BufferPtrs10BufferPtrs"></span><span id="_CPPv2N8amdinfer5Batch10setBuffersE10BufferPtrs10BufferPtrs"></span><span id="amdinfer::Batch::setBuffers__BufferPtrs.BufferPtrs"></span><span class="target" id="classamdinfer_1_1Batch_1a353bd27a9584a4f20cc8f7cc7a937e2b"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">setBuffers</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="typedef_declarations_8hpp_1a6fa0f5650685437baf576ebe74a760c8.html#_CPPv4N8amdinfer10BufferPtrsE" title="amdinfer::BufferPtrs"><span class="n"><span class="pre">BufferPtrs</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">inputs</span></span>, <a class="reference internal" href="typedef_declarations_8hpp_1a6fa0f5650685437baf576ebe74a760c8.html#_CPPv4N8amdinfer10BufferPtrsE" title="amdinfer::BufferPtrs"><span class="n"><span class="pre">BufferPtrs</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">outputs</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer5Batch10setBuffersE10BufferPtrs10BufferPtrs" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
@@ -485,23 +496,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <dd></dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer5Batch15getInputBuffersEv">
-<span id="_CPPv3N8amdinfer5Batch15getInputBuffersEv"></span><span id="_CPPv2N8amdinfer5Batch15getInputBuffersEv"></span><span id="amdinfer::Batch::getInputBuffers"></span><span class="target" id="classamdinfer_1_1Batch_1af6b0612de13b9f94e0990c863bbc3bce"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="typedef_declarations_8hpp_1aa722db0b3b3c1bb8e56367ff9b0390ab.html#_CPPv4N8amdinfer9BufferPtrE" title="amdinfer::BufferPtr"><span class="n"><span class="pre">BufferPtr</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">getInputBuffers</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer5Batch15getInputBuffersEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK8amdinfer5Batch15getInputBuffersEv">
+<span id="_CPPv3NK8amdinfer5Batch15getInputBuffersEv"></span><span id="_CPPv2NK8amdinfer5Batch15getInputBuffersEv"></span><span id="amdinfer::Batch::getInputBuffersC"></span><span class="target" id="classamdinfer_1_1Batch_1a85a3791ed9f754a7926bfd8291e29831"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="typedef_declarations_8hpp_1aa722db0b3b3c1bb8e56367ff9b0390ab.html#_CPPv4N8amdinfer9BufferPtrE" title="amdinfer::BufferPtr"><span class="n"><span class="pre">BufferPtr</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">getInputBuffers</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer5Batch15getInputBuffersEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer5Batch16getOutputBuffersEv">
-<span id="_CPPv3N8amdinfer5Batch16getOutputBuffersEv"></span><span id="_CPPv2N8amdinfer5Batch16getOutputBuffersEv"></span><span id="amdinfer::Batch::getOutputBuffers"></span><span class="target" id="classamdinfer_1_1Batch_1a15a781fa84f1fc2f2908073cc4cf12fe"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="typedef_declarations_8hpp_1aa722db0b3b3c1bb8e56367ff9b0390ab.html#_CPPv4N8amdinfer9BufferPtrE" title="amdinfer::BufferPtr"><span class="n"><span class="pre">BufferPtr</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">getOutputBuffers</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer5Batch16getOutputBuffersEv" title="Permalink to this definition">¶</a><br /></dt>
-<dd></dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK8amdinfer5Batch18getRawInputBuffersEv">
-<span id="_CPPv3NK8amdinfer5Batch18getRawInputBuffersEv"></span><span id="_CPPv2NK8amdinfer5Batch18getRawInputBuffersEv"></span><span id="amdinfer::Batch::getRawInputBuffersC"></span><span class="target" id="classamdinfer_1_1Batch_1a876f75393fcd8646ebeac516f24d9e19"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classamdinfer_1_1Buffer.html#_CPPv4N8amdinfer6BufferE" title="amdinfer::Buffer"><span class="n"><span class="pre">Buffer</span></span></a><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">getRawInputBuffers</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer5Batch18getRawInputBuffersEv" title="Permalink to this definition">¶</a><br /></dt>
-<dd></dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK8amdinfer5Batch19getRawOutputBuffersEv">
-<span id="_CPPv3NK8amdinfer5Batch19getRawOutputBuffersEv"></span><span id="_CPPv2NK8amdinfer5Batch19getRawOutputBuffersEv"></span><span id="amdinfer::Batch::getRawOutputBuffersC"></span><span class="target" id="classamdinfer_1_1Batch_1a4e2a108ad360c6666378659146e1d556"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="classamdinfer_1_1Buffer.html#_CPPv4N8amdinfer6BufferE" title="amdinfer::Buffer"><span class="n"><span class="pre">Buffer</span></span></a><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">getRawOutputBuffers</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer5Batch19getRawOutputBuffersEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK8amdinfer5Batch16getOutputBuffersEv">
+<span id="_CPPv3NK8amdinfer5Batch16getOutputBuffersEv"></span><span id="_CPPv2NK8amdinfer5Batch16getOutputBuffersEv"></span><span id="amdinfer::Batch::getOutputBuffersC"></span><span class="target" id="classamdinfer_1_1Batch_1ac6c177af1d08f951c98a24c89a945b70"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="typedef_declarations_8hpp_1aa722db0b3b3c1bb8e56367ff9b0390ab.html#_CPPv4N8amdinfer9BufferPtrE" title="amdinfer::BufferPtr"><span class="n"><span class="pre">BufferPtr</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">getOutputBuffers</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer5Batch16getOutputBuffersEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
@@ -522,6 +523,21 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK8amdinfer5Batch13getOutputSizeEv">
 <span id="_CPPv3NK8amdinfer5Batch13getOutputSizeEv"></span><span id="_CPPv2NK8amdinfer5Batch13getOutputSizeEv"></span><span id="amdinfer::Batch::getOutputSizeC"></span><span class="target" id="classamdinfer_1_1Batch_1a575d4b14db2530ed22d0ece32fca628d"></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">getOutputSize</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer5Batch13getOutputSizeEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8amdinfer5Batch8getModelE6size_t">
+<span id="_CPPv3NK8amdinfer5Batch8getModelE6size_t"></span><span id="_CPPv2NK8amdinfer5Batch8getModelE6size_t"></span><span id="amdinfer::Batch::getModel__sC"></span><span class="target" id="classamdinfer_1_1Batch_1ae8ef71593d5dc05fd6ec5c36fbc1cb17"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">getModel</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">index</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer5Batch8getModelE6size_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer5Batch8setModelE6size_tNSt6stringE">
+<span id="_CPPv3N8amdinfer5Batch8setModelE6size_tNSt6stringE"></span><span id="_CPPv2N8amdinfer5Batch8setModelE6size_tNSt6stringE"></span><span id="amdinfer::Batch::setModel__s.ss"></span><span class="target" id="classamdinfer_1_1Batch_1ad74dd4edd42cfdbe243b6346b4e32eea"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">setModel</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">index</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">model</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer5Batch8setModelE6size_tNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer5Batch8addModelENSt6stringE">
+<span id="_CPPv3N8amdinfer5Batch8addModelENSt6stringE"></span><span id="_CPPv2N8amdinfer5Batch8addModelENSt6stringE"></span><span id="amdinfer::Batch::addModel__ss"></span><span class="target" id="classamdinfer_1_1Batch_1ac8810f2501c2c69331ae37e32015273f"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">addModel</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">model</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer5Batch8addModelENSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
@@ -562,7 +578,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on March 20, 2023.
+      <span class="lastupdated">Last updated on April 13, 2023.
       </span></p>
   </div>
 

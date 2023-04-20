@@ -39,6 +39,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <script src="../_static/copybutton.js"></script>
         <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
         <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+        <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
+        <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
+        <script defer="defer" src="../_static/tippy/cpp_api/classamdinfer_1_1ParameterMap.65fe9776-bc44-4352-a5c2-7fb9215b0247.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -221,10 +224,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.inferAsyncOrdered"><code class="docutils literal notranslate"><span class="pre">inferAsyncOrdered()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.inferAsyncOrderedBatched"><code class="docutils literal notranslate"><span class="pre">inferAsyncOrderedBatched()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.inference_request_to_dict"><code class="docutils literal notranslate"><span class="pre">inference_request_to_dict()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.loadEnsemble"><code class="docutils literal notranslate"><span class="pre">loadEnsemble()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.parallel_infer"><code class="docutils literal notranslate"><span class="pre">parallel_infer()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.serverHasExtension"><code class="docutils literal notranslate"><span class="pre">serverHasExtension()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.start_http_client_server"><code class="docutils literal notranslate"><span class="pre">start_http_client_server()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.stringToArray"><code class="docutils literal notranslate"><span class="pre">stringToArray()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.unloadModels"><code class="docutils literal notranslate"><span class="pre">unloadModels()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.waitUntilModelNotReady"><code class="docutils literal notranslate"><span class="pre">waitUntilModelNotReady()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.waitUntilModelReady"><code class="docutils literal notranslate"><span class="pre">waitUntilModelReady()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.waitUntilServerReady"><code class="docutils literal notranslate"><span class="pre">waitUntilServerReady()</span></code></a></li>
 </ul>
@@ -474,51 +480,29 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer12ParameterMap3putERKNSt6stringEb">
-<span id="_CPPv3N8amdinfer12ParameterMap3putERKNSt6stringEb"></span><span id="_CPPv2N8amdinfer12ParameterMap3putERKNSt6stringEb"></span><span id="amdinfer::ParameterMap::put__ssCR.b"></span><span class="target" id="classamdinfer_1_1ParameterMap_1a398199d7c428d2e4a4c8a6ba877fea21"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">put</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">key</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer12ParameterMap3putERKNSt6stringEb" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Puts in a key-value pair. </p>
+<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer12ParameterMap12ParameterMapEv">
+<span id="_CPPv3N8amdinfer12ParameterMap12ParameterMapEv"></span><span id="_CPPv2N8amdinfer12ParameterMap12ParameterMapEv"></span><span id="amdinfer::ParameterMap::ParameterMap"></span><span class="target" id="classamdinfer_1_1ParameterMap_1ad26db2f95e45a9b2393735fe59dc69f1"></span><span class="sig-name descname"><span class="n"><span class="pre">ParameterMap</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">default</span></span><a class="headerlink" href="#_CPPv4N8amdinfer12ParameterMap12ParameterMapEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer12ParameterMap12ParameterMapERKNSt6vectorINSt6stringEEERKNSt6vectorI9ParameterEE">
+<span id="_CPPv3N8amdinfer12ParameterMap12ParameterMapERKNSt6vectorINSt6stringEEERKNSt6vectorI9ParameterEE"></span><span id="_CPPv2N8amdinfer12ParameterMap12ParameterMapERKNSt6vectorINSt6stringEEERKNSt6vectorI9ParameterEE"></span><span id="amdinfer::ParameterMap::ParameterMap__std::vector:ss:CR.std::vector:Parameter:CR"></span><span class="target" id="classamdinfer_1_1ParameterMap_1ac57d41628c73d2c13a6e4cda5b8aa041"></span><span class="sig-name descname"><span class="n"><span class="pre">ParameterMap</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">keys</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="typedef_parameters_8hpp_1af874429ad00786b2a05f30c311422e4c.html#_CPPv4N8amdinfer9ParameterE" title="amdinfer::Parameter"><span class="n"><span class="pre">Parameter</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">values</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer12ParameterMap12ParameterMapERKNSt6vectorINSt6stringEEERKNSt6vectorI9ParameterEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Construct a new <a class="reference internal" href="../cpp_user_api.html#classamdinfer_1_1ParameterMap"><span class="std std-ref">ParameterMap</span></a> object with initial values. The sizes of the keys and values vectors must match. </p>
+<p>Until C++20, passing const char* to this constructor will convert it to a bool instead of a string. Explicitly convert any string literals to a string before passing them to this constructor.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>key</strong> – key used to store and retrieve the value </p></li>
-<li><p><strong>value</strong> – value to store </p></li>
+<li><p><strong>keys</strong> – </p></li>
+<li><p><strong>values</strong> – </p></li>
 </ul>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer12ParameterMap3putERKNSt6stringEd">
-<span id="_CPPv3N8amdinfer12ParameterMap3putERKNSt6stringEd"></span><span id="_CPPv2N8amdinfer12ParameterMap3putERKNSt6stringEd"></span><span id="amdinfer::ParameterMap::put__ssCR.double"></span><span class="target" id="classamdinfer_1_1ParameterMap_1a3583f3ba3de3e364bb7d35a2ca0051d6"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">put</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">key</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer12ParameterMap3putERKNSt6stringEd" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Puts in a key-value pair. </p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>key</strong> – key used to store and retrieve the value </p></li>
-<li><p><strong>value</strong> – value to store </p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer12ParameterMap3putERKNSt6stringE7int32_t">
-<span id="_CPPv3N8amdinfer12ParameterMap3putERKNSt6stringE7int32_t"></span><span id="_CPPv2N8amdinfer12ParameterMap3putERKNSt6stringE7int32_t"></span><span id="amdinfer::ParameterMap::put__ssCR.int32_t"></span><span class="target" id="classamdinfer_1_1ParameterMap_1a0c589410b4413695c1223a846d30ce43"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">put</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">key</span></span>, <span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer12ParameterMap3putERKNSt6stringE7int32_t" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Puts in a key-value pair. </p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>key</strong> – key used to store and retrieve the value </p></li>
-<li><p><strong>value</strong> – value to store </p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer12ParameterMap3putERKNSt6stringERKNSt6stringE">
-<span id="_CPPv3N8amdinfer12ParameterMap3putERKNSt6stringERKNSt6stringE"></span><span id="_CPPv2N8amdinfer12ParameterMap3putERKNSt6stringERKNSt6stringE"></span><span id="amdinfer::ParameterMap::put__ssCR.ssCR"></span><span class="target" id="classamdinfer_1_1ParameterMap_1a60de5f95a0da6023b215eeb99e059300"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">put</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">key</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer12ParameterMap3putERKNSt6stringERKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Puts in a key-value pair. </p>
+<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer12ParameterMap3putERKNSt6stringE9Parameter">
+<span id="_CPPv3N8amdinfer12ParameterMap3putERKNSt6stringE9Parameter"></span><span id="_CPPv2N8amdinfer12ParameterMap3putERKNSt6stringE9Parameter"></span><span id="amdinfer::ParameterMap::put__ssCR.Parameter"></span><span class="target" id="classamdinfer_1_1ParameterMap_1ae53207903386386c5bd55e7ad330163c"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">put</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">key</span></span>, <a class="reference internal" href="typedef_parameters_8hpp_1af874429ad00786b2a05f30c311422e4c.html#_CPPv4N8amdinfer9ParameterE" title="amdinfer::Parameter"><span class="n"><span class="pre">Parameter</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer12ParameterMap3putERKNSt6stringE9Parameter" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Put in a key-value pair. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -532,12 +516,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N8amdinfer12ParameterMap3putERKNSt6stringEPKc">
 <span id="_CPPv3N8amdinfer12ParameterMap3putERKNSt6stringEPKc"></span><span id="_CPPv2N8amdinfer12ParameterMap3putERKNSt6stringEPKc"></span><span id="amdinfer::ParameterMap::put__ssCR.cCP"></span><span class="target" id="classamdinfer_1_1ParameterMap_1a4f2e929c798871b992f9e0d14a85559f"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">put</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">key</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer12ParameterMap3putERKNSt6stringEPKc" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Puts in a key-value pair. </p>
+<dd><p>Put in a key-value pair. </p>
+<p>This overload is needed because C++ converts const char* to bool instead of string when both types are present in the variant. This behavior has been fixed in C++20.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>key</strong> – key used to store and retrieve the value </p></li>
-<li><p><strong>value</strong> – value to store </p></li>
+<li><p><strong>key</strong> – </p></li>
+<li><p><strong>value</strong> – </p></li>
 </ul>
 </dd>
 </dl>
@@ -723,7 +708,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on March 20, 2023.
+      <span class="lastupdated">Last updated on April 13, 2023.
       </span></p>
   </div>
 

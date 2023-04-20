@@ -75,7 +75,6 @@ Program Listing for File soft.cpp
        auto batch = std::make_unique<Batch>();
        size_t batch_size = 0;
    
-       std::vector<BufferPtr> input_buffers;
        std::vector<size_t> input_offset;
        std::vector<size_t> output_offset;
    
@@ -125,6 +124,7 @@ Program Listing for File soft.cpp
          }
    
          if (first_request) {
+           std::vector<BufferPtr> input_buffers;
            input_buffers.reserve(input_size);
            // auto output_sizes = req->getOutputSizes();
            // TODO(varunsh): the spec does not require the request to have outputs
@@ -144,8 +144,7 @@ Program Listing for File soft.cpp
            batch->setBuffers(std::move(input_buffers), {});
          }
    
-         auto raw_inputs = batch->getRawInputBuffers();
-         auto raw_outputs = batch->getRawOutputBuffers();
+         const auto& input_buffers = batch->getInputBuffers();
    
    #ifdef AMDINFER_ENABLE_TRACING
          auto& trace = req->trace;
@@ -161,20 +160,20 @@ Program Listing for File soft.cpp
    
          for (auto i = 0U; i < input_size; ++i) {
            const auto& input = inputs[i];
-           auto* raw_input = raw_inputs[i];
+           const auto& input_buffer = input_buffers.at(i);
            auto& offset = input_offset[i];
    
            auto new_offset =
-             raw_input->write(input.getData(), offset,
-                              input.getSize() * input.getDatatype().size());
-           pool_->put(
-             std::make_unique<CpuBuffer>(input.getData(), MemoryAllocators::Cpu));
-           request->setInputTensorData(i, raw_input->data(offset));
+             input_buffer->write(input.getData(), offset,
+                                 input.getSize() * input.getDatatype().size());
+           pool_->put(MemoryAllocators::Cpu, input.getData());
+           request->setInputTensorData(i, input_buffer->data(offset));
            offset = new_offset;
          }
    
          batch->addRequest(request);
          batch_size++;
+         batch->addModel("");
    #ifdef AMDINFER_ENABLE_TRACING
          trace->endSpan();
          batch->addTrace(std::move(trace));

@@ -12,20 +12,8 @@ Inheritance Relationships
 Derived Types
 *************
 
-- ``public amdinfer::workers::Aks`` (:ref:`exhale_class_classamdinfer_1_1workers_1_1Aks`)
-- ``public amdinfer::workers::AksDetect`` (:ref:`exhale_class_classamdinfer_1_1workers_1_1AksDetect`)
-- ``public amdinfer::workers::AksDetectStream`` (:ref:`exhale_class_classamdinfer_1_1workers_1_1AksDetectStream`)
-- ``public amdinfer::workers::CPlusPlus`` (:ref:`exhale_class_classamdinfer_1_1workers_1_1CPlusPlus`)
-- ``public amdinfer::workers::Echo`` (:ref:`exhale_class_classamdinfer_1_1workers_1_1Echo`)
-- ``public amdinfer::workers::EchoMulti`` (:ref:`exhale_class_classamdinfer_1_1workers_1_1EchoMulti`)
-- ``public amdinfer::workers::InvertImage`` (:ref:`exhale_class_classamdinfer_1_1workers_1_1InvertImage`)
-- ``public amdinfer::workers::InvertVideo`` (:ref:`exhale_class_classamdinfer_1_1workers_1_1InvertVideo`)
-- ``public amdinfer::workers::MIGraphXWorker`` (:ref:`exhale_class_classamdinfer_1_1workers_1_1MIGraphXWorker`)
-- ``public amdinfer::workers::PtZendnn`` (:ref:`exhale_class_classamdinfer_1_1workers_1_1PtZendnn`)
-- ``public amdinfer::workers::ResNet50`` (:ref:`exhale_class_classamdinfer_1_1workers_1_1ResNet50`)
-- ``public amdinfer::workers::ResNet50Stream`` (:ref:`exhale_class_classamdinfer_1_1workers_1_1ResNet50Stream`)
-- ``public amdinfer::workers::TfZendnn`` (:ref:`exhale_class_classamdinfer_1_1workers_1_1TfZendnn`)
-- ``public amdinfer::workers::XModel`` (:ref:`exhale_class_classamdinfer_1_1workers_1_1XModel`)
+- ``public amdinfer::workers::MultiThreadedWorker`` (:ref:`exhale_class_classamdinfer_1_1workers_1_1MultiThreadedWorker`)
+- ``public amdinfer::workers::SingleThreadedWorker`` (:ref:`exhale_class_classamdinfer_1_1workers_1_1SingleThreadedWorker`)
 
 
 Class Documentation

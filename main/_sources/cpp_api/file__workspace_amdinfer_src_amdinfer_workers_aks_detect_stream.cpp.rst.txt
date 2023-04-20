@@ -96,7 +96,7 @@ Includes
 
 - ``vart/tensor_buffer.hpp``
 
-- ``vector``
+- ``vector`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector.cpp`)
 
 - ``xir/tensor/tensor.hpp``
 

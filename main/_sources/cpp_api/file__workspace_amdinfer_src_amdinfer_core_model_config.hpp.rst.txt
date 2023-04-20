@@ -1,0 +1,81 @@
+
+.. _file__workspace_amdinfer_src_amdinfer_core_model_config.hpp:
+
+File model_config.hpp
+=====================
+
+|exhale_lsh| :ref:`Parent directory <dir__workspace_amdinfer_src_amdinfer_core>` (``/workspace/amdinfer/src/amdinfer/core``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/workspace/amdinfer/src/amdinfer/core/model_config.hpp``)
+-----------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__workspace_amdinfer_src_amdinfer_core_model_config.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``amdinfer/core/parameters.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_parameters.hpp`)
+
+- ``amdinfer/core/tensor.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_tensor.hpp`)
+
+- ``filesystem`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_filesystem.cpp`)
+
+- ``string`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_string.hpp`)
+
+- ``unordered_map``
+
+- ``vector`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector.cpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_model_config.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_model_repository.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_shared_state.cpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_amdinfer`
+
+- :ref:`namespace_inference`
+
+- :ref:`namespace_toml`
+
+- :ref:`namespace_toml__v3`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structamdinfer_1_1ModelConfigData`
+
+- :ref:`exhale_class_classamdinfer_1_1ModelConfig`
+
+- :ref:`exhale_class_classamdinfer_1_1ModelConfigTensor`
+

@@ -39,9 +39,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <script src="../_static/copybutton.js"></script>
         <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
         <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+        <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
+        <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
+        <script defer="defer" src="../_static/tippy/cpp_api/classamdinfer_1_1VectorBuffer.5fd80eb4-b354-42bc-8863-4e5a092ba662.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" /> 
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Class WebSocketClient" href="classamdinfer_1_1WebSocketClient.html" />
+    <link rel="prev" title="Class VartTensorBuffer" href="classamdinfer_1_1VartTensorBuffer.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -219,10 +224,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.inferAsyncOrdered"><code class="docutils literal notranslate"><span class="pre">inferAsyncOrdered()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.inferAsyncOrderedBatched"><code class="docutils literal notranslate"><span class="pre">inferAsyncOrderedBatched()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.inference_request_to_dict"><code class="docutils literal notranslate"><span class="pre">inference_request_to_dict()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.loadEnsemble"><code class="docutils literal notranslate"><span class="pre">loadEnsemble()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.parallel_infer"><code class="docutils literal notranslate"><span class="pre">parallel_infer()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.serverHasExtension"><code class="docutils literal notranslate"><span class="pre">serverHasExtension()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.start_http_client_server"><code class="docutils literal notranslate"><span class="pre">start_http_client_server()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.stringToArray"><code class="docutils literal notranslate"><span class="pre">stringToArray()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.unloadModels"><code class="docutils literal notranslate"><span class="pre">unloadModels()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.waitUntilModelNotReady"><code class="docutils literal notranslate"><span class="pre">waitUntilModelNotReady()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.waitUntilModelReady"><code class="docutils literal notranslate"><span class="pre">waitUntilModelReady()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.waitUntilServerReady"><code class="docutils literal notranslate"><span class="pre">waitUntilServerReady()</span></code></a></li>
 </ul>
@@ -348,7 +356,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Developers</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../contributing.html#ways-to-contribute">Ways to contribute</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../contributing.html#idea-generation">Idea generation</a></li>
@@ -412,10 +420,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l2"><a class="reference internal" href="../tracing.html#quickstart">Quickstart</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="cpp_root.html">Code Documentation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="cpp_root.html#full-api">Full API</a><ul>
+<li class="toctree-l1 current"><a class="reference internal" href="cpp_root.html">Code Documentation</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="cpp_root.html#full-api">Full API</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="cpp_root.html#namespaces">Namespaces</a></li>
-<li class="toctree-l3"><a class="reference internal" href="cpp_root.html#classes-and-structs">Classes and Structs</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="cpp_root.html#classes-and-structs">Classes and Structs</a></li>
 <li class="toctree-l3"><a class="reference internal" href="cpp_root.html#enums">Enums</a></li>
 <li class="toctree-l3"><a class="reference internal" href="cpp_root.html#functions">Functions</a></li>
 </ul>
@@ -438,6 +446,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="cpp_root.html">Code Documentation</a> &raquo;</li>
       <li>Class VectorBuffer</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/cpp_api/classamdinfer_1_1VectorBuffer.rst.txt" rel="nofollow"> View page source</a>
@@ -451,7 +460,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <section id="class-vectorbuffer">
 <span id="exhale-class-classamdinfer-1-1vectorbuffer"></span><h1>Class VectorBuffer<a class="headerlink" href="#class-vectorbuffer" title="Permalink to this heading">¶</a></h1>
 <ul class="simple">
-<li><p>Defined in <a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_buffers_vector_buffer.hpp.html#file-workspace-amdinfer-src-amdinfer-buffers-vector-buffer-hpp"><span class="std std-ref">File vector_buffer.hpp</span></a></p></li>
+<li><p>Defined in <a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_buffers_vector.hpp.html#file-workspace-amdinfer-src-amdinfer-buffers-vector-hpp"><span class="std std-ref">File vector.hpp</span></a></p></li>
 </ul>
 <section id="inheritance-relationships">
 <h2>Inheritance Relationships<a class="headerlink" href="#inheritance-relationships" title="Permalink to this heading">¶</a></h2>
@@ -464,10 +473,42 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </section>
 <section id="class-documentation">
 <h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Permalink to this heading">¶</a></h2>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>doxygenclass: Cannot find class “amdinfer::VectorBuffer” in doxygen xml output for project “amdinfer” from directory: ../build/docs/doxygen/xml</p>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer12VectorBufferE">
+<span id="_CPPv3N8amdinfer12VectorBufferE"></span><span id="_CPPv2N8amdinfer12VectorBufferE"></span><span id="amdinfer::VectorBuffer"></span><span class="target" id="classamdinfer_1_1VectorBuffer"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">VectorBuffer</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><a class="reference internal" href="../cpp_user_api.html#_CPPv48amdinfer" title="amdinfer"><span class="n"><span class="pre">amdinfer</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="classamdinfer_1_1Buffer.html#_CPPv4N8amdinfer6BufferE" title="amdinfer::Buffer"><span class="n"><span class="pre">Buffer</span></span></a><a class="headerlink" href="#_CPPv4N8amdinfer12VectorBufferE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p><a class="reference internal" href="classamdinfer_1_1CpuBuffer.html#classamdinfer_1_1CpuBuffer"><span class="std std-ref">CpuBuffer</span></a> uses vectors for storing data. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer12VectorBuffer12VectorBufferE6size_t">
+<span id="_CPPv3N8amdinfer12VectorBuffer12VectorBufferE6size_t"></span><span id="_CPPv2N8amdinfer12VectorBuffer12VectorBufferE6size_t"></span><span id="amdinfer::VectorBuffer::VectorBuffer__s"></span><span class="target" id="classamdinfer_1_1VectorBuffer_1a07ca6e7e2b3fd0ba64bd033ccfc41d9b"></span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">VectorBuffer</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">size</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer12VectorBuffer12VectorBufferE6size_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Construct a new Vector <a class="reference internal" href="classamdinfer_1_1Buffer.html#classamdinfer_1_1Buffer"><span class="std std-ref">Buffer</span></a> object. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>size</strong> – size of the buffer in bytes </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer12VectorBuffer4dataE6size_t">
+<span id="_CPPv3N8amdinfer12VectorBuffer4dataE6size_t"></span><span id="_CPPv2N8amdinfer12VectorBuffer4dataE6size_t"></span><span id="amdinfer::VectorBuffer::data__s"></span><span class="target" id="classamdinfer_1_1VectorBuffer_1adad87043e044f6577839c23697d8979b"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">data</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">offset</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4N8amdinfer12VectorBuffer4dataE6size_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns a pointer to the underlying data. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>void* </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer12VectorBuffer4freeEv">
+<span id="_CPPv3N8amdinfer12VectorBuffer4freeEv"></span><span id="_CPPv2N8amdinfer12VectorBuffer4freeEv"></span><span id="amdinfer::VectorBuffer::free"></span><span class="target" id="classamdinfer_1_1VectorBuffer_1a281f81faa0bb00cc5b6aa36033455e4a"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">free</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4N8amdinfer12VectorBuffer4freeEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
 </div>
+</dd></dl>
+
 </section>
 </section>
 
@@ -484,13 +525,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                         }
                   </style>
 				  
-				  <footer>
+				  <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="classamdinfer_1_1VartTensorBuffer.html" class="btn btn-neutral float-left" title="Class VartTensorBuffer" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="classamdinfer_1_1WebSocketClient.html" class="btn btn-neutral float-right" title="Class WebSocketClient" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
 
   <hr/>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on March 20, 2023.
+      <span class="lastupdated">Last updated on April 13, 2023.
       </span></p>
   </div>
 

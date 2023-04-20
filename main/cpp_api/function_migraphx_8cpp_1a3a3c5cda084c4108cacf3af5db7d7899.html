@@ -39,11 +39,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <script src="../_static/copybutton.js"></script>
         <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
         <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+        <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
+        <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
+        <script defer="defer" src="../_static/tippy/cpp_api/function_migraphx_8cpp_1a3a3c5cda084c4108cacf3af5db7d7899.58c5442a-a61c-481e-8ff5-acff3365c246.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Function getInputs()" href="function_models_2echo_8cpp_1af012751791b00fabf8dae7f38f076e18.html" />
-    <link rel="prev" title="Function amdinfer::workers::respond" href="function_c__plus__plus_8cpp_1ae839d3bb421974c63e142c461e969830.html" /> 
+    <link rel="next" title="Function getInputs()" href="function_base64__decode_8cpp_1af012751791b00fabf8dae7f38f076e18.html" />
+    <link rel="prev" title="Function amdinfer::workers::openLibrary" href="function_tf__zendnn_8cpp_1adf504d05611a1a3b28113b6eb6e2eb59.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -221,10 +224,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.inferAsyncOrdered"><code class="docutils literal notranslate"><span class="pre">inferAsyncOrdered()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.inferAsyncOrderedBatched"><code class="docutils literal notranslate"><span class="pre">inferAsyncOrderedBatched()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.inference_request_to_dict"><code class="docutils literal notranslate"><span class="pre">inference_request_to_dict()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.loadEnsemble"><code class="docutils literal notranslate"><span class="pre">loadEnsemble()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.parallel_infer"><code class="docutils literal notranslate"><span class="pre">parallel_infer()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.serverHasExtension"><code class="docutils literal notranslate"><span class="pre">serverHasExtension()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.start_http_client_server"><code class="docutils literal notranslate"><span class="pre">start_http_client_server()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.stringToArray"><code class="docutils literal notranslate"><span class="pre">stringToArray()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.unloadModels"><code class="docutils literal notranslate"><span class="pre">unloadModels()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.waitUntilModelNotReady"><code class="docutils literal notranslate"><span class="pre">waitUntilModelNotReady()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.waitUntilModelReady"><code class="docutils literal notranslate"><span class="pre">waitUntilModelReady()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.waitUntilServerReady"><code class="docutils literal notranslate"><span class="pre">waitUntilServerReady()</span></code></a></li>
 </ul>
@@ -461,7 +467,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N8amdinfer7workers10toDataTypeE25migraphx_shape_datatype_t">
 <span id="_CPPv3N8amdinfer7workers10toDataTypeE25migraphx_shape_datatype_t"></span><span id="_CPPv2N8amdinfer7workers10toDataTypeE25migraphx_shape_datatype_t"></span><span id="amdinfer::workers::toDataType__migraphx_shape_datatype_t"></span><span class="target" id="migraphx_8cpp_1a3a3c5cda084c4108cacf3af5db7d7899"></span><a class="reference internal" href="classamdinfer_1_1DataType.html#_CPPv4N8amdinfer8DataTypeE" title="amdinfer::DataType"><span class="n"><span class="pre">DataType</span></span></a><span class="w"> </span><span class="sig-prename descclassname"><a class="reference internal" href="../cpp_user_api.html#_CPPv48amdinfer" title="amdinfer"><span class="n"><span class="pre">amdinfer</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">workers</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">toDataType</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">migraphx_shape_datatype_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">in</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer7workers10toDataTypeE25migraphx_shape_datatype_t" title="Permalink to this definition">¶</a><br /></dt>
-<dd></dd></dl>
+<dd><p>Enum-to-enum conversion to let us read data type from MIGraphX model. The definitions are taken from the MIGraphX macro MIGRAPHX_SHAPE_VISIT_TYPES. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>in</strong> – MIGraphX datatype </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="../cpp_user_api.html#classamdinfer_1_1DataType"><span class="std std-ref">DataType</span></a></p>
+</dd>
+</dl>
+</dd></dl>
 
 </section>
 </section>
@@ -480,15 +495,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                   </style>
 				  
 				  <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="function_c__plus__plus_8cpp_1ae839d3bb421974c63e142c461e969830.html" class="btn btn-neutral float-left" title="Function amdinfer::workers::respond" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="function_models_2echo_8cpp_1af012751791b00fabf8dae7f38f076e18.html" class="btn btn-neutral float-right" title="Function getInputs()" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="function_tf__zendnn_8cpp_1adf504d05611a1a3b28113b6eb6e2eb59.html" class="btn btn-neutral float-left" title="Function amdinfer::workers::openLibrary" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="function_base64__decode_8cpp_1af012751791b00fabf8dae7f38f076e18.html" class="btn btn-neutral float-right" title="Function getInputs()" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on March 20, 2023.
+      <span class="lastupdated">Last updated on April 13, 2023.
       </span></p>
   </div>
 

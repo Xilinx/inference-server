@@ -62,7 +62,7 @@ Includes
 
 - ``amdinfer/util/containers.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_containers.hpp`)
 
-- ``amdinfer/util/ctpl.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_ctpl.hpp`)
+- ``amdinfer/util/memory.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_memory.hpp`)
 
 - ``amdinfer/util/parse_env.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_parse_env.hpp`)
 
@@ -106,7 +106,7 @@ Includes
 
 - ``vart/tensor_buffer.hpp``
 
-- ``vector``
+- ``vector`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector.cpp`)
 
 - ``vitis/ai/target_factory.hpp``
 

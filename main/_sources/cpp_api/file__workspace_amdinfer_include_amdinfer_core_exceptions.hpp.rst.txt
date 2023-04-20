@@ -66,7 +66,11 @@ Included By
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_core_memory_pool_vart_tensor_allocator.cpp`
 
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_model_config.cpp`
+
 - :ref:`file__workspace_amdinfer_src_amdinfer_core_model_repository.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_parameters.cpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_core_shared_state.cpp`
 
@@ -82,7 +86,7 @@ Included By
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_servers_websocket_server.cpp`
 
-- :ref:`file__workspace_amdinfer_src_amdinfer_workers_aks.cpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_util_filesystem.cpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_workers_migraphx.cpp`
 

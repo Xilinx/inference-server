@@ -47,7 +47,7 @@ Includes
 
 - ``utility``
 
-- ``vector``
+- ``vector`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector.cpp`)
 
 
 
@@ -57,7 +57,7 @@ Included By
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_util_ctpl.cpp`
 
-- :ref:`file__workspace_amdinfer_src_amdinfer_workers_xmodel.cpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_worker.hpp`
 
 
 

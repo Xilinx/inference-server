@@ -1,0 +1,92 @@
+
+.. _file__workspace_amdinfer_src_amdinfer_models_base64_encode.cpp:
+
+File base64_encode.cpp
+======================
+
+|exhale_lsh| :ref:`Parent directory <dir__workspace_amdinfer_src_amdinfer_models>` (``/workspace/amdinfer/src/amdinfer/models``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+Implements the base64_codec model. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/workspace/amdinfer/src/amdinfer/models/base64_encode.cpp``)
+--------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__workspace_amdinfer_src_amdinfer_models_base64_encode.cpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``amdinfer/batching/batch.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_batching_batch.hpp`)
+
+- ``amdinfer/buffers/vector.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector.hpp`)
+
+- ``amdinfer/core/inference_request.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_inference_request.hpp`)
+
+- ``amdinfer/core/inference_response.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_inference_response.hpp`)
+
+- ``amdinfer/core/parameters.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_parameters.hpp`)
+
+- ``amdinfer/observation/logging.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_observation_logging.hpp`)
+
+- ``amdinfer/observation/metrics.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_observation_metrics.hpp`)
+
+- ``amdinfer/observation/tracing.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_observation_tracing.hpp`)
+
+- ``amdinfer/util/base64.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_base64.hpp`)
+
+- ``amdinfer/util/containers.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_containers.hpp`)
+
+- ``amdinfer/util/memory.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_memory.hpp`)
+
+- ``amdinfer/util/timer.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_timer.hpp`)
+
+- ``opencv2/core.hpp``
+
+- ``opencv2/imgcodecs.hpp``
+
+
+
+
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_base64__encode_8cpp_1af012751791b00fabf8dae7f38f076e18`
+
+- :ref:`exhale_function_base64__encode_8cpp_1a88e88f0ce7df9ffadac20aec94d1db2c`
+
+- :ref:`exhale_function_base64__encode_8cpp_1a14bb289162f3834ebc18cdcffd4472e2`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_base64__encode_8cpp_1a49f889671e129dd6efc31813bbbc481f`
+
+- :ref:`exhale_variable_base64__encode_8cpp_1a74119c5aa1aecbbdcb1bf2db7368eab4`
+
+- :ref:`exhale_variable_base64__encode_8cpp_1a0eaa06703265e46c8ce1ab3a1b1d3c70`
+
+- :ref:`exhale_variable_base64__encode_8cpp_1a9bc9a18ebe4ffe55dbcb3fa0a26bb5af`
+

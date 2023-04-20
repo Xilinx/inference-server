@@ -33,17 +33,23 @@ Includes
 
 - ``amdinfer/core/exceptions.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_exceptions.hpp`)
 
+- ``amdinfer/core/model_config.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_model_config.hpp`)
+
 - ``amdinfer/core/model_repository.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_model_repository.hpp`)
 
 - ``amdinfer/core/parameters.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_parameters.hpp`)
 
 - ``amdinfer/observation/logging.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_observation_logging.hpp`)
 
+- ``amdinfer/util/filesystem.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_filesystem.hpp`)
+
+- ``amdinfer/util/string.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_string.hpp`)
+
 - ``chrono``
 
 - ``fcntl.h``
 
-- ``filesystem``
+- ``filesystem`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_filesystem.cpp`)
 
 - ``google/protobuf/io/zero_copy_stream_impl.h``
 
@@ -54,6 +60,8 @@ Includes
 - ``model_config.pb.h``
 
 - ``thread`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_thread.hpp`)
+
+- ``toml++/toml.h``
 
 
 
@@ -71,7 +79,11 @@ Functions
 ---------
 
 
+- :ref:`exhale_function_model__repository_8cpp_1a7ea03e4b5c22db96ecf9ef1cc9d23cdd`
+
 - :ref:`exhale_function_model__repository_8cpp_1a8a80f1f2c5954b017a5bd047957a638f`
 
-- :ref:`exhale_function_model__repository_8cpp_1a05cd20aa1908b4475961f21cbdaf1e76`
+- :ref:`exhale_function_model__repository_8cpp_1ad3799a9788bef596e2144c16b8e3626f`
+
+- :ref:`exhale_function_model__repository_8cpp_1acb79361ac48cfb11a0480445e7e6cfc2`
 

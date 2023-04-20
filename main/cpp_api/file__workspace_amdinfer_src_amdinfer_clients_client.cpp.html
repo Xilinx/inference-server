@@ -39,6 +39,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <script src="../_static/copybutton.js"></script>
         <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
         <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+        <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
+        <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
+        <script defer="defer" src="../_static/tippy/cpp_api/file__workspace_amdinfer_src_amdinfer_clients_client.cpp.4060ae5f-0374-42e2-ae9a-069d373dcc67.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" /> 
@@ -219,10 +222,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.inferAsyncOrdered"><code class="docutils literal notranslate"><span class="pre">inferAsyncOrdered()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.inferAsyncOrderedBatched"><code class="docutils literal notranslate"><span class="pre">inferAsyncOrderedBatched()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.inference_request_to_dict"><code class="docutils literal notranslate"><span class="pre">inference_request_to_dict()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.loadEnsemble"><code class="docutils literal notranslate"><span class="pre">loadEnsemble()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.parallel_infer"><code class="docutils literal notranslate"><span class="pre">parallel_infer()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.serverHasExtension"><code class="docutils literal notranslate"><span class="pre">serverHasExtension()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.start_http_client_server"><code class="docutils literal notranslate"><span class="pre">start_http_client_server()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.stringToArray"><code class="docutils literal notranslate"><span class="pre">stringToArray()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.unloadModels"><code class="docutils literal notranslate"><span class="pre">unloadModels()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.waitUntilModelNotReady"><code class="docutils literal notranslate"><span class="pre">waitUntilModelNotReady()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.waitUntilModelReady"><code class="docutils literal notranslate"><span class="pre">waitUntilModelReady()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.waitUntilServerReady"><code class="docutils literal notranslate"><span class="pre">waitUntilServerReady()</span></code></a></li>
 </ul>
@@ -497,7 +503,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li><p><a class="reference internal" href="function_client_8cpp_1a7db4f7d3cc3c76913a04f054545e45a1.html#exhale-function-client-8cpp-1a7db4f7d3cc3c76913a04f054545e45a1"><span class="std std-ref">Function amdinfer::inferAsyncOrdered</span></a></p></li>
 <li><p><a class="reference internal" href="function_client_8cpp_1a4d4441bcf3855f2e944fa25af8295257.html#exhale-function-client-8cpp-1a4d4441bcf3855f2e944fa25af8295257"><span class="std std-ref">Function amdinfer::inferAsyncOrderedBatched</span></a></p></li>
 <li><p><a class="reference internal" href="function_client_8cpp_1a7c8a24453d2c9aeaa2457ee1a5b13f93.html#exhale-function-client-8cpp-1a7c8a24453d2c9aeaa2457ee1a5b13f93"><span class="std std-ref">Function amdinfer::initializeClientLogging</span></a></p></li>
+<li><p><a class="reference internal" href="function_client_8cpp_1a7a32761519bbb3ac1d86b2b3ec7d3900.html#exhale-function-client-8cpp-1a7a32761519bbb3ac1d86b2b3ec7d3900"><span class="std std-ref">Function amdinfer::loadEnsemble</span></a></p></li>
 <li><p><a class="reference internal" href="function_client_8cpp_1a6354412b0cacb2c302d12c19ff0037f2.html#exhale-function-client-8cpp-1a6354412b0cacb2c302d12c19ff0037f2"><span class="std std-ref">Function amdinfer::serverHasExtension</span></a></p></li>
+<li><p><a class="reference internal" href="function_client_8cpp_1aeca57ac6adc6191c9209e19e70b2c95f.html#exhale-function-client-8cpp-1aeca57ac6adc6191c9209e19e70b2c95f"><span class="std std-ref">Function amdinfer::unloadModels</span></a></p></li>
+<li><p><a class="reference internal" href="function_client_8cpp_1a3501853447c1ef78603637fb6b0f16ca.html#exhale-function-client-8cpp-1a3501853447c1ef78603637fb6b0f16ca"><span class="std std-ref">Function amdinfer::waitUntilModelNotReady</span></a></p></li>
 <li><p><a class="reference internal" href="function_client_8cpp_1ad928316a941cc1f5371da1e90085bfdd.html#exhale-function-client-8cpp-1ad928316a941cc1f5371da1e90085bfdd"><span class="std std-ref">Function amdinfer::waitUntilModelReady</span></a></p></li>
 <li><p><a class="reference internal" href="function_client_8cpp_1ad8b991d3a2a0e2f19e1937cafa34a724.html#exhale-function-client-8cpp-1ad8b991d3a2a0e2f19e1937cafa34a724"><span class="std std-ref">Function amdinfer::waitUntilServerReady</span></a></p></li>
 </ul>
@@ -523,7 +532,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on March 20, 2023.
+      <span class="lastupdated">Last updated on April 13, 2023.
       </span></p>
   </div>
 

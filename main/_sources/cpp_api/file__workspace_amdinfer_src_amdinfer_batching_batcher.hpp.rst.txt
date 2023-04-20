@@ -56,7 +56,7 @@ Includes
 
 - ``thread`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_thread.hpp`)
 
-- ``vector``
+- ``vector`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector.cpp`)
 
 
 
@@ -74,13 +74,11 @@ Included By
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_core_worker_info.cpp`
 
-- :ref:`file__workspace_amdinfer_src_amdinfer_workers_aks.cpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_worker_info.hpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_workers_aks_detect.cpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_workers_aks_detect_stream.cpp`
-
-- :ref:`file__workspace_amdinfer_src_amdinfer_workers_invert_image.cpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_workers_invert_video.cpp`
 

@@ -39,6 +39,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <script src="../_static/copybutton.js"></script>
         <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
         <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+        <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
+        <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
+        <script defer="defer" src="../_static/tippy/cpp_api/unabridged_orphan.194c6ac5-71a8-4be4-bf4f-fb388df44731.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" /> 
@@ -219,10 +222,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.inferAsyncOrdered"><code class="docutils literal notranslate"><span class="pre">inferAsyncOrdered()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.inferAsyncOrderedBatched"><code class="docutils literal notranslate"><span class="pre">inferAsyncOrderedBatched()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.inference_request_to_dict"><code class="docutils literal notranslate"><span class="pre">inference_request_to_dict()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.loadEnsemble"><code class="docutils literal notranslate"><span class="pre">loadEnsemble()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.parallel_infer"><code class="docutils literal notranslate"><span class="pre">parallel_infer()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.serverHasExtension"><code class="docutils literal notranslate"><span class="pre">serverHasExtension()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.start_http_client_server"><code class="docutils literal notranslate"><span class="pre">start_http_client_server()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.stringToArray"><code class="docutils literal notranslate"><span class="pre">stringToArray()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.unloadModels"><code class="docutils literal notranslate"><span class="pre">unloadModels()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.waitUntilModelNotReady"><code class="docutils literal notranslate"><span class="pre">waitUntilModelNotReady()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.waitUntilModelReady"><code class="docutils literal notranslate"><span class="pre">waitUntilModelReady()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.waitUntilServerReady"><code class="docutils literal notranslate"><span class="pre">waitUntilServerReady()</span></code></a></li>
 </ul>
@@ -542,6 +548,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </div>
 <div class="toctree-wrapper compound">
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="variable_model__config_8cpp_1a7a1019f8d96c09cf752492a9f28f907c.html">Variable amdinfer::templated_false</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="variable_model__config_8cpp_1a7a1019f8d96c09cf752492a9f28f907c.html#variable-documentation">Variable Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="variable_traits_8hpp_1a541edeed71c8938d70cdf47659f9a391.html">Variable amdinfer::util::is_any_v</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="variable_traits_8hpp_1a541edeed71c8938d70cdf47659f9a391.html#variable-documentation">Variable Documentation</a></li>
 </ul>
@@ -558,8 +572,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </div>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="variable_aks__detect_8hpp_1aff4c1089315fd2d1ff79e575fb320332.html">Variable amdinfer::workers::kAkdDetectResponseSize</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="variable_aks__detect_8hpp_1aff4c1089315fd2d1ff79e575fb320332.html#variable-documentation">Variable Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="variable_aks__detect_8hpp_1a7005690caff676e0cf1c434d10844fc1.html">Variable amdinfer::workers::kAksDetectResponseSize</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="variable_aks__detect_8hpp_1a7005690caff676e0cf1c434d10844fc1.html#variable-documentation">Variable Documentation</a></li>
 </ul>
 </li>
 </ul>
@@ -576,6 +590,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="variable_resnet50__stream_8cpp_1adc9b3a6c8074468b5528a02f79137dab.html">Variable amdinfer::workers::kBoxHeightStr</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="variable_resnet50__stream_8cpp_1adc9b3a6c8074468b5528a02f79137dab.html#variable-documentation">Variable Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="variable_aks__detect_8hpp_1a39a6ef55956630c25322735f8e6e15c0.html">Variable amdinfer::workers::kDetectResponseSize</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="variable_aks__detect_8hpp_1a39a6ef55956630c25322735f8e6e15c0.html#variable-documentation">Variable Documentation</a></li>
 </ul>
 </li>
 </ul>
@@ -622,24 +644,24 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </div>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="variable_invert__image_8cpp_1a778cfb0679cd1b44d77c94cc1e64cf74.html">Variable amdinfer::workers::kMaxImageChannels</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="variable_invert__image_8cpp_1a778cfb0679cd1b44d77c94cc1e64cf74.html#variable-documentation">Variable Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="variable_invert__video_8cpp_1a778cfb0679cd1b44d77c94cc1e64cf74.html">Variable amdinfer::workers::kMaxImageChannels</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="variable_invert__video_8cpp_1a778cfb0679cd1b44d77c94cc1e64cf74.html#variable-documentation">Variable Documentation</a></li>
 </ul>
 </li>
 </ul>
 </div>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="variable_invert__image_8cpp_1a3fe6b60514f224d88012b81a72f206b0.html">Variable amdinfer::workers::kMaxImageHeight</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="variable_invert__image_8cpp_1a3fe6b60514f224d88012b81a72f206b0.html#variable-documentation">Variable Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="variable_invert__video_8cpp_1a3fe6b60514f224d88012b81a72f206b0.html">Variable amdinfer::workers::kMaxImageHeight</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="variable_invert__video_8cpp_1a3fe6b60514f224d88012b81a72f206b0.html#variable-documentation">Variable Documentation</a></li>
 </ul>
 </li>
 </ul>
 </div>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="variable_invert__image_8cpp_1ab862f12385b964a9f52578ce2b45f91a.html">Variable amdinfer::workers::kMaxImageWidth</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="variable_invert__image_8cpp_1ab862f12385b964a9f52578ce2b45f91a.html#variable-documentation">Variable Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="variable_invert__video_8cpp_1ab862f12385b964a9f52578ce2b45f91a.html">Variable amdinfer::workers::kMaxImageWidth</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="variable_invert__video_8cpp_1ab862f12385b964a9f52578ce2b45f91a.html#variable-documentation">Variable Documentation</a></li>
 </ul>
 </li>
 </ul>
@@ -758,16 +780,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </div>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="variable_models_2echo__multi_8cpp_1afbb86105d54d5a6d56b02d0ffabfebe8.html">Variable kInputLengths</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="variable_models_2echo__multi_8cpp_1afbb86105d54d5a6d56b02d0ffabfebe8.html#variable-documentation">Variable Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="variable_echo__multi_8cpp_1afbb86105d54d5a6d56b02d0ffabfebe8.html">Variable kInputLengths</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="variable_echo__multi_8cpp_1afbb86105d54d5a6d56b02d0ffabfebe8.html#variable-documentation">Variable Documentation</a></li>
 </ul>
 </li>
 </ul>
 </div>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="variable_models_2echo__multi_8cpp_1a8b03977cd93d9bb002e89d614bbbfdb9.html">Variable kInputTensors</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="variable_models_2echo__multi_8cpp_1a8b03977cd93d9bb002e89d614bbbfdb9.html#variable-documentation">Variable Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="variable_echo__multi_8cpp_1a8b03977cd93d9bb002e89d614bbbfdb9.html">Variable kInputTensors</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="variable_echo__multi_8cpp_1a8b03977cd93d9bb002e89d614bbbfdb9.html#variable-documentation">Variable Documentation</a></li>
 </ul>
 </li>
 </ul>
@@ -790,6 +812,102 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </div>
 <div class="toctree-wrapper compound">
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="variable_base64__decode_8cpp_1a49f889671e129dd6efc31813bbbc481f.html">Variable kMaxImageChannels</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="variable_base64__decode_8cpp_1a49f889671e129dd6efc31813bbbc481f.html#variable-documentation">Variable Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="variable_base64__encode_8cpp_1a49f889671e129dd6efc31813bbbc481f.html">Variable kMaxImageChannels</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="variable_base64__encode_8cpp_1a49f889671e129dd6efc31813bbbc481f.html#variable-documentation">Variable Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="variable_invert__image_8cpp_1a49f889671e129dd6efc31813bbbc481f.html">Variable kMaxImageChannels</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="variable_invert__image_8cpp_1a49f889671e129dd6efc31813bbbc481f.html#variable-documentation">Variable Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="variable_base64__decode_8cpp_1a74119c5aa1aecbbdcb1bf2db7368eab4.html">Variable kMaxImageHeight</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="variable_base64__decode_8cpp_1a74119c5aa1aecbbdcb1bf2db7368eab4.html#variable-documentation">Variable Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="variable_base64__encode_8cpp_1a74119c5aa1aecbbdcb1bf2db7368eab4.html">Variable kMaxImageHeight</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="variable_base64__encode_8cpp_1a74119c5aa1aecbbdcb1bf2db7368eab4.html#variable-documentation">Variable Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="variable_invert__image_8cpp_1a74119c5aa1aecbbdcb1bf2db7368eab4.html">Variable kMaxImageHeight</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="variable_invert__image_8cpp_1a74119c5aa1aecbbdcb1bf2db7368eab4.html#variable-documentation">Variable Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="variable_base64__decode_8cpp_1a0eaa06703265e46c8ce1ab3a1b1d3c70.html">Variable kMaxImageSize</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="variable_base64__decode_8cpp_1a0eaa06703265e46c8ce1ab3a1b1d3c70.html#variable-documentation">Variable Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="variable_base64__encode_8cpp_1a0eaa06703265e46c8ce1ab3a1b1d3c70.html">Variable kMaxImageSize</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="variable_base64__encode_8cpp_1a0eaa06703265e46c8ce1ab3a1b1d3c70.html#variable-documentation">Variable Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="variable_invert__image_8cpp_1a0eaa06703265e46c8ce1ab3a1b1d3c70.html">Variable kMaxImageSize</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="variable_invert__image_8cpp_1a0eaa06703265e46c8ce1ab3a1b1d3c70.html#variable-documentation">Variable Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="variable_base64__decode_8cpp_1a9bc9a18ebe4ffe55dbcb3fa0a26bb5af.html">Variable kMaxImageWidth</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="variable_base64__decode_8cpp_1a9bc9a18ebe4ffe55dbcb3fa0a26bb5af.html#variable-documentation">Variable Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="variable_base64__encode_8cpp_1a9bc9a18ebe4ffe55dbcb3fa0a26bb5af.html">Variable kMaxImageWidth</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="variable_base64__encode_8cpp_1a9bc9a18ebe4ffe55dbcb3fa0a26bb5af.html#variable-documentation">Variable Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="variable_invert__image_8cpp_1a9bc9a18ebe4ffe55dbcb3fa0a26bb5af.html">Variable kMaxImageWidth</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="variable_invert__image_8cpp_1a9bc9a18ebe4ffe55dbcb3fa0a26bb5af.html#variable-documentation">Variable Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="variable_build__options_8hpp_1a2cbbae723c01d1e388932882efbf9264.html">Variable kMaxModelNameSize</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="variable_build__options_8hpp_1a2cbbae723c01d1e388932882efbf9264.html#variable-documentation">Variable Documentation</a></li>
 </ul>
@@ -798,16 +916,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </div>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="variable_models_2echo__multi_8cpp_1aef1d8b9952b78ddeb8bb591cbd16eb5d.html">Variable kOutputLengths</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="variable_models_2echo__multi_8cpp_1aef1d8b9952b78ddeb8bb591cbd16eb5d.html#variable-documentation">Variable Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="variable_echo__multi_8cpp_1aef1d8b9952b78ddeb8bb591cbd16eb5d.html">Variable kOutputLengths</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="variable_echo__multi_8cpp_1aef1d8b9952b78ddeb8bb591cbd16eb5d.html#variable-documentation">Variable Documentation</a></li>
 </ul>
 </li>
 </ul>
 </div>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="variable_models_2echo__multi_8cpp_1a295e485ab5ea3732dd7360c47e974d44.html">Variable kOutputTensors</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="variable_models_2echo__multi_8cpp_1a295e485ab5ea3732dd7360c47e974d44.html#variable-documentation">Variable Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="variable_echo__multi_8cpp_1a295e485ab5ea3732dd7360c47e974d44.html">Variable kOutputTensors</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="variable_echo__multi_8cpp_1a295e485ab5ea3732dd7360c47e974d44.html#variable-documentation">Variable Documentation</a></li>
 </ul>
 </li>
 </ul>
@@ -1405,21 +1523,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <h2>Files<a class="headerlink" href="#files" title="Permalink to this heading">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_workers_aks.cpp.html">File aks.cpp</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_workers_aks.cpp.html#definition-workspace-amdinfer-src-amdinfer-workers-aks-cpp">Definition (<code class="docutils literal notranslate"><span class="pre">/workspace/amdinfer/src/amdinfer/workers/aks.cpp</span></code>)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="program_listing_file__workspace_amdinfer_src_amdinfer_workers_aks.cpp.html">Program Listing for File aks.cpp</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_workers_aks.cpp.html#includes">Includes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_workers_aks.cpp.html#namespaces">Namespaces</a></li>
-<li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_workers_aks.cpp.html#classes">Classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_workers_aks.cpp.html#functions">Functions</a></li>
-</ul>
-</li>
-</ul>
-</div>
-<div class="toctree-wrapper compound">
-<ul>
 <li class="toctree-l1"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_workers_aks_detect.cpp.html">File aks_detect.cpp</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_workers_aks_detect.cpp.html#definition-workspace-amdinfer-src-amdinfer-workers-aks-detect-cpp">Definition (<code class="docutils literal notranslate"><span class="pre">/workspace/amdinfer/src/amdinfer/workers/aks_detect.cpp</span></code>)</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="program_listing_file__workspace_amdinfer_src_amdinfer_workers_aks_detect.cpp.html">Program Listing for File aks_detect.cpp</a></li>
@@ -1501,6 +1604,34 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_util_base64.hpp.html#includes">Includes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_util_base64.hpp.html#included-by">Included By</a></li>
 <li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_util_base64.hpp.html#namespaces">Namespaces</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_models_base64_decode.cpp.html">File base64_decode.cpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_models_base64_decode.cpp.html#definition-workspace-amdinfer-src-amdinfer-models-base64-decode-cpp">Definition (<code class="docutils literal notranslate"><span class="pre">/workspace/amdinfer/src/amdinfer/models/base64_decode.cpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file__workspace_amdinfer_src_amdinfer_models_base64_decode.cpp.html">Program Listing for File base64_decode.cpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_models_base64_decode.cpp.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_models_base64_decode.cpp.html#functions">Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_models_base64_decode.cpp.html#variables">Variables</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_models_base64_encode.cpp.html">File base64_encode.cpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_models_base64_encode.cpp.html#definition-workspace-amdinfer-src-amdinfer-models-base64-encode-cpp">Definition (<code class="docutils literal notranslate"><span class="pre">/workspace/amdinfer/src/amdinfer/models/base64_encode.cpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file__workspace_amdinfer_src_amdinfer_models_base64_encode.cpp.html">Program Listing for File base64_encode.cpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_models_base64_encode.cpp.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_models_base64_encode.cpp.html#functions">Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_models_base64_encode.cpp.html#variables">Variables</a></li>
 </ul>
 </li>
 </ul>
@@ -1881,21 +2012,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </div>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_workers_echo.cpp.html">File echo.cpp</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_workers_echo.cpp.html#definition-workspace-amdinfer-src-amdinfer-workers-echo-cpp">Definition (<code class="docutils literal notranslate"><span class="pre">/workspace/amdinfer/src/amdinfer/workers/echo.cpp</span></code>)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="program_listing_file__workspace_amdinfer_src_amdinfer_workers_echo.cpp.html">Program Listing for File echo.cpp</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_workers_echo.cpp.html#includes">Includes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_workers_echo.cpp.html#namespaces">Namespaces</a></li>
-<li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_workers_echo.cpp.html#classes">Classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_workers_echo.cpp.html#functions">Functions</a></li>
-</ul>
-</li>
-</ul>
-</div>
-<div class="toctree-wrapper compound">
-<ul>
 <li class="toctree-l1"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_models_echo_multi.cpp.html">File echo_multi.cpp</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_models_echo_multi.cpp.html#definition-workspace-amdinfer-src-amdinfer-models-echo-multi-cpp">Definition (<code class="docutils literal notranslate"><span class="pre">/workspace/amdinfer/src/amdinfer/models/echo_multi.cpp</span></code>)</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="program_listing_file__workspace_amdinfer_src_amdinfer_models_echo_multi.cpp.html">Program Listing for File echo_multi.cpp</a></li>
@@ -1904,21 +2020,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_models_echo_multi.cpp.html#includes">Includes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_models_echo_multi.cpp.html#functions">Functions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_models_echo_multi.cpp.html#variables">Variables</a></li>
-</ul>
-</li>
-</ul>
-</div>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_workers_echo_multi.cpp.html">File echo_multi.cpp</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_workers_echo_multi.cpp.html#definition-workspace-amdinfer-src-amdinfer-workers-echo-multi-cpp">Definition (<code class="docutils literal notranslate"><span class="pre">/workspace/amdinfer/src/amdinfer/workers/echo_multi.cpp</span></code>)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="program_listing_file__workspace_amdinfer_src_amdinfer_workers_echo_multi.cpp.html">Program Listing for File echo_multi.cpp</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_workers_echo_multi.cpp.html#includes">Includes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_workers_echo_multi.cpp.html#namespaces">Namespaces</a></li>
-<li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_workers_echo_multi.cpp.html#classes">Classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_workers_echo_multi.cpp.html#functions">Functions</a></li>
 </ul>
 </li>
 </ul>
@@ -1992,6 +2093,35 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_util_exec.hpp.html#includes">Includes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_util_exec.hpp.html#included-by">Included By</a></li>
 <li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_util_exec.hpp.html#namespaces">Namespaces</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_util_filesystem.cpp.html">File filesystem.cpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_util_filesystem.cpp.html#definition-workspace-amdinfer-src-amdinfer-util-filesystem-cpp">Definition (<code class="docutils literal notranslate"><span class="pre">/workspace/amdinfer/src/amdinfer/util/filesystem.cpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file__workspace_amdinfer_src_amdinfer_util_filesystem.cpp.html">Program Listing for File filesystem.cpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_util_filesystem.cpp.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_util_filesystem.cpp.html#namespaces">Namespaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_util_filesystem.cpp.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_util_filesystem.hpp.html">File filesystem.hpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_util_filesystem.hpp.html#definition-workspace-amdinfer-src-amdinfer-util-filesystem-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">/workspace/amdinfer/src/amdinfer/util/filesystem.hpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file__workspace_amdinfer_src_amdinfer_util_filesystem.hpp.html">Program Listing for File filesystem.hpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_util_filesystem.hpp.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_util_filesystem.hpp.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_util_filesystem.hpp.html#namespaces">Namespaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_util_filesystem.hpp.html#functions">Functions</a></li>
 </ul>
 </li>
 </ul>
@@ -2328,16 +2458,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </div>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_workers_invert_image.cpp.html">File invert_image.cpp</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_workers_invert_image.cpp.html#definition-workspace-amdinfer-src-amdinfer-workers-invert-image-cpp">Definition (<code class="docutils literal notranslate"><span class="pre">/workspace/amdinfer/src/amdinfer/workers/invert_image.cpp</span></code>)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="program_listing_file__workspace_amdinfer_src_amdinfer_workers_invert_image.cpp.html">Program Listing for File invert_image.cpp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_models_invert_image.cpp.html">File invert_image.cpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_models_invert_image.cpp.html#definition-workspace-amdinfer-src-amdinfer-models-invert-image-cpp">Definition (<code class="docutils literal notranslate"><span class="pre">/workspace/amdinfer/src/amdinfer/models/invert_image.cpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file__workspace_amdinfer_src_amdinfer_models_invert_image.cpp.html">Program Listing for File invert_image.cpp</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_workers_invert_image.cpp.html#includes">Includes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_workers_invert_image.cpp.html#namespaces">Namespaces</a></li>
-<li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_workers_invert_image.cpp.html#classes">Classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_workers_invert_image.cpp.html#functions">Functions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_workers_invert_image.cpp.html#variables">Variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_models_invert_image.cpp.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_models_invert_image.cpp.html#functions">Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_models_invert_image.cpp.html#variables">Variables</a></li>
 </ul>
 </li>
 </ul>
@@ -2484,6 +2612,36 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_include_amdinfer_core_mixins.hpp.html#included-by">Included By</a></li>
 <li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_include_amdinfer_core_mixins.hpp.html#namespaces">Namespaces</a></li>
 <li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_include_amdinfer_core_mixins.hpp.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_core_model_config.cpp.html">File model_config.cpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_core_model_config.cpp.html#definition-workspace-amdinfer-src-amdinfer-core-model-config-cpp">Definition (<code class="docutils literal notranslate"><span class="pre">/workspace/amdinfer/src/amdinfer/core/model_config.cpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file__workspace_amdinfer_src_amdinfer_core_model_config.cpp.html">Program Listing for File model_config.cpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_core_model_config.cpp.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_core_model_config.cpp.html#namespaces">Namespaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_core_model_config.cpp.html#functions">Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_core_model_config.cpp.html#variables">Variables</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_core_model_config.hpp.html">File model_config.hpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_core_model_config.hpp.html#definition-workspace-amdinfer-src-amdinfer-core-model-config-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">/workspace/amdinfer/src/amdinfer/core/model_config.hpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file__workspace_amdinfer_src_amdinfer_core_model_config.hpp.html">Program Listing for File model_config.hpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_core_model_config.hpp.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_core_model_config.hpp.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_core_model_config.hpp.html#namespaces">Namespaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_core_model_config.hpp.html#classes">Classes</a></li>
 </ul>
 </li>
 </ul>
@@ -2797,6 +2955,21 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_workers_resnet50_stream.cpp.html#functions">Functions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_workers_resnet50_stream.cpp.html#typedefs">Typedefs</a></li>
 <li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_workers_resnet50_stream.cpp.html#variables">Variables</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_workers_responder.cpp.html">File responder.cpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_workers_responder.cpp.html#definition-workspace-amdinfer-src-amdinfer-workers-responder-cpp">Definition (<code class="docutils literal notranslate"><span class="pre">/workspace/amdinfer/src/amdinfer/workers/responder.cpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file__workspace_amdinfer_src_amdinfer_workers_responder.cpp.html">Program Listing for File responder.cpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_workers_responder.cpp.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_workers_responder.cpp.html#namespaces">Namespaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_workers_responder.cpp.html#classes">Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_workers_responder.cpp.html#functions">Functions</a></li>
 </ul>
 </li>
 </ul>
@@ -3146,6 +3319,34 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </div>
 <div class="toctree-wrapper compound">
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_buffers_vector.cpp.html">File vector.cpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_buffers_vector.cpp.html#definition-workspace-amdinfer-src-amdinfer-buffers-vector-cpp">Definition (<code class="docutils literal notranslate"><span class="pre">/workspace/amdinfer/src/amdinfer/buffers/vector.cpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file__workspace_amdinfer_src_amdinfer_buffers_vector.cpp.html">Program Listing for File vector.cpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_buffers_vector.cpp.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_buffers_vector.cpp.html#namespaces">Namespaces</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_buffers_vector.hpp.html">File vector.hpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_buffers_vector.hpp.html#definition-workspace-amdinfer-src-amdinfer-buffers-vector-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">/workspace/amdinfer/src/amdinfer/buffers/vector.hpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file__workspace_amdinfer_src_amdinfer_buffers_vector.hpp.html">Program Listing for File vector.hpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_buffers_vector.hpp.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_buffers_vector.hpp.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_buffers_vector.hpp.html#namespaces">Namespaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_buffers_vector.hpp.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_version.hpp.html">File version.hpp</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_version.hpp.html#definition-workspace-amdinfer-src-amdinfer-version-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">/workspace/amdinfer/src/amdinfer/version.hpp</span></code>)</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="program_listing_file__workspace_amdinfer_src_amdinfer_version.hpp.html">Program Listing for File version.hpp</a></li>
@@ -3298,7 +3499,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on March 20, 2023.
+      <span class="lastupdated">Last updated on April 13, 2023.
       </span></p>
   </div>
 

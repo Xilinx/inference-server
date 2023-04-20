@@ -3,7 +3,7 @@
 Class VectorBuffer
 ==================
 
-- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector_buffer.hpp`
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector.hpp`
 
 
 Inheritance Relationships
@@ -20,7 +20,6 @@ Class Documentation
 
 
 .. doxygenclass:: amdinfer::VectorBuffer
-   :project: amdinfer
    :members:
    :protected-members:
    :undoc-members:

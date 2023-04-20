@@ -25,7 +25,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
       <link rel="stylesheet" href="_static/custom.css" type="text/css" />
       <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
-      <link rel="stylesheet" href="_static/collapsible-lists/css/tree_view.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -38,8 +37,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <script src="_static/clipboard.min.js"></script>
         <script src="_static/copybutton.js"></script>
         <script src="_static/tabs.js"></script>
-        <script src="_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
-        <script src="_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+        <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
+        <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
+        <script defer="defer" src="_static/tippy/quickstart_deployment.e7c8803b-80e4-4061-88b7-7632c9936100.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -77,69 +77,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l2"><a class="reference internal" href="introduction.html#support">Support</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="dependencies.html">Dependencies</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="dependencies.html#docker-image">Docker Image</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="dependencies.html#base-image">Base Image</a></li>
-<li class="toctree-l3"><a class="reference internal" href="dependencies.html#ubuntu-focal-repositories">Ubuntu Focal Repositories</a></li>
-<li class="toctree-l3"><a class="reference internal" href="dependencies.html#ubuntu-ppas">Ubuntu PPAs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="dependencies.html#pypi">PyPI</a></li>
-<li class="toctree-l3"><a class="reference internal" href="dependencies.html#github">Github</a></li>
-<li class="toctree-l3"><a class="reference internal" href="dependencies.html#others">Others</a></li>
-<li class="toctree-l3"><a class="reference internal" href="dependencies.html#xilinx">Xilinx</a></li>
-<li class="toctree-l3"><a class="reference internal" href="dependencies.html#amd">AMD</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="dependencies.html#included">Included</a></li>
-<li class="toctree-l2"><a class="reference internal" href="dependencies.html#downloaded-files">Downloaded Files</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="roadmap.html">Roadmap</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="roadmap.html#id1">2022</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="roadmap.html#q1">2022 Q1</a></li>
-<li class="toctree-l3"><a class="reference internal" href="roadmap.html#q2">2022 Q2</a></li>
-<li class="toctree-l3"><a class="reference internal" href="roadmap.html#q3">2022 Q3</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="roadmap.html#id2">2023</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="roadmap.html#id3">2023 Q1</a></li>
-<li class="toctree-l3"><a class="reference internal" href="roadmap.html#id4">2023 Q2</a></li>
-<li class="toctree-l3"><a class="reference internal" href="roadmap.html#id5">2023 Q3</a></li>
-<li class="toctree-l3"><a class="reference internal" href="roadmap.html#q4">2023 Q4</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="roadmap.html#future">Future</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#unreleased">Unreleased</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#added">Added</a></li>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#changed">Changed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#deprecated">Deprecated</a></li>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#removed">Removed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#fixed">Fixed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#security">Security</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#id2">0.3.0 - 2023-02-01</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id3">Added</a></li>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id4">Changed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id5">Deprecated</a></li>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id6">Removed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id7">Fixed</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#id8">0.2.0 - 2022-08-05</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id9">Added</a></li>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id10">Changed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id11">Fixed</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#id12">0.1.0 - 2022-02-08</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id13">Added</a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Quickstart</span></p>
 <ul class="current">
@@ -222,10 +160,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.inferAsyncOrdered"><code class="docutils literal notranslate"><span class="pre">inferAsyncOrdered()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.inferAsyncOrderedBatched"><code class="docutils literal notranslate"><span class="pre">inferAsyncOrderedBatched()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.inference_request_to_dict"><code class="docutils literal notranslate"><span class="pre">inference_request_to_dict()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.loadEnsemble"><code class="docutils literal notranslate"><span class="pre">loadEnsemble()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.parallel_infer"><code class="docutils literal notranslate"><span class="pre">parallel_infer()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.serverHasExtension"><code class="docutils literal notranslate"><span class="pre">serverHasExtension()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.start_http_client_server"><code class="docutils literal notranslate"><span class="pre">start_http_client_server()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.stringToArray"><code class="docutils literal notranslate"><span class="pre">stringToArray()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.unloadModels"><code class="docutils literal notranslate"><span class="pre">unloadModels()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.waitUntilModelNotReady"><code class="docutils literal notranslate"><span class="pre">waitUntilModelNotReady()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.waitUntilModelReady"><code class="docutils literal notranslate"><span class="pre">waitUntilModelReady()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.waitUntilServerReady"><code class="docutils literal notranslate"><span class="pre">waitUntilServerReady()</span></code></a></li>
 </ul>
@@ -366,6 +307,22 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="dependencies.html">Dependencies</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dependencies.html#docker-image">Docker Image</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dependencies.html#base-image">Base Image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dependencies.html#ubuntu-focal-repositories">Ubuntu Focal Repositories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dependencies.html#ubuntu-ppas">Ubuntu PPAs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dependencies.html#pypi">PyPI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dependencies.html#github">Github</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dependencies.html#others">Others</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dependencies.html#xilinx">Xilinx</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dependencies.html#amd">AMD</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dependencies.html#included">Included</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dependencies.html#downloaded-files">Downloaded Files</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="architecture.html#overview">Overview</a></li>
 <li class="toctree-l2"><a class="reference internal" href="architecture.html#ingestion">Ingestion</a><ul>
@@ -415,16 +372,54 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l2"><a class="reference internal" href="tracing.html#quickstart">Quickstart</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="cpp_api/cpp_root.html">Code Documentation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="cpp_api/cpp_root.html#full-api">Full API</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="cpp_api/cpp_root.html#namespaces">Namespaces</a></li>
-<li class="toctree-l3"><a class="reference internal" href="cpp_api/cpp_root.html#classes-and-structs">Classes and Structs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="cpp_api/cpp_root.html#enums">Enums</a></li>
-<li class="toctree-l3"><a class="reference internal" href="cpp_api/cpp_root.html#functions">Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#unreleased">Unreleased</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#added">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#changed">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#deprecated">Deprecated</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#removed">Removed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#fixed">Fixed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#security">Security</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id2">0.3.0 - 2023-02-01</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id3">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id4">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id5">Deprecated</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id6">Removed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id7">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id8">0.2.0 - 2022-08-05</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id9">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id10">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id11">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id12">0.1.0 - 2022-02-08</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id13">Added</a></li>
 </ul>
 </li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="roadmap.html">Roadmap</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="roadmap.html#id1">2022</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="roadmap.html#q1">2022 Q1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="roadmap.html#q2">2022 Q2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="roadmap.html#q3">2022 Q3</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="roadmap.html#id2">2023</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="roadmap.html#id3">2023 Q1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="roadmap.html#id4">2023 Q2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="roadmap.html#id5">2023 Q3</a></li>
+<li class="toctree-l3"><a class="reference internal" href="roadmap.html#q4">2023 Q4</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="roadmap.html#future">Future</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Terminology</a></li>
 </ul>
 
         </div>
@@ -472,17 +467,17 @@ The format of the directory is as follows:</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>/
 ├─ model_a/
 │  ├─ 1/
-│  │  ├─ saved_model.x
-│  ├─ config.pbtxt
+│  │  ├─ &lt;model&gt;.x
+│  ├─ config.toml
 | model_b/
 |  ...
 </pre></div>
 </div>
 <p>The model name, <code class="docutils literal notranslate"><span class="pre">model_a</span></code> in this template, must be unique among the models loaded on a particular server.
 This name is used to name the endpoint used to make inference requests to.
-Under this directory, there must be a directory named <code class="docutils literal notranslate"><span class="pre">1/</span></code> containing the model file itself and a text file named <code class="docutils literal notranslate"><span class="pre">config.pbtxt</span></code>.
-The model file must be named <code class="docutils literal notranslate"><span class="pre">saved_model</span></code> and the file extension depends on the type of the model.
-The <code class="docutils literal notranslate"><span class="pre">config.pbtxt</span></code> file contains metadata for the model.</p>
+Under this directory, there must be a directory named <code class="docutils literal notranslate"><span class="pre">1/</span></code> containing the model file itself and a TOML file containing the metadata for the model.
+This file may be named anything but <code class="docutils literal notranslate"><span class="pre">config.toml</span></code> is suggested and used throughout this documentation.
+The model file can have an arbitrary name and the file extension depends on the type of the model.</p>
 <p>As an example, consider a deployment of a single ResNet50 model.</p>
 <div class="sphinx-tabs docutils container">
 <div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-0-Q1BV" aria-selected="true" class="sphinx-tabs-tab code-tab group-tab" id="tab-0-Q1BV" name="Q1BV" role="tab" tabindex="0">CPU</button><button aria-controls="panel-0-R1BV" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-0-R1BV" name="R1BV" role="tab" tabindex="-1">GPU</button><button aria-controls="panel-0-RlBHQQ==" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-0-RlBHQQ==" name="RlBHQQ==" role="tab" tabindex="-1">FPGA</button></div><div aria-labelledby="tab-0-Q1BV" class="sphinx-tabs-panel code-tab group-tab" id="panel-0-Q1BV" name="Q1BV" role="tabpanel" tabindex="0"><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>wget<span class="w"> </span>-O<span class="w"> </span>tensorflow.zip<span class="w"> </span>https://www.xilinx.com/bin/public/openDownload?filename<span class="o">=</span>tf_resnetv1_50_imagenet_224_224_6.97G_2.5.zip
@@ -503,60 +498,48 @@ The <code class="docutils literal notranslate"><span class="pre">config.pbtxt</s
 </pre></div>
 </div>
 </div></div>
-<p>For the models used here, their corresponding <code class="docutils literal notranslate"><span class="pre">config.pbtxt</span></code> should be placed in the chosen model repository (<code class="docutils literal notranslate"><span class="pre">/tmp/model_repository/resnet50/</span></code>):</p>
+<p>For the models used here, their corresponding <code class="docutils literal notranslate"><span class="pre">config.toml</span></code> should be placed in the chosen model repository (<code class="docutils literal notranslate"><span class="pre">/tmp/model_repository/resnet50/</span></code>):</p>
 <div class="sphinx-tabs docutils container">
-<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-1-Q1BV" aria-selected="true" class="sphinx-tabs-tab code-tab group-tab" id="tab-1-Q1BV" name="Q1BV" role="tab" tabindex="0">CPU</button><button aria-controls="panel-1-R1BV" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-1-R1BV" name="R1BV" role="tab" tabindex="-1">GPU</button><button aria-controls="panel-1-RlBHQQ==" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-1-RlBHQQ==" name="RlBHQQ==" role="tab" tabindex="-1">FPGA</button></div><div aria-labelledby="tab-1-Q1BV" class="sphinx-tabs-panel code-tab group-tab" id="panel-1-Q1BV" name="Q1BV" role="tabpanel" tabindex="0"><div class="highlight-text notranslate"><div class="highlight"><pre><span></span>name: &quot;resnet50&quot;
-platform: &quot;tensorflow_graphdef&quot;
-inputs [
-    {
-        name: &quot;input&quot;
-        datatype: &quot;FP32&quot;
-        shape: [224,224,3]
-    }
-]
-outputs [
-    {
-        name: &quot;resnet_v1_50/predictions/Reshape_1&quot;
-        datatype: &quot;FP32&quot;
-        shape: [1000]
-    }
-]
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-1-Q1BV" aria-selected="true" class="sphinx-tabs-tab code-tab group-tab" id="tab-1-Q1BV" name="Q1BV" role="tab" tabindex="0">CPU</button><button aria-controls="panel-1-R1BV" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-1-R1BV" name="R1BV" role="tab" tabindex="-1">GPU</button><button aria-controls="panel-1-RlBHQQ==" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-1-RlBHQQ==" name="RlBHQQ==" role="tab" tabindex="-1">FPGA</button></div><div aria-labelledby="tab-1-Q1BV" class="sphinx-tabs-panel code-tab group-tab" id="panel-1-Q1BV" name="Q1BV" role="tabpanel" tabindex="0"><div class="highlight-toml notranslate"><div class="highlight"><pre><span></span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;resnet50&quot;</span>
+<span class="n">platform</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;tensorflow_graphdef&quot;</span>
+
+<span class="k">[[inputs]]</span>
+<span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;input&quot;</span>
+<span class="n">datatype</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;FP32&quot;</span>
+<span class="n">shape</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mi">224</span><span class="p">,</span><span class="w"> </span><span class="mi">224</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">]</span>
+
+<span class="k">[[outputs]]</span>
+<span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;resnet_v1_50/predictions/Reshape_1&quot;</span>
+<span class="n">datatype</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;FP32&quot;</span>
+<span class="n">shape</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mi">1000</span><span class="p">]</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-1-R1BV" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-1-R1BV" name="R1BV" role="tabpanel" tabindex="0"><div class="highlight-text notranslate"><div class="highlight"><pre><span></span>name: &quot;resnet50&quot;
-platform: &quot;onnx_onnxv1&quot;
-inputs [
-    {
-        name: &quot;input&quot;
-        datatype: &quot;FP32&quot;
-        shape: [224,224,3]
-    }
-]
-outputs [
-    {
-        name: &quot;output&quot;
-        datatype: &quot;FP32&quot;
-        shape: [1000]
-    }
-]
+</div><div aria-labelledby="tab-1-R1BV" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-1-R1BV" name="R1BV" role="tabpanel" tabindex="0"><div class="highlight-text notranslate"><div class="highlight"><pre><span></span>name = &quot;resnet50&quot;
+platform = &quot;onnx_onnxv1&quot;
+
+[[inputs]]
+name = &quot;input&quot;
+datatype = &quot;FP32&quot;
+shape = [224, 224, 3]
+
+[[outputs]]
+name = &quot;output&quot;
+datatype = &quot;FP32&quot;
+shape = [1000]
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-1-RlBHQQ==" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-1-RlBHQQ==" name="RlBHQQ==" role="tabpanel" tabindex="0"><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">name: &quot;resnet50&quot;</span>
-<span class="go">platform: &quot;vitis_xmodel&quot;</span>
-<span class="go">inputs [</span>
-<span class="go">    {</span>
-<span class="go">        name: &quot;input&quot;</span>
-<span class="go">        datatype: &quot;INT8&quot;</span>
-<span class="go">        shape: [224,224,3]</span>
-<span class="go">    }</span>
-<span class="go">]</span>
-<span class="go">outputs [</span>
-<span class="go">    {</span>
-<span class="go">        name: &quot;output&quot;</span>
-<span class="go">        datatype: &quot;INT8&quot;</span>
-<span class="go">        shape: [1000]</span>
-<span class="go">    }</span>
-<span class="go">]</span>
+</div><div aria-labelledby="tab-1-RlBHQQ==" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-1-RlBHQQ==" name="RlBHQQ==" role="tabpanel" tabindex="0"><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">name = &quot;resnet50&quot;</span>
+<span class="go">platform = &quot;vitis_xmodel&quot;</span>
+
+<span class="go">[[inputs]]</span>
+<span class="go">name = &quot;input&quot;</span>
+<span class="go">datatype = &quot;INT8&quot;</span>
+<span class="go">shape = [224, 224, 3]</span>
+
+<span class="go">[[outputs]]</span>
+<span class="go">name = &quot;output&quot;</span>
+<span class="go">datatype = &quot;INT8&quot;</span>
+<span class="go">shape = [1000]</span>
 </pre></div>
 </div>
 </div></div>
@@ -586,6 +569,12 @@ The supported platforms are:</p>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">onnx_onnxv1</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">.onnx</span></code></p></td>
 </tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">migraphx_mxr</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">.mxr</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">amdinfer_cpp</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">.so</span></code></p></td>
+</tr>
 </tbody>
 </table>
 <p>The inputs and outputs define the list of input and output tensors for the model.
@@ -603,7 +592,7 @@ You can pull the deployment image with Docker if it exists or <a class="referenc
 </div><div aria-labelledby="tab-2-R1BV" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-2-R1BV" name="R1BV" role="tabpanel" tabindex="0"><div class="highlight-text notranslate"><div class="highlight"><pre><span></span>$ docker pull amdih/serve:uif1.1_migraphx_amdinfer_0.3.0
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-2-RlBHQQ==" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-2-RlBHQQ==" name="RlBHQQ==" role="tabpanel" tabindex="0"><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>this<span class="w"> </span>image<span class="w"> </span>is<span class="w"> </span>not<span class="w"> </span>currently<span class="w"> </span>pre-built
+</div><div aria-labelledby="tab-2-RlBHQQ==" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-2-RlBHQQ==" name="RlBHQQ==" role="tabpanel" tabindex="0"><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>this<span class="w"> </span>image<span class="w"> </span>is<span class="w"> </span>not<span class="w"> </span>currently<span class="w"> </span>pre-built<span class="w"> </span>but<span class="w"> </span>you<span class="w"> </span>can<span class="w"> </span>build<span class="w"> </span>it<span class="w"> </span>yourself
 </pre></div>
 </div>
 </div></div>
@@ -632,7 +621,7 @@ By default, the container will start the server executable in the container that
 The <code class="docutils literal notranslate"><span class="pre">--publish</span></code> flags will map ports 8998 and 50051 in the container to arbitrary free ports on the host machine for HTTP and gRPC requests, respectively.
 You can use <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">ps</span></code> to show the running containers and what ports on the host machine are used by the container.
 Your clients will need these port numbers to make requests to the server.
-The endpoints for each model will be the name of the model in the <code class="docutils literal notranslate"><span class="pre">config.pbtxt</span></code>, which should match the name of the parent directory in the model repository.
+The endpoints for each model will be the name of the model in the <code class="docutils literal notranslate"><span class="pre">config.toml</span></code>, which should match the name of the parent directory in the model repository.
 In this example, it would be “resnet50”.
 Once the container is started, you and any clients can <a class="reference internal" href="quickstart_inference.html#quickstart-inference"><span class="std std-ref">make requests to it</span></a>.</p>
 </section>
@@ -660,7 +649,7 @@ Once the container is started, you and any clients can <a class="reference inter
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on March 20, 2023.
+      <span class="lastupdated">Last updated on April 13, 2023.
       </span></p>
   </div>
 

@@ -58,6 +58,8 @@ Included By
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_buffers_vart_tensor.hpp`
 
+- :ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector.hpp`
+
 - :ref:`file__workspace_amdinfer_src_amdinfer_clients_http_internal.cpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_clients_native.cpp`

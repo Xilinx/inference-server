@@ -39,6 +39,7 @@ Program Listing for File client.hpp
    namespace amdinfer {
    
    class ParameterMap;
+   class Endpoint;
    
    class Client {
     public:
@@ -75,6 +76,13 @@ Program Listing for File client.hpp
    bool serverHasExtension(const Client* client, const std::string& extension);
    void waitUntilServerReady(const Client* client);
    void waitUntilModelReady(const Client* client, const std::string& model);
+   void waitUntilModelNotReady(const Client* client, const std::string& model);
+   
+   std::vector<std::string> loadEnsemble(const Client* client,
+                                         std::vector<std::string> workers,
+                                         std::vector<ParameterMap> parameters);
+   
+   void unloadModels(const Client* client, const std::vector<std::string>& models);
    
    std::vector<InferenceResponse> inferAsyncOrdered(
      Client* client, const std::string& model,

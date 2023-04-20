@@ -1,0 +1,13 @@
+.. _exhale_function_invert__image_8cpp_1a681cf77e6cac2cb4fc75279984b2436b:
+
+Template Function invert
+========================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_models_invert_image.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: invert(void *, void *, uint64_t)

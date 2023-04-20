@@ -213,8 +213,13 @@ Program Listing for File grpc_server.cpp
      void operator()(Buffer* buffer, Tensor* tensor, size_t offset, size_t size,
                      [[maybe_unused]] const Observer& observer) const {
        auto* contents = getTensorContents<T>(tensor);
-       if constexpr (util::is_any_v<T, bool, uint32_t, uint64_t, int32_t, int64_t,
-                                    float, double, char>) {
+       if constexpr (std::is_same_v<T, char>) {
+         // gRPC stores char as a string so contents is a string**. Copy over the
+         // actual char* data from the string
+         auto* dest = static_cast<std::byte*>(buffer->data(offset));
+         std::memcpy(dest, (*contents)->data(), size * sizeof(T));
+       } else if constexpr (util::is_any_v<T, bool, uint32_t, uint64_t, int32_t,
+                                           int64_t, float, double>) {
          auto* dest = static_cast<std::byte*>(buffer->data(offset));
          std::memcpy(dest, contents, size * sizeof(T));
        } else if constexpr (util::is_any_v<T, uint8_t, uint16_t, int8_t, int16_t,

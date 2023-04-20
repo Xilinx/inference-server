@@ -72,7 +72,7 @@ Includes
 
 - ``variant``
 
-- ``vector``
+- ``vector`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector.cpp`)
 
 
 

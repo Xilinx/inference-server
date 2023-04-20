@@ -56,9 +56,27 @@ Included By
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_core_tensor.cpp`
 
+- :ref:`file__workspace_amdinfer_src_amdinfer_models_base64_decode.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_models_base64_encode.cpp`
+
 - :ref:`file__workspace_amdinfer_src_amdinfer_models_echo.cpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_models_echo_multi.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_models_invert_image.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_aks_detect.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_migraphx.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_pt_zendnn.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_resnet50.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_tf_zendnn.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_xmodel.cpp`
 
 
 

@@ -1,0 +1,13 @@
+.. _exhale_variable_base64__decode_8cpp_1a9bc9a18ebe4ffe55dbcb3fa0a26bb5af:
+
+Variable kMaxImageWidth
+=======================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_models_base64_decode.cpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: kMaxImageWidth

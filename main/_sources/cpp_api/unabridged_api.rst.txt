@@ -9,11 +9,6 @@ Namespaces
 .. toctree::
    :maxdepth: 5
 
-   namespace_@100.rst
-
-.. toctree::
-   :maxdepth: 5
-
    namespace_AKS.rst
 
 .. toctree::
@@ -89,6 +84,16 @@ Namespaces
 .. toctree::
    :maxdepth: 5
 
+   namespace_toml.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   namespace_toml__v3.rst
+
+.. toctree::
+   :maxdepth: 5
+
    namespace_vart.rst
 
 Classes and Structs
@@ -114,6 +119,11 @@ Classes and Structs
    :maxdepth: 5
 
    structamdinfer_1_1MemoryHeader.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structamdinfer_1_1ModelConfigData.rst
 
 .. toctree::
    :maxdepth: 5
@@ -423,6 +433,16 @@ Classes and Structs
 .. toctree::
    :maxdepth: 5
 
+   classamdinfer_1_1ModelConfig.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1ModelConfigTensor.rst
+
+.. toctree::
+   :maxdepth: 5
+
    classamdinfer_1_1ModelMetadata.rst
 
 .. toctree::
@@ -493,6 +513,11 @@ Classes and Structs
 .. toctree::
    :maxdepth: 5
 
+   classamdinfer_1_1VectorBuffer.rst
+
+.. toctree::
+   :maxdepth: 5
+
    classamdinfer_1_1WebSocketClient.rst
 
 .. toctree::
@@ -504,11 +529,6 @@ Classes and Structs
    :maxdepth: 5
 
    classamdinfer_1_1WorkerInfo.rst
-
-.. toctree::
-   :maxdepth: 5
-
-   classamdinfer_1_1workers_1_1Aks.rst
 
 .. toctree::
    :maxdepth: 5
@@ -528,27 +548,17 @@ Classes and Structs
 .. toctree::
    :maxdepth: 5
 
-   classamdinfer_1_1workers_1_1Echo.rst
-
-.. toctree::
-   :maxdepth: 5
-
-   classamdinfer_1_1workers_1_1EchoMulti.rst
-
-.. toctree::
-   :maxdepth: 5
-
-   classamdinfer_1_1workers_1_1InvertImage.rst
-
-.. toctree::
-   :maxdepth: 5
-
    classamdinfer_1_1workers_1_1InvertVideo.rst
 
 .. toctree::
    :maxdepth: 5
 
    classamdinfer_1_1workers_1_1MIGraphXWorker.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1workers_1_1MultiThreadedWorker.rst
 
 .. toctree::
    :maxdepth: 5
@@ -564,6 +574,16 @@ Classes and Structs
    :maxdepth: 5
 
    classamdinfer_1_1workers_1_1ResNet50Stream.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1workers_1_1Responder.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classamdinfer_1_1workers_1_1SingleThreadedWorker.rst
 
 .. toctree::
    :maxdepth: 5
@@ -681,6 +701,31 @@ Functions
 .. toctree::
    :maxdepth: 5
 
+   function_model__config_8cpp_1ad916117711673111272b87bd7b015dd5.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_model__config_8cpp_1ad993b803c47e24e374682aaec45416f4.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_model__config_8cpp_1a8760611469261389e290e73112952772.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_model__config_8cpp_1a93caf19e0a08474fcdcbfa7d2d660353.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_model__repository_8cpp_1a7ea03e4b5c22db96ecf9ef1cc9d23cdd.rst
+
+.. toctree::
+   :maxdepth: 5
+
    function_worker__info_8cpp_1a0b90dba241fba26f6e1bc8bea0e55a9e.rst
 
 .. toctree::
@@ -791,6 +836,11 @@ Functions
 .. toctree::
    :maxdepth: 5
 
+   function_client_8cpp_1a7a32761519bbb3ac1d86b2b3ec7d3900.rst
+
+.. toctree::
+   :maxdepth: 5
+
    function_http__internal_8cpp_1a427f4954da74353ed225bf6ca403908b.rst
 
 .. toctree::
@@ -876,6 +926,11 @@ Functions
 .. toctree::
    :maxdepth: 5
 
+   function_model__repository_8cpp_1ad3799a9788bef596e2144c16b8e3626f.rst
+
+.. toctree::
+   :maxdepth: 5
+
    function_c__plus__plus_8cpp_1a9e6917e8d658979c637569428360219e.rst
 
 .. toctree::
@@ -911,12 +966,12 @@ Functions
 .. toctree::
    :maxdepth: 5
 
-   function_model__repository_8cpp_1a05cd20aa1908b4475961f21cbdaf1e76.rst
+   function_model__repository_8cpp_1acb79361ac48cfb11a0480445e7e6cfc2.rst
 
 .. toctree::
    :maxdepth: 5
 
-   function_model__repository_8hpp_1a94c9f9dd875588ecd02da3459c46da36.rst
+   function_model__repository_8hpp_1a7bc7cc4b44f85f930556634ea7efe912.rst
 
 .. toctree::
    :maxdepth: 5
@@ -991,6 +1046,11 @@ Functions
 .. toctree::
    :maxdepth: 5
 
+   function_client_8cpp_1aeca57ac6adc6191c9209e19e70b2c95f.rst
+
+.. toctree::
+   :maxdepth: 5
+
    function_string_8hpp_1ab7c84c671182f8c47329d59fbc06fc66.rst
 
 .. toctree::
@@ -1041,6 +1101,11 @@ Functions
 .. toctree::
    :maxdepth: 5
 
+   function_string_8hpp_1a9e3dd8f418d6151cf89a6db45423e1f8.rst
+
+.. toctree::
+   :maxdepth: 5
+
    function_memory_8hpp_1a297476d933ddb20b1462132df4bf2b7c.rst
 
 .. toctree::
@@ -1052,6 +1117,16 @@ Functions
    :maxdepth: 5
 
    function_exec_8cpp_1ad2f76a0098c3445320c56f8208b66a8f.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_filesystem_8cpp_1a9c139c7eb99db1b4be48805a5452548a.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_filesystem_8hpp_1add898d9050c402d6683c871b2417f4b9.rst
 
 .. toctree::
    :maxdepth: 5
@@ -1072,6 +1147,11 @@ Functions
    :maxdepth: 5
 
    function_base64_8cpp_1afad08aa8530e43e678dfab1189b345f4.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_filesystem_8cpp_1a376d9403c48cc8e17b3db68c8193e6ee.rst
 
 .. toctree::
    :maxdepth: 5
@@ -1116,6 +1196,11 @@ Functions
 .. toctree::
    :maxdepth: 5
 
+   function_client_8cpp_1a3501853447c1ef78603637fb6b0f16ca.rst
+
+.. toctree::
+   :maxdepth: 5
+
    function_client_8cpp_1ad928316a941cc1f5371da1e90085bfdd.rst
 
 .. toctree::
@@ -1131,47 +1216,57 @@ Functions
 .. toctree::
    :maxdepth: 5
 
-   function_c__plus__plus_8cpp_1ae839d3bb421974c63e142c461e969830.rst
-
-.. toctree::
-   :maxdepth: 5
-
    function_migraphx_8cpp_1a3a3c5cda084c4108cacf3af5db7d7899.rst
 
 .. toctree::
    :maxdepth: 5
 
-   function_models_2echo_8cpp_1af012751791b00fabf8dae7f38f076e18.rst
+   function_base64__decode_8cpp_1af012751791b00fabf8dae7f38f076e18.rst
 
 .. toctree::
    :maxdepth: 5
 
-   function_models_2echo__multi_8cpp_1af012751791b00fabf8dae7f38f076e18.rst
+   function_base64__encode_8cpp_1af012751791b00fabf8dae7f38f076e18.rst
 
 .. toctree::
    :maxdepth: 5
 
-   function_models_2echo_8cpp_1a88e88f0ce7df9ffadac20aec94d1db2c.rst
+   function_echo_8cpp_1af012751791b00fabf8dae7f38f076e18.rst
 
 .. toctree::
    :maxdepth: 5
 
-   function_models_2echo__multi_8cpp_1a88e88f0ce7df9ffadac20aec94d1db2c.rst
+   function_echo__multi_8cpp_1af012751791b00fabf8dae7f38f076e18.rst
 
 .. toctree::
    :maxdepth: 5
 
-   function_workers_2echo_8cpp_1a601552e385edb19c4596c0c81cabb7fe.rst
+   function_invert__image_8cpp_1af012751791b00fabf8dae7f38f076e18.rst
 
 .. toctree::
    :maxdepth: 5
 
-   function_workers_2echo__multi_8cpp_1a601552e385edb19c4596c0c81cabb7fe.rst
+   function_base64__decode_8cpp_1a88e88f0ce7df9ffadac20aec94d1db2c.rst
 
 .. toctree::
    :maxdepth: 5
 
-   function_aks_8cpp_1a601552e385edb19c4596c0c81cabb7fe.rst
+   function_base64__encode_8cpp_1a88e88f0ce7df9ffadac20aec94d1db2c.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_echo_8cpp_1a88e88f0ce7df9ffadac20aec94d1db2c.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_echo__multi_8cpp_1a88e88f0ce7df9ffadac20aec94d1db2c.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_invert__image_8cpp_1a88e88f0ce7df9ffadac20aec94d1db2c.rst
 
 .. toctree::
    :maxdepth: 5
@@ -1187,11 +1282,6 @@ Functions
    :maxdepth: 5
 
    function_c__plus__plus_8cpp_1a601552e385edb19c4596c0c81cabb7fe.rst
-
-.. toctree::
-   :maxdepth: 5
-
-   function_invert__image_8cpp_1a601552e385edb19c4596c0c81cabb7fe.rst
 
 .. toctree::
    :maxdepth: 5
@@ -1221,6 +1311,11 @@ Functions
 .. toctree::
    :maxdepth: 5
 
+   function_responder_8cpp_1a601552e385edb19c4596c0c81cabb7fe.rst
+
+.. toctree::
+   :maxdepth: 5
+
    function_tf__zendnn_8cpp_1a601552e385edb19c4596c0c81cabb7fe.rst
 
 .. toctree::
@@ -1231,17 +1326,37 @@ Functions
 .. toctree::
    :maxdepth: 5
 
+   function_invert__image_8cpp_1a681cf77e6cac2cb4fc75279984b2436b.rst
+
+.. toctree::
+   :maxdepth: 5
+
    function_main_8cpp_1a0ddf1224851353fc92bfbff6f499fa97.rst
 
 .. toctree::
    :maxdepth: 5
 
-   function_models_2echo_8cpp_1ad728fc7115f1ac5380a1f5b4cae39526.rst
+   function_base64__decode_8cpp_1a14bb289162f3834ebc18cdcffd4472e2.rst
 
 .. toctree::
    :maxdepth: 5
 
-   function_models_2echo__multi_8cpp_1ad728fc7115f1ac5380a1f5b4cae39526.rst
+   function_base64__encode_8cpp_1a14bb289162f3834ebc18cdcffd4472e2.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_echo_8cpp_1ad728fc7115f1ac5380a1f5b4cae39526.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_echo__multi_8cpp_1a14bb289162f3834ebc18cdcffd4472e2.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_invert__image_8cpp_1a14bb289162f3834ebc18cdcffd4472e2.rst
 
 .. toctree::
    :maxdepth: 5

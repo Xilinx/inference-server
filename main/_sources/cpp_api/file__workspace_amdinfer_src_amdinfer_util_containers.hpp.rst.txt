@@ -40,7 +40,7 @@ Includes
 
 - ``type_traits``
 
-- ``vector``
+- ``vector`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector.cpp`)
 
 
 
@@ -52,7 +52,13 @@ Included By
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_core_tensor.cpp`
 
+- :ref:`file__workspace_amdinfer_src_amdinfer_models_base64_decode.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_models_base64_encode.cpp`
+
 - :ref:`file__workspace_amdinfer_src_amdinfer_models_echo_multi.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_models_invert_image.cpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_servers_grpc_server.cpp`
 
@@ -62,15 +68,13 @@ Included By
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_workers_c_plus_plus.cpp`
 
-- :ref:`file__workspace_amdinfer_src_amdinfer_workers_echo_multi.cpp`
-
-- :ref:`file__workspace_amdinfer_src_amdinfer_workers_invert_image.cpp`
-
 - :ref:`file__workspace_amdinfer_src_amdinfer_workers_migraphx.cpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_workers_pt_zendnn.cpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_workers_resnet50.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_responder.cpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_workers_xmodel.cpp`
 
@@ -90,9 +94,9 @@ Functions
 ---------
 
 
-- :ref:`exhale_function_containers_8hpp_1a1d706def706e8040615295c1696f5355`
-
 - :ref:`exhale_function_containers_8hpp_1ab77948aa3101edea0ef3a53b3a9bba4f`
+
+- :ref:`exhale_function_containers_8hpp_1a1d706def706e8040615295c1696f5355`
 
 - :ref:`exhale_function_containers_8hpp_1a99c908436f0a0b8939e1e31b73d1e8a2`
 

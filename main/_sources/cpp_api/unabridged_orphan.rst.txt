@@ -66,6 +66,11 @@ Variables
 .. toctree::
    :maxdepth: 5
 
+   variable_model__config_8cpp_1a7a1019f8d96c09cf752492a9f28f907c.rst
+
+.. toctree::
+   :maxdepth: 5
+
    variable_traits_8hpp_1a541edeed71c8938d70cdf47659f9a391.rst
 
 .. toctree::
@@ -76,7 +81,7 @@ Variables
 .. toctree::
    :maxdepth: 5
 
-   variable_aks__detect_8hpp_1aff4c1089315fd2d1ff79e575fb320332.rst
+   variable_aks__detect_8hpp_1a7005690caff676e0cf1c434d10844fc1.rst
 
 .. toctree::
    :maxdepth: 5
@@ -87,6 +92,11 @@ Variables
    :maxdepth: 5
 
    variable_resnet50__stream_8cpp_1adc9b3a6c8074468b5528a02f79137dab.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   variable_aks__detect_8hpp_1a39a6ef55956630c25322735f8e6e15c0.rst
 
 .. toctree::
    :maxdepth: 5
@@ -116,17 +126,17 @@ Variables
 .. toctree::
    :maxdepth: 5
 
-   variable_invert__image_8cpp_1a778cfb0679cd1b44d77c94cc1e64cf74.rst
+   variable_invert__video_8cpp_1a778cfb0679cd1b44d77c94cc1e64cf74.rst
 
 .. toctree::
    :maxdepth: 5
 
-   variable_invert__image_8cpp_1a3fe6b60514f224d88012b81a72f206b0.rst
+   variable_invert__video_8cpp_1a3fe6b60514f224d88012b81a72f206b0.rst
 
 .. toctree::
    :maxdepth: 5
 
-   variable_invert__image_8cpp_1ab862f12385b964a9f52578ce2b45f91a.rst
+   variable_invert__video_8cpp_1ab862f12385b964a9f52578ce2b45f91a.rst
 
 .. toctree::
    :maxdepth: 5
@@ -201,12 +211,12 @@ Variables
 .. toctree::
    :maxdepth: 5
 
-   variable_models_2echo__multi_8cpp_1afbb86105d54d5a6d56b02d0ffabfebe8.rst
+   variable_echo__multi_8cpp_1afbb86105d54d5a6d56b02d0ffabfebe8.rst
 
 .. toctree::
    :maxdepth: 5
 
-   variable_models_2echo__multi_8cpp_1a8b03977cd93d9bb002e89d614bbbfdb9.rst
+   variable_echo__multi_8cpp_1a8b03977cd93d9bb002e89d614bbbfdb9.rst
 
 .. toctree::
    :maxdepth: 5
@@ -221,17 +231,77 @@ Variables
 .. toctree::
    :maxdepth: 5
 
+   variable_base64__decode_8cpp_1a49f889671e129dd6efc31813bbbc481f.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   variable_base64__encode_8cpp_1a49f889671e129dd6efc31813bbbc481f.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   variable_invert__image_8cpp_1a49f889671e129dd6efc31813bbbc481f.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   variable_base64__decode_8cpp_1a74119c5aa1aecbbdcb1bf2db7368eab4.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   variable_base64__encode_8cpp_1a74119c5aa1aecbbdcb1bf2db7368eab4.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   variable_invert__image_8cpp_1a74119c5aa1aecbbdcb1bf2db7368eab4.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   variable_base64__decode_8cpp_1a0eaa06703265e46c8ce1ab3a1b1d3c70.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   variable_base64__encode_8cpp_1a0eaa06703265e46c8ce1ab3a1b1d3c70.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   variable_invert__image_8cpp_1a0eaa06703265e46c8ce1ab3a1b1d3c70.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   variable_base64__decode_8cpp_1a9bc9a18ebe4ffe55dbcb3fa0a26bb5af.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   variable_base64__encode_8cpp_1a9bc9a18ebe4ffe55dbcb3fa0a26bb5af.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   variable_invert__image_8cpp_1a9bc9a18ebe4ffe55dbcb3fa0a26bb5af.rst
+
+.. toctree::
+   :maxdepth: 5
+
    variable_build__options_8hpp_1a2cbbae723c01d1e388932882efbf9264.rst
 
 .. toctree::
    :maxdepth: 5
 
-   variable_models_2echo__multi_8cpp_1aef1d8b9952b78ddeb8bb591cbd16eb5d.rst
+   variable_echo__multi_8cpp_1aef1d8b9952b78ddeb8bb591cbd16eb5d.rst
 
 .. toctree::
    :maxdepth: 5
 
-   variable_models_2echo__multi_8cpp_1a295e485ab5ea3732dd7360c47e974d44.rst
+   variable_echo__multi_8cpp_1a295e485ab5ea3732dd7360c47e974d44.rst
 
 .. toctree::
    :maxdepth: 5
@@ -612,11 +682,6 @@ Files
 .. toctree::
    :maxdepth: 5
 
-   file__workspace_amdinfer_src_amdinfer_workers_aks.cpp.rst
-
-.. toctree::
-   :maxdepth: 5
-
    file__workspace_amdinfer_src_amdinfer_workers_aks_detect.cpp.rst
 
 .. toctree::
@@ -643,6 +708,16 @@ Files
    :maxdepth: 5
 
    file__workspace_amdinfer_src_amdinfer_util_base64.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_models_base64_decode.cpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_models_base64_encode.cpp.rst
 
 .. toctree::
    :maxdepth: 5
@@ -777,17 +852,7 @@ Files
 .. toctree::
    :maxdepth: 5
 
-   file__workspace_amdinfer_src_amdinfer_workers_echo.cpp.rst
-
-.. toctree::
-   :maxdepth: 5
-
    file__workspace_amdinfer_src_amdinfer_models_echo_multi.cpp.rst
-
-.. toctree::
-   :maxdepth: 5
-
-   file__workspace_amdinfer_src_amdinfer_workers_echo_multi.cpp.rst
 
 .. toctree::
    :maxdepth: 5
@@ -813,6 +878,16 @@ Files
    :maxdepth: 5
 
    file__workspace_amdinfer_src_amdinfer_util_exec.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_util_filesystem.cpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_util_filesystem.hpp.rst
 
 .. toctree::
    :maxdepth: 5
@@ -927,7 +1002,7 @@ Files
 .. toctree::
    :maxdepth: 5
 
-   file__workspace_amdinfer_src_amdinfer_workers_invert_image.cpp.rst
+   file__workspace_amdinfer_src_amdinfer_models_invert_image.cpp.rst
 
 .. toctree::
    :maxdepth: 5
@@ -978,6 +1053,16 @@ Files
    :maxdepth: 5
 
    file__workspace_amdinfer_include_amdinfer_core_mixins.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_core_model_config.cpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_core_model_config.hpp.rst
 
 .. toctree::
    :maxdepth: 5
@@ -1083,6 +1168,11 @@ Files
    :maxdepth: 5
 
    file__workspace_amdinfer_src_amdinfer_workers_resnet50_stream.cpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_workers_responder.cpp.rst
 
 .. toctree::
    :maxdepth: 5
@@ -1203,6 +1293,16 @@ Files
    :maxdepth: 5
 
    file__workspace_amdinfer_src_amdinfer_core_memory_pool_vart_tensor_allocator.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_buffers_vector.cpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__workspace_amdinfer_src_amdinfer_buffers_vector.hpp.rst
 
 .. toctree::
    :maxdepth: 5

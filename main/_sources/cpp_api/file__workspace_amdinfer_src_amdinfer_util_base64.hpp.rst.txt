@@ -44,13 +44,17 @@ Included By
 -----------
 
 
+- :ref:`file__workspace_amdinfer_src_amdinfer_models_base64_decode.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_models_base64_encode.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_models_invert_image.cpp`
+
 - :ref:`file__workspace_amdinfer_src_amdinfer_util_base64.cpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_workers_aks_detect.cpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_workers_aks_detect_stream.cpp`
-
-- :ref:`file__workspace_amdinfer_src_amdinfer_workers_invert_image.cpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_workers_invert_video.cpp`
 

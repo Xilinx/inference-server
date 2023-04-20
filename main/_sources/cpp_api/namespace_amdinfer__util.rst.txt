@@ -48,11 +48,17 @@ Functions
 
 - :ref:`exhale_function_containers_8hpp_1a95954e812c96e615ffc44e525f706868`
 
+- :ref:`exhale_function_string_8hpp_1a9e3dd8f418d6151cf89a6db45423e1f8`
+
 - :ref:`exhale_function_memory_8hpp_1a297476d933ddb20b1462132df4bf2b7c`
 
 - :ref:`exhale_function_string_8hpp_1a7e3149ce8983fc7bc253dd283c5d1327`
 
 - :ref:`exhale_function_exec_8cpp_1ad2f76a0098c3445320c56f8208b66a8f`
+
+- :ref:`exhale_function_filesystem_8cpp_1a9c139c7eb99db1b4be48805a5452548a`
+
+- :ref:`exhale_function_filesystem_8hpp_1add898d9050c402d6683c871b2417f4b9`
 
 - :ref:`exhale_function_timer_8cpp_1a8a0c21722d4843898884016ab59ba783`
 
@@ -61,6 +67,8 @@ Functions
 - :ref:`exhale_function_base64_8cpp_1a0b2049369714bfeecd9db0b350eba210`
 
 - :ref:`exhale_function_base64_8cpp_1afad08aa8530e43e678dfab1189b345f4`
+
+- :ref:`exhale_function_filesystem_8cpp_1a376d9403c48cc8e17b3db68c8193e6ee`
 
 - :ref:`exhale_function_read__nth__line_8cpp_1ab24290f139bfd0ba4a626bdd7d5412d4`
 

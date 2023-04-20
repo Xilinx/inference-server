@@ -39,6 +39,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <script src="../_static/copybutton.js"></script>
         <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
         <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+        <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
+        <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
+        <script defer="defer" src="../_static/tippy/cpp_api/file__workspace_amdinfer_include_amdinfer_declarations.hpp.62e262f4-d67c-4084-a247-fb4241469e7a.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" /> 
@@ -219,10 +222,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.inferAsyncOrdered"><code class="docutils literal notranslate"><span class="pre">inferAsyncOrdered()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.inferAsyncOrderedBatched"><code class="docutils literal notranslate"><span class="pre">inferAsyncOrderedBatched()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.inference_request_to_dict"><code class="docutils literal notranslate"><span class="pre">inference_request_to_dict()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.loadEnsemble"><code class="docutils literal notranslate"><span class="pre">loadEnsemble()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.parallel_infer"><code class="docutils literal notranslate"><span class="pre">parallel_infer()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.serverHasExtension"><code class="docutils literal notranslate"><span class="pre">serverHasExtension()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.start_http_client_server"><code class="docutils literal notranslate"><span class="pre">start_http_client_server()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.stringToArray"><code class="docutils literal notranslate"><span class="pre">stringToArray()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.unloadModels"><code class="docutils literal notranslate"><span class="pre">unloadModels()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.waitUntilModelNotReady"><code class="docutils literal notranslate"><span class="pre">waitUntilModelNotReady()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.waitUntilModelReady"><code class="docutils literal notranslate"><span class="pre">waitUntilModelReady()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.waitUntilServerReady"><code class="docutils literal notranslate"><span class="pre">waitUntilServerReady()</span></code></a></li>
 </ul>
@@ -476,7 +482,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li><p><code class="docutils literal notranslate"><span class="pre">memory</span></code> (<a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_core_memory_pool_cpu_allocator.cpp.html#file-workspace-amdinfer-src-amdinfer-core-memory-pool-cpu-allocator-cpp"><span class="std std-ref">File cpu_allocator.cpp</span></a>)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">string</span></code> (<a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_util_string.hpp.html#file-workspace-amdinfer-src-amdinfer-util-string-hpp"><span class="std std-ref">File string.hpp</span></a>)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">unordered_map</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">vector</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">vector</span></code> (<a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_buffers_vector.cpp.html#file-workspace-amdinfer-src-amdinfer-buffers-vector-cpp"><span class="std std-ref">File vector.cpp</span></a>)</p></li>
 </ul>
 </section>
 <section id="included-by">
@@ -498,18 +504,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li><p><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_servers_grpc_server.cpp.html#file-workspace-amdinfer-src-amdinfer-servers-grpc-server-cpp"><span class="std std-ref">File grpc_server.cpp</span></a></p></li>
 <li><p><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_servers_websocket_server.hpp.html#file-workspace-amdinfer-src-amdinfer-servers-websocket-server-hpp"><span class="std std-ref">File websocket_server.hpp</span></a></p></li>
 <li><p><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_util_queue.hpp.html#file-workspace-amdinfer-src-amdinfer-util-queue-hpp"><span class="std std-ref">File queue.hpp</span></a></p></li>
-<li><p><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_workers_aks.cpp.html#file-workspace-amdinfer-src-amdinfer-workers-aks-cpp"><span class="std std-ref">File aks.cpp</span></a></p></li>
 <li><p><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_workers_aks_detect.cpp.html#file-workspace-amdinfer-src-amdinfer-workers-aks-detect-cpp"><span class="std std-ref">File aks_detect.cpp</span></a></p></li>
 <li><p><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_workers_aks_detect_stream.cpp.html#file-workspace-amdinfer-src-amdinfer-workers-aks-detect-stream-cpp"><span class="std std-ref">File aks_detect_stream.cpp</span></a></p></li>
 <li><p><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_workers_c_plus_plus.cpp.html#file-workspace-amdinfer-src-amdinfer-workers-c-plus-plus-cpp"><span class="std std-ref">File c_plus_plus.cpp</span></a></p></li>
-<li><p><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_workers_echo.cpp.html#file-workspace-amdinfer-src-amdinfer-workers-echo-cpp"><span class="std std-ref">File echo.cpp</span></a></p></li>
-<li><p><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_workers_echo_multi.cpp.html#file-workspace-amdinfer-src-amdinfer-workers-echo-multi-cpp"><span class="std std-ref">File echo_multi.cpp</span></a></p></li>
-<li><p><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_workers_invert_image.cpp.html#file-workspace-amdinfer-src-amdinfer-workers-invert-image-cpp"><span class="std std-ref">File invert_image.cpp</span></a></p></li>
 <li><p><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_workers_invert_video.cpp.html#file-workspace-amdinfer-src-amdinfer-workers-invert-video-cpp"><span class="std std-ref">File invert_video.cpp</span></a></p></li>
 <li><p><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_workers_migraphx.cpp.html#file-workspace-amdinfer-src-amdinfer-workers-migraphx-cpp"><span class="std std-ref">File migraphx.cpp</span></a></p></li>
 <li><p><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_workers_pt_zendnn.cpp.html#file-workspace-amdinfer-src-amdinfer-workers-pt-zendnn-cpp"><span class="std std-ref">File pt_zendnn.cpp</span></a></p></li>
 <li><p><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_workers_resnet50.cpp.html#file-workspace-amdinfer-src-amdinfer-workers-resnet50-cpp"><span class="std std-ref">File resnet50.cpp</span></a></p></li>
 <li><p><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_workers_resnet50_stream.cpp.html#file-workspace-amdinfer-src-amdinfer-workers-resnet50-stream-cpp"><span class="std std-ref">File resnet50_stream.cpp</span></a></p></li>
+<li><p><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_workers_responder.cpp.html#file-workspace-amdinfer-src-amdinfer-workers-responder-cpp"><span class="std std-ref">File responder.cpp</span></a></p></li>
 <li><p><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_workers_tf_zendnn.cpp.html#file-workspace-amdinfer-src-amdinfer-workers-tf-zendnn-cpp"><span class="std std-ref">File tf_zendnn.cpp</span></a></p></li>
 <li><p><a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_workers_xmodel.cpp.html#file-workspace-amdinfer-src-amdinfer-workers-xmodel-cpp"><span class="std std-ref">File xmodel.cpp</span></a></p></li>
 <li><p><a class="reference internal" href="file__workspace_amdinfer_include_amdinfer_amdinfer.hpp.html#file-workspace-amdinfer-include-amdinfer-amdinfer-hpp"><span class="std std-ref">File amdinfer.hpp</span></a></p></li>
@@ -565,7 +568,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on March 20, 2023.
+      <span class="lastupdated">Last updated on April 13, 2023.
       </span></p>
   </div>
 

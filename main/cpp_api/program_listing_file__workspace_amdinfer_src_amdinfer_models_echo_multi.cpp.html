@@ -39,6 +39,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <script src="../_static/copybutton.js"></script>
         <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
         <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+        <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
+        <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
+        <script defer="defer" src="../_static/tippy/cpp_api/program_listing_file__workspace_amdinfer_src_amdinfer_models_echo_multi.cpp.8ea3c9ee-57f7-4f68-973e-7ab97828ff9a.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" /> 
@@ -219,10 +222,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.inferAsyncOrdered"><code class="docutils literal notranslate"><span class="pre">inferAsyncOrdered()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.inferAsyncOrderedBatched"><code class="docutils literal notranslate"><span class="pre">inferAsyncOrderedBatched()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.inference_request_to_dict"><code class="docutils literal notranslate"><span class="pre">inference_request_to_dict()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.loadEnsemble"><code class="docutils literal notranslate"><span class="pre">loadEnsemble()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.parallel_infer"><code class="docutils literal notranslate"><span class="pre">parallel_infer()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.serverHasExtension"><code class="docutils literal notranslate"><span class="pre">serverHasExtension()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.start_http_client_server"><code class="docutils literal notranslate"><span class="pre">start_http_client_server()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.stringToArray"><code class="docutils literal notranslate"><span class="pre">stringToArray()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.unloadModels"><code class="docutils literal notranslate"><span class="pre">unloadModels()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.waitUntilModelNotReady"><code class="docutils literal notranslate"><span class="pre">waitUntilModelNotReady()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.waitUntilModelReady"><code class="docutils literal notranslate"><span class="pre">waitUntilModelReady()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.waitUntilServerReady"><code class="docutils literal notranslate"><span class="pre">waitUntilServerReady()</span></code></a></li>
 </ul>
@@ -466,6 +472,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="c1">// limitations under the License.</span>
 
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/batching/batch.hpp&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/buffers/vector.hpp&quot;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/core/inference_request.hpp&quot;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/core/inference_response.hpp&quot;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/core/parameters.hpp&quot;</span>
@@ -495,32 +502,38 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="p">}</span>
 
 <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">amdinfer</span><span class="o">::</span><span class="n">Tensor</span><span class="o">&gt;</span><span class="w"> </span><span class="n">getOutputs</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">amdinfer</span><span class="o">::</span><span class="n">Tensor</span><span class="o">&gt;</span><span class="w"> </span><span class="n">output_tensors</span><span class="p">;</span>
-<span class="w">  </span><span class="n">output_tensors</span><span class="p">.</span><span class="n">reserve</span><span class="p">(</span><span class="n">kOutputTensors</span><span class="p">);</span>
-<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">kOutputTensors</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">size_t</span><span class="o">&gt;</span><span class="w"> </span><span class="n">shape</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">kOutputLengths</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">i</span><span class="p">)};</span>
-<span class="w">    </span><span class="n">output_tensors</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="s">&quot;output&quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">i</span><span class="p">),</span><span class="w"> </span><span class="n">shape</span><span class="p">,</span>
-<span class="w">                                </span><span class="n">amdinfer</span><span class="o">::</span><span class="n">DataType</span><span class="o">::</span><span class="n">Uint32</span><span class="p">);</span>
-<span class="w">  </span><span class="p">}</span>
-<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">output_tensors</span><span class="p">;</span>
+<span class="w">  </span><span class="c1">// intentionally return an empty shape, indicating an unknown output tensor</span>
+<span class="w">  </span><span class="c1">// size even though it is known in this case. This forces the worker to use</span>
+<span class="w">  </span><span class="c1">// different logic to invoke the run method.</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="p">{};</span>
 <span class="p">}</span>
 
-<span class="kt">void</span><span class="w"> </span><span class="n">run</span><span class="p">(</span><span class="n">amdinfer</span><span class="o">::</span><span class="n">Batch</span><span class="o">*</span><span class="w"> </span><span class="n">batch</span><span class="p">,</span><span class="w"> </span><span class="n">amdinfer</span><span class="o">::</span><span class="n">Batch</span><span class="o">*</span><span class="w"> </span><span class="n">new_batch</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="n">amdinfer</span><span class="o">::</span><span class="n">BatchPtr</span><span class="w"> </span><span class="n">run</span><span class="p">(</span><span class="n">amdinfer</span><span class="o">::</span><span class="n">Batch</span><span class="o">*</span><span class="w"> </span><span class="n">batch</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="n">amdinfer</span><span class="o">::</span><span class="n">Logger</span><span class="w"> </span><span class="n">logger</span><span class="p">{</span><span class="n">amdinfer</span><span class="o">::</span><span class="n">Loggers</span><span class="o">::</span><span class="n">Server</span><span class="p">};</span>
 
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">new_batch</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">batch</span><span class="o">-&gt;</span><span class="n">propagate</span><span class="p">();</span>
 <span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">batch_size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">batch</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">();</span>
+<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">data_size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">amdinfer</span><span class="o">::</span><span class="n">DataType</span><span class="p">(</span><span class="s">&quot;Uint32&quot;</span><span class="p">).</span><span class="n">size</span><span class="p">();</span>
+
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">amdinfer</span><span class="o">::</span><span class="n">BufferPtr</span><span class="o">&gt;</span><span class="w"> </span><span class="n">input_buffers</span><span class="p">;</span>
+<span class="w">  </span><span class="n">input_buffers</span><span class="p">.</span><span class="n">reserve</span><span class="p">(</span><span class="n">kOutputTensors</span><span class="p">);</span>
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">kOutputTensors</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">input_buffers</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">amdinfer</span><span class="o">::</span><span class="n">VectorBuffer</span><span class="o">&gt;</span><span class="p">(</span>
+<span class="w">      </span><span class="n">kOutputLengths</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">batch_size</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">data_size</span><span class="p">));</span>
+<span class="w">  </span><span class="p">}</span>
+
 <span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">batch_size</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">req</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">batch</span><span class="o">-&gt;</span><span class="n">getRequest</span><span class="p">(</span><span class="n">j</span><span class="p">);</span>
-<span class="cp">#ifdef AMDINFER_ENABLE_TRACING</span>
-<span class="w">    </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">trace</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">batch</span><span class="o">-&gt;</span><span class="n">getTrace</span><span class="p">(</span><span class="n">j</span><span class="p">);</span>
-<span class="w">    </span><span class="n">trace</span><span class="o">-&gt;</span><span class="n">startSpan</span><span class="p">(</span><span class="s">&quot;echoMulti&quot;</span><span class="p">);</span>
-<span class="cp">#endif</span>
-<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">new_request</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">new_batch</span><span class="o">-&gt;</span><span class="n">getRequest</span><span class="p">(</span><span class="n">j</span><span class="p">);</span>
-<span class="w">    </span><span class="n">new_request</span><span class="o">-&gt;</span><span class="n">setCallback</span><span class="p">(</span><span class="n">req</span><span class="o">-&gt;</span><span class="n">getCallback</span><span class="p">());</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">new_request</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">req</span><span class="o">-&gt;</span><span class="n">propagate</span><span class="p">();</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">kOutputTensors</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">size_t</span><span class="o">&gt;</span><span class="w"> </span><span class="n">shape</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">kOutputLengths</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">i</span><span class="p">)};</span>
+<span class="w">      </span><span class="k">auto</span><span class="o">*</span><span class="w"> </span><span class="n">data_ptr</span><span class="w"> </span><span class="o">=</span>
+<span class="w">        </span><span class="n">input_buffers</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">(</span><span class="n">j</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">kOutputLengths</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">data_size</span><span class="p">);</span>
+<span class="w">      </span><span class="n">new_request</span><span class="o">-&gt;</span><span class="n">addInputTensor</span><span class="p">(</span><span class="n">data_ptr</span><span class="p">,</span><span class="w"> </span><span class="n">shape</span><span class="p">,</span><span class="w"> </span><span class="n">amdinfer</span><span class="o">::</span><span class="n">DataType</span><span class="o">::</span><span class="n">Uint32</span><span class="p">,</span>
+<span class="w">                                  </span><span class="s">&quot;output&quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">i</span><span class="p">));</span>
+<span class="w">    </span><span class="p">}</span>
 
-<span class="w">    </span><span class="c1">// new_request-&gt;setID(req-&gt;getID());</span>
 <span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">inputs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">req</span><span class="o">-&gt;</span><span class="n">getInputs</span><span class="p">();</span>
-<span class="w">    </span><span class="c1">// auto outputs = req-&gt;getOutputs();</span>
 
 <span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">args</span><span class="p">;</span>
 <span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">input_num</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">amdinfer</span><span class="o">::</span><span class="n">util</span><span class="o">::</span><span class="n">containerSum</span><span class="p">(</span><span class="n">kInputLengths</span><span class="p">);</span>
@@ -545,15 +558,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="w">      </span><span class="p">}</span>
 <span class="w">    </span><span class="p">}</span>
 
-<span class="cp">#ifdef AMDINFER_ENABLE_TRACING</span>
-<span class="w">    </span><span class="n">trace</span><span class="o">-&gt;</span><span class="n">endSpan</span><span class="p">();</span>
-<span class="w">    </span><span class="n">new_batch</span><span class="o">-&gt;</span><span class="n">addTrace</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">trace</span><span class="p">));</span>
-<span class="cp">#endif</span>
-
-<span class="cp">#ifdef AMDINFER_ENABLE_METRICS</span>
-<span class="w">    </span><span class="n">new_batch</span><span class="o">-&gt;</span><span class="n">addTime</span><span class="p">(</span><span class="n">batch</span><span class="o">-&gt;</span><span class="n">getTime</span><span class="p">(</span><span class="n">j</span><span class="p">));</span>
-<span class="cp">#endif</span>
+<span class="w">    </span><span class="n">new_batch</span><span class="o">-&gt;</span><span class="n">addRequest</span><span class="p">(</span><span class="n">new_request</span><span class="p">);</span>
+<span class="w">    </span><span class="n">new_batch</span><span class="o">-&gt;</span><span class="n">setModel</span><span class="p">(</span><span class="n">j</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;echo_multi&quot;</span><span class="p">);</span>
 <span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="n">new_batch</span><span class="o">-&gt;</span><span class="n">setBuffers</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">input_buffers</span><span class="p">),</span><span class="w"> </span><span class="p">{});</span>
+
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">new_batch</span><span class="p">;</span>
 <span class="p">}</span>
 
 <span class="p">}</span><span class="w">  </span><span class="c1">// extern &quot;C&quot;</span>
@@ -580,7 +591,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on March 20, 2023.
+      <span class="lastupdated">Last updated on April 13, 2023.
       </span></p>
   </div>
 

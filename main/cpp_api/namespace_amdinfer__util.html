@@ -39,6 +39,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <script src="../_static/copybutton.js"></script>
         <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
         <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+        <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
+        <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
+        <script defer="defer" src="../_static/tippy/cpp_api/namespace_amdinfer__util.68515834-dfc5-4850-93b0-08253bb55bc9.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -221,10 +224,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.inferAsyncOrdered"><code class="docutils literal notranslate"><span class="pre">inferAsyncOrdered()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.inferAsyncOrderedBatched"><code class="docutils literal notranslate"><span class="pre">inferAsyncOrderedBatched()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.inference_request_to_dict"><code class="docutils literal notranslate"><span class="pre">inference_request_to_dict()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.loadEnsemble"><code class="docutils literal notranslate"><span class="pre">loadEnsemble()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.parallel_infer"><code class="docutils literal notranslate"><span class="pre">parallel_infer()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.serverHasExtension"><code class="docutils literal notranslate"><span class="pre">serverHasExtension()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.start_http_client_server"><code class="docutils literal notranslate"><span class="pre">start_http_client_server()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.stringToArray"><code class="docutils literal notranslate"><span class="pre">stringToArray()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.unloadModels"><code class="docutils literal notranslate"><span class="pre">unloadModels()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.waitUntilModelNotReady"><code class="docutils literal notranslate"><span class="pre">waitUntilModelNotReady()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.waitUntilModelReady"><code class="docutils literal notranslate"><span class="pre">waitUntilModelReady()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.waitUntilServerReady"><code class="docutils literal notranslate"><span class="pre">waitUntilServerReady()</span></code></a></li>
 </ul>
@@ -483,13 +489,17 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li><p><a class="reference internal" href="function_containers_8hpp_1ab77948aa3101edea0ef3a53b3a9bba4f.html#exhale-function-containers-8hpp-1ab77948aa3101edea0ef3a53b3a9bba4f"><span class="std std-ref">Template Function amdinfer::util::containerProduct(const Container&amp;)</span></a></p></li>
 <li><p><a class="reference internal" href="function_containers_8hpp_1a99c908436f0a0b8939e1e31b73d1e8a2.html#exhale-function-containers-8hpp-1a99c908436f0a0b8939e1e31b73d1e8a2"><span class="std std-ref">Template Function amdinfer::util::containerSum(Iter, Iter)</span></a></p></li>
 <li><p><a class="reference internal" href="function_containers_8hpp_1a95954e812c96e615ffc44e525f706868.html#exhale-function-containers-8hpp-1a95954e812c96e615ffc44e525f706868"><span class="std std-ref">Template Function amdinfer::util::containerSum(const Container&amp;)</span></a></p></li>
+<li><p><a class="reference internal" href="function_string_8hpp_1a9e3dd8f418d6151cf89a6db45423e1f8.html#exhale-function-string-8hpp-1a9e3dd8f418d6151cf89a6db45423e1f8"><span class="std std-ref">Function amdinfer::util::contains</span></a></p></li>
 <li><p><a class="reference internal" href="function_memory_8hpp_1a297476d933ddb20b1462132df4bf2b7c.html#exhale-function-memory-8hpp-1a297476d933ddb20b1462132df4bf2b7c"><span class="std std-ref">Template Function amdinfer::util::copy</span></a></p></li>
 <li><p><a class="reference internal" href="function_string_8hpp_1a7e3149ce8983fc7bc253dd283c5d1327.html#exhale-function-string-8hpp-1a7e3149ce8983fc7bc253dd283c5d1327"><span class="std std-ref">Function amdinfer::util::endsWith</span></a></p></li>
 <li><p><a class="reference internal" href="function_exec_8cpp_1ad2f76a0098c3445320c56f8208b66a8f.html#exhale-function-exec-8cpp-1ad2f76a0098c3445320c56f8208b66a8f"><span class="std std-ref">Function amdinfer::util::exec</span></a></p></li>
+<li><p><a class="reference internal" href="function_filesystem_8cpp_1a9c139c7eb99db1b4be48805a5452548a.html#exhale-function-filesystem-8cpp-1a9c139c7eb99db1b4be48805a5452548a"><span class="std std-ref">Function amdinfer::util::findFile(const fs::path&amp;, const std::string&amp;)</span></a></p></li>
+<li><p><a class="reference internal" href="function_filesystem_8hpp_1add898d9050c402d6683c871b2417f4b9.html#exhale-function-filesystem-8hpp-1add898d9050c402d6683c871b2417f4b9"><span class="std std-ref">Function amdinfer::util::findFile(const std::filesystem::path&amp;, const std::string&amp;)</span></a></p></li>
 <li><p><a class="reference internal" href="function_timer_8cpp_1a8a0c21722d4843898884016ab59ba783.html#exhale-function-timer-8cpp-1a8a0c21722d4843898884016ab59ba783"><span class="std std-ref">Function amdinfer::util::getTime</span></a></p></li>
 <li><p><a class="reference internal" href="function_string_8hpp_1af7be5da4787523697f32822ac12bfaef.html#exhale-function-string-8hpp-1af7be5da4787523697f32822ac12bfaef"><span class="std std-ref">Function amdinfer::util::isLower</span></a></p></li>
 <li><p><a class="reference internal" href="function_base64_8cpp_1a0b2049369714bfeecd9db0b350eba210.html#exhale-function-base64-8cpp-1a0b2049369714bfeecd9db0b350eba210"><span class="std std-ref">Function amdinfer::util::minDecodeLength</span></a></p></li>
 <li><p><a class="reference internal" href="function_base64_8cpp_1afad08aa8530e43e678dfab1189b345f4.html#exhale-function-base64-8cpp-1afad08aa8530e43e678dfab1189b345f4"><span class="std std-ref">Function amdinfer::util::minEncodeLength</span></a></p></li>
+<li><p><a class="reference internal" href="function_filesystem_8cpp_1a376d9403c48cc8e17b3db68c8193e6ee.html#exhale-function-filesystem-8cpp-1a376d9403c48cc8e17b3db68c8193e6ee"><span class="std std-ref">Function amdinfer::util::readFile</span></a></p></li>
 <li><p><a class="reference internal" href="function_read__nth__line_8cpp_1ab24290f139bfd0ba4a626bdd7d5412d4.html#exhale-function-read-nth-line-8cpp-1ab24290f139bfd0ba4a626bdd7d5412d4"><span class="std std-ref">Function amdinfer::util::readNthLine</span></a></p></li>
 <li><p><a class="reference internal" href="function_thread_8hpp_1a1f755ec0f69754bbf457b2c7f68a16c7.html#exhale-function-thread-8hpp-1a1f755ec0f69754bbf457b2c7f68a16c7"><span class="std std-ref">Function amdinfer::util::setThreadName(const char *)</span></a></p></li>
 <li><p><a class="reference internal" href="function_thread_8hpp_1a9f542ca1a9ee9128a5871d146acf8b1b.html#exhale-function-thread-8hpp-1a9f542ca1a9ee9128a5871d146acf8b1b"><span class="std std-ref">Function amdinfer::util::setThreadName(const std::string&amp;)</span></a></p></li>
@@ -537,7 +547,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on March 20, 2023.
+      <span class="lastupdated">Last updated on April 13, 2023.
       </span></p>
   </div>
 

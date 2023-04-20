@@ -39,6 +39,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <script src="../_static/copybutton.js"></script>
         <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
         <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+        <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
+        <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
+        <script defer="defer" src="../_static/tippy/cpp_api/file__workspace_amdinfer_src_amdinfer_core_model_repository.cpp.fa0f72ba-8fd8-4487-b684-b6c547840b23.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" /> 
@@ -219,10 +222,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.inferAsyncOrdered"><code class="docutils literal notranslate"><span class="pre">inferAsyncOrdered()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.inferAsyncOrderedBatched"><code class="docutils literal notranslate"><span class="pre">inferAsyncOrderedBatched()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.inference_request_to_dict"><code class="docutils literal notranslate"><span class="pre">inference_request_to_dict()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.loadEnsemble"><code class="docutils literal notranslate"><span class="pre">loadEnsemble()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.parallel_infer"><code class="docutils literal notranslate"><span class="pre">parallel_infer()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.serverHasExtension"><code class="docutils literal notranslate"><span class="pre">serverHasExtension()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.start_http_client_server"><code class="docutils literal notranslate"><span class="pre">start_http_client_server()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.stringToArray"><code class="docutils literal notranslate"><span class="pre">stringToArray()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.unloadModels"><code class="docutils literal notranslate"><span class="pre">unloadModels()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.waitUntilModelNotReady"><code class="docutils literal notranslate"><span class="pre">waitUntilModelNotReady()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.waitUntilModelReady"><code class="docutils literal notranslate"><span class="pre">waitUntilModelReady()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.waitUntilServerReady"><code class="docutils literal notranslate"><span class="pre">waitUntilServerReady()</span></code></a></li>
 </ul>
@@ -473,17 +479,21 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">amdinfer/core/endpoints.hpp</span></code> (<a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_core_endpoints.hpp.html#file-workspace-amdinfer-src-amdinfer-core-endpoints-hpp"><span class="std std-ref">File endpoints.hpp</span></a>)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">amdinfer/core/exceptions.hpp</span></code> (<a class="reference internal" href="file__workspace_amdinfer_include_amdinfer_core_exceptions.hpp.html#file-workspace-amdinfer-include-amdinfer-core-exceptions-hpp"><span class="std std-ref">File exceptions.hpp</span></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">amdinfer/core/model_config.hpp</span></code> (<a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_core_model_config.hpp.html#file-workspace-amdinfer-src-amdinfer-core-model-config-hpp"><span class="std std-ref">File model_config.hpp</span></a>)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">amdinfer/core/model_repository.hpp</span></code> (<a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_core_model_repository.hpp.html#file-workspace-amdinfer-src-amdinfer-core-model-repository-hpp"><span class="std std-ref">File model_repository.hpp</span></a>)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">amdinfer/core/parameters.hpp</span></code> (<a class="reference internal" href="file__workspace_amdinfer_include_amdinfer_core_parameters.hpp.html#file-workspace-amdinfer-include-amdinfer-core-parameters-hpp"><span class="std std-ref">File parameters.hpp</span></a>)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">amdinfer/observation/logging.hpp</span></code> (<a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_observation_logging.hpp.html#file-workspace-amdinfer-src-amdinfer-observation-logging-hpp"><span class="std std-ref">File logging.hpp</span></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">amdinfer/util/filesystem.hpp</span></code> (<a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_util_filesystem.hpp.html#file-workspace-amdinfer-src-amdinfer-util-filesystem-hpp"><span class="std std-ref">File filesystem.hpp</span></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">amdinfer/util/string.hpp</span></code> (<a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_util_string.hpp.html#file-workspace-amdinfer-src-amdinfer-util-string-hpp"><span class="std std-ref">File string.hpp</span></a>)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">chrono</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">fcntl.h</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">filesystem</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">filesystem</span></code> (<a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_util_filesystem.cpp.html#file-workspace-amdinfer-src-amdinfer-util-filesystem-cpp"><span class="std std-ref">File filesystem.cpp</span></a>)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">google/protobuf/io/zero_copy_stream_impl.h</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">google/protobuf/repeated_ptr_field.h</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">google/protobuf/text_format.h</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">model_config.pb.h</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">thread</span></code> (<a class="reference internal" href="file__workspace_amdinfer_src_amdinfer_util_thread.hpp.html#file-workspace-amdinfer-src-amdinfer-util-thread-hpp"><span class="std std-ref">File thread.hpp</span></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">toml++/toml.h</span></code></p></li>
 </ul>
 </section>
 <section id="namespaces">
@@ -495,8 +505,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <section id="functions">
 <h2>Functions<a class="headerlink" href="#functions" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
+<li><p><a class="reference internal" href="function_model__repository_8cpp_1a7ea03e4b5c22db96ecf9ef1cc9d23cdd.html#exhale-function-model-repository-8cpp-1a7ea03e4b5c22db96ecf9ef1cc9d23cdd"><span class="std std-ref">Function amdinfer::findConfigFile</span></a></p></li>
 <li><p><a class="reference internal" href="function_model__repository_8cpp_1a8a80f1f2c5954b017a5bd047957a638f.html#exhale-function-model-repository-8cpp-1a8a80f1f2c5954b017a5bd047957a638f"><span class="std std-ref">Function amdinfer::mapProtoToParameters2</span></a></p></li>
-<li><p><a class="reference internal" href="function_model__repository_8cpp_1a05cd20aa1908b4475961f21cbdaf1e76.html#exhale-function-model-repository-8cpp-1a05cd20aa1908b4475961f21cbdaf1e76"><span class="std std-ref">Function amdinfer::parseModel(const fs::path&amp;, const std::string&amp;, ParameterMap *)</span></a></p></li>
+<li><p><a class="reference internal" href="function_model__repository_8cpp_1ad3799a9788bef596e2144c16b8e3626f.html#exhale-function-model-repository-8cpp-1ad3799a9788bef596e2144c16b8e3626f"><span class="std std-ref">Function amdinfer::openConfigFile</span></a></p></li>
+<li><p><a class="reference internal" href="function_model__repository_8cpp_1acb79361ac48cfb11a0480445e7e6cfc2.html#exhale-function-model-repository-8cpp-1acb79361ac48cfb11a0480445e7e6cfc2"><span class="std std-ref">Function amdinfer::parseModel(const fs::path&amp;, const std::string&amp;)</span></a></p></li>
 </ul>
 </section>
 </section>
@@ -520,7 +532,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on March 20, 2023.
+      <span class="lastupdated">Last updated on April 13, 2023.
       </span></p>
   </div>
 

@@ -1,0 +1,13 @@
+.. _exhale_function_client_8cpp_1aeca57ac6adc6191c9209e19e70b2c95f:
+
+Function amdinfer::unloadModels
+===============================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_clients_client.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: amdinfer::unloadModels(const Client *, const std::vector<std::string>&)

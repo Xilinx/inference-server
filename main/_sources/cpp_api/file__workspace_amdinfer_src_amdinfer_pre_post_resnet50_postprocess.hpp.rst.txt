@@ -33,7 +33,7 @@ Includes
 
 - ``amdinfer/pre_post/softmax.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_pre_post_softmax.hpp`)
 
-- ``vector``
+- ``vector`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector.cpp`)
 
 
 

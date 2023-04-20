@@ -31,7 +31,7 @@ Includes
 
 - ``queue`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_queue.hpp`)
 
-- ``vector``
+- ``vector`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector.cpp`)
 
 
 

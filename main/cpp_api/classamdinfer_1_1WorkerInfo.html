@@ -39,10 +39,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <script src="../_static/copybutton.js"></script>
         <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
         <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+        <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
+        <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
+        <script defer="defer" src="../_static/tippy/cpp_api/classamdinfer_1_1WorkerInfo.f6416f38-72de-4b0d-b007-c65b6fb4a175.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Class Aks" href="classamdinfer_1_1workers_1_1Aks.html" />
+    <link rel="next" title="Class AksDetect" href="classamdinfer_1_1workers_1_1AksDetect.html" />
     <link rel="prev" title="Class WebSocketClient::WebSocketClientImpl" href="classamdinfer_1_1WebSocketClient_1_1WebSocketClientImpl.html" /> 
 </head>
 
@@ -221,10 +224,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.inferAsyncOrdered"><code class="docutils literal notranslate"><span class="pre">inferAsyncOrdered()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.inferAsyncOrderedBatched"><code class="docutils literal notranslate"><span class="pre">inferAsyncOrderedBatched()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.inference_request_to_dict"><code class="docutils literal notranslate"><span class="pre">inference_request_to_dict()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.loadEnsemble"><code class="docutils literal notranslate"><span class="pre">loadEnsemble()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.parallel_infer"><code class="docutils literal notranslate"><span class="pre">parallel_infer()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.serverHasExtension"><code class="docutils literal notranslate"><span class="pre">serverHasExtension()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.start_http_client_server"><code class="docutils literal notranslate"><span class="pre">start_http_client_server()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.stringToArray"><code class="docutils literal notranslate"><span class="pre">stringToArray()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.unloadModels"><code class="docutils literal notranslate"><span class="pre">unloadModels()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.waitUntilModelNotReady"><code class="docutils literal notranslate"><span class="pre">waitUntilModelNotReady()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.waitUntilModelReady"><code class="docutils literal notranslate"><span class="pre">waitUntilModelReady()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.waitUntilServerReady"><code class="docutils literal notranslate"><span class="pre">waitUntilServerReady()</span></code></a></li>
 </ul>
@@ -465,8 +471,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer10WorkerInfo10WorkerInfoERKNSt6stringEP12ParameterMapP10MemoryPool">
-<span id="_CPPv3N8amdinfer10WorkerInfo10WorkerInfoERKNSt6stringEP12ParameterMapP10MemoryPool"></span><span id="_CPPv2N8amdinfer10WorkerInfo10WorkerInfoERKNSt6stringEP12ParameterMapP10MemoryPool"></span><span id="amdinfer::WorkerInfo::WorkerInfo__ssCR.ParameterMapP.MemoryPoolP"></span><span class="target" id="classamdinfer_1_1WorkerInfo_1a94be2827586adf0cced118713910d13f"></span><span class="sig-name descname"><span class="n"><span class="pre">WorkerInfo</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">name</span></span>, <a class="reference internal" href="classamdinfer_1_1ParameterMap.html#_CPPv4N8amdinfer12ParameterMapE" title="amdinfer::ParameterMap"><span class="n"><span class="pre">ParameterMap</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">parameters</span></span>, <a class="reference internal" href="classamdinfer_1_1MemoryPool.html#_CPPv4N8amdinfer10MemoryPoolE" title="amdinfer::MemoryPool"><span class="n"><span class="pre">MemoryPool</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pool</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer10WorkerInfo10WorkerInfoERKNSt6stringEP12ParameterMapP10MemoryPool" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer10WorkerInfo10WorkerInfoERKNSt6stringEP12ParameterMapP10MemoryPoolP13BatchPtrQueueRKNSt6vectorI16MemoryAllocatorsEE">
+<span id="_CPPv3N8amdinfer10WorkerInfo10WorkerInfoERKNSt6stringEP12ParameterMapP10MemoryPoolP13BatchPtrQueueRKNSt6vectorI16MemoryAllocatorsEE"></span><span id="_CPPv2N8amdinfer10WorkerInfo10WorkerInfoERKNSt6stringEP12ParameterMapP10MemoryPoolP13BatchPtrQueueRKNSt6vectorI16MemoryAllocatorsEE"></span><span id="amdinfer::WorkerInfo::WorkerInfo__ssCR.ParameterMapP.MemoryPoolP.BatchPtrQueueP.std::vector:MemoryAllocators:CR"></span><span class="target" id="classamdinfer_1_1WorkerInfo_1a0ed76ead41a08bc00a79bd3eff429e3d"></span><span class="sig-name descname"><span class="n"><span class="pre">WorkerInfo</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">name</span></span>, <a class="reference internal" href="classamdinfer_1_1ParameterMap.html#_CPPv4N8amdinfer12ParameterMapE" title="amdinfer::ParameterMap"><span class="n"><span class="pre">ParameterMap</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">parameters</span></span>, <a class="reference internal" href="classamdinfer_1_1MemoryPool.html#_CPPv4N8amdinfer10MemoryPoolE" title="amdinfer::MemoryPool"><span class="n"><span class="pre">MemoryPool</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pool</span></span>, <a class="reference internal" href="typedef_batcher_8hpp_1adde4237ff9c6ea5f847a1d49faadad89.html#_CPPv4N8amdinfer13BatchPtrQueueE" title="amdinfer::BatchPtrQueue"><span class="n"><span class="pre">BatchPtrQueue</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">next</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="enum_memory__allocator_8hpp_1a7c5b9c96a6c33be879d5f8b8eb3cd8d9.html#_CPPv4N8amdinfer16MemoryAllocatorsE" title="amdinfer::MemoryAllocators"><span class="n"><span class="pre">MemoryAllocators</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">next_allocators</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer10WorkerInfo10WorkerInfoERKNSt6stringEP12ParameterMapP10MemoryPoolP13BatchPtrQueueRKNSt6vectorI16MemoryAllocatorsEE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Construct a new <a class="reference internal" href="#classamdinfer_1_1WorkerInfo"><span class="std std-ref">WorkerInfo</span></a> object. </p>
 </dd></dl>
 
@@ -510,6 +516,17 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>InferenceRequestPtrQueue* </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8amdinfer10WorkerInfo13getInputQueueEv">
+<span id="_CPPv3NK8amdinfer10WorkerInfo13getInputQueueEv"></span><span id="_CPPv2NK8amdinfer10WorkerInfo13getInputQueueEv"></span><span id="amdinfer::WorkerInfo::getInputQueueC"></span><span class="target" id="classamdinfer_1_1WorkerInfo_1aa67262e09a7f9a802c4276f9c52fb110"></span><a class="reference internal" href="typedef_batcher_8hpp_1adde4237ff9c6ea5f847a1d49faadad89.html#_CPPv4N8amdinfer13BatchPtrQueueE" title="amdinfer::BatchPtrQueue"><span class="n"><span class="pre">BatchPtrQueue</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">getInputQueue</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer10WorkerInfo13getInputQueueEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Get the queue associated with this worker to send it batches. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>BatchPtrQueue* </p>
 </dd>
 </dl>
 </dd></dl>
@@ -565,6 +582,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </dd></dl>
 
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8amdinfer10WorkerInfo13getAllocatorsEv">
+<span id="_CPPv3NK8amdinfer10WorkerInfo13getAllocatorsEv"></span><span id="_CPPv2NK8amdinfer10WorkerInfo13getAllocatorsEv"></span><span id="amdinfer::WorkerInfo::getAllocatorsC"></span><span class="target" id="classamdinfer_1_1WorkerInfo_1a46ccdbebff873d6d99c230c736bd67f0"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="enum_memory__allocator_8hpp_1a7c5b9c96a6c33be879d5f8b8eb3cd8d9.html#_CPPv4N8amdinfer16MemoryAllocatorsE" title="amdinfer::MemoryAllocators"><span class="n"><span class="pre">MemoryAllocators</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">getAllocators</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer10WorkerInfo13getAllocatorsEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK8amdinfer10WorkerInfo11getMetadataEv">
 <span id="_CPPv3NK8amdinfer10WorkerInfo11getMetadataEv"></span><span id="_CPPv2NK8amdinfer10WorkerInfo11getMetadataEv"></span><span id="amdinfer::WorkerInfo::getMetadataC"></span><span class="target" id="classamdinfer_1_1WorkerInfo_1abdb29c369f7af0582a01361869039bf3"></span><a class="reference internal" href="classamdinfer_1_1ModelMetadata.html#_CPPv4N8amdinfer13ModelMetadataE" title="amdinfer::ModelMetadata"><span class="n"><span class="pre">ModelMetadata</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">getMetadata</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer10WorkerInfo11getMetadataEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
@@ -590,14 +612,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 				  
 				  <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="classamdinfer_1_1WebSocketClient_1_1WebSocketClientImpl.html" class="btn btn-neutral float-left" title="Class WebSocketClient::WebSocketClientImpl" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="classamdinfer_1_1workers_1_1Aks.html" class="btn btn-neutral float-right" title="Class Aks" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="classamdinfer_1_1workers_1_1AksDetect.html" class="btn btn-neutral float-right" title="Class AksDetect" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on March 20, 2023.
+      <span class="lastupdated">Last updated on April 13, 2023.
       </span></p>
   </div>
 

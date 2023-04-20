@@ -31,7 +31,7 @@ To build the deployment image:
     $ python3 docker/generate.py
     $ ./amdinfer dockerize --production <platform flags>
 
-Depending on what platforms you want to support, add the appropriate flags to enable :doc:`Vitis AI <vitis_ai>`, :doc:`ZenDNN <zendnn>` or :doc:`MIGraphX <migraphx>`.
+Depending on what platforms you want to support, add the appropriate flags to enable :doc:`Vitis AI <vitis_ai:Vitis AI>`, :doc:`ZenDNN <zendnn:ZenDNN>` or :doc:`MIGraphX <migraphx:MIGraphX>`.
 Refer to the help or the platform documentation for more information on how to build the right image.
 
 .. important::

@@ -35,6 +35,8 @@ Includes
 
 - ``amdinfer/core/exceptions.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_exceptions.hpp`)
 
+- ``amdinfer/core/model_config.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_model_config.hpp`)
+
 - ``amdinfer/core/model_repository.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_model_repository.hpp`)
 
 - ``amdinfer/core/parameters.hpp`` (:ref:`file__workspace_amdinfer_include_amdinfer_core_parameters.hpp`)
@@ -51,7 +53,7 @@ Includes
 
 - ``cassert``
 
-- ``filesystem``
+- ``filesystem`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_filesystem.cpp`)
 
 - ``iostream``
 

@@ -48,12 +48,12 @@ Program Listing for File parameters.hpp
      using ConstIterator = Container::const_iterator;
    
     public:
-     void put(const std::string &key, bool value);
-     void put(const std::string &key, double value);
-     void put(const std::string &key, int32_t value);
-     void put(const std::string &key, const std::string &value);
-     void put(const std::string &key, const char *value);
+     ParameterMap() = default;
+     ParameterMap(const std::vector<std::string> &keys,
+                  const std::vector<Parameter> &values);
    
+     void put(const std::string &key, Parameter value);
+     void put(const std::string &key, const char *value);
      template <typename T>
      T get(const std::string &key) const {
        auto &value = this->parameters_.at(key);

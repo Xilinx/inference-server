@@ -1,0 +1,13 @@
+.. _exhale_function_echo_8cpp_1af012751791b00fabf8dae7f38f076e18:
+
+Function getInputs()
+====================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_models_echo.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: getInputs()

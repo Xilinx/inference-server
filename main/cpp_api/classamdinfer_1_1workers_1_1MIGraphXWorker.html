@@ -39,10 +39,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <script src="../_static/copybutton.js"></script>
         <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
         <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+        <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
+        <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
+        <script defer="defer" src="../_static/tippy/cpp_api/classamdinfer_1_1workers_1_1MIGraphXWorker.21fb777d-d8de-4377-81c9-87805955bc3c.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Class PtZendnn" href="classamdinfer_1_1workers_1_1PtZendnn.html" />
+    <link rel="next" title="Class MultiThreadedWorker" href="classamdinfer_1_1workers_1_1MultiThreadedWorker.html" />
     <link rel="prev" title="Class InvertVideo" href="classamdinfer_1_1workers_1_1InvertVideo.html" /> 
 </head>
 
@@ -221,10 +224,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.inferAsyncOrdered"><code class="docutils literal notranslate"><span class="pre">inferAsyncOrdered()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.inferAsyncOrderedBatched"><code class="docutils literal notranslate"><span class="pre">inferAsyncOrderedBatched()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.inference_request_to_dict"><code class="docutils literal notranslate"><span class="pre">inference_request_to_dict()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.loadEnsemble"><code class="docutils literal notranslate"><span class="pre">loadEnsemble()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.parallel_infer"><code class="docutils literal notranslate"><span class="pre">parallel_infer()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.serverHasExtension"><code class="docutils literal notranslate"><span class="pre">serverHasExtension()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.start_http_client_server"><code class="docutils literal notranslate"><span class="pre">start_http_client_server()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.stringToArray"><code class="docutils literal notranslate"><span class="pre">stringToArray()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.unloadModels"><code class="docutils literal notranslate"><span class="pre">unloadModels()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.waitUntilModelNotReady"><code class="docutils literal notranslate"><span class="pre">waitUntilModelNotReady()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.waitUntilModelReady"><code class="docutils literal notranslate"><span class="pre">waitUntilModelReady()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.waitUntilServerReady"><code class="docutils literal notranslate"><span class="pre">waitUntilServerReady()</span></code></a></li>
 </ul>
@@ -461,7 +467,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <section id="base-type">
 <h3>Base Type<a class="headerlink" href="#base-type" title="Permalink to this heading">¶</a></h3>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">amdinfer::workers::Worker</span></code> (<a class="reference internal" href="classamdinfer_1_1workers_1_1Worker.html#exhale-class-classamdinfer-1-1workers-1-1worker"><span class="std std-ref">Class Worker</span></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">amdinfer::workers::SingleThreadedWorker</span></code> (<a class="reference internal" href="classamdinfer_1_1workers_1_1SingleThreadedWorker.html#exhale-class-classamdinfer-1-1workers-1-1singlethreadedworker"><span class="std std-ref">Class SingleThreadedWorker</span></a>)</p></li>
 </ul>
 </section>
 </section>
@@ -469,34 +475,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Permalink to this heading">¶</a></h2>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N8amdinfer7workers14MIGraphXWorkerE">
-<span id="_CPPv3N8amdinfer7workers14MIGraphXWorkerE"></span><span id="_CPPv2N8amdinfer7workers14MIGraphXWorkerE"></span><span id="amdinfer::workers::MIGraphXWorker"></span><span class="target" id="classamdinfer_1_1workers_1_1MIGraphXWorker"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">MIGraphXWorker</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><a class="reference internal" href="../cpp_user_api.html#_CPPv48amdinfer" title="amdinfer"><span class="n"><span class="pre">amdinfer</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">workers</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="classamdinfer_1_1workers_1_1Worker.html#_CPPv4N8amdinfer7workers6WorkerE" title="amdinfer::workers::Worker"><span class="n"><span class="pre">Worker</span></span></a><a class="headerlink" href="#_CPPv4N8amdinfer7workers14MIGraphXWorkerE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N8amdinfer7workers14MIGraphXWorkerE"></span><span id="_CPPv2N8amdinfer7workers14MIGraphXWorkerE"></span><span id="amdinfer::workers::MIGraphXWorker"></span><span class="target" id="classamdinfer_1_1workers_1_1MIGraphXWorker"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">MIGraphXWorker</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><a class="reference internal" href="../cpp_user_api.html#_CPPv48amdinfer" title="amdinfer"><span class="n"><span class="pre">amdinfer</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">workers</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="classamdinfer_1_1workers_1_1SingleThreadedWorker.html#_CPPv4N8amdinfer7workers20SingleThreadedWorkerE" title="amdinfer::workers::SingleThreadedWorker"><span class="n"><span class="pre">SingleThreadedWorker</span></span></a><a class="headerlink" href="#_CPPv4N8amdinfer7workers14MIGraphXWorkerE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The Migraphx worker accepts the name of an migraphx model file as an argument and compiles and evaluates it. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer7workers14MIGraphXWorker5spawnEP13BatchPtrQueue">
-<span id="_CPPv3N8amdinfer7workers14MIGraphXWorker5spawnEP13BatchPtrQueue"></span><span id="_CPPv2N8amdinfer7workers14MIGraphXWorker5spawnEP13BatchPtrQueue"></span><span id="amdinfer::workers::MIGraphXWorker::spawn__BatchPtrQueueP"></span><span class="target" id="classamdinfer_1_1workers_1_1MIGraphXWorker_1af7f3bab0759b39988c256832f9346aef"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">thread</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">spawn</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="typedef_batcher_8hpp_1adde4237ff9c6ea5f847a1d49faadad89.html#_CPPv4N8amdinfer13BatchPtrQueueE" title="amdinfer::BatchPtrQueue"><span class="n"><span class="pre">BatchPtrQueue</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">input_queue</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4N8amdinfer7workers14MIGraphXWorker5spawnEP13BatchPtrQueue" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Starts the worker’s <a class="reference internal" href="classamdinfer_1_1workers_1_1Worker.html#classamdinfer_1_1workers_1_1Worker_1ac9ab4e2e24a43a6b36a6e6f5f97e28dc"><span class="std std-ref">run()</span></a> method as a separate thread and returns it. </p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>input_queue</strong> – queue used to send requests to the started worker thread </p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>std::thread </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK8amdinfer7workers14MIGraphXWorker13getAllocatorsEv">
 <span id="_CPPv3NK8amdinfer7workers14MIGraphXWorker13getAllocatorsEv"></span><span id="_CPPv2NK8amdinfer7workers14MIGraphXWorker13getAllocatorsEv"></span><span id="amdinfer::workers::MIGraphXWorker::getAllocatorsC"></span><span class="target" id="classamdinfer_1_1workers_1_1MIGraphXWorker_1abcceebd1ca371d86ac85e78bccc0ea86"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="enum_memory__allocator_8hpp_1a7c5b9c96a6c33be879d5f8b8eb3cd8d9.html#_CPPv4N8amdinfer16MemoryAllocatorsE" title="amdinfer::MemoryAllocators"><span class="n"><span class="pre">MemoryAllocators</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">getAllocators</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer7workers14MIGraphXWorker13getAllocatorsEv" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Allocate some buffers that are used to hold input and output data. </p>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer7workers14MIGraphXWorker6WorkerERKNSt6stringERKNSt6stringE">
-<span id="_CPPv3N8amdinfer7workers14MIGraphXWorker6WorkerERKNSt6stringERKNSt6stringE"></span><span id="_CPPv2N8amdinfer7workers14MIGraphXWorker6WorkerERKNSt6stringERKNSt6stringE"></span><span id="amdinfer::workers::MIGraphXWorker::Worker__ssCR.ssCR"></span><span class="target" id="classamdinfer_1_1workers_1_1MIGraphXWorker_1aca5984871fa121bffadd10c5eab86e9b"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Worker</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">name</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">platform</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer7workers14MIGraphXWorker6WorkerERKNSt6stringERKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>The constructor only initializes the private class members. </p>
+<dd><p>Get the memory allocators supported by this worker. </p>
 </dd></dl>
 
 </div>
@@ -520,14 +506,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 				  
 				  <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="classamdinfer_1_1workers_1_1InvertVideo.html" class="btn btn-neutral float-left" title="Class InvertVideo" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="classamdinfer_1_1workers_1_1PtZendnn.html" class="btn btn-neutral float-right" title="Class PtZendnn" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="classamdinfer_1_1workers_1_1MultiThreadedWorker.html" class="btn btn-neutral float-right" title="Class MultiThreadedWorker" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on March 20, 2023.
+      <span class="lastupdated">Last updated on April 13, 2023.
       </span></p>
   </div>
 

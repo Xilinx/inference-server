@@ -74,7 +74,7 @@ Includes
 
 - ``thread`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_thread.hpp`)
 
-- ``vector``
+- ``vector`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector.cpp`)
 
 
 
@@ -109,6 +109,12 @@ Functions
 Variables
 ---------
 
+
+- :ref:`exhale_variable_invert__video_8cpp_1a778cfb0679cd1b44d77c94cc1e64cf74`
+
+- :ref:`exhale_variable_invert__video_8cpp_1a3fe6b60514f224d88012b81a72f206b0`
+
+- :ref:`exhale_variable_invert__video_8cpp_1ab862f12385b964a9f52578ce2b45f91a`
 
 - :ref:`exhale_variable_invert__video_8cpp_1ad040ac198e6b944c664091b286f73212`
 

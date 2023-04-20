@@ -75,7 +75,13 @@ Functions
 
 - :ref:`exhale_function_client_8cpp_1a7c8a24453d2c9aeaa2457ee1a5b13f93`
 
+- :ref:`exhale_function_client_8cpp_1a7a32761519bbb3ac1d86b2b3ec7d3900`
+
 - :ref:`exhale_function_client_8cpp_1a6354412b0cacb2c302d12c19ff0037f2`
+
+- :ref:`exhale_function_client_8cpp_1aeca57ac6adc6191c9209e19e70b2c95f`
+
+- :ref:`exhale_function_client_8cpp_1a3501853447c1ef78603637fb6b0f16ca`
 
 - :ref:`exhale_function_client_8cpp_1ad928316a941cc1f5371da1e90085bfdd`
 

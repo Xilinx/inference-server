@@ -39,6 +39,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <script src="../_static/copybutton.js"></script>
         <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
         <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+        <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
+        <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
+        <script defer="defer" src="../_static/tippy/cpp_api/namespace_amdinfer__workers.dc087e9f-2a97-48ef-89bc-fd2fd903bb95.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -221,10 +224,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.inferAsyncOrdered"><code class="docutils literal notranslate"><span class="pre">inferAsyncOrdered()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.inferAsyncOrderedBatched"><code class="docutils literal notranslate"><span class="pre">inferAsyncOrderedBatched()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.inference_request_to_dict"><code class="docutils literal notranslate"><span class="pre">inference_request_to_dict()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.loadEnsemble"><code class="docutils literal notranslate"><span class="pre">loadEnsemble()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.parallel_infer"><code class="docutils literal notranslate"><span class="pre">parallel_infer()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.serverHasExtension"><code class="docutils literal notranslate"><span class="pre">serverHasExtension()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.start_http_client_server"><code class="docutils literal notranslate"><span class="pre">start_http_client_server()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.stringToArray"><code class="docutils literal notranslate"><span class="pre">stringToArray()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.unloadModels"><code class="docutils literal notranslate"><span class="pre">unloadModels()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.waitUntilModelNotReady"><code class="docutils literal notranslate"><span class="pre">waitUntilModelNotReady()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.waitUntilModelReady"><code class="docutils literal notranslate"><span class="pre">waitUntilModelReady()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.waitUntilServerReady"><code class="docutils literal notranslate"><span class="pre">waitUntilServerReady()</span></code></a></li>
 </ul>
@@ -466,18 +472,17 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <h2>Classes<a class="headerlink" href="#classes" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="structamdinfer_1_1workers_1_1DetectResponse.html#exhale-struct-structamdinfer-1-1workers-1-1detectresponse"><span class="std std-ref">Struct DetectResponse</span></a></p></li>
-<li><p><a class="reference internal" href="classamdinfer_1_1workers_1_1Aks.html#exhale-class-classamdinfer-1-1workers-1-1aks"><span class="std std-ref">Class Aks</span></a></p></li>
 <li><p><a class="reference internal" href="classamdinfer_1_1workers_1_1AksDetect.html#exhale-class-classamdinfer-1-1workers-1-1aksdetect"><span class="std std-ref">Class AksDetect</span></a></p></li>
 <li><p><a class="reference internal" href="classamdinfer_1_1workers_1_1AksDetectStream.html#exhale-class-classamdinfer-1-1workers-1-1aksdetectstream"><span class="std std-ref">Class AksDetectStream</span></a></p></li>
 <li><p><a class="reference internal" href="classamdinfer_1_1workers_1_1CPlusPlus.html#exhale-class-classamdinfer-1-1workers-1-1cplusplus"><span class="std std-ref">Class CPlusPlus</span></a></p></li>
-<li><p><a class="reference internal" href="classamdinfer_1_1workers_1_1Echo.html#exhale-class-classamdinfer-1-1workers-1-1echo"><span class="std std-ref">Class Echo</span></a></p></li>
-<li><p><a class="reference internal" href="classamdinfer_1_1workers_1_1EchoMulti.html#exhale-class-classamdinfer-1-1workers-1-1echomulti"><span class="std std-ref">Class EchoMulti</span></a></p></li>
-<li><p><a class="reference internal" href="classamdinfer_1_1workers_1_1InvertImage.html#exhale-class-classamdinfer-1-1workers-1-1invertimage"><span class="std std-ref">Class InvertImage</span></a></p></li>
 <li><p><a class="reference internal" href="classamdinfer_1_1workers_1_1InvertVideo.html#exhale-class-classamdinfer-1-1workers-1-1invertvideo"><span class="std std-ref">Class InvertVideo</span></a></p></li>
 <li><p><a class="reference internal" href="classamdinfer_1_1workers_1_1MIGraphXWorker.html#exhale-class-classamdinfer-1-1workers-1-1migraphxworker"><span class="std std-ref">Class MIGraphXWorker</span></a></p></li>
+<li><p><a class="reference internal" href="classamdinfer_1_1workers_1_1MultiThreadedWorker.html#exhale-class-classamdinfer-1-1workers-1-1multithreadedworker"><span class="std std-ref">Class MultiThreadedWorker</span></a></p></li>
 <li><p><a class="reference internal" href="classamdinfer_1_1workers_1_1PtZendnn.html#exhale-class-classamdinfer-1-1workers-1-1ptzendnn"><span class="std std-ref">Class PtZendnn</span></a></p></li>
 <li><p><a class="reference internal" href="classamdinfer_1_1workers_1_1ResNet50.html#exhale-class-classamdinfer-1-1workers-1-1resnet50"><span class="std std-ref">Class ResNet50</span></a></p></li>
 <li><p><a class="reference internal" href="classamdinfer_1_1workers_1_1ResNet50Stream.html#exhale-class-classamdinfer-1-1workers-1-1resnet50stream"><span class="std std-ref">Class ResNet50Stream</span></a></p></li>
+<li><p><a class="reference internal" href="classamdinfer_1_1workers_1_1Responder.html#exhale-class-classamdinfer-1-1workers-1-1responder"><span class="std std-ref">Class Responder</span></a></p></li>
+<li><p><a class="reference internal" href="classamdinfer_1_1workers_1_1SingleThreadedWorker.html#exhale-class-classamdinfer-1-1workers-1-1singlethreadedworker"><span class="std std-ref">Class SingleThreadedWorker</span></a></p></li>
 <li><p><a class="reference internal" href="classamdinfer_1_1workers_1_1TfZendnn.html#exhale-class-classamdinfer-1-1workers-1-1tfzendnn"><span class="std std-ref">Class TfZendnn</span></a></p></li>
 <li><p><a class="reference internal" href="classamdinfer_1_1workers_1_1Worker.html#exhale-class-classamdinfer-1-1workers-1-1worker"><span class="std std-ref">Class Worker</span></a></p></li>
 <li><p><a class="reference internal" href="classamdinfer_1_1workers_1_1XModel.html#exhale-class-classamdinfer-1-1workers-1-1xmodel"><span class="std std-ref">Class XModel</span></a></p></li>
@@ -493,24 +498,24 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <h2>Functions<a class="headerlink" href="#functions" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="function_tf__zendnn_8cpp_1adf504d05611a1a3b28113b6eb6e2eb59.html#exhale-function-tf-zendnn-8cpp-1adf504d05611a1a3b28113b6eb6e2eb59"><span class="std std-ref">Function amdinfer::workers::openLibrary</span></a></p></li>
-<li><p><a class="reference internal" href="function_c__plus__plus_8cpp_1ae839d3bb421974c63e142c461e969830.html#exhale-function-c-plus-plus-8cpp-1ae839d3bb421974c63e142c461e969830"><span class="std std-ref">Function amdinfer::workers::respond</span></a></p></li>
 <li><p><a class="reference internal" href="function_migraphx_8cpp_1a3a3c5cda084c4108cacf3af5db7d7899.html#exhale-function-migraphx-8cpp-1a3a3c5cda084c4108cacf3af5db7d7899"><span class="std std-ref">Function amdinfer::workers::toDataType</span></a></p></li>
 </ul>
 </section>
 <section id="variables">
 <h2>Variables<a class="headerlink" href="#variables" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
-<li><p><a class="reference internal" href="variable_aks__detect_8hpp_1aff4c1089315fd2d1ff79e575fb320332.html#exhale-variable-aks-detect-8hpp-1aff4c1089315fd2d1ff79e575fb320332"><span class="std std-ref">Variable amdinfer::workers::kAkdDetectResponseSize</span></a></p></li>
+<li><p><a class="reference internal" href="variable_aks__detect_8hpp_1a7005690caff676e0cf1c434d10844fc1.html#exhale-variable-aks-detect-8hpp-1a7005690caff676e0cf1c434d10844fc1"><span class="std std-ref">Variable amdinfer::workers::kAksDetectResponseSize</span></a></p></li>
 <li><p><a class="reference internal" href="variable_resnet50__stream_8cpp_1ac825e49c82320971e8b0370c6d4c36da.html#exhale-variable-resnet50-stream-8cpp-1ac825e49c82320971e8b0370c6d4c36da"><span class="std std-ref">Variable amdinfer::workers::kBoxHeight</span></a></p></li>
 <li><p><a class="reference internal" href="variable_resnet50__stream_8cpp_1adc9b3a6c8074468b5528a02f79137dab.html#exhale-variable-resnet50-stream-8cpp-1adc9b3a6c8074468b5528a02f79137dab"><span class="std std-ref">Variable amdinfer::workers::kBoxHeightStr</span></a></p></li>
+<li><p><a class="reference internal" href="variable_aks__detect_8hpp_1a39a6ef55956630c25322735f8e6e15c0.html#exhale-variable-aks-detect-8hpp-1a39a6ef55956630c25322735f8e6e15c0"><span class="std std-ref">Variable amdinfer::workers::kDetectResponseSize</span></a></p></li>
 <li><p><a class="reference internal" href="variable_aks__detect_8cpp_1a04c17f159348c95b8f43e30dd5870d13.html#exhale-variable-aks-detect-8cpp-1a04c17f159348c95b8f43e30dd5870d13"><span class="std std-ref">Variable amdinfer::workers::kImageChannels</span></a></p></li>
 <li><p><a class="reference internal" href="variable_aks__detect_8cpp_1a42d9aa2fce61d9debb309bcea9830853.html#exhale-variable-aks-detect-8cpp-1a42d9aa2fce61d9debb309bcea9830853"><span class="std std-ref">Variable amdinfer::workers::kImageHeight</span></a></p></li>
 <li><p><a class="reference internal" href="variable_resnet50__stream_8cpp_1a0a4e7d7f877317445cdbbbbad363c7f6.html#exhale-variable-resnet50-stream-8cpp-1a0a4e7d7f877317445cdbbbbad363c7f6"><span class="std std-ref">Variable amdinfer::workers::kImageSize</span></a></p></li>
 <li><p><a class="reference internal" href="variable_aks__detect_8cpp_1aef4b7872e7395e2c7fdf950685bc2c94.html#exhale-variable-aks-detect-8cpp-1aef4b7872e7395e2c7fdf950685bc2c94"><span class="std std-ref">Variable amdinfer::workers::kImageWidth</span></a></p></li>
 <li><p><a class="reference internal" href="variable_resnet50__stream_8cpp_1aa1000a0c48850c27d70bea0534ee229f.html#exhale-variable-resnet50-stream-8cpp-1aa1000a0c48850c27d70bea0534ee229f"><span class="std std-ref">Variable amdinfer::workers::kImageWidthStr</span></a></p></li>
-<li><p><a class="reference internal" href="variable_invert__image_8cpp_1a778cfb0679cd1b44d77c94cc1e64cf74.html#exhale-variable-invert-image-8cpp-1a778cfb0679cd1b44d77c94cc1e64cf74"><span class="std std-ref">Variable amdinfer::workers::kMaxImageChannels</span></a></p></li>
-<li><p><a class="reference internal" href="variable_invert__image_8cpp_1a3fe6b60514f224d88012b81a72f206b0.html#exhale-variable-invert-image-8cpp-1a3fe6b60514f224d88012b81a72f206b0"><span class="std std-ref">Variable amdinfer::workers::kMaxImageHeight</span></a></p></li>
-<li><p><a class="reference internal" href="variable_invert__image_8cpp_1ab862f12385b964a9f52578ce2b45f91a.html#exhale-variable-invert-image-8cpp-1ab862f12385b964a9f52578ce2b45f91a"><span class="std std-ref">Variable amdinfer::workers::kMaxImageWidth</span></a></p></li>
+<li><p><a class="reference internal" href="variable_invert__video_8cpp_1a778cfb0679cd1b44d77c94cc1e64cf74.html#exhale-variable-invert-video-8cpp-1a778cfb0679cd1b44d77c94cc1e64cf74"><span class="std std-ref">Variable amdinfer::workers::kMaxImageChannels</span></a></p></li>
+<li><p><a class="reference internal" href="variable_invert__video_8cpp_1a3fe6b60514f224d88012b81a72f206b0.html#exhale-variable-invert-video-8cpp-1a3fe6b60514f224d88012b81a72f206b0"><span class="std std-ref">Variable amdinfer::workers::kMaxImageHeight</span></a></p></li>
+<li><p><a class="reference internal" href="variable_invert__video_8cpp_1ab862f12385b964a9f52578ce2b45f91a.html#exhale-variable-invert-video-8cpp-1ab862f12385b964a9f52578ce2b45f91a"><span class="std std-ref">Variable amdinfer::workers::kMaxImageWidth</span></a></p></li>
 <li><p><a class="reference internal" href="variable_invert__video_8cpp_1ad040ac198e6b944c664091b286f73212.html#exhale-variable-invert-video-8cpp-1ad040ac198e6b944c664091b286f73212"><span class="std std-ref">Variable amdinfer::workers::kMaxUrlLength</span></a></p></li>
 <li><p><a class="reference internal" href="variable_resnet50__stream_8cpp_1af570cb232c9a5846340eae70c6c53ec6.html#exhale-variable-resnet50-stream-8cpp-1af570cb232c9a5846340eae70c6c53ec6"><span class="std std-ref">Variable amdinfer::workers::kResnetClassifications</span></a></p></li>
 <li><p><a class="reference internal" href="variable_pt__zendnn_8cpp_1a6c6cc50416b27fffc4564f6457fef623.html#exhale-variable-pt-zendnn-8cpp-1a6c6cc50416b27fffc4564f6457fef623"><span class="std std-ref">Variable amdinfer::workers::kResNetImageChannels</span></a></p></li>
@@ -542,7 +547,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on March 20, 2023.
+      <span class="lastupdated">Last updated on April 13, 2023.
       </span></p>
   </div>
 

@@ -1,0 +1,13 @@
+.. _exhale_function_client_8cpp_1a3501853447c1ef78603637fb6b0f16ca:
+
+Function amdinfer::waitUntilModelNotReady
+=========================================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_clients_client.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: amdinfer::waitUntilModelNotReady(const Client *, const std::string&)

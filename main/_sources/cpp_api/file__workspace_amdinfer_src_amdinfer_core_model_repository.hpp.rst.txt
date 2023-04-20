@@ -31,7 +31,7 @@ Includes
 
 - ``efsw/efsw.hpp``
 
-- ``filesystem``
+- ``filesystem`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_filesystem.cpp`)
 
 - ``memory`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_memory_pool_cpu_allocator.cpp`)
 
@@ -74,5 +74,5 @@ Functions
 ---------
 
 
-- :ref:`exhale_function_model__repository_8hpp_1a94c9f9dd875588ecd02da3459c46da36`
+- :ref:`exhale_function_model__repository_8hpp_1a7bc7cc4b44f85f930556634ea7efe912`
 

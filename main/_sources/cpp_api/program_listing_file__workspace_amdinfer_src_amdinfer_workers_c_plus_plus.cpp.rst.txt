@@ -50,6 +50,7 @@ Program Listing for File c_plus_plus.cpp
    #include "amdinfer/observation/tracing.hpp"  // for startFollowSpan, SpanPtr
    #include "amdinfer/util/containers.hpp"      // for containerSum
    #include "amdinfer/util/queue.hpp"           // for BufferPtrsQueue
+   #include "amdinfer/util/string.hpp"          // for endsWith
    #include "amdinfer/util/thread.hpp"          // for setThreadName
    #include "amdinfer/util/timer.hpp"           // for Timer
    #include "amdinfer/workers/worker.hpp"       // for Worker
@@ -106,16 +107,15 @@ Program Listing for File c_plus_plus.cpp
    
    namespace workers {
    
-   class CPlusPlus : public Worker {
+   class CPlusPlus : public SingleThreadedWorker {
     public:
-     using Worker::Worker;
-     std::thread spawn(BatchPtrQueue* input_queue) override;
+     using SingleThreadedWorker::SingleThreadedWorker;
      [[nodiscard]] std::vector<MemoryAllocators> getAllocators() const override;
    
     private:
      void doInit(ParameterMap* parameters) override;
      void doAcquire(ParameterMap* parameters) override;
-     void doRun(BatchPtrQueue* input_queue) override;
+     BatchPtr doRun(Batch* batch, const MemoryPool* pool) override;
      void doRelease() override;
      void doDestroy() override;
    
@@ -133,69 +133,8 @@ Program Listing for File c_plus_plus.cpp
      };
    };
    
-   std::thread CPlusPlus::spawn(BatchPtrQueue* input_queue) {
-     return std::thread(&CPlusPlus::run, this, input_queue);
-   }
-   
    std::vector<MemoryAllocators> CPlusPlus::getAllocators() const {
      return {MemoryAllocators::Cpu};
-   }
-   
-   void respond(Batch* batch) {
-     const auto batch_size = batch->size();
-     for (unsigned int j = 0; j < batch_size; j++) {
-       const auto& req = batch->getRequest(j);
-   #ifdef AMDINFER_ENABLE_TRACING
-       const auto& trace = batch->getTrace(j);
-       trace->startSpan("response");
-   #endif
-       InferenceResponse resp;
-       resp.setID(req->getID());
-       resp.setModel("CPlusPlus");
-       auto inputs = req->getInputs();
-       auto outputs = req->getOutputs();
-       for (unsigned int i = 0; i < inputs.size(); i++) {
-         const auto& input = inputs[i];
-         const auto* input_buffer = input.getData();
-   
-         InferenceResponseOutput output;
-         output.setDatatype(DataType::Uint32);
-         std::string output_name;
-         if (i < outputs.size()) {
-           output_name = outputs[i].getName();
-         }
-   
-         if (output_name.empty()) {
-           output.setName(input.getName());
-         } else {
-           output.setName(output_name);
-         }
-         output.setShape(input.getShape());
-         std::vector<std::byte> buffer;
-         const auto size = input.getSize() * input.getDatatype().size();
-         buffer.resize(size);
-         memcpy(buffer.data(), input_buffer, size);
-         output.setData(std::move(buffer));
-         resp.addOutput(output);
-       }
-   
-   #ifdef AMDINFER_ENABLE_TRACING
-       auto context = trace->propagate();
-       resp.setContext(std::move(context));
-   #endif
-   
-       // respond back to the client
-       req->runCallbackOnce(resp);
-   #ifdef AMDINFER_ENABLE_METRICS
-       Metrics::getInstance().incrementCounter(
-         MetricCounterIDs::PipelineEgressWorker);
-       util::Timer timer{batch->getTime(j)};
-       timer.stop();
-       auto duration = timer.count<std::micro>();
-       Metrics::getInstance().observeSummary(MetricSummaryIDs::RequestLatency,
-                                             duration);
-   #endif
-     }
    }
    
    void CPlusPlus::doInit(ParameterMap* parameters) {
@@ -214,7 +153,11 @@ Program Listing for File c_plus_plus.cpp
        throw invalid_argument("No model specified");
      }
    
-     handle_ = openModel("lib" + model + "_model.so");
+     if (!util::endsWith(model, ".so")) {
+       model = "lib" + model + ".so";
+     }
+   
+     handle_ = openModel(model);
    }
    
    void CPlusPlus::doAcquire([[maybe_unused]] ParameterMap* parameters) {
@@ -235,64 +178,45 @@ Program Listing for File c_plus_plus.cpp
      }
    }
    
-   void CPlusPlus::doRun(BatchPtrQueue* input_queue) {
-     util::setThreadName("CPlusPlus");
-   #ifdef AMDINFER_ENABLE_LOGGING
-     const auto& logger = this->getLogger();
-   #endif
-   
-     while (true) {
-       BatchPtr batch;
-       input_queue->wait_dequeue(batch);
-       if (batch == nullptr) {
-         break;
+   BatchPtr CPlusPlus::doRun(Batch* batch, const MemoryPool* pool) {
+     BatchPtr new_batch;
+     if (!(input_tensors_.empty() || output_tensors_.empty())) {
+       new_batch = batch->propagate();
+       std::vector<BufferPtr> input_buffers;
+       input_buffers.reserve(output_tensors_.size());
+       const auto batch_size = batch->size();
+       for (const auto& tensor : output_tensors_) {
+         input_buffers.push_back(pool->get(next_allocators_, tensor, batch_size));
        }
-       AMDINFER_LOG_INFO(logger, "Got request in CPlusPlus");
-   #ifdef AMDINFER_ENABLE_METRICS
-       Metrics::getInstance().incrementCounter(
-         MetricCounterIDs::PipelineIngressWorker);
-   #endif
-   
-       auto new_batch = std::make_unique<Batch>();
-       if (!(input_tensors_.empty() || output_tensors_.empty())) {
-         std::vector<BufferPtr> input_buffers;
-         input_buffers.reserve(output_tensors_.size());
-         const auto batch_size = batch->size();
+       for (auto i = 0U; i < batch_size; ++i) {
+         const auto& req = batch->getRequest(i);
+         auto new_request = req->propagate();
+         int index = 0;
          for (const auto& tensor : output_tensors_) {
-           input_buffers.push_back(
-             pool_->get({MemoryAllocators::Cpu}, tensor, batch_size));
+           new_request->addInputTensor(InferenceRequestInput{tensor});
+           new_request->setInputTensorData(
+             index, input_buffers.at(index)->data(i * tensor.getSize() *
+                                                  tensor.getDatatype().size()));
+           index++;
          }
-         for (auto i = 0U; i < batch_size; ++i) {
-           auto new_request = std::make_shared<InferenceRequest>();
-           int index = 0;
-           for (const auto& tensor : output_tensors_) {
-             new_request->addInputTensor(InferenceRequestInput{tensor});
-             new_request->setInputTensorData(
-               index, input_buffers.at(index)->data(i * tensor.getSize() *
-                                                    tensor.getDatatype().size()));
-             index++;
-           }
-           new_batch->addRequest(new_request);
-         }
-         new_batch->setBuffers(std::move(input_buffers), {});
-   
-         auto* run_ptr = getFunction(handle_, "run");
-         auto* runModel =
-           reinterpret_cast<void (*)(amdinfer::Batch*, amdinfer::Batch*)>(run_ptr);
-   
-         runModel(batch.get(), new_batch.get());
-       } else {
-         // TODO(varunsh): support this use case
-         throw invalid_argument(
-           "Cannot run a model with an unknown tensor shapes");
+         new_batch->addRequest(new_request);
        }
+       new_batch->setBuffers(std::move(input_buffers), {});
    
-       respond(new_batch.get());
+       auto* run_ptr = getFunction(handle_, "run");
+       auto* runModel =
+         reinterpret_cast<void (*)(amdinfer::Batch*, amdinfer::Batch*)>(run_ptr);
    
-       this->returnInputBuffers(std::move(batch));
-       this->returnInputBuffers(std::move(new_batch));
+       runModel(batch, new_batch.get());
+     } else {
+       auto* run_ptr = getFunction(handle_, "run");
+       auto* runModel =
+         reinterpret_cast<amdinfer::BatchPtr (*)(amdinfer::Batch*)>(run_ptr);
+   
+       new_batch = runModel(batch);
      }
-     AMDINFER_LOG_INFO(logger, "CPlusPlus ending");
+   
+     return new_batch;
    }
    
    void CPlusPlus::doRelease() {}
@@ -306,6 +230,6 @@ Program Listing for File c_plus_plus.cpp
    // using smart pointer here may cause problems inside shared object so managing
    // manually
    amdinfer::workers::Worker* getWorker() {
-     return new amdinfer::workers::CPlusPlus("cPlusPlus", "cpu");
+     return new amdinfer::workers::CPlusPlus("CPlusPlus", "CPU", true);
    }
    }  // extern C

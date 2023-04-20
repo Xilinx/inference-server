@@ -54,7 +54,7 @@ Includes
 
 - ``unordered_map``
 
-- ``vector``
+- ``vector`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector.cpp`)
 
 
 
@@ -68,9 +68,15 @@ Included By
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_clients_native.cpp`
 
+- :ref:`file__workspace_amdinfer_src_amdinfer_models_base64_decode.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_models_base64_encode.cpp`
+
 - :ref:`file__workspace_amdinfer_src_amdinfer_models_echo.cpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_models_echo_multi.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_models_invert_image.cpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_observation_metrics.cpp`
 
@@ -78,17 +84,9 @@ Included By
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_servers_http_server.cpp`
 
-- :ref:`file__workspace_amdinfer_src_amdinfer_workers_aks.cpp`
-
 - :ref:`file__workspace_amdinfer_src_amdinfer_workers_aks_detect.cpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_workers_c_plus_plus.cpp`
-
-- :ref:`file__workspace_amdinfer_src_amdinfer_workers_echo.cpp`
-
-- :ref:`file__workspace_amdinfer_src_amdinfer_workers_echo_multi.cpp`
-
-- :ref:`file__workspace_amdinfer_src_amdinfer_workers_invert_image.cpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_workers_migraphx.cpp`
 
@@ -96,7 +94,11 @@ Included By
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_workers_resnet50.cpp`
 
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_responder.cpp`
+
 - :ref:`file__workspace_amdinfer_src_amdinfer_workers_tf_zendnn.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_worker.hpp`
 
 
 

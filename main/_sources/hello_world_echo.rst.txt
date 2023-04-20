@@ -21,11 +21,16 @@ Hello World - Python
 
 AMD Inference Server's Python API allows you to start the server and send requests to it from Python.
 This example walks you through how to start the server and use Python to send requests to a simple model.
-This example and script are intended to run in the development container.
 The complete script used here is available in the :amdinferTree:`repository <examples/hello_world>`.
 
 Import the library
 ------------------
+
+You can install the Python client library with ``pip``:
+
+.. code-block:: console
+
+    $ pip install amdinfer
 
 In the development container, the Python library is automatically built and installed as part of the CMake build process.
 
@@ -67,7 +72,8 @@ Workers are started as threads in AMD Inference Server and have a defined lifecy
 Before making an inference request to a worker, it must first be loaded.
 Loading a worker returns an endpoint that the client should use for future operations.
 
-This worker, Echo, is a simple example worker that accepts an integer as input, adds one to it and returns the sum.
+This simple worker, "cplusplus", is a worker that accepts a C++-based "model" which is specified in the parameters.
+This model, "echo" is a simple test model that accepts an integer as input, adds one to it and returns the sum.
 
 .. literalinclude:: ../examples/hello_world/echo.py
     :start-after: +load worker
@@ -79,7 +85,7 @@ Inference
 
 Once the worker is ready, you can make an inference request to it.
 To do so, first construct a request.
-We construct a request that contains an integer and send it to AMD Inference Server.
+We construct a request that contains an integer and send it to the server.
 
 .. literalinclude:: ../examples/hello_world/echo.py
     :start-after: +inference
@@ -103,7 +109,7 @@ After making the inference, you should check what the response was.
 First, make sure the inference didn't fail by checking if the response is erroneous.
 Then, you can get the outputs and examine them.
 The format and contents of the output data will depend on the worker and model used for inference.
-In this case, the Echo worker returns a single output tensor back with one integer that should be one larger than what was sent.
+In this case, the worker returns a single output tensor back with one integer that should be one larger than what was sent.
 The assertions here check these cases.
 
 .. literalinclude:: ../examples/hello_world/echo.py
@@ -115,8 +121,12 @@ Clean up
 --------
 
 Workers that are loaded in AMD Inference Server will persist until the server shuts down or they're explicitly unloaded.
-While it's not shown here, the Python API provides an ``unload()`` method for this purpose.
 As the script ends, the Server object's destructor will clean up any active workers on the server and it will shut down
+
+.. literalinclude:: ../examples/hello_world/echo.py
+    :start-after: +unload
+    :end-before: -unload
+    :dedent: 4
 
 Next steps
 ----------

@@ -35,7 +35,7 @@ Includes
 
 - ``string`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_string.hpp`)
 
-- ``vector``
+- ``vector`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector.cpp`)
 
 
 
@@ -44,6 +44,8 @@ Included By
 
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_core_memory_pool_memory_allocator.hpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_model_config.hpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_core_tensor.cpp`
 

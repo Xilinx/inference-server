@@ -39,6 +39,8 @@ Includes
 
 - ``amdinfer/core/memory_pool/vart_tensor_allocator.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_memory_pool_vart_tensor_allocator.hpp`)
 
+- ``cassert``
+
 
 
 

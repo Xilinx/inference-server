@@ -35,7 +35,7 @@ Includes
 
 - ``memory`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_memory_pool_cpu_allocator.cpp`)
 
-- ``vector``
+- ``vector`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector.cpp`)
 
 
 
@@ -51,15 +51,17 @@ Included By
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_buffers_cpu.hpp`
 
+- :ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector.hpp`
+
 - :ref:`file__workspace_amdinfer_src_amdinfer_core_endpoints.hpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_core_worker_info.hpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_workers_c_plus_plus.cpp`
 
-- :ref:`file__workspace_amdinfer_src_amdinfer_workers_echo_multi.cpp`
-
 - :ref:`file__workspace_amdinfer_src_amdinfer_workers_migraphx.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_responder.cpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_workers_xmodel.cpp`
 

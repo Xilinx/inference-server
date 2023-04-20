@@ -39,6 +39,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <script src="../_static/copybutton.js"></script>
         <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
         <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+        <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
+        <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
+        <script defer="defer" src="../_static/tippy/cpp_api/program_listing_file__workspace_amdinfer_src_amdinfer_workers_migraphx.cpp.3d1492c4-c906-4838-8e34-f89ab8490f50.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" /> 
@@ -219,10 +222,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.inferAsyncOrdered"><code class="docutils literal notranslate"><span class="pre">inferAsyncOrdered()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.inferAsyncOrderedBatched"><code class="docutils literal notranslate"><span class="pre">inferAsyncOrderedBatched()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.inference_request_to_dict"><code class="docutils literal notranslate"><span class="pre">inference_request_to_dict()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.loadEnsemble"><code class="docutils literal notranslate"><span class="pre">loadEnsemble()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.parallel_infer"><code class="docutils literal notranslate"><span class="pre">parallel_infer()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.serverHasExtension"><code class="docutils literal notranslate"><span class="pre">serverHasExtension()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.start_http_client_server"><code class="docutils literal notranslate"><span class="pre">start_http_client_server()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.stringToArray"><code class="docutils literal notranslate"><span class="pre">stringToArray()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.unloadModels"><code class="docutils literal notranslate"><span class="pre">unloadModels()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.waitUntilModelNotReady"><code class="docutils literal notranslate"><span class="pre">waitUntilModelNotReady()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.waitUntilModelReady"><code class="docutils literal notranslate"><span class="pre">waitUntilModelReady()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.waitUntilServerReady"><code class="docutils literal notranslate"><span class="pre">waitUntilServerReady()</span></code></a></li>
 </ul>
@@ -494,25 +500,28 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/observation/logging.hpp&quot;</span><span class="c1">  // for AMDINFER_LOG_INFO, AMD...</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/observation/metrics.hpp&quot;</span><span class="c1">  // for Metrics, MetricCounterIDs</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/util/containers.hpp&quot;</span><span class="c1">      // for containerProduct</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/util/memory.hpp&quot;</span><span class="c1">          // for copy</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/util/queue.hpp&quot;</span><span class="c1">           // for BufferPtrsQueue</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/util/string.hpp&quot;</span><span class="c1">          // for contains</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/util/thread.hpp&quot;</span><span class="c1">          // for setThreadName</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/util/timer.hpp&quot;</span><span class="c1">           // for Timer</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;amdinfer/workers/worker.hpp&quot;</span><span class="c1">       // for Worker, kNumBufferAuto</span>
 
 <span class="k">namespace</span><span class="w"> </span><span class="nn">amdinfer</span><span class="o">::</span><span class="nn">workers</span><span class="w"> </span><span class="p">{</span>
 
-<span class="k">class</span><span class="w"> </span><span class="nc">MIGraphXWorker</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">Worker</span><span class="w"> </span><span class="p">{</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">MIGraphXWorker</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">SingleThreadedWorker</span><span class="w"> </span><span class="p">{</span>
 <span class="w"> </span><span class="k">public</span><span class="o">:</span>
-<span class="w">  </span><span class="k">using</span><span class="w"> </span><span class="n">Worker</span><span class="o">::</span><span class="n">Worker</span><span class="p">;</span>
-<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="w"> </span><span class="nf">spawn</span><span class="p">(</span><span class="n">BatchPtrQueue</span><span class="o">*</span><span class="w"> </span><span class="n">input_queue</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="p">;</span>
+<span class="w">  </span><span class="k">using</span><span class="w"> </span><span class="n">SingleThreadedWorker</span><span class="o">::</span><span class="n">SingleThreadedWorker</span><span class="p">;</span>
 <span class="w">  </span><span class="p">[[</span><span class="n">nodiscard</span><span class="p">]]</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">MemoryAllocators</span><span class="o">&gt;</span><span class="w"> </span><span class="n">getAllocators</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">override</span><span class="p">;</span>
 
 <span class="w"> </span><span class="k">private</span><span class="o">:</span>
 <span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="n">doInit</span><span class="p">(</span><span class="n">ParameterMap</span><span class="o">*</span><span class="w"> </span><span class="n">parameters</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="p">;</span>
 <span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">doAcquire</span><span class="p">(</span><span class="n">ParameterMap</span><span class="o">*</span><span class="w"> </span><span class="n">parameters</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="p">;</span>
-<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">doRun</span><span class="p">(</span><span class="n">BatchPtrQueue</span><span class="o">*</span><span class="w"> </span><span class="n">input_queue</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="p">;</span>
+<span class="w">  </span><span class="n">BatchPtr</span><span class="w"> </span><span class="nf">doRun</span><span class="p">(</span><span class="n">Batch</span><span class="o">*</span><span class="w"> </span><span class="n">batch</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">MemoryPool</span><span class="o">*</span><span class="w"> </span><span class="n">pool</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="p">;</span>
 <span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">doRelease</span><span class="p">()</span><span class="w"> </span><span class="k">override</span><span class="p">;</span>
 <span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">doDestroy</span><span class="p">()</span><span class="w"> </span><span class="k">override</span><span class="p">;</span>
+
+<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">compile</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">onnx_path</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">compiled_path</span><span class="p">);</span>
 
 <span class="w">  </span><span class="c1">// the model file to be loaded.  Supported types are *.onnx and *.mxr</span>
 <span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">filesystem</span><span class="o">::</span><span class="n">path</span><span class="w"> </span><span class="n">input_file_</span><span class="p">;</span>
@@ -522,25 +531,18 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="w">  </span><span class="n">migraphx</span><span class="o">::</span><span class="n">program</span><span class="w"> </span><span class="n">prog_</span><span class="p">;</span>
 
 <span class="w">  </span><span class="c1">// flag to pad out a batch with dummy data.  Sending a batch of requests</span>
-<span class="w">  </span><span class="c1">// with uninitialized data may crash migraphx, for certain models.</span>
+<span class="w">  </span><span class="c1">// with uninitialized data may crash MIGraphX, for certain models.</span>
 <span class="w">  </span><span class="c1">// If pad_batch_ is true, this worker will pad any unused request slots</span>
 <span class="w">  </span><span class="c1">// in a batch with dummy copies of the first request.</span>
 <span class="w">  </span><span class="kt">bool</span><span class="w"> </span><span class="n">pad_batch_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
 <span class="w">  </span><span class="c1">// Calculated sizes in bytes for each input tensor, by input name</span>
-<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="kt">size_t</span><span class="o">&gt;</span><span class="w"> </span><span class="n">input_sizes_</span><span class="p">;</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="kt">size_t</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">less</span><span class="o">&lt;&gt;&gt;</span><span class="w"> </span><span class="n">input_sizes_</span><span class="p">;</span>
 <span class="p">};</span>
-
-<span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="w"> </span><span class="nf">MIGraphXWorker::spawn</span><span class="p">(</span><span class="n">BatchPtrQueue</span><span class="o">*</span><span class="w"> </span><span class="n">input_queue</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="p">(</span><span class="o">&amp;</span><span class="n">MIGraphXWorker</span><span class="o">::</span><span class="n">run</span><span class="p">,</span><span class="w"> </span><span class="k">this</span><span class="p">,</span><span class="w"> </span><span class="n">input_queue</span><span class="p">);</span>
-<span class="p">}</span>
 
 <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">MemoryAllocators</span><span class="o">&gt;</span><span class="w"> </span><span class="n">MIGraphXWorker</span><span class="o">::</span><span class="n">getAllocators</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="p">{</span><span class="n">MemoryAllocators</span><span class="o">::</span><span class="n">Cpu</span><span class="p">};</span>
 <span class="p">}</span>
 
-<span class="c1">// Enum-to-enum conversion to let us read data type from migraphx model.</span>
-<span class="c1">// The definitions are taken from the MIGraphX macro</span>
-<span class="c1">// MIGRAPHX_SHAPE_VISIT_TYPES</span>
 <span class="n">DataType</span><span class="w"> </span><span class="n">toDataType</span><span class="p">(</span><span class="n">migraphx_shape_datatype_t</span><span class="w"> </span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="c1">// case 0 is tuple_type which we don&#39;t support here</span>
@@ -570,6 +572,75 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="w">      </span><span class="k">return</span><span class="w"> </span><span class="n">DataType</span><span class="o">::</span><span class="n">Uint64</span><span class="p">;</span>
 <span class="w">    </span><span class="k">default</span><span class="o">:</span>
 <span class="w">      </span><span class="k">return</span><span class="w"> </span><span class="n">DataType</span><span class="o">::</span><span class="n">Unknown</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="n">MIGraphXWorker</span><span class="o">::</span><span class="n">compile</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">onnx_path</span><span class="p">,</span>
+<span class="w">                             </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">compiled_path</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="cp">#ifdef AMDINFER_ENABLE_LOGGING</span>
+<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">logger</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">getLogger</span><span class="p">();</span>
+<span class="cp">#endif</span>
+
+<span class="w">  </span><span class="c1">// Look for onnx file.  ifstream tests that the file can be opened</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">f</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">ifstream</span><span class="p">(</span><span class="n">onnx_path</span><span class="p">.</span><span class="n">c_str</span><span class="p">());</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">f</span><span class="p">.</span><span class="n">good</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Not finding the model file makes it impossible to finish initializing</span>
+<span class="w">    </span><span class="c1">// this worker</span>
+<span class="w">    </span><span class="n">AMDINFER_LOG_ERROR</span><span class="p">(</span>
+<span class="w">      </span><span class="n">logger</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="s">&quot;migraphx worker cannot open the model file &quot;</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
+<span class="w">                </span><span class="n">onnx_path</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot;.  Does this path exist?&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="k">throw</span><span class="w"> </span><span class="n">invalid_argument</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="s">&quot;model file &quot;</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">onnx_path</span><span class="w"> </span><span class="o">+</span>
+<span class="w">                           </span><span class="s">&quot; not found or can&#39;t be opened&quot;</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="c1">// Load the onnx file</span>
+<span class="w">  </span><span class="c1">// Using parse_onnx() instead of load() because there&#39;s a bug at the</span>
+<span class="w">  </span><span class="c1">// time of writing</span>
+<span class="w">  </span><span class="n">AMDINFER_LOG_INFO</span><span class="p">(</span><span class="n">logger</span><span class="p">,</span>
+<span class="w">                    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="s">&quot;migraphx worker loading ONNX model file &quot;</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
+<span class="w">                      </span><span class="n">onnx_path</span><span class="p">.</span><span class="n">c_str</span><span class="p">());</span>
+
+<span class="w">  </span><span class="n">migraphx</span><span class="o">::</span><span class="n">onnx_options</span><span class="w"> </span><span class="n">onnx_opts</span><span class="p">;</span>
+<span class="w">  </span><span class="n">onnx_opts</span><span class="p">.</span><span class="n">set_default_dim_value</span><span class="p">(</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">batch_size_</span><span class="p">));</span>
+<span class="w">  </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">prog_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">migraphx</span><span class="o">::</span><span class="n">parse_onnx</span><span class="p">(</span><span class="n">onnx_path</span><span class="p">.</span><span class="n">c_str</span><span class="p">(),</span><span class="w"> </span><span class="n">onnx_opts</span><span class="p">);</span>
+
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">param_shapes</span><span class="w"> </span><span class="o">=</span>
+<span class="w">    </span><span class="n">prog_</span><span class="p">.</span><span class="n">get_parameter_shapes</span><span class="p">();</span><span class="w">  </span><span class="c1">// program_parameter_shapes struct</span>
+
+<span class="w">  </span><span class="n">AMDINFER_LOG_INFO</span><span class="p">(</span>
+<span class="w">    </span><span class="n">logger</span><span class="p">,</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="s">&quot;migraphx worker loaded ONNX model file &quot;</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">onnx_path</span><span class="p">.</span><span class="n">c_str</span><span class="p">());</span>
+
+<span class="w">  </span><span class="c1">// Compile the model.  Hard-coded choices of offload_copy and gpu target</span>
+<span class="w">  </span><span class="n">migraphx</span><span class="o">::</span><span class="n">compile_options</span><span class="w"> </span><span class="n">comp_opts</span><span class="p">;</span>
+<span class="w">  </span><span class="n">comp_opts</span><span class="p">.</span><span class="n">set_offload_copy</span><span class="p">();</span>
+
+<span class="w">  </span><span class="c1">// migraphx can support a reference (cpu) target as a fallback if GPU is</span>
+<span class="w">  </span><span class="c1">// not found; not implemented here</span>
+<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">use_gpu</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">target_str</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">use_gpu</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="s">&quot;gpu&quot;</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s">&quot;ref&quot;</span><span class="p">;</span>
+<span class="w">  </span><span class="n">migraphx</span><span class="o">::</span><span class="n">target</span><span class="w"> </span><span class="n">targ</span><span class="p">{</span><span class="n">target_str</span><span class="p">.</span><span class="n">c_str</span><span class="p">()};</span>
+<span class="w">  </span><span class="c1">// The hip library will throw a cryptic error if unable to connect with</span>
+<span class="w">  </span><span class="c1">// a GPU at this point.</span>
+<span class="w">  </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">prog_</span><span class="p">.</span><span class="n">compile</span><span class="p">(</span><span class="n">migraphx</span><span class="o">::</span><span class="n">target</span><span class="p">(</span><span class="s">&quot;gpu&quot;</span><span class="p">),</span><span class="w"> </span><span class="n">comp_opts</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">exception</span><span class="o">&amp;</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">what</span><span class="p">();</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">util</span><span class="o">::</span><span class="n">contains</span><span class="p">(</span><span class="n">error</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Failed to call function&quot;</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">error</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot;.  Server could not connect to a GPU.&quot;</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">AMDINFER_LOG_ERROR</span><span class="p">(</span><span class="n">logger</span><span class="p">,</span><span class="w"> </span><span class="n">error</span><span class="p">);</span>
+<span class="w">    </span><span class="k">throw</span><span class="w"> </span><span class="n">external_error</span><span class="p">(</span><span class="n">error</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="c1">// Save the compiled program as a MessagePack (*.mxr) file</span>
+<span class="w">  </span><span class="n">f</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">ifstream</span><span class="p">(</span><span class="n">compiled_path</span><span class="p">.</span><span class="n">c_str</span><span class="p">());</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">f</span><span class="p">.</span><span class="n">good</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">migraphx</span><span class="o">::</span><span class="n">file_options</span><span class="w"> </span><span class="n">options</span><span class="p">;</span>
+<span class="w">    </span><span class="n">options</span><span class="p">.</span><span class="n">set_file_format</span><span class="p">(</span><span class="s">&quot;msgpack&quot;</span><span class="p">);</span>
+
+<span class="w">    </span><span class="n">migraphx</span><span class="o">::</span><span class="n">save</span><span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">prog_</span><span class="p">,</span><span class="w"> </span><span class="n">compiled_path</span><span class="p">.</span><span class="n">c_str</span><span class="p">(),</span><span class="w"> </span><span class="n">options</span><span class="p">);</span>
+<span class="w">    </span><span class="n">AMDINFER_LOG_INFO</span><span class="p">(</span><span class="n">logger</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="s">&quot; Saved compiled model file &quot;</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
+<span class="w">                                </span><span class="n">compiled_path</span><span class="p">.</span><span class="n">c_str</span><span class="p">());</span>
 <span class="w">  </span><span class="p">}</span>
 <span class="p">}</span>
 
@@ -651,72 +722,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="w">      </span><span class="c1">// prog_ does not need to be compiled.</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="c1">// Look for onnx file.  ifstream tests that the file can be opened</span>
-<span class="w">    </span><span class="n">f</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">ifstream</span><span class="p">(</span><span class="n">onnx_path</span><span class="p">.</span><span class="n">c_str</span><span class="p">());</span>
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">f</span><span class="p">.</span><span class="n">good</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
-<span class="w">      </span><span class="c1">// Load the onnx file</span>
-<span class="w">      </span><span class="c1">// Using parse_onnx() instead of load() because there&#39;s a bug at the</span>
-<span class="w">      </span><span class="c1">// time of writing</span>
-<span class="w">      </span><span class="n">AMDINFER_LOG_INFO</span><span class="p">(</span>
-<span class="w">        </span><span class="n">logger</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="s">&quot;migraphx worker loading ONNX model file &quot;</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
-<span class="w">                  </span><span class="n">onnx_path</span><span class="p">.</span><span class="n">c_str</span><span class="p">());</span>
-
-<span class="w">      </span><span class="n">migraphx</span><span class="o">::</span><span class="n">onnx_options</span><span class="w"> </span><span class="n">onnx_opts</span><span class="p">;</span>
-<span class="w">      </span><span class="n">onnx_opts</span><span class="p">.</span><span class="n">set_default_dim_value</span><span class="p">(</span><span class="n">batch_size_</span><span class="p">);</span>
-<span class="w">      </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">prog_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">migraphx</span><span class="o">::</span><span class="n">parse_onnx</span><span class="p">(</span><span class="n">onnx_path</span><span class="p">.</span><span class="n">c_str</span><span class="p">(),</span><span class="w"> </span><span class="n">onnx_opts</span><span class="p">);</span>
-
-<span class="w">      </span><span class="k">auto</span><span class="w"> </span><span class="n">param_shapes</span><span class="w"> </span><span class="o">=</span>
-<span class="w">        </span><span class="n">prog_</span><span class="p">.</span><span class="n">get_parameter_shapes</span><span class="p">();</span><span class="w">  </span><span class="c1">// program_parameter_shapes struct</span>
-
-<span class="w">      </span><span class="n">AMDINFER_LOG_INFO</span><span class="p">(</span><span class="n">logger</span><span class="p">,</span>
-<span class="w">                        </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="s">&quot;migraphx worker loaded ONNX model file &quot;</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
-<span class="w">                          </span><span class="n">onnx_path</span><span class="p">.</span><span class="n">c_str</span><span class="p">());</span>
-
-<span class="w">      </span><span class="c1">// Compile the model.  Hard-coded choices of offload_copy and gpu</span>
-<span class="w">      </span><span class="c1">// target.</span>
-<span class="w">      </span><span class="n">migraphx</span><span class="o">::</span><span class="n">compile_options</span><span class="w"> </span><span class="n">comp_opts</span><span class="p">;</span>
-<span class="w">      </span><span class="n">comp_opts</span><span class="p">.</span><span class="n">set_offload_copy</span><span class="p">();</span>
-
-<span class="w">      </span><span class="c1">// migraphx can support a reference (cpu) target as a fallback if GPU is</span>
-<span class="w">      </span><span class="c1">// not found; not implemented here</span>
-<span class="w">      </span><span class="k">const</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">use_gpu</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
-<span class="w">      </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">target_str</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">use_gpu</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="s">&quot;gpu&quot;</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s">&quot;ref&quot;</span><span class="p">;</span>
-<span class="w">      </span><span class="n">migraphx</span><span class="o">::</span><span class="n">target</span><span class="w"> </span><span class="n">targ</span><span class="p">{</span><span class="n">target_str</span><span class="p">.</span><span class="n">c_str</span><span class="p">()};</span>
-<span class="w">      </span><span class="c1">// The hip library will throw a cryptic error if unable to connect with</span>
-<span class="w">      </span><span class="c1">// a GPU at this point.</span>
-<span class="w">      </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">prog_</span><span class="p">.</span><span class="n">compile</span><span class="p">(</span><span class="n">migraphx</span><span class="o">::</span><span class="n">target</span><span class="p">(</span><span class="s">&quot;gpu&quot;</span><span class="p">),</span><span class="w"> </span><span class="n">comp_opts</span><span class="p">);</span>
-<span class="w">      </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">exception</span><span class="o">&amp;</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">emsg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">what</span><span class="p">();</span>
-<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">emsg</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="s">&quot;Failed to call function&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">::</span><span class="n">npos</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">          </span><span class="n">emsg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">emsg</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot;.  Server could not connect to a GPU.&quot;</span><span class="p">;</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">        </span><span class="n">AMDINFER_LOG_ERROR</span><span class="p">(</span><span class="n">logger</span><span class="p">,</span><span class="w"> </span><span class="n">emsg</span><span class="p">);</span>
-<span class="w">        </span><span class="k">throw</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">runtime_error</span><span class="p">(</span><span class="n">emsg</span><span class="p">);</span>
-<span class="w">      </span><span class="p">}</span>
-
-<span class="w">      </span><span class="c1">// Save the compiled program as a MessagePack (*.mxr) file</span>
-<span class="w">      </span><span class="n">f</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">ifstream</span><span class="p">(</span><span class="n">compiled_path</span><span class="p">.</span><span class="n">c_str</span><span class="p">());</span>
-<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">f</span><span class="p">.</span><span class="n">good</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">migraphx</span><span class="o">::</span><span class="n">file_options</span><span class="w"> </span><span class="n">options</span><span class="p">;</span>
-<span class="w">        </span><span class="n">options</span><span class="p">.</span><span class="n">set_file_format</span><span class="p">(</span><span class="s">&quot;msgpack&quot;</span><span class="p">);</span>
-
-<span class="w">        </span><span class="n">migraphx</span><span class="o">::</span><span class="n">save</span><span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">prog_</span><span class="p">,</span><span class="w"> </span><span class="n">compiled_path</span><span class="p">.</span><span class="n">c_str</span><span class="p">(),</span><span class="w"> </span><span class="n">options</span><span class="p">);</span>
-<span class="w">        </span><span class="n">AMDINFER_LOG_INFO</span><span class="p">(</span><span class="n">logger</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="s">&quot; Saved compiled model file &quot;</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
-<span class="w">                                    </span><span class="n">compiled_path</span><span class="p">.</span><span class="n">c_str</span><span class="p">());</span>
-<span class="w">      </span><span class="p">}</span>
-
-<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
-<span class="w">      </span><span class="c1">// Not finding the model file makes it impossible to finish initializing</span>
-<span class="w">      </span><span class="c1">// this worker</span>
-<span class="w">      </span><span class="n">AMDINFER_LOG_INFO</span><span class="p">(</span>
-<span class="w">        </span><span class="n">logger</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="s">&quot;migraphx worker cannot open the model file &quot;</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
-<span class="w">                  </span><span class="n">onnx_path</span><span class="p">.</span><span class="n">c_str</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot; or &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">compiled_path</span><span class="p">.</span><span class="n">c_str</span><span class="p">()</span><span class="w"> </span><span class="o">+</span>
-<span class="w">                  </span><span class="s">&quot;.  Does this path exist?&quot;</span><span class="p">);</span>
-<span class="w">      </span><span class="k">throw</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">invalid_argument</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="s">&quot;model file &quot;</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
-<span class="w">                                  </span><span class="n">onnx_path</span><span class="p">.</span><span class="n">c_str</span><span class="p">()</span><span class="w"> </span><span class="o">+</span>
-<span class="w">                                  </span><span class="s">&quot; not found or can&#39;t be opened&quot;</span><span class="p">);</span>
-<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">compile</span><span class="p">(</span><span class="n">onnx_path</span><span class="p">,</span><span class="w"> </span><span class="n">compiled_path</span><span class="p">);</span>
 <span class="w">  </span><span class="p">}</span>
 <span class="w">  </span><span class="c1">//</span>
 <span class="w">  </span><span class="c1">// Fetch the expected dimensions of the input from the parsed model.</span>
@@ -740,13 +746,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <span class="kt">void</span><span class="w"> </span><span class="n">MIGraphXWorker</span><span class="o">::</span><span class="n">doAcquire</span><span class="p">(</span><span class="n">ParameterMap</span><span class="o">*</span><span class="w"> </span><span class="n">parameters</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">parameters</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 
-<span class="kt">void</span><span class="w"> </span><span class="n">MIGraphXWorker</span><span class="o">::</span><span class="n">doRun</span><span class="p">(</span><span class="n">BatchPtrQueue</span><span class="o">*</span><span class="w"> </span><span class="n">input_queue</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="n">BatchPtr</span><span class="w"> </span><span class="n">MIGraphXWorker</span><span class="o">::</span><span class="n">doRun</span><span class="p">(</span><span class="n">Batch</span><span class="o">*</span><span class="w"> </span><span class="n">batch</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">MemoryPool</span><span class="o">*</span><span class="w"> </span><span class="n">pool</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="cp">#ifdef AMDINFER_ENABLE_LOGGING</span>
 <span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">logger</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">getLogger</span><span class="p">();</span>
 <span class="cp">#endif</span>
-<span class="w">  </span><span class="n">AMDINFER_LOG_INFO</span><span class="p">(</span><span class="n">logger</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;beginning of MIGraphXWorker::doRun&quot;</span><span class="p">);</span>
-
-<span class="w">  </span><span class="n">util</span><span class="o">::</span><span class="n">setThreadName</span><span class="p">(</span><span class="s">&quot;Migraphx&quot;</span><span class="p">);</span>
 
 <span class="w">  </span><span class="c1">// stringstream used for formatting logger messages</span>
 <span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">msg</span><span class="p">;</span>
@@ -759,59 +762,50 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="w">  </span><span class="c1">// client and continue waiting for requests.</span>
 <span class="w">  </span><span class="c1">//</span>
 
-<span class="w">  </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="nb">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="n">BatchPtr</span><span class="w"> </span><span class="n">batch</span><span class="p">;</span>
-<span class="w">    </span><span class="n">input_queue</span><span class="o">-&gt;</span><span class="n">wait_dequeue</span><span class="p">(</span><span class="n">batch</span><span class="p">);</span>
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">batch</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">      </span><span class="k">break</span><span class="p">;</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="w">    </span><span class="n">AMDINFER_LOG_INFO</span><span class="p">(</span><span class="n">logger</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;New batch request in migraphx&quot;</span><span class="p">);</span>
-<span class="w">    </span><span class="n">util</span><span class="o">::</span><span class="n">Timer</span><span class="w"> </span><span class="n">timer</span><span class="p">;</span>
-<span class="w">    </span><span class="n">timer</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="s">&quot;batch_start&quot;</span><span class="p">);</span>
-<span class="cp">#ifdef AMDINFER_ENABLE_METRICS</span>
-<span class="w">    </span><span class="n">Metrics</span><span class="o">::</span><span class="n">getInstance</span><span class="p">().</span><span class="n">incrementCounter</span><span class="p">(</span>
-<span class="w">      </span><span class="n">MetricCounterIDs</span><span class="o">::</span><span class="n">PipelineIngressWorker</span><span class="p">);</span>
-<span class="cp">#endif</span>
+<span class="w">  </span><span class="n">util</span><span class="o">::</span><span class="n">Timer</span><span class="w"> </span><span class="n">timer</span><span class="p">;</span>
+<span class="w">  </span><span class="n">timer</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="s">&quot;batch_start&quot;</span><span class="p">);</span>
 
-<span class="w">    </span><span class="c1">// The MIGraphX operation: run the migraphx eval() method.</span>
-<span class="w">    </span><span class="c1">// If migraphx exceptions happen, they will be handled</span>
+<span class="w">  </span><span class="c1">// The MIGraphX operation: run the migraphx eval() method.</span>
+<span class="w">  </span><span class="c1">// If migraphx exceptions happen, they will be handled</span>
 
-<span class="w">    </span><span class="c1">// We only need to look at the 0&#39;th request to set up evaluation, because</span>
-<span class="w">    </span><span class="c1">// its input pointers (one for each input) are the base addresses of the</span>
-<span class="w">    </span><span class="c1">// data for the entire batch. The different input tensors are not required</span>
-<span class="w">    </span><span class="c1">// to be contiguous with each other.</span>
-<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">req0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">batch</span><span class="o">-&gt;</span><span class="n">getRequest</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">inputs0</span><span class="w"> </span><span class="o">=</span>
-<span class="w">      </span><span class="n">req0</span><span class="o">-&gt;</span><span class="n">getInputs</span><span class="p">();</span><span class="w">  </span><span class="c1">// const std::vector&lt;InferenceRequestInput&gt;</span>
+<span class="w">  </span><span class="c1">// We only need to look at the 0&#39;th request to set up evaluation, because</span>
+<span class="w">  </span><span class="c1">// its input pointers (one for each input) are the base addresses of the</span>
+<span class="w">  </span><span class="c1">// data for the entire batch. The different input tensors are not required</span>
+<span class="w">  </span><span class="c1">// to be contiguous with each other.</span>
+<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">req0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">batch</span><span class="o">-&gt;</span><span class="n">getRequest</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">inputs0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">req0</span><span class="o">-&gt;</span><span class="n">getInputs</span><span class="p">();</span><span class="w">  </span><span class="c1">// const std::vector&lt;InferenceRequestInput&gt;</span>
 
-<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
-<span class="w">      </span><span class="n">migraphx</span><span class="o">::</span><span class="n">program_parameters</span><span class="w"> </span><span class="n">params</span><span class="p">;</span>
+<span class="w">  </span><span class="n">BatchPtr</span><span class="w"> </span><span class="n">new_batch</span><span class="p">;</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">amdinfer</span><span class="o">::</span><span class="n">BufferPtr</span><span class="o">&gt;</span><span class="w"> </span><span class="n">input_buffers</span><span class="p">;</span>
 
-<span class="w">      </span><span class="c1">// populate the migraphx parameters with shape read from the onnx</span>
-<span class="w">      </span><span class="c1">// model.</span>
-<span class="w">      </span><span class="k">auto</span><span class="w"> </span><span class="n">param_shapes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">prog_</span><span class="p">.</span><span class="n">get_parameter_shapes</span><span class="p">();</span>
+<span class="w">  </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">migraphx</span><span class="o">::</span><span class="n">program_parameters</span><span class="w"> </span><span class="n">params</span><span class="p">;</span>
 
-<span class="w">      </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">aninput</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">inputs0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">  </span><span class="c1">// InferenceRequestInput</span>
-<span class="w">        </span><span class="k">auto</span><span class="w"> </span><span class="n">aname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">aninput</span><span class="p">.</span><span class="n">getName</span><span class="p">();</span>
+<span class="w">    </span><span class="c1">// populate the migraphx parameters with shape read from the onnx</span>
+<span class="w">    </span><span class="c1">// model.</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">param_shapes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">prog_</span><span class="p">.</span><span class="n">get_parameter_shapes</span><span class="p">();</span>
 
-<span class="w">        </span><span class="c1">// Look up the shape by name in the model, but if there&#39;s only 1 input</span>
-<span class="w">        </span><span class="c1">// then the name in the request isn&#39;t required to match.</span>
-<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">inputs0</span><span class="p">.</span><span class="n">size</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">          </span><span class="n">aname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">param_shapes</span><span class="p">.</span><span class="n">names</span><span class="p">().</span><span class="n">front</span><span class="p">();</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">        </span><span class="n">migraphx</span><span class="o">::</span><span class="n">shape</span><span class="w"> </span><span class="n">modelshape</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">param_shapes</span><span class="p">[</span><span class="n">aname</span><span class="p">.</span><span class="n">c_str</span><span class="p">()];</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">aninput</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">inputs0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">  </span><span class="c1">// InferenceRequestInput</span>
+<span class="w">      </span><span class="k">auto</span><span class="w"> </span><span class="n">aname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">aninput</span><span class="p">.</span><span class="n">getName</span><span class="p">();</span>
 
-<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">toDataType</span><span class="p">(</span><span class="n">modelshape</span><span class="p">.</span><span class="n">type</span><span class="p">())</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">aninput</span><span class="p">.</span><span class="n">getDatatype</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
-<span class="w">          </span><span class="n">smsg</span><span class="p">.</span><span class="n">str</span><span class="p">(</span><span class="s">&quot;&quot;</span><span class="p">);</span>
-<span class="w">          </span><span class="n">smsg</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Migraph worker model and input data types don&#39;t match:   &quot;</span>
-<span class="w">               </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">toDataType</span><span class="p">(</span><span class="n">modelshape</span><span class="p">.</span><span class="n">type</span><span class="p">())</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot; vs &quot;</span>
-<span class="w">               </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">aninput</span><span class="p">.</span><span class="n">getDatatype</span><span class="p">();</span>
-<span class="w">          </span><span class="k">throw</span><span class="p">(</span><span class="n">invalid_argument</span><span class="p">(</span><span class="n">smsg</span><span class="p">.</span><span class="n">str</span><span class="p">()));</span>
-<span class="w">        </span><span class="p">}</span>
+<span class="w">      </span><span class="c1">// Look up the shape by name in the model, but if there&#39;s only 1 input</span>
+<span class="w">      </span><span class="c1">// then the name in the request isn&#39;t required to match.</span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">inputs0</span><span class="p">.</span><span class="n">size</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">aname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">param_shapes</span><span class="p">.</span><span class="n">names</span><span class="p">().</span><span class="n">front</span><span class="p">();</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">      </span><span class="n">migraphx</span><span class="o">::</span><span class="n">shape</span><span class="w"> </span><span class="n">modelshape</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">param_shapes</span><span class="p">[</span><span class="n">aname</span><span class="p">.</span><span class="n">c_str</span><span class="p">()];</span>
 
-<span class="w">        </span><span class="c1">// check that lengths() and type match</span>
-<span class="w">        </span><span class="k">auto</span><span class="w"> </span><span class="n">llen</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">modelshape</span><span class="p">.</span><span class="n">lengths</span><span class="p">();</span>
-<span class="w">        </span><span class="c1">// clang-format off</span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">toDataType</span><span class="p">(</span><span class="n">modelshape</span><span class="p">.</span><span class="n">type</span><span class="p">())</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">aninput</span><span class="p">.</span><span class="n">getDatatype</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">smsg</span><span class="p">.</span><span class="n">str</span><span class="p">(</span><span class="s">&quot;&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="n">smsg</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Migraph worker model and input data types don&#39;t match:   &quot;</span>
+<span class="w">             </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">toDataType</span><span class="p">(</span><span class="n">modelshape</span><span class="p">.</span><span class="n">type</span><span class="p">())</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot; vs &quot;</span>
+<span class="w">             </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">aninput</span><span class="p">.</span><span class="n">getDatatype</span><span class="p">();</span>
+<span class="w">        </span><span class="k">throw</span><span class="p">(</span><span class="n">invalid_argument</span><span class="p">(</span><span class="n">smsg</span><span class="p">.</span><span class="n">str</span><span class="p">()));</span>
+<span class="w">      </span><span class="p">}</span>
+
+<span class="w">      </span><span class="c1">// check that lengths() and type match</span>
+<span class="w">      </span><span class="k">auto</span><span class="w"> </span><span class="n">llen</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">modelshape</span><span class="p">.</span><span class="n">lengths</span><span class="p">();</span>
+<span class="w">      </span><span class="c1">// clang-format off</span>
 <span class="w">        </span><span class="c1">//    compare each dimension of shapes except the 0&#39;th (batch size)</span>
 <span class="w">        </span><span class="c1">//  TODO(bpickrel): the following check works inconsistently between different example client scripts.</span>
 <span class="w">        </span><span class="c1">// It accepts inputs from the yolo script but rejects hello_migraphx.py inputs</span>
@@ -829,179 +823,134 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="w">        </span><span class="c1">//     throw invalid_argument(smsg.str());</span>
 <span class="w">        </span><span class="c1">//   }</span>
 <span class="w">        </span><span class="c1">// }</span>
-<span class="w">        </span><span class="c1">// clang-format on</span>
+<span class="w">      </span><span class="c1">// clang-format on</span>
 
-<span class="w">        </span><span class="k">auto</span><span class="o">*</span><span class="w"> </span><span class="n">a_data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">aninput</span><span class="p">.</span><span class="n">getData</span><span class="p">();</span><span class="w">  </span><span class="c1">//  void *</span>
-<span class="w">        </span><span class="n">params</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">aname</span><span class="p">.</span><span class="n">c_str</span><span class="p">(),</span><span class="w"> </span><span class="n">migraphx</span><span class="o">::</span><span class="n">argument</span><span class="p">(</span><span class="n">modelshape</span><span class="p">,</span><span class="w"> </span><span class="n">a_data</span><span class="p">));</span>
-<span class="w">      </span><span class="p">}</span>
-<span class="w">      </span><span class="c1">// If there were fewer requests in the batch than the stated batch size,</span>
-<span class="w">      </span><span class="c1">// pad the various input tensors with copies of the 0&#39;th request&#39;s data.</span>
+<span class="w">      </span><span class="k">auto</span><span class="o">*</span><span class="w"> </span><span class="n">a_data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">aninput</span><span class="p">.</span><span class="n">getData</span><span class="p">();</span><span class="w">  </span><span class="c1">//  void *</span>
+<span class="w">      </span><span class="n">params</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">aname</span><span class="p">.</span><span class="n">c_str</span><span class="p">(),</span><span class="w"> </span><span class="n">migraphx</span><span class="o">::</span><span class="n">argument</span><span class="p">(</span><span class="n">modelshape</span><span class="p">,</span><span class="w"> </span><span class="n">a_data</span><span class="p">));</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="c1">// If there were fewer requests in the batch than the stated batch size,</span>
+<span class="w">    </span><span class="c1">// pad the various input tensors with copies of the 0&#39;th request&#39;s data.</span>
 
-<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">pad_batch_</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="c1">// for each named input channel</span>
-<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">aninput</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">inputs0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">          </span><span class="k">auto</span><span class="w"> </span><span class="n">aname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">aninput</span><span class="p">.</span><span class="n">getName</span><span class="p">();</span>
-<span class="w">          </span><span class="c1">// Look up the shape by name in the model, but if there&#39;s only 1 input</span>
-<span class="w">          </span><span class="c1">// then the name in the request isn&#39;t required to match.</span>
-<span class="w">          </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">inputs0</span><span class="p">.</span><span class="n">size</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="n">aname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">param_shapes</span><span class="p">.</span><span class="n">names</span><span class="p">().</span><span class="n">front</span><span class="p">();</span>
-<span class="w">          </span><span class="p">}</span>
-<span class="w">          </span><span class="k">auto</span><span class="o">*</span><span class="w"> </span><span class="n">a_data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">aninput</span><span class="p">.</span><span class="n">getData</span><span class="p">());</span>
-<span class="w">          </span><span class="c1">// For each empty slot in buffer, i.e. from end of real requests up to</span>
-<span class="w">          </span><span class="c1">// batch size</span>
-<span class="w">          </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">req_idx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">batch</span><span class="o">-&gt;</span><span class="n">getRequests</span><span class="p">().</span><span class="n">size</span><span class="p">();</span>
-<span class="w">               </span><span class="n">req_idx</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">batch_size_</span><span class="p">;</span><span class="w"> </span><span class="n">req_idx</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="n">memcpy</span><span class="p">(</span><span class="n">a_data</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">req_idx</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">input_sizes_</span><span class="p">[</span><span class="n">aname</span><span class="p">],</span><span class="w"> </span><span class="n">a_data</span><span class="p">,</span>
-<span class="w">                   </span><span class="n">input_sizes_</span><span class="p">[</span><span class="n">aname</span><span class="p">]);</span>
-<span class="w">          </span><span class="p">}</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">pad_batch_</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="c1">// for each named input channel</span>
+<span class="w">      </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">aninput</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">inputs0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">auto</span><span class="w"> </span><span class="n">aname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">aninput</span><span class="p">.</span><span class="n">getName</span><span class="p">();</span>
+<span class="w">        </span><span class="c1">// Look up the shape by name in the model, but if there&#39;s only 1 input</span>
+<span class="w">        </span><span class="c1">// then the name in the request isn&#39;t required to match.</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">inputs0</span><span class="p">.</span><span class="n">size</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="n">aname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">param_shapes</span><span class="p">.</span><span class="n">names</span><span class="p">().</span><span class="n">front</span><span class="p">();</span>
 <span class="w">        </span><span class="p">}</span>
-<span class="w">      </span><span class="p">}</span>
-
-<span class="w">      </span><span class="c1">//</span>
-<span class="w">      </span><span class="c1">// Run the inference</span>
-<span class="w">      </span><span class="c1">//</span>
-
-<span class="w">      </span><span class="n">AMDINFER_LOG_INFO</span><span class="p">(</span><span class="n">logger</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Beginning migraphx eval&quot;</span><span class="p">);</span>
-<span class="w">      </span><span class="n">timer</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="s">&quot;eval_start&quot;</span><span class="p">);</span>
-<span class="w">      </span><span class="n">migraphx</span><span class="o">::</span><span class="n">api</span><span class="o">::</span><span class="n">arguments</span><span class="w"> </span><span class="n">migraphx_output</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">prog_</span><span class="p">.</span><span class="n">eval</span><span class="p">(</span><span class="n">params</span><span class="p">);</span>
-<span class="w">      </span><span class="n">timer</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="s">&quot;eval_end&quot;</span><span class="p">);</span>
-<span class="w">      </span><span class="k">auto</span><span class="w"> </span><span class="n">eval_duration_us</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">timer</span><span class="p">.</span><span class="n">count</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">micro</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;eval_start&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;eval_end&quot;</span><span class="p">);</span>
-<span class="w">      </span><span class="p">[[</span><span class="n">maybe_unused</span><span class="p">]]</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">eval_duration_s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">eval_duration_us</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">mega</span><span class="o">::</span><span class="n">num</span><span class="p">;</span>
-<span class="w">      </span><span class="n">AMDINFER_LOG_INFO</span><span class="p">(</span>
-<span class="w">        </span><span class="n">logger</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="s">&quot;Finished migraphx eval; batch size: &quot;</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
-<span class="w">                  </span><span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">batch_size_</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot;  elapsed time: &quot;</span><span class="w"> </span><span class="o">+</span>
-<span class="w">                  </span><span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">eval_duration_us</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot; us.  Images/sec: &quot;</span><span class="w"> </span><span class="o">+</span>
-<span class="w">                  </span><span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">batch_size_</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="n">eval_duration_s</span><span class="p">)));</span>
-
-<span class="w">      </span><span class="c1">//</span>
-<span class="w">      </span><span class="c1">//           Fetch the results and populate response to each request in</span>
-<span class="w">      </span><span class="c1">//           the batch</span>
-<span class="w">      </span><span class="c1">//</span>
-
-<span class="w">      </span><span class="c1">// for each request in the batch</span>
-<span class="w">      </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">batch</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">();</span><span class="w"> </span><span class="n">j</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">req</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">batch</span><span class="o">-&gt;</span><span class="n">getRequest</span><span class="p">(</span><span class="n">j</span><span class="p">);</span>
-<span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
-<span class="w">          </span><span class="n">InferenceResponse</span><span class="w"> </span><span class="n">resp</span><span class="p">;</span>
-<span class="w">          </span><span class="n">resp</span><span class="p">.</span><span class="n">setID</span><span class="p">(</span><span class="n">req</span><span class="o">-&gt;</span><span class="n">getID</span><span class="p">());</span>
-<span class="w">          </span><span class="n">resp</span><span class="p">.</span><span class="n">setModel</span><span class="p">(</span><span class="s">&quot;migraphx&quot;</span><span class="p">);</span>
-
-<span class="w">          </span><span class="c1">// We don&#39;t use the outputs portion of the request currently.  It is</span>
-<span class="w">          </span><span class="c1">// part of the kserve format specification, which the Inference Server</span>
-<span class="w">          </span><span class="c1">// is intended to follow. &quot;The $request_output JSON is used to request</span>
-<span class="w">          </span><span class="c1">// which output tensors should be returned from the model.&quot;</span>
-<span class="w">          </span><span class="c1">// https://github.com/kserve/kserve/blob/master/docs/predict-api/v2/required_api.md</span>
-<span class="w">          </span><span class="c1">//</span>
-<span class="w">          </span><span class="c1">// Selecting the request output is only relevant to models that have</span>
-<span class="w">          </span><span class="c1">// more than one output tensor.</span>
-<span class="w">          </span><span class="c1">//</span>
-
-<span class="w">          </span><span class="c1">// Fetch the vector shape, data, etc. for output from the</span>
-<span class="w">          </span><span class="c1">// parsed/compiled model</span>
-<span class="w">          </span><span class="n">migraphx</span><span class="o">::</span><span class="n">api</span><span class="o">::</span><span class="n">shapes</span><span class="w"> </span><span class="n">output_shapes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">prog_</span><span class="p">.</span><span class="n">get_output_shapes</span><span class="p">();</span>
-
-<span class="w">          </span><span class="c1">//</span>
-<span class="w">          </span><span class="c1">// Transfer the migraphx results to output</span>
-<span class="w">          </span><span class="c1">//</span>
-<span class="w">          </span><span class="kt">size_t</span><span class="w"> </span><span class="n">result_size</span><span class="w"> </span><span class="o">=</span>
-<span class="w">            </span><span class="n">migraphx_output</span><span class="p">.</span><span class="n">size</span><span class="p">();</span><span class="w">  </span><span class="c1">//   Resnet models have 1 output; yolo and</span>
-<span class="w">                                     </span><span class="c1">//   bert models have 3</span>
-
-<span class="w">          </span><span class="c1">// For each output channel in result:</span>
-<span class="w">          </span><span class="c1">//</span>
-<span class="w">          </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">result_size</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="c1">// the buffer to populate for return</span>
-<span class="w">            </span><span class="n">InferenceResponseOutput</span><span class="w"> </span><span class="n">output</span><span class="p">;</span>
-
-<span class="w">            </span><span class="n">migraphx_shape_datatype_t</span><span class="w"> </span><span class="n">output_type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">output_shapes</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">type</span><span class="p">();</span>
-<span class="w">            </span><span class="n">amdinfer</span><span class="o">::</span><span class="n">DataType</span><span class="w"> </span><span class="n">output_dt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">toDataType</span><span class="p">(</span><span class="n">output_type</span><span class="p">);</span>
-<span class="w">            </span><span class="n">output</span><span class="p">.</span><span class="n">setDatatype</span><span class="p">(</span><span class="n">output_dt</span><span class="p">);</span>
-
-<span class="w">            </span><span class="k">auto</span><span class="w"> </span><span class="n">this_output</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">migraphx_output</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-<span class="w">            </span><span class="n">migraphx</span><span class="o">::</span><span class="n">api</span><span class="o">::</span><span class="n">shape</span><span class="w"> </span><span class="n">shape</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">this_output</span><span class="p">.</span><span class="n">get_shape</span><span class="p">();</span>
-<span class="w">            </span><span class="k">auto</span><span class="w"> </span><span class="n">lengths</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">shape</span><span class="p">.</span><span class="n">lengths</span><span class="p">();</span>
-
-<span class="w">            </span><span class="k">auto</span><span class="w"> </span><span class="n">num_results</span><span class="w"> </span><span class="o">=</span>
-<span class="w">              </span><span class="n">util</span><span class="o">::</span><span class="n">containerProduct</span><span class="p">(</span><span class="n">lengths</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">lengths</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
-
-<span class="w">            </span><span class="c1">// remove the 0&#39;th dimension (batch size) from lengths</span>
-<span class="w">            </span><span class="n">lengths</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">lengths</span><span class="p">.</span><span class="n">begin</span><span class="p">());</span>
-<span class="w">            </span><span class="c1">// size of each result array, bytes</span>
-<span class="w">            </span><span class="kt">size_t</span><span class="w"> </span><span class="n">size_of_result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">num_results</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">output_dt</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
-
-<span class="w">            </span><span class="c1">// pointer to offset in data blob</span>
-<span class="w">            </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">results</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">this_output</span><span class="p">.</span><span class="n">data</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">size_of_result</span><span class="p">;</span>
-
-<span class="w">            </span><span class="c1">// the kserve specification for response output is at</span>
-<span class="w">            </span><span class="c1">// https://github.com/kserve/kserve/blob/master/docs/predict-api/v2/required_api.md#response-output</span>
-<span class="w">            </span><span class="c1">//</span>
-<span class="w">            </span><span class="c1">// The outputs buffer in the InferenceRequest is not used or</span>
-<span class="w">            </span><span class="c1">// enforced at the time of writing this, but here it is. Give the</span>
-<span class="w">            </span><span class="c1">// output a default name if necessary.</span>
-<span class="w">            </span><span class="k">auto</span><span class="w"> </span><span class="n">outputs</span><span class="w"> </span><span class="o">=</span>
-<span class="w">              </span><span class="n">req</span><span class="o">-&gt;</span><span class="n">getOutputs</span><span class="p">();</span><span class="w">  </span><span class="c1">// one result vector for each request</span>
-
-<span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">output_name</span><span class="p">;</span>
-<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">outputs</span><span class="p">.</span><span class="n">size</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
-<span class="w">              </span><span class="n">output_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">outputs</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">getName</span><span class="p">();</span>
-<span class="w">            </span><span class="p">}</span>
-
-<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">output_name</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
-<span class="w">              </span><span class="n">output</span><span class="p">.</span><span class="n">setName</span><span class="p">(</span><span class="n">inputs0</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">getName</span><span class="p">());</span>
-<span class="w">            </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
-<span class="w">              </span><span class="n">output</span><span class="p">.</span><span class="n">setName</span><span class="p">(</span><span class="n">output_name</span><span class="p">);</span>
-<span class="w">            </span><span class="p">}</span>
-<span class="w">            </span><span class="n">output</span><span class="p">.</span><span class="n">setShape</span><span class="p">(</span><span class="n">lengths</span><span class="p">);</span>
-
-<span class="w">            </span><span class="c1">// Copy migraphx results to a buffer and add to output</span>
-<span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">byte</span><span class="o">&gt;</span><span class="w"> </span><span class="n">buffer</span><span class="p">;</span>
-<span class="w">            </span><span class="n">buffer</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">size_of_result</span><span class="p">);</span>
-<span class="w">            </span><span class="n">memcpy</span><span class="p">(</span><span class="n">buffer</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span><span class="w"> </span><span class="n">results</span><span class="p">,</span><span class="w"> </span><span class="n">size_of_result</span><span class="p">);</span>
-<span class="w">            </span><span class="n">output</span><span class="p">.</span><span class="n">setData</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">buffer</span><span class="p">));</span>
-<span class="w">            </span><span class="n">resp</span><span class="p">.</span><span class="n">addOutput</span><span class="p">(</span><span class="n">output</span><span class="p">);</span>
-<span class="w">          </span><span class="p">}</span>
-<span class="w">          </span><span class="c1">// respond back to the client</span>
-<span class="w">          </span><span class="n">req</span><span class="o">-&gt;</span><span class="n">runCallbackOnce</span><span class="p">(</span><span class="n">resp</span><span class="p">);</span>
-<span class="cp">#ifdef AMDINFER_ENABLE_METRICS</span>
-<span class="w">          </span><span class="n">Metrics</span><span class="o">::</span><span class="n">getInstance</span><span class="p">().</span><span class="n">incrementCounter</span><span class="p">(</span>
-<span class="w">            </span><span class="n">MetricCounterIDs</span><span class="o">::</span><span class="n">PipelineEgressWorker</span><span class="p">);</span>
-<span class="w">          </span><span class="n">timer</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="s">&quot;batch_time&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">batch</span><span class="o">-&gt;</span><span class="n">getTime</span><span class="p">(</span><span class="n">j</span><span class="p">));</span>
-<span class="w">          </span><span class="n">timer</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="s">&quot;request_latency&quot;</span><span class="p">);</span>
-<span class="w">          </span><span class="k">auto</span><span class="w"> </span><span class="n">duration</span><span class="w"> </span><span class="o">=</span>
-<span class="w">            </span><span class="n">timer</span><span class="p">.</span><span class="n">count</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">micro</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;batch_time&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;request_latency&quot;</span><span class="p">);</span>
-<span class="w">          </span><span class="n">Metrics</span><span class="o">::</span><span class="n">getInstance</span><span class="p">().</span><span class="n">observeSummary</span><span class="p">(</span>
-<span class="w">            </span><span class="n">MetricSummaryIDs</span><span class="o">::</span><span class="n">RequestLatency</span><span class="p">,</span><span class="w"> </span><span class="n">duration</span><span class="p">);</span>
-<span class="cp">#endif</span>
-<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">exception</span><span class="o">&amp;</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">          </span><span class="n">AMDINFER_LOG_ERROR</span><span class="p">(</span><span class="n">logger</span><span class="p">,</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">what</span><span class="p">());</span>
-<span class="w">          </span><span class="c1">// Pass error message back as reply to request; continue processing</span>
-<span class="w">          </span><span class="c1">// more inference requests</span>
-
-<span class="w">          </span><span class="n">req</span><span class="o">-&gt;</span><span class="n">runCallbackError</span><span class="p">(</span>
-<span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="s">&quot;Error processing Migraphx request: &quot;</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">what</span><span class="p">());</span>
+<span class="w">        </span><span class="k">auto</span><span class="o">*</span><span class="w"> </span><span class="n">a_data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">aninput</span><span class="p">.</span><span class="n">getData</span><span class="p">());</span>
+<span class="w">        </span><span class="c1">// For each empty slot in buffer, i.e. from end of real requests up to</span>
+<span class="w">        </span><span class="c1">// batch size</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">req_idx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">batch</span><span class="o">-&gt;</span><span class="n">getRequests</span><span class="p">().</span><span class="n">size</span><span class="p">();</span>
+<span class="w">             </span><span class="n">req_idx</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">batch_size_</span><span class="p">;</span><span class="w"> </span><span class="n">req_idx</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="n">memcpy</span><span class="p">(</span><span class="n">a_data</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">req_idx</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">input_sizes_</span><span class="p">[</span><span class="n">aname</span><span class="p">],</span><span class="w"> </span><span class="n">a_data</span><span class="p">,</span>
+<span class="w">                 </span><span class="n">input_sizes_</span><span class="p">[</span><span class="n">aname</span><span class="p">]);</span>
 <span class="w">        </span><span class="p">}</span>
-<span class="w">      </span><span class="p">}</span><span class="w">  </span><span class="c1">// end j, request</span>
-<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">exception</span><span class="o">&amp;</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">      </span><span class="c1">// This outer catch block catches exceptions in evaluation of the batch.</span>
-<span class="w">      </span><span class="n">AMDINFER_LOG_ERROR</span><span class="p">(</span><span class="n">logger</span><span class="p">,</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">what</span><span class="p">());</span>
-<span class="w">      </span><span class="c1">// Pass error message back as reply for each request in the batch</span>
-<span class="w">      </span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">requests</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">batch</span><span class="o">-&gt;</span><span class="n">getRequests</span><span class="p">();</span>
-<span class="w">      </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">req_e</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">requests</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">req_e</span><span class="o">-&gt;</span><span class="n">runCallbackError</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="s">&quot;Migraphx inference error: &quot;</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
-<span class="w">                                </span><span class="n">e</span><span class="p">.</span><span class="n">what</span><span class="p">());</span>
 <span class="w">      </span><span class="p">}</span>
 <span class="w">    </span><span class="p">}</span>
 
-<span class="w">    </span><span class="n">timer</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="s">&quot;batch_stop&quot;</span><span class="p">);</span>
-<span class="w">    </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">returnInputBuffers</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">batch</span><span class="p">));</span>
-<span class="w">    </span><span class="p">[[</span><span class="n">maybe_unused</span><span class="p">]]</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">duration</span><span class="w"> </span><span class="o">=</span>
-<span class="w">      </span><span class="n">timer</span><span class="p">.</span><span class="n">count</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">micro</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;batch_start&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;batch_stop&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="c1">//</span>
+<span class="w">    </span><span class="c1">// Run the inference</span>
+<span class="w">    </span><span class="c1">//</span>
+
+<span class="w">    </span><span class="n">AMDINFER_LOG_INFO</span><span class="p">(</span><span class="n">logger</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Beginning migraphx eval&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">timer</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="s">&quot;eval_start&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">migraphx</span><span class="o">::</span><span class="n">api</span><span class="o">::</span><span class="n">arguments</span><span class="w"> </span><span class="n">migraphx_output</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">prog_</span><span class="p">.</span><span class="n">eval</span><span class="p">(</span><span class="n">params</span><span class="p">);</span>
+<span class="w">    </span><span class="n">timer</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="s">&quot;eval_end&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">eval_duration_us</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">timer</span><span class="p">.</span><span class="n">count</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">micro</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;eval_start&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;eval_end&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="p">[[</span><span class="n">maybe_unused</span><span class="p">]]</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">eval_duration_s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">eval_duration_us</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">mega</span><span class="o">::</span><span class="n">num</span><span class="p">;</span>
 <span class="w">    </span><span class="n">AMDINFER_LOG_INFO</span><span class="p">(</span>
-<span class="w">      </span><span class="n">logger</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="s">&quot;Finished migraphx batch processing; batch size: &quot;</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
-<span class="w">                </span><span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">batch_size_</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
-<span class="w">                </span><span class="s">&quot;  elapsed time: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">duration</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot; us&quot;</span><span class="p">);</span>
-<span class="w">  </span><span class="p">}</span><span class="w">  </span><span class="c1">// end while (batch)</span>
-<span class="w">  </span><span class="n">AMDINFER_LOG_INFO</span><span class="p">(</span><span class="n">logger</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Migraphx::doRun ending&quot;</span><span class="p">);</span>
+<span class="w">      </span><span class="n">logger</span><span class="p">,</span>
+<span class="w">      </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="s">&quot;Finished migraphx eval; batch size: &quot;</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">batch_size_</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
+<span class="w">        </span><span class="s">&quot;  elapsed time: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">eval_duration_us</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
+<span class="w">        </span><span class="s">&quot; us.  Images/sec: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">batch_size_</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="n">eval_duration_s</span><span class="p">)));</span>
+
+<span class="w">    </span><span class="c1">//</span>
+<span class="w">    </span><span class="c1">//           Fetch the results and populate response to each request in</span>
+<span class="w">    </span><span class="c1">//           the batch</span>
+<span class="w">    </span><span class="c1">//</span>
+
+<span class="w">    </span><span class="n">new_batch</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">batch</span><span class="o">-&gt;</span><span class="n">propagate</span><span class="p">();</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">batch_size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">batch</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">();</span>
+
+<span class="w">    </span><span class="c1">// Fetch the vector shape, data, etc. for output from the</span>
+<span class="w">    </span><span class="c1">// parsed/compiled model</span>
+<span class="w">    </span><span class="n">migraphx</span><span class="o">::</span><span class="n">api</span><span class="o">::</span><span class="n">shapes</span><span class="w"> </span><span class="n">output_shapes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">prog_</span><span class="p">.</span><span class="n">get_output_shapes</span><span class="p">();</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">DataType</span><span class="o">&gt;</span><span class="w"> </span><span class="n">datatypes</span><span class="p">;</span>
+<span class="w">    </span><span class="n">datatypes</span><span class="p">.</span><span class="n">reserve</span><span class="p">(</span><span class="n">output_shapes</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
+
+<span class="w">    </span><span class="kt">size_t</span><span class="w"> </span><span class="n">num_output_tensors</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">migraphx_output</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">output_shapes</span><span class="p">.</span><span class="n">size</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">num_output_tensors</span><span class="p">);</span>
+<span class="w">    </span><span class="n">input_buffers</span><span class="p">.</span><span class="n">reserve</span><span class="p">(</span><span class="n">num_output_tensors</span><span class="p">);</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0U</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">num_output_tensors</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="k">auto</span><span class="w"> </span><span class="n">migraphx_shape</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">migraphx_output</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">get_shape</span><span class="p">();</span>
+<span class="w">      </span><span class="k">auto</span><span class="w"> </span><span class="n">shape</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">migraphx_shape</span><span class="p">.</span><span class="n">lengths</span><span class="p">();</span>
+<span class="w">      </span><span class="c1">// erase the leading batch size to get the tensor size</span>
+<span class="w">      </span><span class="n">shape</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">shape</span><span class="p">.</span><span class="n">begin</span><span class="p">());</span>
+
+<span class="w">      </span><span class="n">datatypes</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">toDataType</span><span class="p">(</span><span class="n">output_shapes</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">type</span><span class="p">()));</span>
+
+<span class="w">      </span><span class="n">Tensor</span><span class="w"> </span><span class="n">tensor</span><span class="p">{</span><span class="s">&quot;&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">shape</span><span class="p">,</span><span class="w"> </span><span class="n">datatypes</span><span class="p">.</span><span class="n">back</span><span class="p">()};</span>
+<span class="w">      </span><span class="n">input_buffers</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span>
+<span class="w">        </span><span class="n">pool</span><span class="o">-&gt;</span><span class="n">get</span><span class="p">(</span><span class="n">next_allocators_</span><span class="p">,</span><span class="w"> </span><span class="n">tensor</span><span class="p">,</span><span class="w"> </span><span class="n">batch_size</span><span class="p">));</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">batch_size</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">req</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">batch</span><span class="o">-&gt;</span><span class="n">getRequest</span><span class="p">(</span><span class="n">j</span><span class="p">);</span>
+<span class="w">      </span><span class="k">auto</span><span class="w"> </span><span class="n">new_request</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">req</span><span class="o">-&gt;</span><span class="n">propagate</span><span class="p">();</span>
+
+<span class="w">      </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0U</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">num_output_tensors</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">auto</span><span class="w"> </span><span class="n">migraphx_shape</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">migraphx_output</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">get_shape</span><span class="p">();</span>
+<span class="w">        </span><span class="k">auto</span><span class="w"> </span><span class="n">shape</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">migraphx_shape</span><span class="p">.</span><span class="n">lengths</span><span class="p">();</span>
+<span class="w">        </span><span class="c1">// erase the leading batch size to get the tensor size</span>
+<span class="w">        </span><span class="n">shape</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">shape</span><span class="p">.</span><span class="n">begin</span><span class="p">());</span>
+
+<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">datatype</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">datatypes</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+
+<span class="w">        </span><span class="k">auto</span><span class="w"> </span><span class="n">size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">util</span><span class="o">::</span><span class="n">containerProduct</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">datatype</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+<span class="w">        </span><span class="c1">// TODO(bpickrel): the BERT example&#39;s last tensor produces a shape of</span>
+<span class="w">        </span><span class="c1">// [10], which becomes zero after erasing the batch size, resulting in</span>
+<span class="w">        </span><span class="c1">// a tensor of size zero. What does this mean?</span>
+<span class="w">        </span><span class="c1">// assert(size &gt; 0);</span>
+<span class="w">        </span><span class="k">auto</span><span class="o">*</span><span class="w"> </span><span class="n">data_ptr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">input_buffers</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">(</span><span class="n">size</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">j</span><span class="p">);</span>
+<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">results</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">migraphx_output</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">data</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="n">size</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">j</span><span class="p">);</span>
+
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">memcpy</span><span class="p">(</span><span class="n">data_ptr</span><span class="p">,</span><span class="w"> </span><span class="n">results</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="p">);</span>
+<span class="w">        </span><span class="n">InferenceRequestInput</span><span class="w"> </span><span class="n">input</span><span class="p">{</span><span class="n">data_ptr</span><span class="p">,</span><span class="w"> </span><span class="n">shape</span><span class="p">,</span><span class="w"> </span><span class="n">datatype</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">};</span>
+
+<span class="w">        </span><span class="n">new_request</span><span class="o">-&gt;</span><span class="n">addInputTensor</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">input</span><span class="p">));</span>
+<span class="w">      </span><span class="p">}</span>
+
+<span class="w">      </span><span class="n">new_batch</span><span class="o">-&gt;</span><span class="n">addRequest</span><span class="p">(</span><span class="n">new_request</span><span class="p">);</span>
+
+<span class="w">      </span><span class="n">new_batch</span><span class="o">-&gt;</span><span class="n">setModel</span><span class="p">(</span><span class="n">j</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;migraphx&quot;</span><span class="p">);</span>
+
+<span class="w">    </span><span class="p">}</span><span class="w">  </span><span class="c1">// end j, request</span>
+<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">exception</span><span class="o">&amp;</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// This outer catch block catches exceptions in evaluation of the batch.</span>
+<span class="w">    </span><span class="n">AMDINFER_LOG_ERROR</span><span class="p">(</span><span class="n">logger</span><span class="p">,</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">what</span><span class="p">());</span>
+<span class="w">    </span><span class="c1">// Pass error message back as reply for each request in the batch</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">requests</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">batch</span><span class="o">-&gt;</span><span class="n">getRequests</span><span class="p">();</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">req_e</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">requests</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">req_e</span><span class="o">-&gt;</span><span class="n">runCallbackError</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="s">&quot;Migraphx inference error: &quot;</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
+<span class="w">                              </span><span class="n">e</span><span class="p">.</span><span class="n">what</span><span class="p">());</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="n">new_batch</span><span class="o">-&gt;</span><span class="n">setBuffers</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">input_buffers</span><span class="p">),</span><span class="w"> </span><span class="p">{});</span>
+
+<span class="w">  </span><span class="n">timer</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="s">&quot;batch_stop&quot;</span><span class="p">);</span>
+<span class="w">  </span><span class="p">[[</span><span class="n">maybe_unused</span><span class="p">]]</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">duration</span><span class="w"> </span><span class="o">=</span>
+<span class="w">    </span><span class="n">timer</span><span class="p">.</span><span class="n">count</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">micro</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;batch_start&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;batch_stop&quot;</span><span class="p">);</span>
+<span class="w">  </span><span class="n">AMDINFER_LOG_INFO</span><span class="p">(</span>
+<span class="w">    </span><span class="n">logger</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="s">&quot;Finished migraphx batch processing; batch size: &quot;</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
+<span class="w">              </span><span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">batch_size_</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
+<span class="w">              </span><span class="s">&quot;  elapsed time: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">duration</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot; us&quot;</span><span class="p">);</span>
+
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">new_batch</span><span class="p">;</span>
 <span class="p">}</span>
 
 <span class="kt">void</span><span class="w"> </span><span class="n">MIGraphXWorker</span><span class="o">::</span><span class="n">doRelease</span><span class="p">()</span><span class="w"> </span><span class="p">{}</span>
@@ -1013,7 +962,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="c1">// using smart pointer here may cause problems inside shared object so managing</span>
 <span class="c1">// manually</span>
 <span class="n">amdinfer</span><span class="o">::</span><span class="n">workers</span><span class="o">::</span><span class="n">Worker</span><span class="o">*</span><span class="w"> </span><span class="nf">getWorker</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">amdinfer</span><span class="o">::</span><span class="n">workers</span><span class="o">::</span><span class="n">MIGraphXWorker</span><span class="p">(</span><span class="s">&quot;MIGraphX&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;gpu&quot;</span><span class="p">);</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">amdinfer</span><span class="o">::</span><span class="n">workers</span><span class="o">::</span><span class="n">MIGraphXWorker</span><span class="p">(</span><span class="s">&quot;MIGraphX&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;GPU&quot;</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span>
 <span class="p">}</span>
 <span class="p">}</span><span class="w">  </span><span class="c1">// extern C</span>
 </pre></div>
@@ -1039,7 +988,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on March 20, 2023.
+      <span class="lastupdated">Last updated on April 13, 2023.
       </span></p>
   </div>
 

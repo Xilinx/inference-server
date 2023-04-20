@@ -63,5 +63,7 @@ Variables
 ---------
 
 
-- :ref:`exhale_variable_aks__detect_8hpp_1aff4c1089315fd2d1ff79e575fb320332`
+- :ref:`exhale_variable_aks__detect_8hpp_1a7005690caff676e0cf1c434d10844fc1`
+
+- :ref:`exhale_variable_aks__detect_8hpp_1a39a6ef55956630c25322735f8e6e15c0`
 

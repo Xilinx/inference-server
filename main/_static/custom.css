@@ -26,3 +26,15 @@
 .sphinx-tabs .sphinx-tabs-panel *:last-child {
     margin-bottom: 0;
 }
+
+/* 
+Style all links to the internal glossary with special formatting. The ^= denotes
+that the href value starts with "glossary.html" 
+*/
+a[href^="glossary.html"] {
+    border-bottom: 1px dotted;
+}
+
+.has-tippy:hover {
+    cursor: help;
+}

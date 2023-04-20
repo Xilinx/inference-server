@@ -31,7 +31,7 @@ Includes
 
 - ``cstdint``
 
-- ``filesystem``
+- ``filesystem`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_filesystem.cpp`)
 
 - ``memory`` (:ref:`file__workspace_amdinfer_src_amdinfer_core_memory_pool_cpu_allocator.cpp`)
 

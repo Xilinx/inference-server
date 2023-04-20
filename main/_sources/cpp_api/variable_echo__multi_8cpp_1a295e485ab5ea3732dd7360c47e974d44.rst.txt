@@ -1,0 +1,13 @@
+.. _exhale_variable_echo__multi_8cpp_1a295e485ab5ea3732dd7360c47e974d44:
+
+Variable kOutputTensors
+=======================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_models_echo_multi.cpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: kOutputTensors

@@ -58,6 +58,8 @@ Includes
 
 - ``amdinfer/util/queue.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_queue.hpp`)
 
+- ``amdinfer/util/string.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_string.hpp`)
+
 - ``amdinfer/util/thread.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_thread.hpp`)
 
 - ``amdinfer/util/timer.hpp`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_timer.hpp`)
@@ -86,7 +88,7 @@ Includes
 
 - ``utility``
 
-- ``vector``
+- ``vector`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector.cpp`)
 
 
 
@@ -116,8 +118,6 @@ Functions
 - :ref:`exhale_function_c__plus__plus_8cpp_1ad50576352aa9fe95a1f335068a150f86`
 
 - :ref:`exhale_function_c__plus__plus_8cpp_1a9e6917e8d658979c637569428360219e`
-
-- :ref:`exhale_function_c__plus__plus_8cpp_1ae839d3bb421974c63e142c461e969830`
 
 - :ref:`exhale_function_c__plus__plus_8cpp_1a601552e385edb19c4596c0c81cabb7fe`
 

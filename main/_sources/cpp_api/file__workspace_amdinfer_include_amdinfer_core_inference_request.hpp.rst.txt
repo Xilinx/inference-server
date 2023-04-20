@@ -39,7 +39,7 @@ Includes
 
 - ``string`` (:ref:`file__workspace_amdinfer_src_amdinfer_util_string.hpp`)
 
-- ``vector``
+- ``vector`` (:ref:`file__workspace_amdinfer_src_amdinfer_buffers_vector.cpp`)
 
 
 
@@ -75,9 +75,15 @@ Included By
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_core_model_metadata.cpp`
 
+- :ref:`file__workspace_amdinfer_src_amdinfer_models_base64_decode.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_models_base64_encode.cpp`
+
 - :ref:`file__workspace_amdinfer_src_amdinfer_models_echo.cpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_models_echo_multi.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_models_invert_image.cpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_servers_grpc_server.cpp`
 
@@ -85,19 +91,11 @@ Included By
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_servers_websocket_server.cpp`
 
-- :ref:`file__workspace_amdinfer_src_amdinfer_workers_aks.cpp`
-
 - :ref:`file__workspace_amdinfer_src_amdinfer_workers_aks_detect.cpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_workers_aks_detect_stream.cpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_workers_c_plus_plus.cpp`
-
-- :ref:`file__workspace_amdinfer_src_amdinfer_workers_echo.cpp`
-
-- :ref:`file__workspace_amdinfer_src_amdinfer_workers_echo_multi.cpp`
-
-- :ref:`file__workspace_amdinfer_src_amdinfer_workers_invert_image.cpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_workers_invert_video.cpp`
 
@@ -108,6 +106,8 @@ Included By
 - :ref:`file__workspace_amdinfer_src_amdinfer_workers_resnet50.cpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_workers_resnet50_stream.cpp`
+
+- :ref:`file__workspace_amdinfer_src_amdinfer_workers_responder.cpp`
 
 - :ref:`file__workspace_amdinfer_src_amdinfer_workers_tf_zendnn.cpp`
 

@@ -28,6 +28,8 @@ Files
 - :ref:`file__workspace_amdinfer_src_amdinfer_core_inference_request.cpp`
 - :ref:`file__workspace_amdinfer_src_amdinfer_core_inference_response.cpp`
 - :ref:`file__workspace_amdinfer_src_amdinfer_core_inference_tensor.cpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_model_config.cpp`
+- :ref:`file__workspace_amdinfer_src_amdinfer_core_model_config.hpp`
 - :ref:`file__workspace_amdinfer_src_amdinfer_core_model_metadata.cpp`
 - :ref:`file__workspace_amdinfer_src_amdinfer_core_model_repository.cpp`
 - :ref:`file__workspace_amdinfer_src_amdinfer_core_model_repository.hpp`

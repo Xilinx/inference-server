@@ -39,6 +39,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <script src="../_static/copybutton.js"></script>
         <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
         <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+        <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
+        <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
+        <script defer="defer" src="../_static/tippy/cpp_api/classamdinfer_1_1Buffer.15110f40-323f-4943-9687-eb211f954648.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -221,10 +224,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.inferAsyncOrdered"><code class="docutils literal notranslate"><span class="pre">inferAsyncOrdered()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.inferAsyncOrderedBatched"><code class="docutils literal notranslate"><span class="pre">inferAsyncOrderedBatched()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.inference_request_to_dict"><code class="docutils literal notranslate"><span class="pre">inference_request_to_dict()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.loadEnsemble"><code class="docutils literal notranslate"><span class="pre">loadEnsemble()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.parallel_infer"><code class="docutils literal notranslate"><span class="pre">parallel_infer()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.serverHasExtension"><code class="docutils literal notranslate"><span class="pre">serverHasExtension()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.start_http_client_server"><code class="docutils literal notranslate"><span class="pre">start_http_client_server()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.stringToArray"><code class="docutils literal notranslate"><span class="pre">stringToArray()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.unloadModels"><code class="docutils literal notranslate"><span class="pre">unloadModels()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.waitUntilModelNotReady"><code class="docutils literal notranslate"><span class="pre">waitUntilModelNotReady()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.waitUntilModelReady"><code class="docutils literal notranslate"><span class="pre">waitUntilModelReady()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.waitUntilServerReady"><code class="docutils literal notranslate"><span class="pre">waitUntilServerReady()</span></code></a></li>
 </ul>
@@ -463,6 +469,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">amdinfer::CpuBuffer</span></code> (<a class="reference internal" href="classamdinfer_1_1CpuBuffer.html#exhale-class-classamdinfer-1-1cpubuffer"><span class="std std-ref">Class CpuBuffer</span></a>)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">amdinfer::VartTensorBuffer</span></code> (<a class="reference internal" href="classamdinfer_1_1VartTensorBuffer.html#exhale-class-classamdinfer-1-1varttensorbuffer"><span class="std std-ref">Class VartTensorBuffer</span></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">amdinfer::VectorBuffer</span></code> (<a class="reference internal" href="classamdinfer_1_1VectorBuffer.html#exhale-class-classamdinfer-1-1vectorbuffer"><span class="std std-ref">Class VectorBuffer</span></a>)</p></li>
 </ul>
 </section>
 </section>
@@ -472,7 +479,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <dt class="sig sig-object cpp" id="_CPPv4N8amdinfer6BufferE">
 <span id="_CPPv3N8amdinfer6BufferE"></span><span id="_CPPv2N8amdinfer6BufferE"></span><span id="amdinfer::Buffer"></span><span class="target" id="classamdinfer_1_1Buffer"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Buffer</span></span></span><a class="headerlink" href="#_CPPv4N8amdinfer6BufferE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The base buffer class. <a class="reference internal" href="#classamdinfer_1_1Buffer"><span class="std std-ref">Buffer</span></a> implementations should extend this class and override the methods. </p>
-<p>Subclassed by <a class="reference internal" href="classamdinfer_1_1CpuBuffer.html#classamdinfer_1_1CpuBuffer"><span class="std std-ref">amdinfer::CpuBuffer</span></a>, <a class="reference internal" href="classamdinfer_1_1VartTensorBuffer.html#classamdinfer_1_1VartTensorBuffer"><span class="std std-ref">amdinfer::VartTensorBuffer</span></a></p>
+<p>Subclassed by <a class="reference internal" href="classamdinfer_1_1CpuBuffer.html#classamdinfer_1_1CpuBuffer"><span class="std std-ref">amdinfer::CpuBuffer</span></a>, <a class="reference internal" href="classamdinfer_1_1VartTensorBuffer.html#classamdinfer_1_1VartTensorBuffer"><span class="std std-ref">amdinfer::VartTensorBuffer</span></a>, <a class="reference internal" href="classamdinfer_1_1VectorBuffer.html#classamdinfer_1_1VectorBuffer"><span class="std std-ref">amdinfer::VectorBuffer</span></a></p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
@@ -534,6 +541,24 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span id="_CPPv3NK8amdinfer6Buffer12getAllocatorEv"></span><span id="_CPPv2NK8amdinfer6Buffer12getAllocatorEv"></span><span id="amdinfer::Buffer::getAllocatorC"></span><span class="target" id="classamdinfer_1_1Buffer_1aeeb4894707c2ea3912b35d58e348edd7"></span><a class="reference internal" href="enum_memory__allocator_8hpp_1a7c5b9c96a6c33be879d5f8b8eb3cd8d9.html#_CPPv4N8amdinfer16MemoryAllocatorsE" title="amdinfer::MemoryAllocators"><span class="n"><span class="pre">MemoryAllocators</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">getAllocator</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer6Buffer12getAllocatorEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer6Buffer7setPoolEPK10MemoryPool">
+<span id="_CPPv3N8amdinfer6Buffer7setPoolEPK10MemoryPool"></span><span id="_CPPv2N8amdinfer6Buffer7setPoolEPK10MemoryPool"></span><span id="amdinfer::Buffer::setPool__MemoryPoolCP"></span><span class="target" id="classamdinfer_1_1Buffer_1a677d019c55c39a59fe7a4ce5fdcdfb63"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">setPool</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="classamdinfer_1_1MemoryPool.html#_CPPv4N8amdinfer10MemoryPoolE" title="amdinfer::MemoryPool"><span class="n"><span class="pre">MemoryPool</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pool</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8amdinfer6Buffer7setPoolEPK10MemoryPool" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8amdinfer6Buffer4freeEv">
+<span id="_CPPv3N8amdinfer6Buffer4freeEv"></span><span id="_CPPv2N8amdinfer6Buffer4freeEv"></span><span id="amdinfer::Buffer::free"></span><span class="target" id="classamdinfer_1_1Buffer_1a20494be289694a0965417c32de463892"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">free</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><a class="headerlink" href="#_CPPv4N8amdinfer6Buffer4freeEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-protected-functions">Protected Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8amdinfer6Buffer7getPoolEv">
+<span id="_CPPv3NK8amdinfer6Buffer7getPoolEv"></span><span id="_CPPv2NK8amdinfer6Buffer7getPoolEv"></span><span id="amdinfer::Buffer::getPoolC"></span><span class="target" id="classamdinfer_1_1Buffer_1a1025e5933c7a1637f6b82aa50d41ba5b"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="classamdinfer_1_1MemoryPool.html#_CPPv4N8amdinfer10MemoryPoolE" title="amdinfer::MemoryPool"><span class="n"><span class="pre">MemoryPool</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">getPool</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8amdinfer6Buffer7getPoolEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
 </div>
 </dd></dl>
 
@@ -562,7 +587,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on March 20, 2023.
+      <span class="lastupdated">Last updated on April 13, 2023.
       </span></p>
   </div>
 

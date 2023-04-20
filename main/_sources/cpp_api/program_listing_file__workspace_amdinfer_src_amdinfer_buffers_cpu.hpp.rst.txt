@@ -44,6 +44,8 @@ Program Listing for File cpu.hpp
    
      void* data(size_t offset) override;
    
+     void free() override;
+   
     private:
      std::byte* data_;
    };

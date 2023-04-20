@@ -25,6 +25,7 @@ Program Listing for File echo_multi.cpp
    // limitations under the License.
    
    #include "amdinfer/batching/batch.hpp"
+   #include "amdinfer/buffers/vector.hpp"
    #include "amdinfer/core/inference_request.hpp"
    #include "amdinfer/core/inference_response.hpp"
    #include "amdinfer/core/parameters.hpp"
@@ -54,32 +55,38 @@ Program Listing for File echo_multi.cpp
    }
    
    std::vector<amdinfer::Tensor> getOutputs() {
-     std::vector<amdinfer::Tensor> output_tensors;
-     output_tensors.reserve(kOutputTensors);
-     for (auto i = 0; i < kOutputTensors; ++i) {
-       std::vector<size_t> shape = {kOutputLengths.at(i)};
-       output_tensors.emplace_back("output" + std::to_string(i), shape,
-                                   amdinfer::DataType::Uint32);
-     }
-     return output_tensors;
+     // intentionally return an empty shape, indicating an unknown output tensor
+     // size even though it is known in this case. This forces the worker to use
+     // different logic to invoke the run method.
+     return {};
    }
    
-   void run(amdinfer::Batch* batch, amdinfer::Batch* new_batch) {
+   amdinfer::BatchPtr run(amdinfer::Batch* batch) {
      amdinfer::Logger logger{amdinfer::Loggers::Server};
    
+     auto new_batch = batch->propagate();
      const auto batch_size = batch->size();
+     const auto data_size = amdinfer::DataType("Uint32").size();
+   
+     std::vector<amdinfer::BufferPtr> input_buffers;
+     input_buffers.reserve(kOutputTensors);
+     for (auto i = 0; i < kOutputTensors; ++i) {
+       input_buffers.emplace_back(std::make_unique<amdinfer::VectorBuffer>(
+         kOutputLengths.at(i) * batch_size * data_size));
+     }
+   
      for (unsigned int j = 0; j < batch_size; j++) {
        const auto& req = batch->getRequest(j);
-   #ifdef AMDINFER_ENABLE_TRACING
-       auto& trace = batch->getTrace(j);
-       trace->startSpan("echoMulti");
-   #endif
-       const auto& new_request = new_batch->getRequest(j);
-       new_request->setCallback(req->getCallback());
+       auto new_request = req->propagate();
+       for (auto i = 0; i < kOutputTensors; ++i) {
+         std::vector<size_t> shape = {kOutputLengths.at(i)};
+         auto* data_ptr =
+           input_buffers.at(i)->data(j * kOutputLengths.at(i) * data_size);
+         new_request->addInputTensor(data_ptr, shape, amdinfer::DataType::Uint32,
+                                     "output" + std::to_string(i));
+       }
    
-       // new_request->setID(req->getID());
        const auto& inputs = req->getInputs();
-       // auto outputs = req->getOutputs();
    
        std::vector<int> args;
        const auto input_num = amdinfer::util::containerSum(kInputLengths);
@@ -104,15 +111,13 @@ Program Listing for File echo_multi.cpp
          }
        }
    
-   #ifdef AMDINFER_ENABLE_TRACING
-       trace->endSpan();
-       new_batch->addTrace(std::move(trace));
-   #endif
-   
-   #ifdef AMDINFER_ENABLE_METRICS
-       new_batch->addTime(batch->getTime(j));
-   #endif
+       new_batch->addRequest(new_request);
+       new_batch->setModel(j, "echo_multi");
      }
+   
+     new_batch->setBuffers(std::move(input_buffers), {});
+   
+     return new_batch;
    }
    
    }  // extern "C"

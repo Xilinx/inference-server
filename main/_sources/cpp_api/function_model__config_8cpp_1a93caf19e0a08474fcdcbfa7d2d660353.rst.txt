@@ -1,0 +1,13 @@
+.. _exhale_function_model__config_8cpp_1a93caf19e0a08474fcdcbfa7d2d660353:
+
+Function amdinfer::extractString
+================================
+
+- Defined in :ref:`file__workspace_amdinfer_src_amdinfer_core_model_config.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: amdinfer::extractString(const toml::table&, const std::string&, bool)
