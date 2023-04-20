@@ -38,32 +38,34 @@ endforeach()
 
 # create a custom target to create an entry in the repository if all these
 # targets succeed
-add_custom_target(invert_image_repository ALL)
-foreach(filename base64_encode base64_decode invert_image)
-  amdinfer_get_target_name(target ${filename})
-  add_dependencies(invert_image_repository ${target})
-endforeach()
+if(NOT AMDINFER_INSTALL)
+  add_custom_target(invert_image_repository ALL)
+  foreach(filename base64_encode base64_decode invert_image)
+    amdinfer_get_target_name(target ${filename})
+    add_dependencies(invert_image_repository ${target})
+  endforeach()
 
-add_custom_command(
-  TARGET invert_image_repository
-  POST_BUILD
-  COMMENT
-    "Copying base64_encode, base64_decode and invert_image to invert_image model in repository"
-  COMMAND mkdir -p
-          ${PROJECT_SOURCE_DIR}/external/artifacts/repository/invert_image/1
-  COMMAND
-    cp libbase64_decode.so
-    ${PROJECT_SOURCE_DIR}/external/artifacts/repository/invert_image/1/base64_decode.so
-  COMMAND
-    cp libinvert_image.so
-    ${PROJECT_SOURCE_DIR}/external/artifacts/repository/invert_image/1/invert_image.so
-  COMMAND
-    cp libbase64_encode.so
-    ${PROJECT_SOURCE_DIR}/external/artifacts/repository/invert_image/1/base64_encode.so
-  COMMAND
-    cp ${PROJECT_SOURCE_DIR}/external/repository_metadata/invert_image.toml
-    ${PROJECT_SOURCE_DIR}/external/artifacts/repository/invert_image/invert_image.toml
-)
+  add_custom_command(
+    TARGET invert_image_repository
+    POST_BUILD
+    COMMENT
+      "Copying base64_encode, base64_decode and invert_image to invert_image model in repository"
+    COMMAND mkdir -p
+            ${PROJECT_SOURCE_DIR}/external/artifacts/repository/invert_image/1
+    COMMAND
+      cp libbase64_decode.so
+      ${PROJECT_SOURCE_DIR}/external/artifacts/repository/invert_image/1/base64_decode.so
+    COMMAND
+      cp libinvert_image.so
+      ${PROJECT_SOURCE_DIR}/external/artifacts/repository/invert_image/1/invert_image.so
+    COMMAND
+      cp libbase64_encode.so
+      ${PROJECT_SOURCE_DIR}/external/artifacts/repository/invert_image/1/base64_encode.so
+    COMMAND
+      cp ${PROJECT_SOURCE_DIR}/external/repository_metadata/invert_image.toml
+      ${PROJECT_SOURCE_DIR}/external/artifacts/repository/invert_image/invert_image.toml
+  )
+endif()
 
 if(NOT SKBUILD)
   install(TARGETS ${targets} LIBRARY COMPONENT amdinfer_Runtime
