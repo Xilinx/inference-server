@@ -31,7 +31,7 @@
 Style all links to the internal glossary with special formatting. The ^= denotes
 that the href value starts with "glossary.html" 
 */
-a[href^="glossary.html"] {
+a[href*="glossary.html"] {
     border-bottom: 1px dotted;
 }
 

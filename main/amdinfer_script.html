@@ -41,7 +41,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <script src="_static/twemoji.js"></script>
         <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
         <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
-        <script defer="defer" src="_static/tippy/amdinfer_script.ddf6a0f6-bb0d-480e-9e12-d92f8455fa46.js"></script>
+        <script defer="defer" src="_static/tippy/amdinfer_script.fbda1da1-cac4-460e-8dd9-6f51dd5b5041.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -901,8 +901,8 @@ The documentation for the options available in this Python script can be seen he
 <section id="test">
 <h3>test<a class="headerlink" href="#test" title="Permalink to this heading">¶</a></h3>
 <p>Run the test suite with pytest. All unknown arguments are passed to pytest</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">amdinfer</span> <span class="n">test</span> <span class="p">[</span><span class="o">--</span><span class="n">mode</span> <span class="p">{</span><span class="nb">all</span><span class="p">,</span><span class="n">examples</span><span class="p">,</span><span class="n">tests</span><span class="p">}]</span> <span class="p">[</span><span class="o">--</span><span class="n">hostname</span> <span class="n">HOSTNAME</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">http</span><span class="o">-</span><span class="n">port</span> <span class="n">HTTP_PORT</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">load</span><span class="o">-</span><span class="n">before</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">build</span> <span class="n">BUILD</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">benchmark</span> <span class="p">{</span><span class="nb">all</span><span class="p">,</span><span class="n">skip</span><span class="p">,</span><span class="n">only</span><span class="p">}]</span> <span class="p">[</span><span class="o">--</span><span class="n">perf</span> <span class="p">{</span><span class="nb">all</span><span class="p">,</span><span class="n">skip</span><span class="p">,</span><span class="n">only</span><span class="p">}]</span>
-              <span class="p">[</span><span class="o">--</span><span class="n">cpp</span> <span class="p">{</span><span class="nb">all</span><span class="p">,</span><span class="n">skip</span><span class="p">,</span><span class="n">only</span><span class="p">}]</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">amdinfer</span> <span class="n">test</span> <span class="p">[</span><span class="o">--</span><span class="n">mode</span> <span class="p">{</span><span class="nb">all</span><span class="p">,</span><span class="n">examples</span><span class="p">,</span><span class="n">tests</span><span class="p">}]</span> <span class="p">[</span><span class="o">--</span><span class="n">hostname</span> <span class="n">HOSTNAME</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">http</span><span class="o">-</span><span class="n">port</span> <span class="n">HTTP_PORT</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">load</span><span class="o">-</span><span class="n">before</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">build</span> <span class="n">BUILD</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">benchmark</span> <span class="p">{</span><span class="n">only</span><span class="p">,</span><span class="nb">all</span><span class="p">,</span><span class="n">skip</span><span class="p">}]</span> <span class="p">[</span><span class="o">--</span><span class="n">perf</span> <span class="p">{</span><span class="n">only</span><span class="p">,</span><span class="nb">all</span><span class="p">,</span><span class="n">skip</span><span class="p">}]</span>
+              <span class="p">[</span><span class="o">--</span><span class="n">cpp</span> <span class="p">{</span><span class="n">only</span><span class="p">,</span><span class="nb">all</span><span class="p">,</span><span class="n">skip</span><span class="p">}]</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span>
 </pre></div>
 </div>
 <section id="options_repeat10">
@@ -930,17 +930,17 @@ The documentation for the options available in this Python script can be seen he
 <p>Default: “Debug”</p>
 </dd>
 <dt><kbd>--benchmark</kbd></dt>
-<dd><p>Possible choices: all, skip, only</p>
+<dd><p>Possible choices: only, all, skip</p>
 <p>Run benchmark tests. Defaults to skip. Ignored if -m is specified</p>
 <p>Default: “skip”</p>
 </dd>
 <dt><kbd>--perf</kbd></dt>
-<dd><p>Possible choices: all, skip, only</p>
+<dd><p>Possible choices: only, all, skip</p>
 <p>Run perf tests. Defaults to skip. Ignored if -m is specified</p>
 <p>Default: “skip”</p>
 </dd>
 <dt><kbd>--cpp</kbd></dt>
-<dd><p>Possible choices: all, skip, only</p>
+<dd><p>Possible choices: only, all, skip</p>
 <p>Run cpp tests. Defaults to all. Ignored if -m is specified</p>
 <p>Default: “all”</p>
 </dd>
