@@ -150,6 +150,7 @@ add_option("ENABLE_TFZENDNN" "Enable TF+ZenDNN worker" ${tfzendnn_FOUND})
 add_option("ENABLE_PTZENDNN" "Enable PT+ZenDNN worker" ${ptzendnn_FOUND})
 add_option("ENABLE_MIGRAPHX" "Enable migraphx worker" ${migraphx_FOUND})
 add_option("ENABLE_PYTHON_BINDINGS" "Build Python bindings" ON)
+add_option("INSTALL" "Set when invoking installation" OFF)
 
 # override tracing option and disable it if building Python bindings
 if(SKBUILD)
