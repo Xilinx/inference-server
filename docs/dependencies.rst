@@ -115,35 +115,35 @@ The following packages (and any dependencies) are installed from the Python Pack
     :header: Name,Version,License,Usage
     :widths: auto
 
-    :pypiPackages:`black`,latest,MIT,Formatting Python files\ :superscript:`d 0`
-    :pypiPackages:`breathe`,latest,BSD-3,Connect Doxygen to Sphinx for documentation\ :superscript:`d 0`
-    :pypiPackages:`cmakelang`,latest,GPL-3,CMake linter and formatter\ :superscript:`d 0`
-    :pypiPackages:`cpplint`,latest,BSD-3,C++ linter\ :superscript:`d 0`
-    :pypiPackages:`exhale`,latest,BSD-3,Documentation generator\ :superscript:`d 0`
-    :pypiPackages:`fastcov`,latest,MIT,Reporting test coverage\ :superscript:`d 0`
-    :pypiPackages:`numpy`,latest,BSD-3,Scientific computing package for Python\ :superscript:`d 0`
-    :pypiPackages:`opencv-python-headless`,latest,MIT,Python bindings for OpenCV\ :superscript:`d 0`
+    :pypiPackages:`black`,23.3.0,MIT,Formatting Python files\ :superscript:`d 0`
+    :pypiPackages:`breathe`,4.35.0,BSD-3,Connect Doxygen to Sphinx for documentation\ :superscript:`d 0`
+    :pypiPackages:`cmakelang`,0.6.13,GPL-3,CMake linter and formatter\ :superscript:`d 0`
+    :pypiPackages:`cpplint`,1.6.1,BSD-3,C++ linter\ :superscript:`d 0`
+    :pypiPackages:`exhale`,0.3.6,BSD-3,Documentation generator\ :superscript:`d 0`
+    :pypiPackages:`fastcov`,1.14,MIT,Reporting test coverage\ :superscript:`d 0`
+    :pypiPackages:`numpy`,1.24.2,BSD-3,Scientific computing package for Python\ :superscript:`d 0`
+    :pypiPackages:`opencv-python-headless`,4.7.0.72,MIT,Python bindings for OpenCV\ :superscript:`d 0`
     :pypiPackages:`pip`,latest,MIT,Python package installer\ :superscript:`d 0`
-    :pypiPackages:`pre-commit`,latest,MIT,Pre-commit hook framework\ :superscript:`d 0`
-    :pypiPackages:`pybind11_mkdoc`,latest,MIT,Used to extract function documentation for Python binding\ :superscript:`d 0`
-    :pypiPackages:`pybind11-stubgen`,latest,BSD-3,Used to generate type stubs for Python binding\ :superscript:`d 0`
-    :pypiPackages:`pytest`,latest,MIT,Python testing infrastructure\ :superscript:`d 0`
-    :pypiPackages:`pytest-benchmark`,latest,BSD-2,Plugin for Pytest to add benchmarking\ :superscript:`d 0`
-    :pypiPackages:`pytest-cpp`,latest,MIT,Plugin for Pytest to run C++ tests\ :superscript:`d 0`
-    :pypiPackages:`pytest-xprocess`,latest,MIT,Plugin for Pytest to run external processes\ :superscript:`d 0`
-    :pypiPackages:`requests`,latest,Apache-2.0,Making REST requests\ :superscript:`d 0`
-    :pypiPackages:`rich`,latest,MIT,Printing tables when benchmarking\ :superscript:`d 0`
+    :pypiPackages:`pre-commit`,3.2.2,MIT,Pre-commit hook framework\ :superscript:`d 0`
+    :pypiPackages:`pybind11_mkdoc`,2.6.2,MIT,Used to extract function documentation for Python binding\ :superscript:`d 0`
+    :pypiPackages:`pybind11-stubgen`,0.13.0,BSD-3,Used to generate type stubs for Python binding\ :superscript:`d 0`
+    :pypiPackages:`pytest`,7.3.1,MIT,Python testing infrastructure\ :superscript:`d 0`
+    :pypiPackages:`pytest-benchmark`,4.0.0,BSD-2,Plugin for Pytest to add benchmarking\ :superscript:`d 0`
+    :pypiPackages:`pytest-cpp`,2.3.0,MIT,Plugin for Pytest to run C++ tests\ :superscript:`d 0`
+    :pypiPackages:`pytest-xprocess`,0.22.2,MIT,Plugin for Pytest to run external processes\ :superscript:`d 0`
+    :pypiPackages:`requests`,2.28.2,Apache-2.0,Making REST requests\ :superscript:`d 0`
+    :pypiPackages:`rich`,13.3.4,MIT,Printing tables when benchmarking\ :superscript:`d 0`
     :pypiPackages:`setuptools`,latest,MIT,Manage Python packages\ :superscript:`d 0`
-    :pypiPackages:`Sphinx`,latest,BSD-2 + others,Building documentation\ :superscript:`d 0`
-    :pypiPackages:`sphinx-argparse`,latest,MIT,Sphinx plugin for documenting CLIs\ :superscript:`d 0`
-    :pypiPackages:`sphinx-copybutton`,latest,MIT,Adds copy button for code blocks\ :superscript:`d 0`
-    :pypiPackages:`sphinxemoji`,latest,BSD-3,Sphinx plugin for enabling emoji\ :superscript:`d 0`
-    :pypiPackages:`sphinx-issues`,latest,MIT,Sphinx plugin for links to the project's Github issue tracker\ :superscript:`d 0`
-    :pypiPackages:`sphinx-tabs`,latest,MIT,Sphinx plugin to create tabs\ :superscript:`d 0`
-    :pypiPackages:`sphinx_tippy`,latest,MIT,Sphinx plugin to create tooltips\ :superscript:`d 0`
-    :pypiPackages:`sphinxcontrib-confluencebuilder`,latest,BSD-2,Sphinx plugin to export documentation to Confluence\ :superscript:`d 0`
-    :pypiPackages:`sphinxcontrib-jquery`,latest,BSD-0,Sphinx plugin to add JQuery\ :superscript:`d 0`
-    :pypiPackages:`sphinxcontrib-openapi`,latest,BSD-2,Sphinx plugin to build OpenAPI docs\ :superscript:`d 0`
+    :pypiPackages:`Sphinx`,4.5.0,BSD-2 + others,Building documentation\ :superscript:`d 0`
+    :pypiPackages:`sphinx-argparse`,0.4.0,MIT,Sphinx plugin for documenting CLIs\ :superscript:`d 0`
+    :pypiPackages:`sphinx-copybutton`,0.5.2,MIT,Adds copy button for code blocks\ :superscript:`d 0`
+    :pypiPackages:`sphinx-issues`,3.0.1,MIT,Sphinx plugin for links to the project's Github issue tracker\ :superscript:`d 0`
+    :pypiPackages:`sphinx-tabs`,3.4.0,MIT,Sphinx plugin to create tabs\ :superscript:`d 0`
+    :pypiPackages:`sphinx_tippy`,0.4.1,MIT,Sphinx plugin to create tooltips\ :superscript:`d 0`
+    :pypiPackages:`sphinxcontrib-confluencebuilder`,2.0.0,BSD-2,Sphinx plugin to export documentation to Confluence\ :superscript:`d 0`
+    :pypiPackages:`sphinxcontrib-jquery`,4.1,BSD-0,Sphinx plugin to add JQuery\ :superscript:`d 0`
+    :pypiPackages:`sphinxcontrib-openapi`,0.8.1,BSD-2,Sphinx plugin to build OpenAPI docs\ :superscript:`d 0`
+    :pypiPackages:`sphinxemoji`,0.2.0,BSD-3,Sphinx plugin for enabling emoji\ :superscript:`d 0`
     :pypiPackages:`wheel`,latest,MIT,Support wheels for Python packages\ :superscript:`d 0`
 
 Github

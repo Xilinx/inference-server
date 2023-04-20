@@ -45,12 +45,12 @@ Documentation overview
 
 The remainder of this documentation is organized as follows:
 
-* The **About** section continues to talk about the project at a high-level
-* The **Quickstart** section presents quick starts for different types of users
-* The **Libraries and API** section goes over the different libraries, APIs and tools available to users
+* The **Getting Started** section continues to talk about the project at a high-level
+* The **User Guide** section discusses how to use the server in more depth
 * The **Examples** section provides more commentary around the examples in the repository
-* The **Using the Server** section discusses how to use the server in more depth
-* The **Developers** section has useful information for contributors and more detail about the internal operations of the server
+* The **Developers** section has useful information for developers who are building their own images and compiling the server manually
+* The **About** section presents meta information about the inference server itself
+* The **Libraries and API** section goes over the different libraries, APIs and tools available to users
 
 Support
 -------
