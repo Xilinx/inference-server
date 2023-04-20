@@ -682,6 +682,37 @@ def install_migraphx(manager: PackageManager, custom_backends):
 
 
 def install_python_packages():
+    # The versions are pinned to prevent package updates from breaking the
+    # container. To update this list, install the packages we actually want:
+    #     pip install --no-cache-dir --ignore-installed \
+    #         pytest \
+    #         pytest-cpp \
+    #         pytest-xprocess \
+    #         requests \
+    #         breathe \
+    #         fastcov \
+    #         sphinx \
+    #         sphinx_copybutton \
+    #         sphinxcontrib-confluencebuilder \
+    #         sphinx-argparse \
+    #         sphinxemoji \
+    #         sphinx-issues \
+    #         exhale \
+    #         sphinx-tabs \
+    #         sphinx-tippy \
+    #         sphinxcontrib-openapi \
+    #         sphinxcontrib-jquery \
+    #         black \
+    #         cpplint \
+    #         cmakelang  \
+    #         pre-commit \
+    #         opencv-python-headless \
+    #         scikit-build \
+    #         pytest-benchmark \
+    #         rich \
+    #         pybind11_mkdoc \
+    #         pybind11-stubgen
+
     return textwrap.dedent(
         """\
         RUN python3 -m pip install --upgrade --force-reinstall pip \\
@@ -691,39 +722,94 @@ def install_python_packages():
                 wheel \\
             # clang-tidy-10 installs pyyaml which can't be uninstalled with pip
             && pip install --no-cache-dir --ignore-installed \\
-                # install testing dependencies
-                pytest \\
-                pytest-cpp \\
-                pytest-xprocess \\
-                requests \\
-                # install documentation dependencies
-                breathe \\
-                fastcov \\
-                sphinx \\
-                sphinx_copybutton \\
-                sphinxcontrib-confluencebuilder \\
-                sphinx-argparse \\
-                sphinxemoji \\
-                sphinx-issues \\
-                exhale \\
-                sphinx-tabs \\
-                sphinx-tippy \\
-                sphinxcontrib-openapi \\
-                sphinxcontrib-jquery \\
-                # install linting tools
-                black \\
-                cpplint \\
-                cmakelang  \\
-                pre-commit \\
-                # install dependencies
-                opencv-python-headless \\
-                scikit-build \\
-                # install benchmarking dependencies
-                pytest-benchmark \\
-                rich \\
-                # used for Python bindings
-                pybind11_mkdoc \\
-                pybind11-stubgen
+                "alabaster==0.7.13" \\
+                "attrs==23.1.0" \\
+                "Babel==2.12.1" \\
+                "beautifulsoup4==4.12.2" \\
+                "black==23.3.0" \\
+                "breathe==4.35.0" \\
+                "certifi==2022.12.7" \\
+                "cfgv==3.3.1" \\
+                "charset-normalizer==3.1.0" \\
+                "clang==14.0" \\
+                "click==8.1.3" \\
+                "cmakelang==0.6.13" \\
+                "colorama==0.4.6" \\
+                "cpplint==1.6.1" \\
+                "deepmerge==1.1.0" \\
+                "distlib==0.3.6" \\
+                "distro==1.8.0" \\
+                "docutils==0.17.1" \\
+                "exceptiongroup==1.1.1" \\
+                "exhale==0.3.6" \\
+                "fastcov==1.14" \\
+                "filelock==3.12.0" \\
+                "identify==2.5.22" \\
+                "idna==3.4" \\
+                "imagesize==1.4.1" \\
+                "importlib-metadata==6.5.0" \\
+                "importlib-resources==5.12.0" \\
+                "iniconfig==2.0.0" \\
+                "Jinja2==3.0.3" \\
+                "jsonschema==4.17.3" \\
+                "lxml==4.9.2" \\
+                "markdown-it-py==2.2.0" \\
+                "MarkupSafe==2.1.2" \\
+                "mdurl==0.1.2" \\
+                "mistune==2.0.5" \\
+                "mypy-extensions==1.0.0" \\
+                "nodeenv==1.7.0" \\
+                "numpy==1.24.2" \\
+                "opencv-python-headless==4.7.0.72" \\
+                "packaging==23.1" \\
+                "pathspec==0.11.1" \\
+                "picobox==3.0.0" \\
+                "pkgutil_resolve_name==1.3.10" \\
+                "platformdirs==3.2.0" \\
+                "pluggy==1.0.0" \\
+                "pre-commit==3.2.2" \\
+                "psutil==5.9.5" \\
+                "py==1.11.0" \\
+                "py-cpuinfo==9.0.0" \\
+                "pybind11-stubgen==0.13.0" \\
+                "pybind11_mkdoc==2.6.2" \\
+                "Pygments==2.15.1" \\
+                "pyrsistent==0.19.3" \\
+                "pytest==7.3.1" \\
+                "pytest-benchmark==4.0.0" \\
+                "pytest-cpp==2.3.0" \\
+                "pytest-xprocess==0.22.2" \\
+                "pytz==2023.3" \\
+                "PyYAML==6.0" \\
+                "requests==2.28.2" \\
+                "rich==13.3.4" \\
+                "scikit-build==0.17.2" \\
+                "six==1.16.0" \\
+                "snowballstemmer==2.2.0" \\
+                "soupsieve==2.4.1" \\
+                "Sphinx==4.5.0" \\
+                "sphinx-argparse==0.4.0" \\
+                "sphinx-copybutton==0.5.2" \\
+                "sphinx-issues==3.0.1" \\
+                "sphinx-tabs==3.4.0" \\
+                "sphinx_mdinclude==0.5.3" \\
+                "sphinx_tippy==0.4.1" \\
+                "sphinxcontrib-applehelp==1.0.4" \\
+                "sphinxcontrib-confluencebuilder==2.0.0" \\
+                "sphinxcontrib-devhelp==1.0.2" \\
+                "sphinxcontrib-htmlhelp==2.0.1" \\
+                "sphinxcontrib-httpdomain==1.8.1" \\
+                "sphinxcontrib-jquery==4.1" \\
+                "sphinxcontrib-jsmath==1.0.1" \\
+                "sphinxcontrib-openapi==0.8.1" \\
+                "sphinxcontrib-qthelp==1.0.3" \\
+                "sphinxcontrib-serializinghtml==1.1.5" \\
+                "sphinxemoji==0.2.0" \\
+                "tomli==2.0.1" \\
+                "typing_extensions==4.5.0" \\
+                "urllib3==1.26.15" \\
+                "virtualenv==20.22.0" \\
+                "zipp==3.15.0"
         """
     )
 
