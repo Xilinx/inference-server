@@ -13,17 +13,18 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 
-..* This page has blocks of text that are inserted in multiple pages in an
-..* effort to avoid duplicating text and making the documentation easier to
-..* maintain. The format for text snippets is:
-..*     +<label>
-..*     <contents>
-..*     -<label>
-..* As an arbitrary convention, I'm using +/- prefixes to denote start and stop
-..* labels. Note that due to how including sections of pages works in RST, the
-..* labels must be entirely unique i.e. if you use "foobar" as a label, you
-..* cannot use "foobar" at the start of any other label. Therefore, prefer
-..* verbose labels to prevent unintentional matching.
+..
+    This page has blocks of text that are inserted in multiple pages in an
+    effort to avoid duplicating text and making the documentation easier to
+    maintain. The format for text snippets is:
+        +<label>
+        <contents>
+        -<label>
+    As an arbitrary convention, I'm using +/- prefixes to denote start and stop
+    labels. Note that due to how including sections of pages works in RST, the
+    labels must be entirely unique i.e. if you use "foobar" as a label, you
+    cannot use "foobar" at the start of any other label. Therefore, prefer
+    verbose labels to prevent unintentional matching.
 
 +loading_the_backend_intro
 There are multiple ways to load this backend to make it available for inference requests from clients.
@@ -52,4 +53,21 @@ In this case, the endpoint is defined in the model's configuration file in the r
         # client = amdinfer.Client()
         # parameters = amdinfer.ParameterMap()
         client.modelLoad(<model>, parameters)
+
 -loading_the_backend_modelLoad
+
++docker_pull_deployment_images
+.. tabs::
+
+    .. code-tab:: console CPU
+
+        $ docker pull amdih/serve:uif1.1_zendnn_amdinfer_0.3.0
+
+    .. code-tab:: text GPU
+
+        $ docker pull amdih/serve:uif1.1_migraphx_amdinfer_0.3.0
+
+    .. code-tab:: console FPGA
+
+        # this image is not currently pre-built but you can build it yourself
+-docker_pull_deployment_images

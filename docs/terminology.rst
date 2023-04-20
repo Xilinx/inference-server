@@ -18,8 +18,8 @@ Terminology
 
 This page presents some important terminology to frame the rest of the documentation.
 
-*amdinfer*
-----------
+amdinfer
+--------
 
 Depending on the context, *amdinfer* can be used to refer to different things.
 If the usage is ambiguous, it will be qualified with the appropriate word to clarify the meaning:
@@ -33,6 +33,8 @@ Types of Docker images
 
 There are two types of Docker images that are used in this project: *development* and *deployment*.
 
+.. _terminology~Development:
+
 Development
 ^^^^^^^^^^^
 
@@ -42,7 +44,9 @@ These images are used to compile and test the server executable using the tests 
 They are not pre-built and must be built by the user using the provided scripts.
 The development images do not contain any inference server source code.
 Instead, the standard workflow to use development images is to clone the inference server repository, build a development image and start a container using the provided script that will mount the working directory into the container.
-Under the standard naming convention used by the *amdinfer* script, this image will be tagged as ``$(whoami)/amdinfer-dev:latest``.
+Under the standard naming convention used by the *amdinfer* script during the build, this image will be tagged as ``$(whoami)/amdinfer-dev:latest``.
+
+.. _terminology~Deployment:
 
 Deployment
 ^^^^^^^^^^
@@ -52,6 +56,7 @@ They are optimized for size and used to deploy the server locally, on Kubernetes
 By default, as deployment images start, they start the server executable automatically with the default arguments.
 You can override these values by setting your own when you start a container from this image.
 The published images for the AMD Inference Server on `Docker Hub <LinkInferenceServerDockerHub>`_ are deployment images.
+Under the standard naming convention used by the *amdinfer* script during the build, this image will be tagged as ``$(whoami)/amdinfer:latest``.
 
 Types of users
 --------------

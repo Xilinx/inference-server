@@ -43,8 +43,8 @@ To see other versions, you can use "Read the Docs" panel on the bottom-left or e
     backends
     model_repository
     ensembles
-    Deploying with Docker <docker>
-    Deploying with KServe <kserve>
+    deployment
+    kserve
     performance_factors
     troubleshooting
 
@@ -90,4 +90,3 @@ To see other versions, you can use "Read the Docs" panel on the bottom-left or e
     cpp_user_api
     python
     rest
-    .. cpp_api/cpp_root

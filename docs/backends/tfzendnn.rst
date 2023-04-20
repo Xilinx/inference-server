@@ -14,7 +14,7 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 
-Vitis AI
+TfZenDNN
 ========
 
 The TfZenDNN backend executes a TensorFlow model on CPUs.

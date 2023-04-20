@@ -211,7 +211,7 @@ Always do these first when debugging any issue to eliminate the most common sour
 2. Make sure the XRT version matches in the host and in the container with ``xbutil --version``
 3. Optionally, repeat the ``xbutil examine`` and ``xbutil validate`` tests from the container. If this doesn't work, double-check how you are passing device files to the container.
 4. Make sure the XRM daemon is running in the container with ``sudo systemctl status xrmd``
-4. Run your failing test in the container and see if there are logs in the host machine's system logs.
+5. Run your failing test in the container and see if there are logs in the host machine's system logs.
 
 Gotchas
 ^^^^^^^

@@ -161,7 +161,7 @@ Use ``--help`` to see the options available.
 .. code-block:: console
 
     $ git lfs pull
-    $ amdinfer get --all-models --all-platforms
+    $ amdinfer get --all-models --all-backends
 
 You must abide by the license agreements of these files, if you choose to download them.
 

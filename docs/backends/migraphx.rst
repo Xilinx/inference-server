@@ -32,6 +32,11 @@ The tested models are listed below:
 
 Other models should also work but are currently untested.
 
+MXR is an MIGraphX-compiled format.
+When given an ONNX file, the MIGraphX backend will compile it to an MXR file.
+This MXR file will be different depending on the GPU as well as some load-time parameters such as batch size.
+If you move MXR files from one server to another, make sure they were compiled for the hardware on the new server.
+
 Hardware support
 ----------------
 
@@ -147,6 +152,11 @@ If you run into problems, first check the :ref:`general troubleshooting guide <t
 Then continue on to this XModel specific troubleshooting guide.
 You will need access to the machine where the inference server is running to debug.
 
-TODO
+Gotchas
+^^^^^^^
+
+Some common easy-to-make errors are listed here:
+
+* MXR file mismatch: MXR files are compiled by the backend using the given ONNX file for the GPU and load-time parameters. The backend will also prefer to use MXR files if they exist. If you move the MXR files to a different server or use a network storage where the MXR files get used by different servers with different GPUs, the MXR file will not work and you will get cryptic errors. The solution is to delete the MXR file and let the backend recompile from the ONNX file for your hardware.
 
 .. |platform| replace:: ``onnx_onnxv1`` or ``migraphx_mxr``

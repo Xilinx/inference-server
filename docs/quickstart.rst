@@ -146,21 +146,11 @@ Get the deployment image
 
 The deployment image is optimized for size and only contains the run-time dependencies of the server to allow for quicker deployments.
 It has limited debugging capabilities and it contains a precompiled executable for the server that automatically starts when the container starts.
-You can pull the deployment image with Docker if it exists or :ref:`build it yourself <docker:Build the deployment Docker image>`.
+You can pull the deployment image with Docker if it exists or :ref:`build it yourself <deployment:Build the deployment Docker image>`.
 
-.. tabs::
-
-    .. code-tab:: console CPU
-
-        $ docker pull amdih/serve:uif1.1_zendnn_amdinfer_0.3.0
-
-    .. code-tab:: text GPU
-
-        $ docker pull amdih/serve:uif1.1_migraphx_amdinfer_0.3.0
-
-    .. code-tab:: console FPGA
-
-        # this image is not currently pre-built but you can build it yourself
+.. include:: dry.rst
+    :start-after: +docker_pull_deployment_images
+    :end-before: -docker_pull_deployment_images
 
 Start the image
 ---------------

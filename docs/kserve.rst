@@ -80,7 +80,7 @@ A sample ``ClusterServingRuntime`` definition is provided below.
       name: kserve-amdserver
     spec:
       supportedModelFormats:
-        # depending on the image you're using, and which platforms are added,
+        # depending on the image you're using, and which backends are added,
         # the supported formats could be different. For example, this assumes
         # that a ZenDNN image was created with both TF+ZenDNN and PT+ZenDNN
         # support

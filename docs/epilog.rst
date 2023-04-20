@@ -13,6 +13,9 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 
+..
+    The contents of this file are inserted at the end of every RST source file
+
 .. _LinkDockerInstallLinux: https://docs.docker.com/engine/install/
 .. _LinkDockerRun: https://docs.docker.com/engine/reference/commandline/run/
 .. _LinkInferenceServerDockerHub: https://hub.docker.com/r/amdih/serve
