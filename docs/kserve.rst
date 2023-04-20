@@ -26,9 +26,9 @@ To use KServe, you will need a Kubernetes cluster.
 There are many ways to set up and configure a Kubernetes cluster depending on your use cases.
 Instructions for installing and configuring Kubernetes are out of this scope.
 
-Install KServe using the `instructions <https://kserve.github.io/website/admin/serverless/>`__ provided by KServe.
+Install KServe using the `instructions <https://kserve.github.io/website/master/admin/serverless/serverless>`__ provided by KServe.
 We have tested with KServe 0.8 using the standard serverless installation but other versions/configurations may work as well.
-Once KServe is installed, verify basic functionality of the cluster using KServe's `basic tutorial <https://kserve.github.io/website/get_started/first_isvc/>`__.
+Once KServe is installed, verify basic functionality of the cluster using KServe's `basic tutorial <https://kserve.github.io/website/master/get_started/first_isvc/>`__.
 If this succeeds, KServe should be installed correctly.
 KServe installation help and debugging are also out of scope for these instructions.
 If you run into problems, reach out to the KServe project.
@@ -44,7 +44,7 @@ The `kube-prometheus <https://github.com/prometheus-operator/kube-prometheus/>`_
 Get or build the AMD Inference Server Image
 -------------------------------------------
 
-To use with KServe, you will need to pull or :ref:`build the deployment container <docker:Build the deployment Docker image>`.
+To use with KServe, you will need a :ref:`deployment image <deployment:Deployment image>`.
 Once you have it somewhere, make sure you can use ``docker pull <image>`` on all the nodes in the Kubernetes cluster to get the image.
 
 Start an inference service
@@ -56,61 +56,9 @@ KServe provides a number of Custom Resource Definitions (CRDs) that you can use 
 The current recommended approach from KServe is to use the ``ServingRuntime`` method.
 
 As you start an inference service, you will need models to serve.
-The model format for the AMD Inference Server is the following:
-
-.. code-block:: text
-
-    /
-    ├─ model_a/
-    │  ├─ 1/
-    │  │  ├─ <model>.x
-    │  ├─ <config>.toml
-
-The model name, ``model_a`` in this template, must be unique among the models loaded on a particular server.
-This name is used to name the endpoint used to make inference requests to.
-Under this directory, there must be a directory named ``1/`` containing the model file itself and a TOML file describing the configuration.
-This file, ``<config>.toml`` in this template, can have any name though ``config.toml`` is suggested and will be used in this documentation.
-You can also use ``.pbtxt`` format for single models as well.
-The model file can have an arbitrary name and the file extension depends on the type of the model.
-The ``config.toml`` file contains metadata for the model.
-Consider this example of an MNIST TensorFlow model:
-
-.. code-block:: toml
-
-    name = "mnist"
-    platform = "tensorflow_graphdef"
-
-    [[inputs]]
-    name = "images_in"
-    datatype = "FP32"
-    shape = [28, 28, 1]
-
-    [[outputs]]
-    name = "flatten/Reshape"
-    datatype = "FP32"
-    shape = [10]
-
-The name must match the name of the model directory, i.e. ``model_a``.
-The platform identifies the type of the model and determines the file extension of the model file.
-The supported platforms are:
-
-.. csv-table::
-    :header: Platform,Model file extension
-    :widths: 90, 10
-    :width: 22em
-
-    ``tensorflow_graphdef``,``.pb``
-    ``pytorch_torchscript``,``.pt``
-    ``vitis_xmodel``,``.xmodel``
-    ``onnx_onnxv1``,``.onnx``
-    ``migraphx_mxr``,``.mxr``
-    ``amdinfer_cpp``,``.so``
-
-The inputs and outputs define the list of input and output tensors for the model.
-The names of the tensors may be significant if the platform needs them to perform inference.
-
+These models should be in the format that the inference server expects for its :ref:`model repository <model_repository:Model Repository>`.
 You can put the model up on any of the cloud storage platforms that KServe supports like GCS, S3 and HTTP.
-If you use HTTP, the model should be zipped.
+If you use HTTP, the model should be zipped and should unzip in the expected model repository directory structure.
 Other archive formats such as ``.tar.gz`` may not work as expected.
 Wherever you store it, the URI will be needed to start inference services.
 
@@ -132,7 +80,7 @@ A sample ``ClusterServingRuntime`` definition is provided below.
       name: kserve-amdserver
     spec:
       supportedModelFormats:
-        # depending on the image you're using, and which platforms are added,
+        # depending on the image you're using, and which backends are added,
         # the supported formats could be different. For example, this assumes
         # that a ZenDNN image was created with both TF+ZenDNN and PT+ZenDNN
         # support

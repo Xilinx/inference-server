@@ -703,9 +703,11 @@ def install_python_packages():
                 sphinx_copybutton \\
                 sphinxcontrib-confluencebuilder \\
                 sphinx-argparse \\
+                sphinxemoji \\
                 sphinx-issues \\
                 exhale \\
                 sphinx-tabs \\
+                sphinx-tippy \\
                 sphinxcontrib-openapi \\
                 sphinxcontrib-jquery \\
                 # install linting tools

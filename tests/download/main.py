@@ -219,23 +219,23 @@ def get_parser(parser=None):
         "-h", "--help", action="help", help="show this help message and exit"
     )
 
-    platforms = parser.add_argument_group("Platforms")
-    platforms.add_argument(
-        "--all-platforms", action="store_true", help="download files for all platforms"
+    backends = parser.add_argument_group("Backends")
+    backends.add_argument(
+        "--all-backends", action="store_true", help="download files for all backends"
     )
-    platforms.add_argument(
+    backends.add_argument(
         "--vitis", action="store_true", help="download all vitis-related files"
     )
-    platforms.add_argument(
+    backends.add_argument(
         "--ptzendnn", action="store_true", help="download all ptzendnn-related files"
     )
-    platforms.add_argument(
+    backends.add_argument(
         "--tfzendnn", action="store_true", help="download all tfzendnn-related files"
     )
-    platforms.add_argument(
+    backends.add_argument(
         "--zendnn", action="store_true", help="alias for --ptzendnn --tfzendnn"
     )
-    platforms.add_argument(
+    backends.add_argument(
         "--migraphx", action="store_true", help="download all migraphx-related files"
     )
 
@@ -262,7 +262,7 @@ def update_args(args):
     Returns:
         argparse.namespace: the updated arguments
     """
-    if args.all_platforms:
+    if args.all_backends:
         args.vitis = True
         args.zendnn = True
         args.migraphx = True

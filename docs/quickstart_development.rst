@@ -14,30 +14,30 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 
-Quickstart - Development
-========================
+Developer Quickstart
+====================
 
 This quickstart is intended for a user who is developing, testing, debugging or otherwise working more deeply with the inference server.
-There are multiple ways to build the server but this quickstart only covers Docker-based development using the included Python run script ``amdinfer``.
+There are multiple ways to build the server but this quickstart only covers Docker-based development using the *amdinfer* script.
 
 Prerequisites
 -------------
 
+A Linux host machine with:
+
 * `Docker <https://docs.docker.com/get-docker/>`__
-* `Docker-Compose <https://docs.docker.com/compose/install/>`__ (optional - used for some tests)
 * Python3
 * git
-* Network access to clone the repository
+* Network access to clone the repository and get test artifacts
 * Sufficient disk space to download test data and assets
-
 
 Set up the host
 ---------------
 
-The inference server supports multiple platforms and hardware backends.
-Ensure that you set up your host appropriately depending on which platform(s) you are using.
+The inference server supports multiple backends.
+Ensure that you set up your host appropriately depending on which backend(s) you are using.
 For example, to use GPUs, you will need to install the drivers.
-More information on host setup can be found in :ref:`each platforms' guide <platforms:Platforms>`.
+More information on host setup can be found in :ref:`each backends' guide <backends:Backends>`.
 
 Get the code
 ------------
@@ -50,10 +50,32 @@ Use ``git`` to clone the repository from Github:
     $ cd inference-server
 
 Tests and examples need assets like images and videos to run.
-Some of these files are stored in `Git LFS <https://git-lfs.github.com/>`__.
+Some of these files are stored in the repository using `Git LFS <https://git-lfs.com/>`__.
 Depending on your host, these files may be automatically downloaded with the ``git clone``.
 If some of the files in ``tests/assets`` are very small (less than 300 bytes), then you haven't downloaded these Git LFS artifacts.
 From your host or after entering the development container, use ``git lfs pull`` to get these files.
+
+amdinfer script
+---------------
+
+This Python script is located at the root of the repository.
+It provides a standardized way to do common tasks such as building images, compiling the server, and running tests.
+This documentation exclusively uses this script for performing these tasks.
+
+The *amdinfer* script has serveral subcommands such as ``build``, ``dockerize`` and ``test``.
+The script's main ``--help`` lists all the supported subcommands.
+Each subcommand also has its own ``--help`` where its options are listed.
+If you want to see the underlying commands that are being executed, use the flag ``--dry-run`` before the subcommand.
+For example, to see the ``docker build`` command being invoked during ``dockerize``, use:
+
+.. code-block:: console
+
+    $ ./amdinfer --dry-run dockerize
+
+This functionality lets you edit the command if the default command does not work for you.
+However, you should use the ``--help`` flag first to see if what you need is already provided by a flag.
+
+You can see the full documentation for this script using the ``--help`` flags or :ref:`online <amdinfer_script:amdinfer Script>`.
 
 Build or get the Docker image
 -----------------------------
@@ -64,12 +86,14 @@ You can pull the development image from a Docker registry if it's already built.
 
     $ docker pull <image>
 
-To build a development image from source, run the following commands:
+To build a development image from the repository, run the following commands:
 
 .. tabs::
 
     .. code-tab:: console CPU
 
+        # The ZenDNN backend requires additional steps before building.
+        # See the ZenDNN backend documentation for more information
         $ python3 docker/generate.py
         $ ./amdinfer dockerize --ptzendnn /path/to/ptzendnn/archive --tfzendnn /path/to/tfzendnn/archive
 
@@ -84,10 +108,10 @@ To build a development image from source, run the following commands:
         $ ./amdinfer dockerize --vitis
 
 The ``generate.py`` script is used to create a dockerfile in the root directory, which is then used by the ``dockerize`` command.
-Then, this dockerfile is used to build the development image with the appropriate platform enabled.
-You can also combine the platform flags to enable multiple platforms in one image.
-Look at the :ref:`platform-specific documentation <platforms:Platforms>` for more information.
-By default, this builds the development image as ``<username>/amdinfer-dev:latest``.
+Then, this dockerfile is used to build the development image with the appropriate backend enabled.
+You can also combine the backend flags to enable multiple backends in one image.
+Look at the :ref:`backend-specific documentation <backends:Backends>` for more information about building an image with that backend.
+By default, this tags the resulting development image as ``<username>/amdinfer-dev:latest``.
 
 After the image is built, you can use it to start a container:
 
@@ -104,14 +128,15 @@ Compiling the AMD Inference Server
 ----------------------------------
 
 These commands are all run inside the development container.
-Here, :file:`./amdinfer` is aliased to :command:`amdinfer`.
+Here, ``./amdinfer`` is aliased to ``amdinfer``.
 
 .. code-block:: console
 
     $ amdinfer build
 
-The build command builds the :program:`amdinfer-server` executable, the C++ examples and the C++ tests.
-By default, this will be the debug version.
+The build command builds everything including the server executable (``amdinfer-server``), the C++ examples and the C++ tests.
+The ``build`` will also install the server's Python library in the development container.
+By default, everything will be compiled in Debug mode.
 You can pass flags to ``build`` to control the compile options.
 
 .. tip::
@@ -125,24 +150,18 @@ You can pass flags to ``build`` to control the compile options.
     In general, you should not use ``sudo`` to run ``amdinfer`` commands.
     Some commands create files in your working directory and using ``sudo`` creates files with mixed permissions in your container and host and will even fail in some cases.
 
-The ``build`` will also install the server's Python library in the development container.
-
-.. code-block:: console
-
-    pip list | grep amdinfer
-
 Get test artifacts
 ------------------
 
 For running tests and examples, you need to get models and other files that they use.
 Make sure you have `Git LFS <https://git-lfs.github.com/>`__ installed.
-You can download all files, as shown below with the ``--all`` flag, or download platform-specific files by passing the appropriate flag(s).
+You can download all files, as shown below with the flags, or download backend-specific/model-specific files by passing the appropriate flag(s).
 Use ``--help`` to see the options available.
 
 .. code-block:: console
 
     $ git lfs pull
-    $ amdinfer get --all
+    $ amdinfer get --all-models --all-backends
 
 You must abide by the license agreements of these files, if you choose to download them.
 

@@ -23,18 +23,18 @@ unzip -j "tensorflow.zip" "tf_resnetv1_50_imagenet_224_224_6.97G_2.5/float/resne
 mkdir -p model_repository/resnet50/1
 mv ./resnet_v1_50_baseline_6.96B_922.pb model_repository/resnet50/1/saved_model.pb
 cat << EOF > model_repository/resnet50/config.toml
-name = "mnist"
+name = "resnet50"
 platform = "tensorflow_graphdef"
 
 [[inputs]]
-name = "images_in"
+name = "input"
 datatype = "FP32"
-shape = [28, 28, 1]
+shape = [224, 224, 3]
 
 [[outputs]]
-name = "flatten/Reshape"
+name = "resnet_v1_50/predictions/Reshape_1"
 datatype = "FP32"
-shape = [10]
+shape = [1000]
 EOF
 
 # Download the class labels for this model

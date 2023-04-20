@@ -19,7 +19,7 @@ Roadmap
 
 The AMD Inference Server is in active development and this is the tentative and non-exhaustive roadmap of features we would like to add.
 Of course, this is subject to change based on our own assessment and on feedback from the community, both of which may affect which features take priority over others.
-More detailed information about the work that's ongoing and/or completed can be found in the :ref:`change log <Changelog>` and the `Github roadmap <https://github.com/Xilinx/inference-server/projects/3>`__.
+More detailed information about the work that's ongoing and/or completed can be found in the :ref:`change log <Changelog>` and the `Github roadmap <https://github.com/orgs/Xilinx/projects/7>`__.
 
 2022
 ----

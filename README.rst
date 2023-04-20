@@ -1,6 +1,6 @@
 ..
     Copyright 2021 Xilinx, Inc.
-    Copyright 2022, Advanced Micro Devices, Inc.
+    Copyright 2022 Advanced Micro Devices, Inc.
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -38,13 +38,14 @@ The AMD Inference Server is integrated with the following libraries out of the g
 * TensorFlow and PyTorch models with `ZenDNN <https://developer.amd.com/zendnn/>`__ on AMD CPUs
 * ONNX models with `MIGraphX <https://github.com/ROCmSoftwarePlatform/AMDMIGraphX>`__ on AMD GPUs
 * XModel models with `Vitis AI <https://www.xilinx.com/products/design-tools/vitis/vitis-ai.html>`__ on AMD FPGAs
-* A graph of computation including as pre- and post-processing can be written using `AKS <https://github.com/Xilinx/Vitis-AI/tree/v2.5/src/AKS>`__ on AMD FPGAs for end-to-end inference
+* A graph of computation including as pre- and post-processing can be written using `AKS <https://github.com/Xilinx/Vitis-AI/tree/v3.0/src/AKS>`__ on AMD FPGAs for end-to-end inference
 
 Quick Start Deployment and Inference
 ------------------------------------
 
 The following example demonstrates how to deploy the server locally and run a sample inference.
 This example runs on the CPU and does not require any special hardware.
+You can see a more detailed version of this example in the `quickstart <https://xilinx.github.io/inference-server/main/quickstart_inference.html>`__.
 
 .. code-block:: bash
 

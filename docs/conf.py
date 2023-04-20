@@ -39,7 +39,7 @@ author = "Advanced Micro Devices, Inc."
 # override this value to build different versions
 version = "main"
 
-if version != "main":
+if version != "main" and version != "dev":
     release = f"v{version}"
 else:
     release = version
@@ -52,7 +52,8 @@ else:
 extensions = [
     "sphinxcontrib.jquery",
     "breathe",
-    "exhale",
+    # omitting the full C++ documentation generation for now
+    # "exhale",
     # adds argparse directive to parse CLIs
     "sphinxarg.ext",
     "sphinxcontrib.confluencebuilder",
@@ -67,6 +68,10 @@ extensions = [
     "sphinx_copybutton",
     "sphinx_issues",
     "sphinx_tabs.tabs",
+    # adds tooltips
+    "sphinx_tippy",
+    # add emoji
+    "sphinxemoji.sphinxemoji",
     "sphinxcontrib.openapi",
 ]
 
@@ -105,6 +110,16 @@ autodoc_default_options = {
     "special-members": "__init__",
 }
 
+tippy_add_class = "has-tippy"
+tippy_skip_urls = [
+    # skip all URLs except those pointing to the glossary
+    r"^((?!glossary\.html).)*$"
+]
+tippy_enable_wikitips = False
+tippy_enable_doitips = False
+
+sphinxemoji_style = "twemoji"
+
 
 def hide_private_module(app, what, name, obj, options, signature, return_annotation):
     if signature is not None:
@@ -132,6 +147,7 @@ blob_path = f"https://github.com/Xilinx/inference-server/blob/{release}/%s"
 raw_path = f"https://github.com/Xilinx/inference-server/raw/{release}/%s"
 xilinx_download = "https://www.xilinx.com/bin/public/openDownload?filename=%s"
 github_onnx = "https://github.com/onnx/models/raw/main/%s"
+vitis_ai_path = "https://github.com/Xilinx/Vitis-AI/tree/v3.0/%s"
 
 # sphinx.ext.extlinks configuration. syntax is key: (url, caption). The key should not have underscores.
 extlinks = {
@@ -143,6 +159,7 @@ extlinks = {
     "github": ("https://github.com/%s", "%s"),
     "xilinxDownload": (xilinx_download, "%s"),
     "githubOnnx": (github_onnx, None),
+    "vitisAItree": (vitis_ai_path, None),
 }
 
 # sphinx-issues configuration
@@ -157,6 +174,14 @@ nitpicky = True
 # number all figures with captions
 numfig = True
 
+rst_prolog = """
+.. include:: /prolog.rst
+"""
+
+rst_epilog = """
+.. include:: /epilog.rst
+"""
+
 # Configure 'Edit on GitHub' extension
 edit_on_github_project = "Xilinx/inference-server"
 edit_on_github_branch = f"{release}/docs"
@@ -167,7 +192,15 @@ templates_path = ["_templates"]
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", "**/build/**", "**/uploads/**"]
+exclude_patterns = [
+    "_build",
+    "Thumbs.db",
+    ".DS_Store",
+    "**/build/**",
+    "**/uploads/**",
+    "epilog.rst",
+    "prolog.rst",
+]
 
 
 # -- Options for HTML output -------------------------------------------------

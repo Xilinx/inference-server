@@ -37,7 +37,7 @@ ARG TARGETPLATFORM=${TARGETPLATFORM:-linux/amd64}
 # image type to build. This must be 'dev' or 'prod'
 ARG IMAGE_TYPE=${IMAGE_TYPE:-dev}
 
-# enable building platforms. By default, all platforms are opt-in
+# enable building backends. By default, all backends are opt-in
 ARG ENABLE_VITIS=${ENABLE_VITIS:-no}
 ARG ENABLE_TFZENDNN=${ENABLE_TFZENDNN:-no}
 ARG TFZENDNN_PATH
@@ -71,7 +71,7 @@ RUN if [[ ${TARGETPLATFORM} == "linux/amd64" ]]; then \
     && rm -rf /tmp/*
 
 # this stage builds any common dependencies between the inference server and
-# any of the platforms. Using common packages between the two ensures version
+# any of the backends. Using common packages between the two ensures version
 # compatibility. Note, some of the packages here are also used implicitly
 # by subsequent build stages
 FROM dev_base AS common_builder

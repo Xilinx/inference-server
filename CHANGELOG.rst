@@ -47,12 +47,17 @@ Changed
 * Use const references throughout for ParameterMap (:pr:`172`)
 * Update workers' ``doRun`` method signature to produce and return a batch (:pr:`176`)
 * Use TOML-based configuration files in the repository by default (:pr:`178`)
+* Location of test model lists moved to ``tests`` directory (:pr:`180`)
 
 Deprecated
 ^^^^^^^^^^
 
+* N/A
+
 Removed
 ^^^^^^^
+
+* N/A
 
 Fixed
 ^^^^^
@@ -64,6 +69,8 @@ Fixed
 
 Security
 ^^^^^^^^
+
+* N/A
 
 :github:`0.3.0 <Xilinx/inference-server/releases/tag/v0.3.0>` - 2023-02-01
 --------------------------------------------------------------------------
