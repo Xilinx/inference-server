@@ -55,7 +55,7 @@ Deployment images contain only the the compiled server executable and its run-ti
 They are optimized for size and used to deploy the server locally, on Kubernetes or on KServe.
 By default, as deployment images start, they start the server executable automatically with the default arguments.
 You can override these values by setting your own when you start a container from this image.
-The published images for the AMD Inference Server on `Docker Hub <LinkInferenceServerDockerHub>`_ are deployment images.
+The published images for the AMD Inference Server on `Docker Hub <LinkInferenceServerDockerHub_>`_ are deployment images.
 Under the standard naming convention used by the *amdinfer* script during the build, this image will be tagged as ``$(whoami)/amdinfer:latest``.
 
 Types of users

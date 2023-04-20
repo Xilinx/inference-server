@@ -147,7 +147,7 @@ blob_path = f"https://github.com/Xilinx/inference-server/blob/{release}/%s"
 raw_path = f"https://github.com/Xilinx/inference-server/raw/{release}/%s"
 xilinx_download = "https://www.xilinx.com/bin/public/openDownload?filename=%s"
 github_onnx = "https://github.com/onnx/models/raw/main/%s"
-vitis_ai_path = "https://github.com/Xilinx/Vitis-AI/tree/3.0/%s"
+vitis_ai_path = "https://github.com/Xilinx/Vitis-AI/tree/v3.0/%s"
 
 # sphinx.ext.extlinks configuration. syntax is key: (url, caption). The key should not have underscores.
 extlinks = {

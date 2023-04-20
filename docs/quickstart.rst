@@ -35,7 +35,7 @@ For making an inference:
 
 For deploying the server:
 
-* A Linux host machine with `Docker <LinkDockerInstallLinux>`_ installed
+* A Linux host machine with `Docker <LinkDockerInstallLinux_>`_ installed
 * Sufficient disk space to host your models
 
 This guide assumes that inference will be made from the same machine where the server is deployed.
@@ -146,7 +146,7 @@ Get the deployment image
 
 The deployment image is optimized for size and only contains the run-time dependencies of the server to allow for quicker deployments.
 It has limited debugging capabilities and it contains a precompiled executable for the server that automatically starts when the container starts.
-You can pull the deployment image with Docker if it exists or :ref:`build it yourself <deployment:Build the deployment Docker image>`.
+You can pull the :ref:`deployment image <deployment:Deployment image>` if it exists or build it yourself.
 
 .. include:: dry.rst
     :start-after: +docker_pull_deployment_images
@@ -156,7 +156,7 @@ Start the image
 ---------------
 
 You can start a container from the deployment image with ``docker run`` as any other image.
-For more information about these flags and other options you can use, refer to its `documentation <LinkDockerRun>`_.
+For more information about these flags and other options you can use, refer to its `documentation <LinkDockerRun_>`_.
 The flags used in this sample command are:
 
 * ``--volume $(pwd)/model_repository:/mnt/models:rw``: mount the model repository you created above into the container to where the server expects it to be. This allows the server to load these models at startup.

@@ -26,9 +26,9 @@ To use KServe, you will need a Kubernetes cluster.
 There are many ways to set up and configure a Kubernetes cluster depending on your use cases.
 Instructions for installing and configuring Kubernetes are out of this scope.
 
-Install KServe using the `instructions <https://kserve.github.io/website/admin/serverless/>`__ provided by KServe.
+Install KServe using the `instructions <https://kserve.github.io/website/master/admin/serverless/serverless>`__ provided by KServe.
 We have tested with KServe 0.8 using the standard serverless installation but other versions/configurations may work as well.
-Once KServe is installed, verify basic functionality of the cluster using KServe's `basic tutorial <https://kserve.github.io/website/get_started/first_isvc/>`__.
+Once KServe is installed, verify basic functionality of the cluster using KServe's `basic tutorial <https://kserve.github.io/website/master/get_started/first_isvc/>`__.
 If this succeeds, KServe should be installed correctly.
 KServe installation help and debugging are also out of scope for these instructions.
 If you run into problems, reach out to the KServe project.
@@ -44,7 +44,7 @@ The `kube-prometheus <https://github.com/prometheus-operator/kube-prometheus/>`_
 Get or build the AMD Inference Server Image
 -------------------------------------------
 
-To use with KServe, you will need to pull or :ref:`build the deployment container <docker:Build the deployment Docker image>`.
+To use with KServe, you will need a :ref:`deployment image <deployment:Deployment image>`.
 Once you have it somewhere, make sure you can use ``docker pull <image>`` on all the nodes in the Kubernetes cluster to get the image.
 
 Start an inference service

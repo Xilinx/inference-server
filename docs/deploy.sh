@@ -16,7 +16,7 @@
 
 set -e
 
-VERSION=dev
+VERSION=main
 echo "Pushing to ./$VERSION. Okay?"
 read response
 if [[ "$response" != "y" && "$response" != "Y" ]]; then

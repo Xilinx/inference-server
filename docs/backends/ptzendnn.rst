@@ -151,6 +151,6 @@ You will need access to the machine where the inference server is running to deb
 Tune performance
 ^^^^^^^^^^^^^^^^
 
-For tuning ZenDNN performance, you can refer to the PyTorch + ZenDNN `user guide <LinkZenDNNptGuide>`_.
+For tuning ZenDNN performance, you can refer to the PyTorch + ZenDNN `user guide <LinkZenDNNptGuide_>`_.
 
 .. |platform| replace:: ``pytorch_torchscript``

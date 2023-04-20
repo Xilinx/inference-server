@@ -152,6 +152,6 @@ You will need access to the machine where the inference server is running to deb
 Tune performance
 ^^^^^^^^^^^^^^^^
 
-For tuning ZenDNN performance, you can refer to the TensorFlow + ZenDNN `user guide <LinkZenDNNtfGuide>`_.
+For tuning ZenDNN performance, you can refer to the TensorFlow + ZenDNN `user guide <LinkZenDNNtfGuide_>`_.
 
 .. |platform| replace:: ``tensorflow_graphdef``
