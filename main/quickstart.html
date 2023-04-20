@@ -42,7 +42,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <script src="_static/tabs.js"></script>
         <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
         <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
-        <script defer="defer" src="_static/tippy/quickstart.c4ad6df0-c1b0-41fb-ba1b-e5e93708ce5d.js"></script>
+        <script defer="defer" src="_static/tippy/quickstart.25fa6d2d-1c1b-41b2-b260-376192ef678a.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -542,7 +542,7 @@ It is not intended to demonstrate all the different options and settings that co
 </ul>
 <p>For deploying the server:</p>
 <ul class="simple">
-<li><p>A Linux host machine with <a class="reference external" href="LinkDockerInstallLinux">Docker</a> installed</p></li>
+<li><p>A Linux host machine with <a class="reference external" href="https://docs.docker.com/engine/install/">Docker</a> installed</p></li>
 <li><p>Sufficient disk space to host your models</p></li>
 </ul>
 <p>This guide assumes that inference will be made from the same machine where the server is deployed.</p>
@@ -639,7 +639,7 @@ The names of the tensors may be significant if the backend needs them to perform
 <h2>Get the deployment image<a class="headerlink" href="#get-the-deployment-image" title="Permalink to this heading">¶</a></h2>
 <p>The deployment image is optimized for size and only contains the run-time dependencies of the server to allow for quicker deployments.
 It has limited debugging capabilities and it contains a precompiled executable for the server that automatically starts when the container starts.
-You can pull the deployment image with Docker if it exists or <span class="xref std std-ref">build it yourself</span>.</p>
+You can pull the <a class="reference internal" href="deployment.html#deployment-image"><span class="std std-ref">deployment image</span></a> if it exists or build it yourself.</p>
 <div class="sphinx-tabs docutils container">
 <div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-2-Q1BV" aria-selected="true" class="sphinx-tabs-tab code-tab group-tab" id="tab-2-Q1BV" name="Q1BV" role="tab" tabindex="0">CPU</button><button aria-controls="panel-2-R1BV" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-2-R1BV" name="R1BV" role="tab" tabindex="-1">GPU</button><button aria-controls="panel-2-RlBHQQ==" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-2-RlBHQQ==" name="RlBHQQ==" role="tab" tabindex="-1">FPGA</button></div><div aria-labelledby="tab-2-Q1BV" class="sphinx-tabs-panel code-tab group-tab" id="panel-2-Q1BV" name="Q1BV" role="tabpanel" tabindex="0"><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>pull<span class="w"> </span>amdih/serve:uif1.1_zendnn_amdinfer_0.3.0
 </pre></div>
@@ -655,7 +655,7 @@ You can pull the deployment image with Docker if it exists or <span class="xref 
 <section id="start-the-image">
 <h2>Start the image<a class="headerlink" href="#start-the-image" title="Permalink to this heading">¶</a></h2>
 <p>You can start a container from the deployment image with <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">run</span></code> as any other image.
-For more information about these flags and other options you can use, refer to its <a class="reference external" href="LinkDockerRun">documentation</a>.
+For more information about these flags and other options you can use, refer to its <a class="reference external" href="https://docs.docker.com/engine/reference/commandline/run/">documentation</a>.
 The flags used in this sample command are:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">--volume</span> <span class="pre">$(pwd)/model_repository:/mnt/models:rw</span></code>: mount the model repository you created above into the container to where the server expects it to be. This allows the server to load these models at startup.</p></li>

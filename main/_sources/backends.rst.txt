@@ -25,8 +25,8 @@ You can see more information about each backend on its own page.
 
     :ref:`CPlusPlus <backends/cplusplus:CPlusPlus>`,CPU \| GPU \| FPGA,.so,✔
     :ref:`MIGraphX <backends/migraphx:MIGraphX>`,GPU,.mxr \| .onnx,✔
-    :ref:`PT+ZenDNN <backends/zendnn:ZenDNN>`,CPU,.pt,⚠
-    :ref:`TF+ZenDNN <backends/zendnn:ZenDNN>`,CPU,.tf,⚠
+    :ref:`PT+ZenDNN <backends/ptzendnn:PtZenDNN>`,CPU,.pt,⚠
+    :ref:`TF+ZenDNN <backends/tfzendnn:TfZenDNN>`,CPU,.tf,⚠
     :ref:`Vitis AI <backends/vitis_ai:Vitis AI>`,FPGA,.xmodel,✔
 
 .. toctree::

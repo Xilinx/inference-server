@@ -41,7 +41,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <script src="_static/twemoji.js"></script>
         <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
         <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
-        <script defer="defer" src="_static/tippy/kserve.b2a7da3e-1c83-4054-86c6-5c6c8438b65f.js"></script>
+        <script defer="defer" src="_static/tippy/kserve.8761b379-6783-44a3-880f-be6f6c7a3daa.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -530,9 +530,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <p>To use KServe, you will need a Kubernetes cluster.
 There are many ways to set up and configure a Kubernetes cluster depending on your use cases.
 Instructions for installing and configuring Kubernetes are out of this scope.</p>
-<p>Install KServe using the <a class="reference external" href="https://kserve.github.io/website/admin/serverless/">instructions</a> provided by KServe.
+<p>Install KServe using the <a class="reference external" href="https://kserve.github.io/website/master/admin/serverless/serverless">instructions</a> provided by KServe.
 We have tested with KServe 0.8 using the standard serverless installation but other versions/configurations may work as well.
-Once KServe is installed, verify basic functionality of the cluster using KServe’s <a class="reference external" href="https://kserve.github.io/website/get_started/first_isvc/">basic tutorial</a>.
+Once KServe is installed, verify basic functionality of the cluster using KServe’s <a class="reference external" href="https://kserve.github.io/website/master/get_started/first_isvc/">basic tutorial</a>.
 If this succeeds, KServe should be installed correctly.
 KServe installation help and debugging are also out of scope for these instructions.
 If you run into problems, reach out to the KServe project.</p>
@@ -544,7 +544,7 @@ The <a class="reference external" href="https://github.com/prometheus-operator/k
 </section>
 <section id="get-or-build-the-amd-inference-server-image">
 <h2>Get or build the AMD Inference Server Image<a class="headerlink" href="#get-or-build-the-amd-inference-server-image" title="Permalink to this heading">¶</a></h2>
-<p>To use with KServe, you will need to pull or <span class="xref std std-ref">build the deployment container</span>.
+<p>To use with KServe, you will need a <a class="reference internal" href="deployment.html#deployment-image"><span class="std std-ref">deployment image</span></a>.
 Once you have it somewhere, make sure you can use <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">pull</span> <span class="pre">&lt;image&gt;</span></code> on all the nodes in the Kubernetes cluster to get the image.</p>
 </section>
 <section id="start-an-inference-service">

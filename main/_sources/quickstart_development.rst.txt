@@ -50,7 +50,7 @@ Use ``git`` to clone the repository from Github:
     $ cd inference-server
 
 Tests and examples need assets like images and videos to run.
-Some of these files are stored in the repository using `Git LFS <https://git-lfs.github.com/>`__.
+Some of these files are stored in the repository using `Git LFS <https://git-lfs.com/>`__.
 Depending on your host, these files may be automatically downloaded with the ``git clone``.
 If some of the files in ``tests/assets`` are very small (less than 300 bytes), then you haven't downloaded these Git LFS artifacts.
 From your host or after entering the development container, use ``git lfs pull`` to get these files.
