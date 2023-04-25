@@ -47,20 +47,37 @@ namespace fs = std::filesystem;
 using InferenceRequest = amdinfer::InferenceRequest;
 using ParameterMap = amdinfer::ParameterMap;
 
+/**
+ * @brief This class wraps the different parameters used by these benchmarks.
+ * The benchmark library works by parameterizing numbers so if you want to pass
+ * other kinds of data to the tests, you need to wrap it in a class.
+ */
 class Config {
  public:
-  int batch_size;
-  int requests;
+  Config(int batch_size, int requests)
+    : batch_size_({batch_size, batch_size}), requests_(requests) {}
+
+  int requests() const { return requests_; }
+  int batchSize() const { return batch_size_.first; }
+  void batchSize(int batch_size) { batch_size_.second = batch_size; }
 
   std::string toString() const {
-    return "batch_size:" + std::to_string(batch_size) +
-           "/requests:" + std::to_string(requests);
+    return "batch_size:" + std::to_string(batch_size_.second) + "(" +
+           std::to_string(batch_size_.first) +
+           ")/requests:" + std::to_string(requests_);
   }
 
   friend std::ostream& operator<<(std::ostream& os, const Config& self) {
     os << self.toString();
     return os;
   }
+
+ private:
+  // This is a pair representing the <requested, actual> value of the batch
+  // size. A particular backend may not support the requested batch size and
+  // use a different value
+  std::pair<int, int> batch_size_;
+  int requests_;
 };
 
 const std::array kConfigs{Config{1, 1}, Config{4, 4}, Config{4, 8}};
@@ -73,6 +90,7 @@ class Backend {
 
   virtual std::string extension() const = 0;
   virtual std::string name() const = 0;
+  virtual void updateConfig(Config& config) = 0;
 
   void request(InferenceRequest request) { request_ = std::move(request); }
   const InferenceRequest& request() const { return request_; }
@@ -87,6 +105,12 @@ class Backend {
   ParameterMap parameters_;
 };
 
+const auto kImageHeight = 224;
+const auto kImageWidth = 224;
+const auto kImageChannels = 3;
+// for ImageNet dataset, 1000 output classes
+const auto kOutputClasses = 1000;
+
 class Ptzendnn : public Backend {
  public:
   Ptzendnn() {
@@ -97,6 +121,9 @@ class Ptzendnn : public Backend {
 
   std::string name() const override { return "ptzendnn"; }
   std::string extension() const override { return "ptzendnn"; }
+  void updateConfig([[maybe_unused]] Config& config) override {
+    // no update necessary
+  }
 
   void preprocess(const std::string& input_path) override {
     const std::array<float, 3> mean{0.485F, 0.456F, 0.406F};
@@ -117,7 +144,8 @@ class Ptzendnn : public Backend {
     images_ = amdinfer::pre_post::imagePreprocess({input_path}, options);
 
     InferenceRequest request;
-    request.addInputTensor(images_[0].data(), {3, 224, 224},
+    request.addInputTensor(images_[0].data(),
+                           {kImageChannels, kImageHeight, kImageWidth},
                            amdinfer::DataType::Fp32);
     this->request(std::move(request));
   }
@@ -137,14 +165,17 @@ class Tfzendnn : public Backend {
     put("model", model);
     put("input_node", std::string{"input"});
     put("output_node", std::string{"resnet_v1_50/predictions/Reshape_1"});
-    put("input_size", 224);
-    put("output_classes", 1000);
+    put("input_size", kImageHeight);
+    put("output_classes", kOutputClasses);
     put("inter_op", inter_op);
     put("intra_op", 1);
   }
 
   std::string name() const override { return "tfzendnn"; }
   std::string extension() const override { return "tfzendnn"; }
+  void updateConfig([[maybe_unused]] Config& config) override {
+    // no update necessary
+  }
 
   void preprocess(const std::string& input_path) override {
     amdinfer::pre_post::ImagePreprocessOptions<float, 3> options;
@@ -155,7 +186,8 @@ class Tfzendnn : public Backend {
     images_ = amdinfer::pre_post::imagePreprocess({input_path}, options);
 
     InferenceRequest request;
-    request.addInputTensor(images_[0].data(), {3, 224, 224},
+    request.addInputTensor(images_[0].data(),
+                           {kImageChannels, kImageHeight, kImageWidth},
                            amdinfer::DataType::Fp32);
     this->request(std::move(request));
   }
@@ -173,6 +205,10 @@ class Vitis : public Backend {
 
   std::string name() const override { return "xmodel"; }
   std::string extension() const override { return "vitis"; }
+  void updateConfig(Config& config) override {
+    const int batch_size = 4;
+    config.batchSize(batch_size);
+  }
 
   void preprocess(const std::string& input_path) override {
     const std::array<int8_t, 3> mean{123, 107, 104};
@@ -186,7 +222,8 @@ class Vitis : public Backend {
     images_ = amdinfer::pre_post::imagePreprocess({input_path}, options);
 
     InferenceRequest request;
-    request.addInputTensor(images_[0].data(), {224, 224, 3},
+    request.addInputTensor(images_[0].data(),
+                           {kImageHeight, kImageWidth, kImageChannels},
                            amdinfer::DataType::Int8);
     this->request(std::move(request));
   }
@@ -204,6 +241,9 @@ class Migraphx : public Backend {
 
   std::string name() const override { return "migraphx"; }
   std::string extension() const override { return "migraphx"; }
+  void updateConfig([[maybe_unused]] Config& config) override {
+    // no update necessary
+  }
 
   void preprocess(const std::string& input_path) override {
     const std::array<float, 3> mean{0.485F, 0.456F, 0.406F};
@@ -211,7 +251,7 @@ class Migraphx : public Backend {
     const auto image_size = 224;
     const auto convert_scale = 1 / 255.0;
 
-    amdinfer::pre_post::ImagePreprocessOptions<float, 3> options;
+    amdinfer::pre_post::ImagePreprocessOptions<float, kImageChannels> options;
     options.order = amdinfer::pre_post::ImageOrder::NCHW;
     options.height = image_size;
     options.width = image_size;
@@ -226,7 +266,8 @@ class Migraphx : public Backend {
     images_ = amdinfer::pre_post::imagePreprocess({input_path}, options);
 
     InferenceRequest request;
-    request.addInputTensor(images_[0].data(), {224, 224, 3},
+    request.addInputTensor(images_[0].data(),
+                           {kImageHeight, kImageWidth, kImageChannels},
                            amdinfer::DataType::Fp32);
     this->request(std::move(request));
   }
@@ -235,24 +276,19 @@ class Migraphx : public Backend {
   std::vector<std::vector<float>> images_;
 };
 
-const auto kNumBackends = 1;
-enum class Backends {
-  // Tfzendnn,
-  // Ptzendnn,
-  Vitis,
-  // Migraphx
-};
+const auto kNumBackends = 4;
+enum class Backends { Tfzendnn, Ptzendnn, Vitis, Migraphx };
 
 std::unique_ptr<Backend> getBackend(Backends index) {
   switch (index) {
-    // case Backends::Tfzendnn:
-    //   return std::make_unique<Tfzendnn>();
-    // case Backends::Ptzendnn:
-    //   return std::make_unique<Ptzendnn>();
+    case Backends::Tfzendnn:
+      return std::make_unique<Tfzendnn>();
+    case Backends::Ptzendnn:
+      return std::make_unique<Ptzendnn>();
     case Backends::Vitis:
       return std::make_unique<Vitis>();
-    // case Backends::Migraphx:
-    //   return std::make_unique<Migraphx>();
+    case Backends::Migraphx:
+      return std::make_unique<Migraphx>();
     default:
       throw amdinfer::invalid_argument("Unknown argument");
   }
@@ -260,7 +296,6 @@ std::unique_ptr<Backend> getBackend(Backends index) {
 
 // the benchmark function cannot be part of a namespace
 
-// template <class... Args>
 void resnet50(benchmark::State& st, const amdinfer::Client* client,
               Backend* backend) {
   const auto extension = backend->extension();
@@ -271,11 +306,12 @@ void resnet50(benchmark::State& st, const amdinfer::Client* client,
   }
 
   auto config_index = st.range(0);
-  const auto& config = kConfigs.at(config_index);
+  auto config = kConfigs.at(config_index);
+  backend->updateConfig(config);
   st.SetLabel(config.toString());
 
-  const auto num_requests = config.requests;
-  const auto batch_size = config.batch_size;
+  const auto num_requests = config.requests();
+  const auto batch_size = config.batchSize();
 
   backend->put("batch_size", batch_size);
 
@@ -295,23 +331,11 @@ void resnet50(benchmark::State& st, const amdinfer::Client* client,
     }
   }
 
-  // const size_t batches = num_requests / batch_size;
-  // const size_t leftover_requests = num_requests % batch_size;
-
   const std::vector<amdinfer::InferenceRequest> requests{
     static_cast<size_t>(num_requests), request};
-  // const std::vector<amdinfer::InferenceRequest>
-  // extra_requests{leftover_requests, request};
 
   for (auto _ : st) {
-    // for (auto i = 0U; i < batches; ++i) {
     std::ignore = amdinfer::inferAsyncOrdered(client, endpoint, requests);
-    // for(auto i = 0; i < num_requests; ++i){
-    //   std::ignore = client->modelInfer(endpoint, request);
-    // }
-    // }
-    // std::ignore = amdinfer::inferAsyncOrderedBatched(client, endpoint,
-    // extra_requests, batch_size);
   }
   client->workerUnload(endpoint);
   amdinfer::waitUntilModelNotReady(client, endpoint);
