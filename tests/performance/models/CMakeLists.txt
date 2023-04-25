@@ -12,13 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-list(APPEND tests resnet50)
+set(tests resnet50)
+set(libs "opencv_imgcodecs~opencv_imgproc~opencv_core~amdinfer~testing")
 
-foreach(test ${tests})
-  amdinfer_add_benchmark(${test})
-  amdinfer_get_test_target(target ${test} benchmark)
-  target_link_libraries(
-    ${target} PRIVATE opencv_imgcodecs opencv_imgproc opencv_core amdinfer
-                      testing
-  )
-endforeach()
+amdinfer_add_benchmarks(${tests} ${libs})
