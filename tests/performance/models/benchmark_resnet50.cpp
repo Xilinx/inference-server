@@ -80,7 +80,8 @@ class Config {
   int requests_;
 };
 
-const std::array kConfigs{Config{1, 1}, Config{4, 4}, Config{4, 8}};
+const std::array kConfigs{Config{1, 1}, Config{4, 4}, Config{4, 8},
+                          Config{64, 64}};
 
 class Backend {
  public:
@@ -111,6 +112,7 @@ const auto kImageChannels = 3;
 // for ImageNet dataset, 1000 output classes
 const auto kOutputClasses = 1000;
 
+#ifdef AMDINFER_ENABLE_PTZENDNN
 class Ptzendnn : public Backend {
  public:
   Ptzendnn() {
@@ -153,7 +155,9 @@ class Ptzendnn : public Backend {
  private:
   std::vector<std::vector<float>> images_;
 };
+#endif  // AMDINFER_ENABLE_PTZENDNN
 
+#ifdef AMDINFER_ENABLE_TFZENDNN
 class Tfzendnn : public Backend {
  public:
   Tfzendnn() {
@@ -195,7 +199,9 @@ class Tfzendnn : public Backend {
  private:
   std::vector<std::vector<float>> images_;
 };
+#endif  // AMDINFER_ENABLE_TFZENDNN
 
+#ifdef AMDINFER_ENABLE_VITIS
 class Vitis : public Backend {
  public:
   Vitis() {
@@ -231,7 +237,9 @@ class Vitis : public Backend {
  private:
   std::vector<std::vector<int8_t>> images_;
 };
+#endif  // AMDINFER_ENABLE_VITIS
 
+#ifdef AMDINFER_ENABLE_MIGRAPHX
 class Migraphx : public Backend {
  public:
   Migraphx() {
@@ -275,20 +283,45 @@ class Migraphx : public Backend {
  private:
   std::vector<std::vector<float>> images_;
 };
+#endif  // AMDINFER_ENABLE_MIGRAPHX
 
-const auto kNumBackends = 4;
-enum class Backends { Tfzendnn, Ptzendnn, Vitis, Migraphx };
+enum class Backends {
+#ifdef AMDINFER_ENABLE_TFZENDNN
+  Tfzendnn,
+#endif
+#ifdef AMDINFER_ENABLE_PTZENDNN
+  Ptzendnn,
+#endif
+#ifdef AMDINFER_ENABLE_VITIS
+  Vitis,
+#endif
+#ifdef AMDINFER_ENABLE_MIGRAPHX
+  Migraphx,
+#endif
+  // this is used find the number of backends enabled. It is NOT a backend. This
+  // must be the last enum value
+  Count
+};
+const auto kNumBackends = static_cast<int>(Backends::Count);
 
 std::unique_ptr<Backend> getBackend(Backends index) {
   switch (index) {
+#ifdef AMDINFER_ENABLE_TFZENDNN
     case Backends::Tfzendnn:
       return std::make_unique<Tfzendnn>();
+#endif
+#ifdef AMDINFER_ENABLE_PTZENDNN
     case Backends::Ptzendnn:
       return std::make_unique<Ptzendnn>();
+#endif
+#ifdef AMDINFER_ENABLE_VITIS
     case Backends::Vitis:
       return std::make_unique<Vitis>();
+#endif
+#ifdef AMDINFER_ENABLE_MIGRAPHX
     case Backends::Migraphx:
       return std::make_unique<Migraphx>();
+#endif
     default:
       throw amdinfer::invalid_argument("Unknown argument");
   }
