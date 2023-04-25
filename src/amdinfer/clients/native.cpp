@@ -47,7 +47,7 @@ struct NativeClient::NativeClientImpl {
   SharedState* state;
 };
 
-NativeClient::NativeClient(Server* server) {
+NativeClient::NativeClient(const Server* server) {
   impl_ = std::make_unique<NativeClientImpl>();
   impl_->state = &(server->impl_->state);
 }

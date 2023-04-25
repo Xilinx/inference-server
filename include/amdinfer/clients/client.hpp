@@ -222,7 +222,7 @@ void unloadModels(const Client* client, const std::vector<std::string>& models);
  * @return std::vector<InferenceResponse>
  */
 std::vector<InferenceResponse> inferAsyncOrdered(
-  Client* client, const std::string& model,
+  const Client* client, const std::string& model,
   const std::vector<InferenceRequest>& requests);
 /**
  * @brief Makes inference requests in parallel to the specified model in
@@ -237,7 +237,7 @@ std::vector<InferenceResponse> inferAsyncOrdered(
  * @return std::vector<InferenceResponse>
  */
 std::vector<InferenceResponse> inferAsyncOrderedBatched(
-  Client* client, const std::string& model,
+  const Client* client, const std::string& model,
   const std::vector<InferenceRequest>& requests, size_t batch_size);
 
 }  // namespace amdinfer
