@@ -66,20 +66,42 @@ function(amdinfer_add_unit_test test)
   _amdinfer_add_test(${test} "unit")
 endfunction()
 
+function(amdinfer_get_protocols protocols)
+  set(my_protocols native)
+  if(AMDINFER_ENABLE_HTTP)
+    list(APPEND my_protocols http)
+  endif()
+  if(AMDINFER_ENABLE_GRPC)
+    list(APPEND my_protocols grpc)
+  endif()
+  set(${protocols} ${my_protocols} PARENT_SCOPE)
+endfunction()
+
 function(amdinfer_add_benchmark test)
   amdinfer_get_test_target(target ${test} benchmark)
 
-  add_executable(${target} benchmark_${test}.cpp)
-  target_include_directories(
-    ${target} BEFORE PRIVATE ${AMDINFER_TEST_INCLUDE_DIRS}
-  )
-  target_include_directories(${target} AFTER PRIVATE ${AMDINFER_INCLUDE_DIRS})
+  amdinfer_get_protocols(protocols)
+  foreach(protocol ${protocols})
+    set(target_protocol ${target}_${protocol})
+    add_executable(${target_protocol} benchmark_${test}.cpp)
+    target_include_directories(
+      ${target_protocol} BEFORE PRIVATE ${AMDINFER_TEST_INCLUDE_DIRS}
+    )
+    target_include_directories(
+      ${target_protocol} AFTER PRIVATE ${AMDINFER_INCLUDE_DIRS}
+    )
 
-  target_link_libraries(
-    ${target} PRIVATE benchmark::benchmark benchmark::benchmark_main
-  )
+    target_link_libraries(
+      ${target_protocol} PRIVATE benchmark::benchmark benchmark::benchmark_main
+    )
 
-  set_target_options(${target})
+    string(TOUPPER ${protocol} protocol_upper)
+    target_compile_definitions(
+      ${target_protocol} PRIVATE PROTOCOL_${protocol_upper}
+    )
+
+    set_target_options(${target_protocol})
+  endforeach()
 endfunction()
 
 function(amdinfer_add_system_tests tests)
@@ -108,8 +130,11 @@ function(amdinfer_add_benchmarks tests tests_libs)
     string(REPLACE "~" ";" libs ${libs_no_spaces})
 
     amdinfer_add_benchmark(${test})
-    amdinfer_get_test_target(target ${test} benchmark)
 
-    target_link_libraries(${target} PRIVATE ${libs})
+    amdinfer_get_test_target(target ${test} benchmark)
+    amdinfer_get_protocols(protocols)
+    foreach(protocol ${protocols})
+      target_link_libraries(${target}_${protocol} PRIVATE ${libs})
+    endforeach()
   endforeach()
 endfunction()

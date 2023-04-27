@@ -44,44 +44,92 @@
 
 namespace fs = std::filesystem;
 
-struct Config {
-  int batch_size;
-  int requests;
+using InferenceRequest = amdinfer::InferenceRequest;
+using ParameterMap = amdinfer::ParameterMap;
+
+/**
+ * @brief This class wraps the different parameters used by these benchmarks.
+ * The benchmark library works by parameterizing numbers so if you want to pass
+ * other kinds of data to the tests, you need to wrap it in a class.
+ */
+class Config {
+ public:
+  Config(int batch_size, int requests, int workers)
+    : batch_size_({batch_size, batch_size}),
+      requests_(requests),
+      workers_(workers) {}
+
+  int requests() const { return requests_; }
+  int batchSize() const { return batch_size_.first; }
+  void batchSize(int batch_size) { batch_size_.second = batch_size; }
+  int workers() const { return workers_; }
+
+  std::string toString() const {
+    return "batch_size:" + std::to_string(batch_size_.second) + "(" +
+           std::to_string(batch_size_.first) +
+           ")/requests:" + std::to_string(requests_) +
+           "/workers:" + std::to_string(workers_);
+  }
 
   friend std::ostream& operator<<(std::ostream& os, const Config& self) {
-    os << "Batch Size: " << self.batch_size << ", ";
-    os << "Requests: " << self.requests << ", ";
+    os << self.toString();
     return os;
   }
+
+ private:
+  // This is a pair representing the <requested, actual> value of the batch
+  // size. A particular backend may not support the requested batch size and
+  // use a different value
+  std::pair<int, int> batch_size_;
+  int requests_;
+  int workers_;
 };
 
-const std::array<Config, 4> kConfigs = {Config{1, 10}, Config{2, 20},
-                                        Config{20, 40}, Config{40, 40}};
+class Backend {
+ public:
+  virtual ~Backend() = default;
 
-template <typename T, int kChannels>
-using ImagePreprocessOptions =
-  amdinfer::pre_post::ImagePreprocessOptions<T, kChannels>;
+  virtual void preprocess(const std::string& input_path) = 0;
 
-struct Workers {
-  char* root = std::getenv("AMDINFER_ROOT");
-  std::string extension;
-  std::string name;
-  fs::path graph;
+  virtual std::string extension() const = 0;
+  virtual std::string name() const = 0;
+  virtual void updateConfig(Config& config) = 0;
 
-  amdinfer::ParameterMap parameters;
-  std::variant<ImagePreprocessOptions<float, 3>> preprocessing;
+  void request(InferenceRequest request) { request_ = std::move(request); }
+  const InferenceRequest& request() const { return request_; }
+
+  const auto& parameters() const { return parameters_; }
+  void put(const std::string& key, const amdinfer::Parameter& value) {
+    parameters_.put(key, value);
+  }
+
+ private:
+  InferenceRequest request_;
+  ParameterMap parameters_;
 };
 
-struct PtzendnnWorker : public Workers {
-  PtzendnnWorker() {
-    assert(root != nullptr);
-    extension = "ptzendnn";
-    name = "ptzendnn";
-    graph =
-      fs::path{root} / "external/artifacts/resnet50/resnet50_pretrained.pt";
+const auto kImageHeight = 224;
+const auto kImageWidth = 224;
+const auto kImageChannels = 3;
+// for ImageNet dataset, 1000 output classes
+const auto kOutputClasses = 1000;
 
-    parameters.put("model", graph.string());
+#ifdef AMDINFER_ENABLE_PTZENDNN
+class Ptzendnn : public Backend {
+ public:
+  Ptzendnn() {
+    auto model = amdinfer::getPathToAsset("pt_resnet50");
 
+    this->put("model", model);
+  }
+
+  std::string name() const override { return "ptzendnn"; }
+  std::string extension() const override { return "ptzendnn"; }
+  void updateConfig([[maybe_unused]] Config& config) override {
+    // no update necessary
+  }
+
+  void preprocess(const std::string& input_path) override {
     const std::array<float, 3> mean{0.485F, 0.456F, 0.406F};
     const std::array<float, 3> std{4.367F, 4.464F, 4.444F};
     const auto convert_scale = 1 / 255.0;
@@ -96,163 +144,289 @@ struct PtzendnnWorker : public Workers {
     options.convert_type = true;
     options.type = CV_32FC3;
     options.convert_scale = convert_scale;
-    preprocessing = options;
+
+    images_ = amdinfer::pre_post::imagePreprocess({input_path}, options);
+
+    InferenceRequest request;
+    request.addInputTensor(images_[0].data(),
+                           {kImageChannels, kImageHeight, kImageWidth},
+                           amdinfer::DataType::Fp32);
+    this->request(std::move(request));
   }
+
+ private:
+  std::vector<std::vector<float>> images_;
 };
+#endif  // AMDINFER_ENABLE_PTZENDNN
 
-struct TfzendnnWorker : public Workers {
-  TfzendnnWorker() {
-    assert(root != nullptr);
-    extension = "tfzendnn";
-    name = "tfzendnn";
-    graph = fs::path{root} /
-            "external/artifacts/resnet50/resnet_v1_50_baseline_6.96B_922.pb";
-
+#ifdef AMDINFER_ENABLE_TFZENDNN
+class Tfzendnn : public Backend {
+ public:
+  Tfzendnn() {
     // arbitrarily set to 64
     const int inter_op = 64;
 
-    parameters.put("model", graph.string());
-    parameters.put("input_node", "input");
-    parameters.put("output_node", "resnet_v1_50/predictions/Reshape_1");
-    parameters.put("inter_op", inter_op);
-    parameters.put("intra_op", 1);
+    auto model = amdinfer::getPathToAsset("tf_resnet50");
 
+    put("model", model);
+    put("input_node", std::string{"input"});
+    put("output_node", std::string{"resnet_v1_50/predictions/Reshape_1"});
+    put("input_size", kImageHeight);
+    put("output_classes", kOutputClasses);
+    put("inter_op", inter_op);
+    put("intra_op", 1);
+  }
+
+  std::string name() const override { return "tfzendnn"; }
+  std::string extension() const override { return "tfzendnn"; }
+  void updateConfig([[maybe_unused]] Config& config) override {
+    // no update necessary
+  }
+
+  void preprocess(const std::string& input_path) override {
     amdinfer::pre_post::ImagePreprocessOptions<float, 3> options;
     options.convert_color = true;
     options.color_code = cv::COLOR_BGR2RGB;
     options.assign = true;
-    preprocessing = options;
+
+    images_ = amdinfer::pre_post::imagePreprocess({input_path}, options);
+
+    InferenceRequest request;
+    request.addInputTensor(images_[0].data(),
+                           {kImageChannels, kImageHeight, kImageWidth},
+                           amdinfer::DataType::Fp32);
+    this->request(std::move(request));
   }
+
+ private:
+  std::vector<std::vector<float>> images_;
 };
+#endif  // AMDINFER_ENABLE_TFZENDNN
 
-// NOLINTNEXTLINE(cert-err58-cpp)
-const PtzendnnWorker kPtZendnn{};
-// NOLINTNEXTLINE(cert-err58-cpp)
-const TfzendnnWorker kTfZendnn{};
+#ifdef AMDINFER_ENABLE_VITIS
+class Vitis : public Backend {
+ public:
+  Vitis() {
+    auto model = amdinfer::getPathToAsset("u250_resnet50");
+    put("model", model);
+  }
 
-const std::array<const Workers*, 2> kWorkers{&kPtZendnn, &kTfZendnn};
+  std::string name() const override { return "xmodel"; }
+  std::string extension() const override { return "vitis"; }
+  void updateConfig(Config& config) override {
+    const int batch_size = 4;
+    config.batchSize(batch_size);
+  }
 
-template <class... Fs>
-struct Overload : Fs... {
-  using Fs::operator()...;
+  void preprocess(const std::string& input_path) override {
+    const std::array<int8_t, 3> mean{123, 107, 104};
+    const std::array<int8_t, 3> std{1, 1, 1};
+
+    amdinfer::pre_post::ImagePreprocessOptions<int8_t, 3> options;
+    options.order = amdinfer::pre_post::ImageOrder::NHWC;
+    options.mean = mean;
+    options.std = std;
+    options.normalize = true;
+    images_ = amdinfer::pre_post::imagePreprocess({input_path}, options);
+
+    InferenceRequest request;
+    request.addInputTensor(images_[0].data(),
+                           {kImageHeight, kImageWidth, kImageChannels},
+                           amdinfer::DataType::Int8);
+    this->request(std::move(request));
+  }
+
+ private:
+  std::vector<std::vector<int8_t>> images_;
 };
-template <class... Fs>
-Overload(Fs...) -> Overload<Fs...>;
+#endif  // AMDINFER_ENABLE_VITIS
 
-template <class... Args>
-void resnet50(benchmark::State& st, Args&&... args) {
-  auto args_tuple = std::make_tuple(std::forward<Args>(args)...);
-  int client_index = std::get<0>(args_tuple);
+#ifdef AMDINFER_ENABLE_MIGRAPHX
+class Migraphx : public Backend {
+ public:
+  Migraphx() {
+    auto model = amdinfer::getPathToAsset("onnx_resnet50");
+    put("model", model);
+  }
 
-  auto config_index = st.range(0);
-  auto worker_index = st.range(1);
-  const auto& config = kConfigs.at(config_index);
-  const auto* worker = kWorkers.at(worker_index);
+  std::string name() const override { return "migraphx"; }
+  std::string extension() const override { return "migraphx"; }
+  void updateConfig([[maybe_unused]] Config& config) override {
+    // no update necessary
+  }
 
-  const auto image_location =
-    amdinfer::getPathToAsset("asset_dog-3619020_640.jpg");
-  const auto input_size = 224;
-  const auto channels = 3;
-  const auto output_classes = 1000;
-  const auto batch_size = config.batch_size;
+  void preprocess(const std::string& input_path) override {
+    const std::array<float, 3> mean{0.485F, 0.456F, 0.406F};
+    const std::array<float, 3> std{4.367F, 4.464F, 4.444F};
+    const auto image_size = 224;
+    const auto convert_scale = 1 / 255.0;
 
-  const auto warmup_requests = 4;
+    amdinfer::pre_post::ImagePreprocessOptions<float, kImageChannels> options;
+    options.order = amdinfer::pre_post::ImageOrder::NCHW;
+    options.height = image_size;
+    options.width = image_size;
+    options.mean = mean;
+    options.std = std;
+    options.normalize = true;
+    options.convert_color = true;
+    options.color_code = cv::COLOR_BGR2RGB;
+    options.convert_type = true;
+    options.type = CV_32FC3;
+    options.convert_scale = convert_scale;
+    images_ = amdinfer::pre_post::imagePreprocess({input_path}, options);
 
-  const auto& name = worker->name;
+    InferenceRequest request;
+    request.addInputTensor(images_[0].data(),
+                           {kImageHeight, kImageWidth, kImageChannels},
+                           amdinfer::DataType::Fp32);
+    this->request(std::move(request));
+  }
 
-  auto parameters = worker->parameters;
-  parameters.put("input_size", input_size);
-  parameters.put("output_classes", output_classes);
-  parameters.put("batch_size", batch_size);
+ private:
+  std::vector<std::vector<float>> images_;
+};
+#endif  // AMDINFER_ENABLE_MIGRAPHX
 
-  [[maybe_unused]] const auto default_http_port = 8998;
-  [[maybe_unused]] const auto default_grpc_port = 50'051;
-
-  amdinfer::Server server;
-  std::unique_ptr<amdinfer::Client> client;
-  if (client_index == 0) {
-    client = std::make_unique<amdinfer::NativeClient>(&server);
-#ifdef AMDINFER_ENABLE_HTTP
-  } else if (client_index == 1) {
-    server.startHttp(default_http_port);
-    client = std::make_unique<amdinfer::HttpClient>("http://127.0.0.1:8998");
+enum class Backends {
+#ifdef AMDINFER_ENABLE_TFZENDNN
+  Tfzendnn,
 #endif
-#ifdef AMDINFER_ENABLE_GRPC
-  } else if (client_index == 2) {
-    server.startGrpc(default_grpc_port);
-    client = std::make_unique<amdinfer::GrpcClient>("127.0.0.1:50051");
+#ifdef AMDINFER_ENABLE_PTZENDNN
+  Ptzendnn,
 #endif
-  } else {
-    st.SkipWithError("Unknown client index passed");
+#ifdef AMDINFER_ENABLE_VITIS
+  Vitis,
+#endif
+#ifdef AMDINFER_ENABLE_MIGRAPHX
+  Migraphx,
+#endif
+  // this is used find the number of backends enabled. It is NOT a backend. This
+  // must be the last enum value
+  Count
+};
+const auto kNumBackends = static_cast<int>(Backends::Count);
+
+std::unique_ptr<Backend> getBackend(Backends index) {
+  switch (index) {
+#ifdef AMDINFER_ENABLE_TFZENDNN
+    case Backends::Tfzendnn:
+      return std::make_unique<Tfzendnn>();
+#endif
+#ifdef AMDINFER_ENABLE_PTZENDNN
+    case Backends::Ptzendnn:
+      return std::make_unique<Ptzendnn>();
+#endif
+#ifdef AMDINFER_ENABLE_VITIS
+    case Backends::Vitis:
+      return std::make_unique<Vitis>();
+#endif
+#ifdef AMDINFER_ENABLE_MIGRAPHX
+    case Backends::Migraphx:
+      return std::make_unique<Migraphx>();
+#endif
+    default:
+      throw amdinfer::invalid_argument("Unknown argument");
+  }
+}
+
+// the benchmark function cannot be part of a namespace
+
+void resnet50(benchmark::State& st, const amdinfer::Client* client,
+              Backend* backend) {
+  const auto extension = backend->extension();
+  if (!amdinfer::serverHasExtension(client, extension)) {
+    std::string error = extension + " support required but not found";
+    st.SkipWithError(error.c_str());
     return;
   }
 
-  amdinfer::waitUntilServerReady(client.get());
+  const auto batch_size = static_cast<int>(st.range(0));
+  const auto num_requests = static_cast<int>(st.range(1));
+  const auto workers = static_cast<int>(st.range(2));
+  Config config{batch_size, num_requests, workers};
+  backend->updateConfig(config);
+  st.SetLabel(config.toString());
 
+  backend->put("batch_size", config.batchSize());
+  backend->put("share", false);
+
+  const auto& request = backend->request();
+  const auto& parameters = backend->parameters();
+
+  const auto& name = backend->name();
   auto endpoint = client->workerLoad(name, parameters);
   assert(endpoint == name);
-
-  std::vector<std::string> paths{image_location};
-  const auto& options = worker->preprocessing;
-
-  amdinfer::InferenceRequest request;
-  std::vector<std::vector<float>> images;
-  std::visit(
-    Overload{
-      [&](const ImagePreprocessOptions<float, channels>& opts) {
-        images = amdinfer::pre_post::imagePreprocess(paths, opts);
-        request.addInputTensor(images[0].data(),
-                               {channels, input_size, input_size},
-                               amdinfer::DataType::Fp32);
-      },
-    },
-    options);
-
-  // warm up
-  for (auto i = 0; i < warmup_requests; ++i) {
-    std::ignore = client->modelInfer(endpoint, request);
+  for (auto i = 0; i < workers - 1; ++i) {
+    std::ignore = client->workerLoad(name, parameters);
   }
 
-  for (auto _ : st) {
-    if (!amdinfer::serverHasExtension(client.get(), worker->extension)) {
-      std::string error = worker->extension + " support required but not found";
-      st.SkipWithError(error.c_str());
+  const auto warmup_requests = 4;
+  for (auto i = 0; i < warmup_requests; ++i) {
+    auto response = client->modelInfer(endpoint, request);
+    if (response.isError()) {
+      st.SkipWithError("Error response from the server");
       return;
     }
+  }
 
-    auto num_requests = config.requests;
-    for (auto i = 0; i < num_requests; ++i) {
-      auto response = client->modelInfer(endpoint, request);
-      assert(!response.isError());
-    }
+  const std::vector<amdinfer::InferenceRequest> requests{
+    static_cast<size_t>(config.requests()), request};
+
+  for (auto _ : st) {
+    std::ignore = amdinfer::inferAsyncOrdered(client, endpoint, requests);
   }
-  client->workerUnload(endpoint);
-  while (client->modelReady(endpoint)) {
-    std::this_thread::sleep_for(std::chrono::seconds(1));
+  for (auto i = 0; i < workers; ++i) {
+    client->workerUnload(endpoint);
   }
+  amdinfer::waitUntilModelNotReady(client, endpoint);
 }
 
 // NOLINTNEXTLINE(cert-err58-cpp)
 const std::initializer_list<std::vector<int64_t>> kRange{
-  benchmark::CreateDenseRange(0, kConfigs.size() - 1, 1),
-  benchmark::CreateDenseRange(0, kWorkers.size() - 1, 1)};
+  {1, 4, 64},                         // batch size
+  benchmark::CreateRange(1, 256, 4),  // number of requests
+  benchmark::CreateRange(1, 8, 2)     // workers
+};
 
-// NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
-BENCHMARK_CAPTURE(resnet50, Native, 0)
-  ->ArgsProduct(kRange)
-  ->Unit(benchmark::kMillisecond);
-#ifdef AMDINFER_ENABLE_HTTP
-// NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
-BENCHMARK_CAPTURE(resnet50, HTTP, 1)
-  ->ArgsProduct(kRange)
-  ->Unit(benchmark::kMillisecond);
-#endif
-#ifdef AMDINFER_ENABLE_GRPC
-// NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
-BENCHMARK_CAPTURE(resnet50, gRPC, 2)
-  ->ArgsProduct(kRange)
-  ->Unit(benchmark::kMillisecond);
+int main(int argc, char* argv[]) {
+  const amdinfer::Server server;
+
+#if defined(PROTOCOL_HTTP)
+  const auto default_http_port = 8998;
+  server.startHttp(default_http_port);
+  auto client = std::make_unique<amdinfer::HttpClient>(
+    "http://127.0.0.1:" + std::to_string(default_http_port));
+#elif defined(PROTOCOL_GRPC)
+  const auto default_grpc_port = 50051;
+  server.startGrpc(default_grpc_port);
+  auto client = std::make_unique<amdinfer::GrpcClient>(
+    "127.0.0.1:" + std::to_string(default_grpc_port));
+#else
+  auto client = std::make_unique<amdinfer::NativeClient>(&server);
 #endif
 
-// NOLINTNEXTLINE
-BENCHMARK_MAIN();
+  std::vector<std::unique_ptr<Backend>> backends;
+  backends.reserve(kNumBackends);
+  const auto image_location =
+    amdinfer::getPathToAsset("asset_dog-3619020_640.jpg");
+
+  for (auto i = 0; i < kNumBackends; ++i) {
+    backends.push_back(getBackend(static_cast<Backends>(i)));
+    auto* backend = backends.back().get();
+    auto name = "ResNet50/" + backend->name();
+    auto* benchmark = benchmark::RegisterBenchmark(name.c_str(), resnet50,
+                                                   client.get(), backend);
+    benchmark->ArgsProduct(kRange);
+    benchmark->Unit(benchmark::kMillisecond);
+
+    // construct request
+    std::vector<std::string> paths{image_location};
+    backend->preprocess(image_location);
+  }
+
+  amdinfer::waitUntilServerReady(client.get());
+
+  benchmark::Initialize(&argc, argv);
+  benchmark::RunSpecifiedBenchmarks();
+  benchmark::Shutdown();
+}

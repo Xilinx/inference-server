@@ -63,11 +63,13 @@ Raise pull requests
 A pull request should be made against an active issue.
 An active issue indicates that it has gone through a discussion already and is approved for development.
 You can fork the repository, make your additions and raise a pull request.
-Remember to :ref:`sign your git commits <Sign your work>`_.
+Remember to :ref:`sign your git commits <sign-your-work>`.
 The pull request will be reviewed by an owner and eventually approved for testing.
 If the automated testing passes, then it can be merged in.
 All code is licensed under the terms of the LICENSE file included in the repository.
 Your contribution will be accepted under the same license.
+
+.. _sign-your-work:
 
 Sign your work
 """"""""""""""

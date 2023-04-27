@@ -119,7 +119,7 @@ void waitUntilModelNotReady(const Client* client, const std::string& model) {
 }
 
 std::vector<InferenceResponse> inferAsyncOrdered(
-  Client* client, const std::string& model,
+  const Client* client, const std::string& model,
   const std::vector<InferenceRequest>& requests) {
   std::queue<InferenceResponseFuture> q;
   for (const auto& request : requests) {
@@ -138,7 +138,7 @@ std::vector<InferenceResponse> inferAsyncOrdered(
 }
 
 std::vector<InferenceResponse> inferAsyncOrderedBatched(
-  Client* client, const std::string& model,
+  const Client* client, const std::string& model,
   const std::vector<InferenceRequest>& requests, size_t batch_size) {
   auto num_requests = requests.size();
   std::vector<InferenceResponse> responses;

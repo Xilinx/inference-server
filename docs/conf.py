@@ -205,6 +205,13 @@ exclude_patterns = [
 
 # -- Options for HTML output -------------------------------------------------
 
+# Add any paths that contain custom static files (such as style sheets) here,
+# relative to this directory. They are copied after the builtin static files,
+# so a file named "default.css" will overwrite the builtin "default.css".
+html_static_path = ["_static"]
+
+html_last_updated_fmt = "%B %d, %Y"
+
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes. Attempts to use a custom Xilinx theme if it exists,
 # otherwise the default theme is used
@@ -242,14 +249,18 @@ if os.path.exists("./_themes/xilinx"):
             (version, "/" + "inference-server/" + version + "/")
         )
 
-# Add any paths that contain custom static files (such as style sheets) here,
-# relative to this directory. They are copied after the builtin static files,
-# so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ["_static"]
+    html_css_files = [
+        "custom.css",
+        "https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css",
+        # "https://cdn.datatables.net/fixedcolumns/4.2.2/css/fixedColumns.dataTables.min.css",
+    ]
 
-html_last_updated_fmt = "%B %d, %Y"
+    html_js_files = [
+        "https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js",
+        # "https://cdn.datatables.net/fixedcolumns/4.2.2/js/dataTables.fixedColumns.min.js",
+        "dataTables.js",
+    ]
 
 
 def setup(app):
     app.connect("autodoc-process-signature", hide_private_module)
-    app.add_css_file("custom.css")

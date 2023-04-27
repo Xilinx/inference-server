@@ -264,6 +264,9 @@ BatchPtr XModel::doRun(Batch* batch, const MemoryPool* pool) {
 
     new_batch->setModel(k, "xmodel");
   }
+  for (const auto& buffer : output_buffers) {
+    buffer->free();
+  }
   new_batch->setBuffers(std::move(new_input_buffers), {});
 
   return new_batch;

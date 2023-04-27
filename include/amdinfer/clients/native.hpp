@@ -55,7 +55,7 @@ class NativeClient : public Client {
    * @param server server to connect to
    *
    */
-  explicit NativeClient(Server* server);
+  explicit NativeClient(const Server* server);
   /// Copy constructor
   NativeClient(NativeClient const&) = delete;
   /// Copy assignment constructor
