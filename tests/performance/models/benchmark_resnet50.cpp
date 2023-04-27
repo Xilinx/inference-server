@@ -54,17 +54,21 @@ using ParameterMap = amdinfer::ParameterMap;
  */
 class Config {
  public:
-  Config(int batch_size, int requests)
-    : batch_size_({batch_size, batch_size}), requests_(requests) {}
+  Config(int batch_size, int requests, int workers)
+    : batch_size_({batch_size, batch_size}),
+      requests_(requests),
+      workers_(workers) {}
 
   int requests() const { return requests_; }
   int batchSize() const { return batch_size_.first; }
   void batchSize(int batch_size) { batch_size_.second = batch_size; }
+  int workers() const { return workers_; }
 
   std::string toString() const {
     return "batch_size:" + std::to_string(batch_size_.second) + "(" +
            std::to_string(batch_size_.first) +
-           ")/requests:" + std::to_string(requests_);
+           ")/requests:" + std::to_string(requests_) +
+           "/workers:" + std::to_string(workers_);
   }
 
   friend std::ostream& operator<<(std::ostream& os, const Config& self) {
@@ -78,10 +82,8 @@ class Config {
   // use a different value
   std::pair<int, int> batch_size_;
   int requests_;
+  int workers_;
 };
-
-const std::array kConfigs{Config{1, 1}, Config{4, 4}, Config{4, 8},
-                          Config{64, 64}};
 
 class Backend {
  public:
@@ -338,15 +340,15 @@ void resnet50(benchmark::State& st, const amdinfer::Client* client,
     return;
   }
 
-  auto config_index = st.range(0);
-  auto config = kConfigs.at(config_index);
+  const auto batch_size = static_cast<int>(st.range(0));
+  const auto num_requests = static_cast<int>(st.range(1));
+  const auto workers = static_cast<int>(st.range(2));
+  Config config{batch_size, num_requests, workers};
   backend->updateConfig(config);
   st.SetLabel(config.toString());
 
-  const auto num_requests = config.requests();
-  const auto batch_size = config.batchSize();
-
-  backend->put("batch_size", batch_size);
+  backend->put("batch_size", config.batchSize());
+  backend->put("share", false);
 
   const auto& request = backend->request();
   const auto& parameters = backend->parameters();
@@ -354,6 +356,9 @@ void resnet50(benchmark::State& st, const amdinfer::Client* client,
   const auto& name = backend->name();
   auto endpoint = client->workerLoad(name, parameters);
   assert(endpoint == name);
+  for (auto i = 0; i < workers - 1; ++i) {
+    std::ignore = client->workerLoad(name, parameters);
+  }
 
   const auto warmup_requests = 4;
   for (auto i = 0; i < warmup_requests; ++i) {
@@ -365,18 +370,23 @@ void resnet50(benchmark::State& st, const amdinfer::Client* client,
   }
 
   const std::vector<amdinfer::InferenceRequest> requests{
-    static_cast<size_t>(num_requests), request};
+    static_cast<size_t>(config.requests()), request};
 
   for (auto _ : st) {
     std::ignore = amdinfer::inferAsyncOrdered(client, endpoint, requests);
   }
-  client->workerUnload(endpoint);
+  for (auto i = 0; i < workers; ++i) {
+    client->workerUnload(endpoint);
+  }
   amdinfer::waitUntilModelNotReady(client, endpoint);
 }
 
 // NOLINTNEXTLINE(cert-err58-cpp)
 const std::initializer_list<std::vector<int64_t>> kRange{
-  benchmark::CreateDenseRange(0, kConfigs.size() - 1, 1)};
+  {1, 4, 64},                         // batch size
+  benchmark::CreateRange(1, 256, 4),  // number of requests
+  benchmark::CreateRange(1, 8, 2)     // workers
+};
 
 int main(int argc, char* argv[]) {
   const amdinfer::Server server;
@@ -414,8 +424,9 @@ int main(int argc, char* argv[]) {
     backend->preprocess(image_location);
   }
 
-  benchmark::Initialize(&argc, argv);
   amdinfer::waitUntilServerReady(client.get());
+
+  benchmark::Initialize(&argc, argv);
   benchmark::RunSpecifiedBenchmarks();
   benchmark::Shutdown();
 }
