@@ -330,7 +330,7 @@ InferenceRequestInput getInput(
   AMDINFER_LOG_TRACE(observer.logger, "Writing " + std::to_string(size) +
                                         " elements of type " +
                                         input.getDatatype().str() + " to " +
-                                        util::addressToString(buffer->data(0)));
+                                        util::toString(buffer->data(0)));
 
   switchOverTypes(WriteData(), input.getDatatype(), buffer.get(), &req, 0, size,
                   observer);

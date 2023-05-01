@@ -95,4 +95,14 @@ const std::byte *Tensor::deserialize(const std::byte *data_in) {
   return data_in;
 }
 
+std::ostream &operator<<(std::ostream &os, const Tensor &self) {
+  os << "Tensor(" << self.name_ << ", [";
+  for (const auto &index : self.shape_) {
+    os << index << ",";
+  }
+  os << "], " << self.data_type_.str() << ")";
+
+  return os;
+}
+
 }  // namespace amdinfer

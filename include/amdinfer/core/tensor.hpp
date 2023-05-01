@@ -76,6 +76,8 @@ class Tensor : public Serializable {
    */
   const std::byte *deserialize(const std::byte *data_in) override;
 
+  friend std::ostream &operator<<(std::ostream &os, const Tensor &self);
+
  private:
   std::string name_;
   std::vector<uint64_t> shape_;

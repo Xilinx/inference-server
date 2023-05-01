@@ -80,10 +80,11 @@ inline bool isLower(std::string_view str) {
                      [](char c) { return c == std::tolower(c); });
 }
 
-inline std::string addressToString(const void* ptr) {
-  std::ostringstream addr;
-  addr << ptr;
-  return addr.str();
+template <typename T>
+inline std::string toString(const T& object) {
+  std::ostringstream ss;
+  ss << object;
+  return ss.str();
 }
 
 }  // namespace amdinfer::util

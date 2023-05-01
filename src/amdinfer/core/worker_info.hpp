@@ -106,6 +106,7 @@ class WorkerInfo {
 
  private:
   std::map<std::thread::id, std::thread> worker_threads_;
+  void* handle_;
   std::map<std::thread::id, workers::Worker*> workers_;
   std::vector<std::unique_ptr<Batcher>> batchers_;
   size_t batch_size_ = 1;
