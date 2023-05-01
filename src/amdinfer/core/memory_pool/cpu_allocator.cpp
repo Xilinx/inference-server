@@ -66,8 +66,7 @@ BufferPtr CpuAllocator::get(const Tensor& tensor, size_t batch_size) {
   if (allocated_ + size_to_allocate > max_allocate_) {
     throw runtime_error("Too much requested");
   }
-  auto& new_block = data_.emplace_back();
-  new_block.resize(size_to_allocate);
+  auto& new_block = data_.emplace_back(size_to_allocate);
   allocated_ += size_to_allocate;
 
   auto* retval = new_block.data();
