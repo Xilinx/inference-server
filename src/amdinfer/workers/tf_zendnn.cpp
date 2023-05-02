@@ -66,6 +66,15 @@ const int kResNetImageSize = 224;
 const int kResNetImageChannels = 3;
 const int kResNetOutputClasses = 1000;
 
+void* openLibrary(const char* library, int dlopen_flags) {
+  void* handle = dlopen(library, dlopen_flags);
+  if (handle == nullptr) {
+    const char* error_str = dlerror();
+    throw amdinfer::file_not_found_error(error_str);
+  }
+  return handle;
+}
+
 /**
  * @brief The TfZendnn worker is a simple worker that accepts a single uint32_t
  * argument and adds 1 to it and returns. It accepts multiple input tensors and
@@ -74,8 +83,11 @@ const int kResNetOutputClasses = 1000;
  */
 class TfZendnn : public SingleThreadedWorker {
  public:
-  using SingleThreadedWorker::SingleThreadedWorker;
+  TfZendnn(const std::string& name, const std::string& platform,
+           bool allow_next);
+  // using SingleThreadedWorker::SingleThreadedWorker;
   [[nodiscard]] std::vector<MemoryAllocators> getAllocators() const override;
+  ~TfZendnn() override;
 
  private:
   void doInit(ParameterMap* parameters) override;
@@ -83,6 +95,10 @@ class TfZendnn : public SingleThreadedWorker {
   BatchPtr doRun(Batch* batch, const MemoryPool* pool) override;
   void doRelease() override;
   void doDestroy() override;
+
+  // handles must be the first member variable so the TF libraries can be loaded
+  // and saved before attempting to create the other members
+  std::vector<void*> handles_;
 
   // TF session and graphs
   tf::Session* session_ = nullptr;
@@ -101,6 +117,36 @@ class TfZendnn : public SingleThreadedWorker {
   std::string output_node_{"predict"};
   DataType input_dt_ = DataType::Fp32;
 };
+
+std::vector<void*> saveHandles() {
+  std::vector<void*> handles;
+
+  // Due to the DEEPBIND change for tensorflow_cc.so below, OMP now gives a
+  // segfault unexpectedly if the server is run from Python. Preloading iomp
+  // without DEEPBIND addresses this problem.
+  handles.emplace_back(openLibrary("libiomp5.so", RTLD_LOCAL | RTLD_LAZY));
+  // Upcoming changes in Tensorflow move the Protobuf symbols defined in this
+  // library to another library called tensorflow_framework.so. At runtime,
+  // tensorflow_cc should resolve its missing protobuf symbols against this
+  // library but instead it finds the protobuf used in the inference server.
+  // Using DEEPBIND addresses this problem so the protobuf symbols get found
+  // correctly when this library uses its own dependencies to resolve missing
+  // symbols before the global scope.
+  handles.emplace_back(openLibrary("libtensorflow_cc.so",
+                                   RTLD_GLOBAL | RTLD_LAZY | RTLD_DEEPBIND));
+  return handles;
+}
+
+TfZendnn::TfZendnn(const std::string& name, const std::string& platform,
+                   bool allow_next)
+  : SingleThreadedWorker(name, platform, allow_next), handles_(saveHandles()) {}
+
+TfZendnn::~TfZendnn() {
+  for (auto* handle : handles_) {
+    dlclose(handle);
+  }
+  handles_.clear();
+}
 
 std::vector<MemoryAllocators> TfZendnn::getAllocators() const {
   return {MemoryAllocators::Cpu};
@@ -303,35 +349,12 @@ void TfZendnn::doRelease() {
 }
 void TfZendnn::doDestroy() {}
 
-void* openLibrary(const char* library, int dlopen_flags) {
-  void* handle = dlopen(library, dlopen_flags);
-  if (handle == nullptr) {
-    const char* error_str = dlerror();
-    throw amdinfer::file_not_found_error(error_str);
-  }
-  return handle;
-}
-
 }  // namespace amdinfer::workers
 
 extern "C" {
 // using smart pointer here may cause problems inside shared object so managing
 // manually
 amdinfer::workers::Worker* getWorker() {
-  using amdinfer::workers::openLibrary;
-  // Due to the DEEPBIND change for tensorflow_cc.so below, OMP now gives a
-  // segfault unexpectedly if the server is run from Python. Preloading iomp
-  // without DEEPBIND addresses this problem.
-  openLibrary("libiomp5.so", RTLD_LOCAL | RTLD_LAZY);
-  // Upcoming changes in Tensorflow move the Protobuf symbols defined in this
-  // library to another library called tensorflow_framework.so. At runtime,
-  // tensorflow_cc should resolve its missing protobuf symbols against this
-  // library but instead it finds the protobuf used in the inference server.
-  // Using DEEPBIND addresses this problem so the protobuf symbols get found
-  // correctly when this library uses its own dependencies to resolve missing
-  // symbols before the global scope.
-  openLibrary("libtensorflow_cc.so", RTLD_GLOBAL | RTLD_LAZY | RTLD_DEEPBIND);
-
   return new amdinfer::workers::TfZendnn("TfZendnn", "CPU", true);
 }
 }  // extern C

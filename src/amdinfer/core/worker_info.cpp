@@ -40,17 +40,16 @@
 
 namespace amdinfer {
 
-/**
- * @brief Find the named function in a *.so file
- *
- * @param func name of the symbol  to find
- * @param so_path path to the *.so file to search
- * @return void* pointer to the function
- */
-void* findFunc(const std::string& func, const std::string& so_path) {
-  if (func.empty() || so_path.empty()) {
-    throw invalid_argument("Function or .so path empty");
+void* getHandle(const std::string& name) {
+  // multiple workers with different configurations may exist. Remove the config
+  // tag that starts with "-" in the name prior to loading the .so
+  auto lib_name = name;
+  lib_name[0] = static_cast<char>(std::toupper(lib_name[0]));
+  if (auto hyphen_pos = name.find('-'); hyphen_pos != std::string::npos) {
+    lib_name.erase(hyphen_pos);
   }
+  std::string library =
+    std::string("libworker") + lib_name + std::string(".so");
 
   // reset errors
   dlerror();
@@ -70,7 +69,21 @@ void* findFunc(const std::string& func, const std::string& so_path) {
   workers is dlmopen but that also should not be used here due to its own set of
   issues (https://sourceware.org/bugzilla/show_bug.cgi?id=24776).
   */
-  void* handle = dlopen(so_path.c_str(), RTLD_LOCAL | RTLD_LAZY);
+  void* handle = dlopen(library.c_str(), RTLD_LOCAL | RTLD_LAZY);
+  return handle;
+}
+
+/**
+ * @brief Find the named function in a *.so file
+ *
+ * @param func name of the symbol  to find
+ * @param so_path path to the *.so file to search
+ * @return void* pointer to the function
+ */
+void* findFunc(void* handle, const std::string& func) {
+  // reset errors
+  dlerror();
+
   if (handle == nullptr) {
     const char* error_str = dlerror();
     throw file_not_found_error(error_str);
@@ -85,18 +98,8 @@ void* findFunc(const std::string& func, const std::string& so_path) {
   return fptr;
 }
 
-workers::Worker* getWorker(const std::string& name) {
-  // multiple workers with different configurations may exist. Remove the config
-  // tag that starts with "-" in the name prior to loading the .so
-  auto lib_name = name;
-  lib_name[0] = static_cast<char>(std::toupper(lib_name[0]));
-  if (auto hyphen_pos = name.find('-'); hyphen_pos != std::string::npos) {
-    lib_name.erase(hyphen_pos);
-  }
-  std::string library =
-    std::string("libworker") + lib_name + std::string(".so");
-
-  void* func_ptr = findFunc("getWorker", library);
+workers::Worker* getWorker(void* handle) {
+  void* func_ptr = findFunc(handle, "getWorker");
 
   // cast the void pointer from dlsym to a function pointer. This assumes that
   // void* is same size as function pointer, which should be true on POSIX
@@ -108,6 +111,7 @@ WorkerInfo::WorkerInfo(const std::string& name, ParameterMap* parameters,
                        MemoryPool* pool, BatchPtrQueue* next,
                        const std::vector<MemoryAllocators>& next_allocators)
   : next_(next), next_allocators_(next_allocators) {
+  handle_ = getHandle(name);
   this->addAndStartWorker(name, parameters, pool);
 }
 
@@ -116,11 +120,13 @@ WorkerInfo::~WorkerInfo() {
   for (const auto& [thread_id, worker] : workers_) {
     delete worker;  // NOLINT(cppcoreguidelines-owning-memory)
   }
+  dlclose(handle_);
+  handle_ = nullptr;
 }
 
 void WorkerInfo::addAndStartWorker(const std::string& name,
                                    ParameterMap* parameters, MemoryPool* pool) {
-  auto* worker = getWorker(name);
+  auto* worker = getWorker(handle_);
   worker->init(parameters);
 
   std::vector<MemoryAllocators> allocators = worker->getAllocators();

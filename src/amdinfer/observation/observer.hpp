@@ -44,7 +44,7 @@ inline void logTraceBuffer([[maybe_unused]] const Logger& logger, void* data,
     bytes += std::to_string(static_cast<int>(addr[i])) + ", ";
   }
   AMDINFER_LOG_TRACE(
-    logger, "Buffer(" + util::addressToString(data) + ") has bytes: " + bytes);
+    logger, "Buffer(" + util::toString(data) + ") has bytes: " + bytes);
 }
 
 #endif  // AMDINFER_ENABLE_LOGGING
