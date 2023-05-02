@@ -24,6 +24,7 @@
 #include <opentelemetry/context/propagation/text_map_propagator.h>
 #include <opentelemetry/context/runtime_context.h>
 #include <opentelemetry/exporters/jaeger/jaeger_exporter.h>
+#include <opentelemetry/exporters/ostream/span_exporter.h>
 #include <opentelemetry/sdk/resource/resource.h>
 #include <opentelemetry/sdk/trace/exporter.h>
 #include <opentelemetry/sdk/trace/processor.h>
@@ -91,7 +92,7 @@ class HttpTextMapCarrier
   StringMap headers_;
 };
 
-void startTracer() {
+void startTracer(std::unique_ptr<trace_sdk::SpanExporter> exporter) {
   /**
    * Using "new" here instead of make_unique because g++ complains during
    * compilation about the destructor of the unique_ptr using an incomplete
@@ -99,10 +100,6 @@ void startTracer() {
    * already statically-linked into opentelemetry. We'd need to include Thrift
    * headers to use make_unique
    */
-  // auto exporter  = std::unique_ptr<trace_sdk::SpanExporter>(new
-  //   opentelemetry::exporter::trace::OStreamSpanExporter());
-  auto exporter = std::unique_ptr<trace_sdk::SpanExporter>(
-    new opentelemetry::exporter::jaeger::JaegerExporter());
   auto processor =
     std::make_unique<trace_sdk::SimpleSpanProcessor>(std::move(exporter));
   auto provider =
@@ -119,6 +116,20 @@ void startTracer() {
   // set global propagator
   opentelemetry::context::propagation::GlobalTextMapPropagator::
     SetGlobalPropagator(propagator);
+}
+
+void startOStreamTracer(std::ostream& os) {
+  auto exporter = std::unique_ptr<trace_sdk::SpanExporter>(
+    new opentelemetry::exporter::trace::OStreamSpanExporter(os));
+
+  startTracer(std::move(exporter));
+}
+
+void startJaegerTracer() {
+  auto exporter = std::unique_ptr<trace_sdk::SpanExporter>(
+    new opentelemetry::exporter::jaeger::JaegerExporter());
+
+  startTracer(std::move(exporter));
 }
 
 nostd::shared_ptr<trace_api::Tracer> getTracer() {

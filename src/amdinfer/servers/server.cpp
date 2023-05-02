@@ -23,7 +23,7 @@
 #include "amdinfer/core/exceptions.hpp"          // for environment_not_set_e...
 #include "amdinfer/core/shared_state.hpp"        // for SharedState
 #include "amdinfer/observation/logging.hpp"      // for initLogger, getLogDir...
-#include "amdinfer/observation/tracing.hpp"      // for startTracer, stopTracer
+#include "amdinfer/observation/tracing.hpp"      // for startJaegerTracer, st...
 #include "amdinfer/servers/grpc_server.hpp"      // for start, stop
 #include "amdinfer/servers/http_server.hpp"      // for stop, start
 #include "amdinfer/servers/server_internal.hpp"  // for ServerImpl
@@ -67,7 +67,7 @@ Server::Server() {
   impl_->state.workerLoad("responder", {});
 
 #ifdef AMDINFER_ENABLE_TRACING
-  startTracer();
+  startJaegerTracer();
 #endif
 
 #ifdef AMDINFER_ENABLE_AKS

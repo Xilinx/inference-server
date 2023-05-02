@@ -21,8 +21,9 @@
 #ifndef GUARD_AMDINFER_OBSERVATION_TRACING
 #define GUARD_AMDINFER_OBSERVATION_TRACING
 
-#include <memory>  // for shared_ptr, uniqu...
-#include <stack>   // for stack
+#include <iostream>  // for cout
+#include <memory>    // for shared_ptr, uniqu...
+#include <stack>     // for stack
 
 #include "amdinfer/build_options.hpp"    // for AMDINFER_ENABLE_TR...
 #include "amdinfer/core/parameters.hpp"  // for ParameterMap
@@ -44,8 +45,12 @@
 
 namespace amdinfer {
 
-/// initialize tracing globally
-void startTracer();
+// only initialize one exporter
+
+/// initialize tracing globally using ostream exporter
+void startOStreamTracer(std::ostream& os = std::cout);
+/// initialize tracing globally using Jaeger exporter
+void startJaegerTracer();
 /// clean up the tracing prior to shutdown
 void stopTracer();
 
