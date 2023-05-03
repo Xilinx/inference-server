@@ -358,8 +358,8 @@ RUN git clone --depth=1 --branch v1.44.0 --single-branch https://github.com/grpc
     && cd /tmp \
     && rm -fr /tmp/*
 
-# install opentelemetry 1.1.0 for tracing
-RUN VERSION=1.1.0 \
+# install opentelemetry 1.9.0 for tracing
+RUN VERSION=1.9.0 \
     && wget --quiet https://github.com/open-telemetry/opentelemetry-cpp/archive/refs/tags/v${VERSION}.tar.gz \
     && tar -xzf v${VERSION}.tar.gz \
     && cd opentelemetry-cpp-${VERSION} \
