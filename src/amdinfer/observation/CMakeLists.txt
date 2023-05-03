@@ -36,9 +36,11 @@ if(${AMDINFER_ENABLE_TRACING})
   # opentelemetry_exporter_ostream_span for debugging traces locally
   target_link_libraries(
     tracing
-    INTERFACE opentelemetry_trace libopentelemetry_resources.so
+    INTERFACE opentelemetry_trace
+              opentelemetry_resources
               opentelemetry_exporter_ostream_span
-              opentelemetry_exporter_jaeger_trace
+              opentelemetry_exporter_otlp_http
+              opentelemetry_exporter_otlp_http_client
   )
 endif()
 

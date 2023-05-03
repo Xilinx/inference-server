@@ -23,8 +23,8 @@
 #include <opentelemetry/context/propagation/global_propagator.h>
 #include <opentelemetry/context/propagation/text_map_propagator.h>
 #include <opentelemetry/context/runtime_context.h>
-#include <opentelemetry/exporters/jaeger/jaeger_exporter.h>
 #include <opentelemetry/exporters/ostream/span_exporter.h>
+#include <opentelemetry/exporters/otlp/otlp_http_exporter.h>
 #include <opentelemetry/sdk/resource/resource.h>
 #include <opentelemetry/sdk/trace/exporter.h>
 #include <opentelemetry/sdk/trace/processor.h>
@@ -126,8 +126,8 @@ void startOStreamTracer(std::ostream& os) {
 }
 
 void startJaegerTracer() {
-  auto exporter = std::unique_ptr<trace_sdk::SpanExporter>(
-    new opentelemetry::exporter::jaeger::JaegerExporter());
+  auto exporter =
+    std::make_unique<opentelemetry::exporter::otlp::OtlpHttpExporter>();
 
   startTracer(std::move(exporter));
 }
