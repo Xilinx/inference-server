@@ -31,13 +31,13 @@ namespace nostd = opentelemetry::nostd;
 
 namespace amdinfer {
 
-void startTracer() {}
+void startOtlpTracer() {}
 
 nostd::shared_ptr<trace_api::Tracer> getTracer() { return nullptr; }
 
 void stopTracer() {}
 
-Trace::Trace(const char* name,
+Trace::Trace(const std::string& name,
              const opentelemetry::v1::trace::StartSpanOptions& options) {
   (void)name;
   (void)options;
@@ -45,7 +45,7 @@ Trace::Trace(const char* name,
 
 Trace::~Trace() = default;
 
-void Trace::startSpan([[maybe_unused]] const char* name) {}
+void Trace::startSpan([[maybe_unused]] const std::string& name) {}
 
 void Trace::setAttribute(
   [[maybe_unused]] nostd::string_view key,
@@ -56,13 +56,15 @@ void Trace::setAttributes([[maybe_unused]] const ParameterMap& parameters) {}
 void Trace::endSpan() {}
 
 // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
-StringMap Trace::propagate() { return StringMap(); }
+StringMap Trace::propagate() { return {}; }
 
 void Trace::endTrace() {}
 
-TracePtr startTrace(const char* name) { return std::make_unique<Trace>(name); }
+TracePtr startTrace(const std::string& name) {
+  return std::make_unique<Trace>(name);
+}
 
-TracePtr startTrace(const char* name,
+TracePtr startTrace(const std::string& name,
                     [[maybe_unused]] const StringMap& http_headers) {
   return std::make_unique<Trace>(name);
 }

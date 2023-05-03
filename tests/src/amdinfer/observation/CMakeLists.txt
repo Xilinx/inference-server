@@ -40,10 +40,6 @@ if(${AMDINFER_ENABLE_TRACING})
   target_include_directories(
     fake_tracing AFTER PRIVATE ${AMDINFER_INCLUDE_DIRS}
   )
-  # switch opentelemetry_exporter_jaeger_trace to
-  # opentelemetry_exporter_ostream_span for debugging traces locally
-  # target_link_libraries(tracing INTERFACE opentelemetry_trace
-  # libopentelemetry_resources.so opentelemetry_exporter_jaeger_trace)
   set_target_options(fake_tracing)
 
   target_link_libraries(
