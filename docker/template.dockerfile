@@ -331,8 +331,8 @@ RUN VERSION=1.1.0 \
         -DBUILD_SHARED_LIBS=ON \
         -DOVERRIDE_CXX_STANDARD_FLAGS=OFF \
     && cmake --build build --target install -- -j$(($(nproc) - 1)) \
-    && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
-    && cat install_manifest.txt > ${MANIFESTS_DIR}/prometheus-cpp.txt \
+    && cat ./build/install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
+    && cat ./build/install_manifest.txt > ${MANIFESTS_DIR}/prometheus-cpp.txt \
     && cd /tmp \
     && rm -rf /tmp/*
 
@@ -354,7 +354,7 @@ RUN git clone --depth=1 --branch v1.44.0 --single-branch https://github.com/grpc
     && make -j$(($(nproc) - 1)) \
     && make install \
     && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
-    && cat install_manifest.txt > ${MANIFESTS_DIR}/grpc.txt \
+    && cp install_manifest.txt ${MANIFESTS_DIR}/grpc.txt \
     && cd /tmp \
     && rm -fr /tmp/*
 
@@ -372,8 +372,8 @@ RUN VERSION=1.9.0 \
         -DCMAKE_POSITION_INDEPENDENT_CODE=ON \
         -DBUILD_SHARED_LIBS=ON \
     && cmake --build build --target install -- -j$(($(nproc) - 1)) \
-    && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
-    && cp install_manifest.txt ${MANIFESTS_DIR}/opentelemetry.txt \
+    && cat ./build/install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
+    && cp ./build/install_manifest.txt ${MANIFESTS_DIR}/opentelemetry.txt \
     && cd /tmp \
     && rm -rf /tmp/*
 
