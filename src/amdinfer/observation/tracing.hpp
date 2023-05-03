@@ -35,7 +35,9 @@
 
 // opentelemetry needs this definition prior to any header inclusions if the
 // library was compiled with this flag set, which it is in the Docker build
+#ifndef HAVE_CPP_STDLIB
 #define HAVE_CPP_STDLIB
+#endif
 
 #include <opentelemetry/common/attribute_value.h>  // for AttributeValue
 #include <opentelemetry/nostd/shared_ptr.h>
@@ -49,8 +51,8 @@ namespace amdinfer {
 
 /// initialize tracing globally using ostream exporter
 void startOStreamTracer(std::ostream& os = std::cout);
-/// initialize tracing globally using Jaeger exporter
-void startJaegerTracer();
+/// initialize tracing globally using OTLP exporter
+void startOtlpTracer();
 /// clean up the tracing prior to shutdown
 void stopTracer();
 

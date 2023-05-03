@@ -93,23 +93,14 @@ class HttpTextMapCarrier
 };
 
 void startTracer(std::unique_ptr<trace_sdk::SpanExporter> exporter) {
-  /**
-   * Using "new" here instead of make_unique because g++ complains during
-   * compilation about the destructor of the unique_ptr using an incomplete
-   * type ThriftSender. This is forward-declared in jaeger_exporter.h and
-   * already statically-linked into opentelemetry. We'd need to include Thrift
-   * headers to use make_unique
-   */
   auto processor =
     std::make_unique<trace_sdk::SimpleSpanProcessor>(std::move(exporter));
-  auto provider =
-    nostd::shared_ptr<trace_api::TracerProvider>(new trace_sdk::TracerProvider(
-      std::move(processor), opentelemetry::sdk::resource::Resource::Create(
-                              {{"service.name", "amdinfer"}})));
+  auto provider = std::make_shared<trace_sdk::TracerProvider>(
+    std::move(processor), opentelemetry::sdk::resource::Resource::Create(
+                            {{"service.name", "amdinfer"}}));
 
   auto propagator =
-    nostd::shared_ptr<opentelemetry::context::propagation::TextMapPropagator>(
-      new opentelemetry::trace::propagation::HttpTraceContext());
+    std::make_shared<opentelemetry::trace::propagation::HttpTraceContext>();
 
   // Set the global trace provider
   trace_api::Provider::SetTracerProvider(provider);
@@ -119,13 +110,13 @@ void startTracer(std::unique_ptr<trace_sdk::SpanExporter> exporter) {
 }
 
 void startOStreamTracer(std::ostream& os) {
-  auto exporter = std::unique_ptr<trace_sdk::SpanExporter>(
-    new opentelemetry::exporter::trace::OStreamSpanExporter(os));
+  auto exporter =
+    std::make_unique<opentelemetry::exporter::trace::OStreamSpanExporter>(os);
 
   startTracer(std::move(exporter));
 }
 
-void startJaegerTracer() {
+void startOtlpTracer() {
   auto exporter =
     std::make_unique<opentelemetry::exporter::otlp::OtlpHttpExporter>();
 
@@ -165,11 +156,11 @@ void Trace::setAttributes(const ParameterMap& parameters) {
   auto data = parameters.data();
   // a range-based for loop doesn't work here because we can't pass the key when
   // it's a structured binding.
-  for (auto& it : data) {
+  for (const auto& it : data) {
     const auto& key = it.first;
     const auto& value = it.second;
     std::visit(
-      [key, this](Parameter&& arg) {
+      [key, this](const Parameter& arg) {
         if (std::holds_alternative<bool>(arg)) {
           this->spans_.top()->SetAttribute(key, std::get<bool>(arg));
         } else if (std::holds_alternative<double>(arg)) {

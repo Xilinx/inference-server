@@ -31,7 +31,7 @@ namespace nostd = opentelemetry::nostd;
 
 namespace amdinfer {
 
-void startJaegerTracer() {}
+void startOtlpTracer() {}
 
 nostd::shared_ptr<trace_api::Tracer> getTracer() { return nullptr; }
 

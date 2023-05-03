@@ -32,15 +32,13 @@ if(${AMDINFER_ENABLE_METRICS})
   target_link_libraries(metrics INTERFACE prometheus-cpp-core util)
 endif()
 if(${AMDINFER_ENABLE_TRACING})
-  # switch opentelemetry_exporter_jaeger_trace to
-  # opentelemetry_exporter_ostream_span for debugging traces locally
   target_link_libraries(
     tracing
-    INTERFACE opentelemetry_trace
-              opentelemetry_resources
-              opentelemetry_exporter_ostream_span
-              opentelemetry_exporter_otlp_http
-              opentelemetry_exporter_otlp_http_client
+    INTERFACE opentelemetry-cpp::trace
+              opentelemetry-cpp::resources
+              opentelemetry-cpp::ostream_span_exporter
+              opentelemetry-cpp::otlp_http_exporter
+              opentelemetry-cpp::otlp_http_client
   )
 endif()
 
