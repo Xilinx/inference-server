@@ -60,7 +60,7 @@ namespace amdinfer {
 
 /**
  * @brief This class provides the interface to hold the HTTP context from
- * incoming requests so we can propogate it. This class is taken from the HTTP
+ * incoming requests so we can propagate it. This class is taken from the HTTP
  * example in opentelemetry.
  *
  */
@@ -70,17 +70,14 @@ class HttpTextMapCarrier
   explicit HttpTextMapCarrier(StringMap headers)
     : headers_(std::move(headers)) {}
   HttpTextMapCarrier() = default;
-  opentelemetry::nostd::string_view Get(
-    opentelemetry::nostd::string_view key) const noexcept override {
-    auto it = headers_.find(key.data());
-    if (it != headers_.end()) {
+  std::string_view Get(std::string_view key) const noexcept override {
+    if (auto it = headers_.find(key.data()); it != headers_.end()) {
       return it->second;
     }
     return "";
   }
 
-  void Set(opentelemetry::nostd::string_view key,
-           opentelemetry::nostd::string_view value) noexcept override {
+  void Set(std::string_view key, std::string_view value) noexcept override {
     headers_.try_emplace(std::string(key), value);
   }
 
@@ -133,7 +130,7 @@ void stopTracer() {
   tracer->Close(std::chrono::milliseconds(1));
 }
 
-Trace::Trace(const char* name,
+Trace::Trace(const std::string& name,
              const opentelemetry::v1::trace::StartSpanOptions& options) {
   auto tracer = getTracer();
   this->spans_.emplace(tracer->StartSpan(name, options));
@@ -141,7 +138,7 @@ Trace::Trace(const char* name,
 
 Trace::~Trace() { this->endTrace(); }
 
-void Trace::startSpan(const char* name) {
+void Trace::startSpan(const std::string& name) {
   auto scope = trace_api::Scope(this->spans_.top());  // mark last span active
   auto tracer = getTracer();
   this->spans_.emplace(tracer->StartSpan(name));
@@ -201,9 +198,11 @@ void Trace::endTrace() {
   }
 }
 
-TracePtr startTrace(const char* name) { return std::make_unique<Trace>(name); }
+TracePtr startTrace(const std::string& name) {
+  return std::make_unique<Trace>(name);
+}
 
-TracePtr startTrace(const char* name, const StringMap& http_headers) {
+TracePtr startTrace(const std::string& name, const StringMap& http_headers) {
   auto prop = opentelemetry::context::propagation::GlobalTextMapPropagator::
     GetGlobalPropagator();
   auto current_ctx = opentelemetry::context::RuntimeContext::GetCurrent();
