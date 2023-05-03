@@ -28,9 +28,10 @@ In the container:
 .. code-block:: console
 
     $ cd /tmp
-    $ wget https://github.com/jaegertracing/jaeger/releases/download/v1.26.0/jaeger-1.26.0-linux-amd64.tar.gz
-    $ tar -xzf jaeger-1.26.0-linux-amd64.tar.gz
-    $ cd jaeger-1.26.0-linux-amd64
+    $ wget https://github.com/jaegertracing/jaeger/releases/download/v1.44.0/jaeger-1.44.0-linux-amd64.tar.gz
+    $ tar -xzf jaeger-1.44.0-linux-amd64.tar.gz
+    $ cd jaeger-1.44.0-linux-amd64
+    $ export COLLECTOR_OTLP_ENABLED=true
     $ ./jaeger-all-in-one
 
 Once the jaeger executable is running, start your instrumented application.

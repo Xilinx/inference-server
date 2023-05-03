@@ -385,7 +385,7 @@ void resnet50(benchmark::State& st, const amdinfer::Client* client,
 const std::initializer_list<std::vector<int64_t>> kRange{
   {1, 4, 64},                         // batch size
   benchmark::CreateRange(1, 256, 4),  // number of requests
-  benchmark::CreateRange(1, 8, 2)     // workers
+  benchmark::CreateRange(1, 4, 2)     // workers
 };
 
 int main(int argc, char* argv[]) {
@@ -394,15 +394,14 @@ int main(int argc, char* argv[]) {
 #if defined(PROTOCOL_HTTP)
   const auto default_http_port = 8998;
   server.startHttp(default_http_port);
-  auto client = std::make_unique<amdinfer::HttpClient>(
-    "http://127.0.0.1:" + std::to_string(default_http_port));
+  amdinfer::HttpClient client{"http://127.0.0.1:" +
+                              std::to_string(default_http_port)};
 #elif defined(PROTOCOL_GRPC)
   const auto default_grpc_port = 50051;
   server.startGrpc(default_grpc_port);
-  auto client = std::make_unique<amdinfer::GrpcClient>(
-    "127.0.0.1:" + std::to_string(default_grpc_port));
+  amdinfer::GrpcClient client{"127.0.0.1:" + std::to_string(default_grpc_port)};
 #else
-  auto client = std::make_unique<amdinfer::NativeClient>(&server);
+  amdinfer::NativeClient client{&server};
 #endif
 
   std::vector<std::unique_ptr<Backend>> backends;
@@ -414,8 +413,8 @@ int main(int argc, char* argv[]) {
     backends.push_back(getBackend(static_cast<Backends>(i)));
     auto* backend = backends.back().get();
     auto name = "ResNet50/" + backend->name();
-    auto* benchmark = benchmark::RegisterBenchmark(name.c_str(), resnet50,
-                                                   client.get(), backend);
+    auto* benchmark =
+      benchmark::RegisterBenchmark(name.c_str(), resnet50, &client, backend);
     benchmark->ArgsProduct(kRange);
     benchmark->Unit(benchmark::kMillisecond);
 
@@ -424,7 +423,7 @@ int main(int argc, char* argv[]) {
     backend->preprocess(image_location);
   }
 
-  amdinfer::waitUntilServerReady(client.get());
+  amdinfer::waitUntilServerReady(&client);
 
   benchmark::Initialize(&argc, argv);
   benchmark::RunSpecifiedBenchmarks();

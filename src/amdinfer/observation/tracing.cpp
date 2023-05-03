@@ -23,7 +23,8 @@
 #include <opentelemetry/context/propagation/global_propagator.h>
 #include <opentelemetry/context/propagation/text_map_propagator.h>
 #include <opentelemetry/context/runtime_context.h>
-#include <opentelemetry/exporters/jaeger/jaeger_exporter.h>
+#include <opentelemetry/exporters/ostream/span_exporter.h>
+#include <opentelemetry/exporters/otlp/otlp_http_exporter.h>
 #include <opentelemetry/sdk/resource/resource.h>
 #include <opentelemetry/sdk/trace/exporter.h>
 #include <opentelemetry/sdk/trace/processor.h>
@@ -59,7 +60,7 @@ namespace amdinfer {
 
 /**
  * @brief This class provides the interface to hold the HTTP context from
- * incoming requests so we can propogate it. This class is taken from the HTTP
+ * incoming requests so we can propagate it. This class is taken from the HTTP
  * example in opentelemetry.
  *
  */
@@ -69,17 +70,14 @@ class HttpTextMapCarrier
   explicit HttpTextMapCarrier(StringMap headers)
     : headers_(std::move(headers)) {}
   HttpTextMapCarrier() = default;
-  opentelemetry::nostd::string_view Get(
-    opentelemetry::nostd::string_view key) const noexcept override {
-    auto it = headers_.find(key.data());
-    if (it != headers_.end()) {
+  std::string_view Get(std::string_view key) const noexcept override {
+    if (auto it = headers_.find(key.data()); it != headers_.end()) {
       return it->second;
     }
     return "";
   }
 
-  void Set(opentelemetry::nostd::string_view key,
-           opentelemetry::nostd::string_view value) noexcept override {
+  void Set(std::string_view key, std::string_view value) noexcept override {
     headers_.try_emplace(std::string(key), value);
   }
 
@@ -91,34 +89,35 @@ class HttpTextMapCarrier
   StringMap headers_;
 };
 
-void startTracer() {
-  /**
-   * Using "new" here instead of make_unique because g++ complains during
-   * compilation about the destructor of the unique_ptr using an incomplete
-   * type ThriftSender. This is forward-declared in jaeger_exporter.h and
-   * already statically-linked into opentelemetry. We'd need to include Thrift
-   * headers to use make_unique
-   */
-  // auto exporter  = std::unique_ptr<trace_sdk::SpanExporter>(new
-  //   opentelemetry::exporter::trace::OStreamSpanExporter());
-  auto exporter = std::unique_ptr<trace_sdk::SpanExporter>(
-    new opentelemetry::exporter::jaeger::JaegerExporter());
+void startTracer(std::unique_ptr<trace_sdk::SpanExporter> exporter) {
   auto processor =
     std::make_unique<trace_sdk::SimpleSpanProcessor>(std::move(exporter));
-  auto provider =
-    nostd::shared_ptr<trace_api::TracerProvider>(new trace_sdk::TracerProvider(
-      std::move(processor), opentelemetry::sdk::resource::Resource::Create(
-                              {{"service.name", "amdinfer"}})));
+  auto provider = std::make_shared<trace_sdk::TracerProvider>(
+    std::move(processor), opentelemetry::sdk::resource::Resource::Create(
+                            {{"service.name", "amdinfer"}}));
 
   auto propagator =
-    nostd::shared_ptr<opentelemetry::context::propagation::TextMapPropagator>(
-      new opentelemetry::trace::propagation::HttpTraceContext());
+    std::make_shared<opentelemetry::trace::propagation::HttpTraceContext>();
 
   // Set the global trace provider
   trace_api::Provider::SetTracerProvider(provider);
   // set global propagator
   opentelemetry::context::propagation::GlobalTextMapPropagator::
     SetGlobalPropagator(propagator);
+}
+
+void startOStreamTracer(std::ostream& os) {
+  auto exporter =
+    std::make_unique<opentelemetry::exporter::trace::OStreamSpanExporter>(os);
+
+  startTracer(std::move(exporter));
+}
+
+void startOtlpTracer() {
+  auto exporter =
+    std::make_unique<opentelemetry::exporter::otlp::OtlpHttpExporter>();
+
+  startTracer(std::move(exporter));
 }
 
 nostd::shared_ptr<trace_api::Tracer> getTracer() {
@@ -131,7 +130,7 @@ void stopTracer() {
   tracer->Close(std::chrono::milliseconds(1));
 }
 
-Trace::Trace(const char* name,
+Trace::Trace(const std::string& name,
              const opentelemetry::v1::trace::StartSpanOptions& options) {
   auto tracer = getTracer();
   this->spans_.emplace(tracer->StartSpan(name, options));
@@ -139,7 +138,7 @@ Trace::Trace(const char* name,
 
 Trace::~Trace() { this->endTrace(); }
 
-void Trace::startSpan(const char* name) {
+void Trace::startSpan(const std::string& name) {
   auto scope = trace_api::Scope(this->spans_.top());  // mark last span active
   auto tracer = getTracer();
   this->spans_.emplace(tracer->StartSpan(name));
@@ -154,11 +153,11 @@ void Trace::setAttributes(const ParameterMap& parameters) {
   auto data = parameters.data();
   // a range-based for loop doesn't work here because we can't pass the key when
   // it's a structured binding.
-  for (auto& it : data) {
+  for (const auto& it : data) {
     const auto& key = it.first;
     const auto& value = it.second;
     std::visit(
-      [key, this](Parameter&& arg) {
+      [key, this](const Parameter& arg) {
         if (std::holds_alternative<bool>(arg)) {
           this->spans_.top()->SetAttribute(key, std::get<bool>(arg));
         } else if (std::holds_alternative<double>(arg)) {
@@ -199,9 +198,11 @@ void Trace::endTrace() {
   }
 }
 
-TracePtr startTrace(const char* name) { return std::make_unique<Trace>(name); }
+TracePtr startTrace(const std::string& name) {
+  return std::make_unique<Trace>(name);
+}
 
-TracePtr startTrace(const char* name, const StringMap& http_headers) {
+TracePtr startTrace(const std::string& name, const StringMap& http_headers) {
   auto prop = opentelemetry::context::propagation::GlobalTextMapPropagator::
     GetGlobalPropagator();
   auto current_ctx = opentelemetry::context::RuntimeContext::GetCurrent();

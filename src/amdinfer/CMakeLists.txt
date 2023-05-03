@@ -170,9 +170,13 @@ if(${AMDINFER_ENABLE_AKS})
 endif()
 
 if(${AMDINFER_ENABLE_TRACING})
-  list(APPEND dependencies opentelemetry-cpp::jaeger_trace_exporter
-              opentelemetry-cpp::resources opentelemetry-cpp::trace
-              opentelemetry-cpp::common opentelemetry-cpp::http_client_curl
+  list(
+    APPEND dependencies
+           opentelemetry-cpp::exporter_otlp_http
+           opentelemetry-cpp::resources
+           opentelemetry-cpp::trace
+           opentelemetry-cpp::common
+           opentelemetry-cpp::exporter_otlp_http_client
   )
 endif()
 

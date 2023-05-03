@@ -21,8 +21,9 @@
 #ifndef GUARD_AMDINFER_OBSERVATION_TRACING
 #define GUARD_AMDINFER_OBSERVATION_TRACING
 
-#include <memory>  // for shared_ptr, uniqu...
-#include <stack>   // for stack
+#include <iostream>  // for cout
+#include <memory>    // for shared_ptr, uniqu...
+#include <stack>     // for stack
 
 #include "amdinfer/build_options.hpp"    // for AMDINFER_ENABLE_TR...
 #include "amdinfer/core/parameters.hpp"  // for ParameterMap
@@ -34,7 +35,9 @@
 
 // opentelemetry needs this definition prior to any header inclusions if the
 // library was compiled with this flag set, which it is in the Docker build
+#ifndef HAVE_CPP_STDLIB
 #define HAVE_CPP_STDLIB
+#endif
 
 #include <opentelemetry/common/attribute_value.h>  // for AttributeValue
 #include <opentelemetry/nostd/shared_ptr.h>
@@ -44,8 +47,12 @@
 
 namespace amdinfer {
 
-/// initialize tracing globally
-void startTracer();
+// only initialize one exporter
+
+/// initialize tracing globally using ostream exporter
+void startOStreamTracer(std::ostream& os = std::cout);
+/// initialize tracing globally using OTLP exporter
+void startOtlpTracer();
 /// clean up the tracing prior to shutdown
 void stopTracer();
 
@@ -57,7 +64,7 @@ void stopTracer();
 class Trace final {
  public:
   explicit Trace(
-    const char* name,
+    const std::string& name,
     const opentelemetry::v1::trace::StartSpanOptions& options = {});
   ~Trace();
   Trace(Trace const&) = delete;              ///< Copy constructor
@@ -66,10 +73,10 @@ class Trace final {
   Trace& operator=(Trace&& other) = delete;  ///< Move assignment constructor
 
   /// start a new span with the given name
-  void startSpan(const char* name);
+  void startSpan(const std::string& name);
 
   /// set an attribute in the active span in the trace
-  void setAttribute(opentelemetry::nostd::string_view key,
+  void setAttribute(std::string_view key,
                     const opentelemetry::common::AttributeValue& value);
 
   /// set all parameters as attributes in the active span in the trace
@@ -85,13 +92,12 @@ class Trace final {
   void endTrace();
 
  private:
-  std::stack<opentelemetry::nostd::shared_ptr<opentelemetry::trace::Span>>
-    spans_;
+  std::stack<std::shared_ptr<opentelemetry::trace::Span>> spans_;
   // std::unique_ptr<opentelemetry::trace::Scope> scope_;
 };
 
 /// Start a trace with the given name
-TracePtr startTrace(const char* name);
+TracePtr startTrace(const std::string& name);
 
 /**
  * @brief Start a trace with context from HTTP headers
@@ -100,7 +106,7 @@ TracePtr startTrace(const char* name);
  * @param http_headers headers from HTTP request to extract context from
  * @return TracePtr
  */
-TracePtr startTrace(const char* name, const StringMap& http_headers);
+TracePtr startTrace(const std::string& name, const StringMap& http_headers);
 
 }  // namespace amdinfer
 

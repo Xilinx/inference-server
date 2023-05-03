@@ -319,75 +319,20 @@ RUN wget --quiet https://github.com/gabime/spdlog/archive/refs/tags/v1.8.2.tar.g
     && cd /tmp \
     && rm -rf /tmp/*
 
-# install prometheus-cpp 0.12.2 for metrics
-RUN wget --quiet https://github.com/jupp0r/prometheus-cpp/archive/refs/tags/v0.12.2.tar.gz \
-    && tar -xzf v0.12.2.tar.gz \
-    && cd prometheus-cpp-0.12.2 \
-    && mkdir -p build && cd build \
-    && cmake .. \
+# install prometheus-cpp 1.1.0 for metrics
+RUN VERSION=1.1.0 \
+    && wget --quiet https://github.com/jupp0r/prometheus-cpp/archive/refs/tags/v${VERSION}.tar.gz \
+    && tar -xzf v${VERSION}.tar.gz \
+    && cd prometheus-cpp-${VERSION} \
+    && cmake -S . -B build \
         -DENABLE_PUSH=OFF \
         -DENABLE_PULL=OFF \
         -DENABLE_TESTING=OFF \
         -DBUILD_SHARED_LIBS=ON \
-        -DUSE_THIRDPARTY_LIBRARIES=OFF \
-    && make -j$(($(nproc) - 1)) \
-    && make install \
-    && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
-    && cat install_manifest.txt > ${MANIFESTS_DIR}/prometheus-cpp.txt \
-    && cd /tmp \
-    && rm -rf /tmp/*
-
-# get Nlohmann JSON for building opentelemetry
-RUN wget --quiet https://github.com/nlohmann/json/archive/refs/tags/v3.7.3.tar.gz \
-    && tar -xzf v3.7.3.tar.gz \
-    && cd json-3.7.3 \
-    && mkdir -p build && cd build \
-    && cmake .. \
-        -DBUILD_TESTING=OFF \
-    && make -j$(($(nproc) - 1)) \
-    && make install \
-    && rm -rf /tmp/*
-
-# install Apache Thrift 0.12.0 for running the jaeger exporter in opentelemetry
-RUN VERSION=0.15.0 \
-    && cd /tmp && wget --quiet https://github.com/apache/thrift/archive/refs/tags/v${VERSION}.tar.gz \
-    && tar -xzf v${VERSION}.tar.gz \
-    && cd thrift-${VERSION} \
-    && mkdir -p build && cd build \
-    && cmake .. \
-        -DBUILD_TESTING=OFF \
-        -DBUILD_TUTORIALS=OFF \
-        -DBUILD_COMPILER=ON \
-        -DBUILD_CPP=ON \
-        -DBUILD_C_GLIB=OFF \
-        -DBUILD_JAVA=OFF \
-        -DBUILD_PYTHON=OFF \
-        -DBUILD_JAVASCRIPT=OFF \
-        -DBUILD_NODEJS=OFF \
-        -DCMAKE_POSITION_INDEPENDENT_CODE=ON \
-        -DBUILD_SHARED_LIBS=OFF \
-    && make -j$(($(nproc) - 1)) \
-    && make install \
-    && rm -rf /tmp/*
-
-# install opentelemetry 1.1.0 for tracing
-RUN VERSION=1.1.0 \
-    && wget --quiet https://github.com/open-telemetry/opentelemetry-cpp/archive/refs/tags/v${VERSION}.tar.gz \
-    && tar -xzf v${VERSION}.tar.gz \
-    && cd opentelemetry-cpp-${VERSION} \
-    && mkdir build && cd build \
-    && cmake .. \
-        -DWITH_JAEGER=ON \
-        -DBUILD_TESTING=OFF \
-        -DWITH_EXAMPLES=OFF \
-        -DWITH_PROMETHEUS=ON \
-        -DWITH_STL=ON \
-        -DCMAKE_POSITION_INDEPENDENT_CODE=ON \
-        -DBUILD_SHARED_LIBS=ON \
-    && make -j$(($(nproc) - 1)) \
-    && make install \
-    && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
-    && cp install_manifest.txt ${MANIFESTS_DIR}/opentelemetry.txt \
+        -DOVERRIDE_CXX_STANDARD_FLAGS=OFF \
+    && cmake --build build --target install -- -j$(($(nproc) - 1)) \
+    && cat ./build/install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
+    && cat ./build/install_manifest.txt > ${MANIFESTS_DIR}/prometheus-cpp.txt \
     && cd /tmp \
     && rm -rf /tmp/*
 
@@ -409,9 +354,30 @@ RUN git clone --depth=1 --branch v1.44.0 --single-branch https://github.com/grpc
     && make -j$(($(nproc) - 1)) \
     && make install \
     && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
-    && cat install_manifest.txt > ${MANIFESTS_DIR}/grpc.txt \
+    && cp install_manifest.txt ${MANIFESTS_DIR}/grpc.txt \
     && cd /tmp \
     && rm -fr /tmp/*
+
+# install opentelemetry 1.9.0 for tracing
+RUN VERSION=1.9.0 \
+    && wget --quiet https://github.com/open-telemetry/opentelemetry-cpp/archive/refs/tags/v${VERSION}.tar.gz \
+    && tar -xzf v${VERSION}.tar.gz \
+    && cd opentelemetry-cpp-${VERSION} \
+    && cmake -S . -B build \
+        -DWITH_OTLP=ON \
+        -DWITH_OTLP_HTTP=ON \
+        -DBUILD_TESTING=OFF \
+        -DWITH_EXAMPLES=OFF \
+        -DWITH_STL=ON \
+        -DCMAKE_POSITION_INDEPENDENT_CODE=ON \
+        -DBUILD_SHARED_LIBS=ON \
+    # necessary to pick up the protobuf install?
+    && ldconfig \
+    && cmake --build build --target install -- -j$(($(nproc) - 1)) \
+    && cat ./build/install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
+    && cp ./build/install_manifest.txt ${MANIFESTS_DIR}/opentelemetry.txt \
+    && cd /tmp \
+    && rm -rf /tmp/*
 
 # install efsw for directory monitoring
 RUN COMMIT=6b51944994b5c77dbd7edce66846e378a3bf4d8e \
