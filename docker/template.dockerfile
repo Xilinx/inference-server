@@ -371,6 +371,8 @@ RUN VERSION=1.9.0 \
         -DWITH_STL=ON \
         -DCMAKE_POSITION_INDEPENDENT_CODE=ON \
         -DBUILD_SHARED_LIBS=ON \
+    # necessary to pick up the protobuf install?
+    && ldconfig \
     && cmake --build build --target install -- -j$(($(nproc) - 1)) \
     && cat ./build/install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
     && cp ./build/install_manifest.txt ${MANIFESTS_DIR}/opentelemetry.txt \

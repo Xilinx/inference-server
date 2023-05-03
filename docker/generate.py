@@ -809,7 +809,9 @@ def install_python_packages():
                 "typing_extensions==4.5.0" \\
                 "urllib3==1.26.15" \\
                 "virtualenv==20.22.0" \\
-                "zipp==3.15.0"
+                "zipp==3.15.0" \\
+            # some packages install to site-packages which needs to be added to the PATH
+            && echo "/usr/lib/python3.8/site-packages" >> /usr/local/lib/python3.8/dist-packages/site-packages.pth
         """
     )
 
