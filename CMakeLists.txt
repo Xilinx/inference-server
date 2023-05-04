@@ -36,14 +36,6 @@ else()
   message(STATUS "Building version ${ver_major}.${ver_minor}.${ver_patch}")
 endif()
 
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
-
-if(NOT DEFINED CMAKE_TOOLCHAIN_FILE)
-  find_program(MAKE_PROGRAM make)
-  set(CMAKE_MAKE_PROGRAM ${MAKE_PROGRAM})
-  include(GetVcpkg)
-endif()
-
 # set the project name
 project(
   amdinfer
@@ -69,6 +61,8 @@ if(PROJECT_IS_TOP_LEVEL)
       CACHE STRING "Available build-types: Debug, Release and Coverage"
   )
 endif()
+
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 if(CMAKE_BUILD_TYPE MATCHES Coverage)
   include(CodeCoverage)
