@@ -14,6 +14,22 @@
 
 from conan import ConanFile
 
+# in the dockerfile:
+# RUN pip install --no-cache-dir conan
+
+# ARG AMDINFER_ROOT
+# COPY . $AMDINFER_ROOT
+
+# RUN conan profile detect \
+#     && cp $AMDINFER_ROOT/external/conan/ubuntu.cfg $(conan profile path default) \
+#     && conan export $AMDINFER_ROOT/external/conan/ffmpeg --version 3.4.8 --user xilinx --channel inference-server \
+#     && conan export $AMDINFER_ROOT/external/conan/nodejs --version 14.16.0 --user xilinx --channel inference-server  \
+#     && conan export $AMDINFER_ROOT/external/conan/opencv --version 3.4.3 --user xilinx --channel inference-server \
+#     && conan export $AMDINFER_ROOT/external/conan/opentelemetry-proto --version 0.19.0 --user xilinx --channel inference-server \
+#     && conan export $AMDINFER_ROOT/external/conan/trantor --version 1.5.8 --user xilinx --channel inference-server  \
+#     && mkdir -p ~/.conan2/output-folder \
+#     && conan install --user xilinx --channel inference-server --build missing --output-folder ~/.conan2/output-folder $AMDINFER_ROOT
+
 
 class AMDinferRecipe(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
@@ -24,16 +40,18 @@ class AMDinferRecipe(ConanFile):
         self.requires("concurrentqueue/1.0.3")
         self.requires("cxxopts/2.2.1")
         self.requires("drogon/1.8.2")
-        # self.requires("ffmpeg/3.4.8")
-        self.requires("grpc/1.50.1")
+        self.requires("grpc/1.44.0@xilinx/inference-server", force=True)
         self.requires("half/2.2.0")
-        # self.requires("nodejs/14.16.0")
-        # self.requires("opencv/3.4.3")
-        # self.requires("opentelemetry-cpp/1.8.1")
-        # needed to resolve conflicts between different versions of openssl
+        self.requires("libwebp/1.2.4", override=True)
+        self.requires("nodejs/14.16.0@xilinx/inference-server")
+        self.requires("opencv/3.4.3@xilinx/inference-server")
+        self.requires("opentelemetry-cpp/1.8.1")
+        self.requires(
+            "opentelemetry-proto/0.19.0@xilinx/inference-server", override=True
+        )
         self.requires("openssl/1.1.1s", override=True)
         self.requires("prometheus-cpp/1.1.0")
-        self.requires("protobuf/3.19.4", override=True)
+        self.requires("protobuf/3.19.4", force=True)
         self.requires("pybind11/2.9.1")
         self.requires("spdlog/1.11.0")
         self.requires("trantor/1.5.8@xilinx/inference-server", override=True)
@@ -47,11 +65,10 @@ class AMDinferRecipe(ConanFile):
 
     def configure(self):
         self.options["drogon"].with_orm = False
-        self.options["grpc"].csharp_plugin = False
-        self.options["grpc"].node_plugin = False
-        self.options["grpc"].objective_c_plugin = False
-        self.options["grpc"].php_plugin = False
-        self.options["grpc"].python_plugin = False
-        self.options["grpc"].ruby_plugin = False
         self.options["prometheus-cpp"].with_pull = False
         self.options["prometheus-cpp"].with_push = False
+        self.options["opentelemetry-cpp"].shared = True
+        self.options["opentelemetry-cpp"].with_abseil = False
+        self.options["opentelemetry-cpp"].with_jaeger = False
+        self.options["opentelemetry-cpp"].with_stl = True
+        self.options["opentelemetry-cpp"].with_zipkin = False
