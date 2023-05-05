@@ -35,20 +35,20 @@ class AMDinferRecipe(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
     generators = "CMakeToolchain", "CMakeDeps"
 
+    # default_options = {"grpc/*:shared": True}
+
     def requirements(self):
         self.requires("b64/2.0.0.1")
         self.requires("concurrentqueue/1.0.3")
         self.requires("cxxopts/2.2.1")
         self.requires("drogon/1.8.2")
+        self.requires("googleapis/cci.20221108@xilinx/inference-server", override=True)
         self.requires("grpc/1.44.0@xilinx/inference-server", force=True)
         self.requires("half/2.2.0")
         self.requires("libwebp/1.2.4", override=True)
         self.requires("nodejs/14.16.0@xilinx/inference-server")
         self.requires("opencv/3.4.3@xilinx/inference-server")
-        self.requires("opentelemetry-cpp/1.8.1")
-        self.requires(
-            "opentelemetry-proto/0.19.0@xilinx/inference-server", override=True
-        )
+        self.requires("opentelemetry-cpp/1.8.1@xilinx/inference-server")
         self.requires("openssl/1.1.1s", override=True)
         self.requires("prometheus-cpp/1.1.0")
         self.requires("protobuf/3.19.4", force=True)
@@ -72,3 +72,4 @@ class AMDinferRecipe(ConanFile):
         self.options["opentelemetry-cpp"].with_jaeger = False
         self.options["opentelemetry-cpp"].with_stl = True
         self.options["opentelemetry-cpp"].with_zipkin = False
+        self.options["opentelemetry-cpp"].with_otlp_grpc = False

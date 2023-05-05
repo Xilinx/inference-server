@@ -144,8 +144,14 @@ class GrpcConan(ConanFile):
         self.requires("openssl/[>=1.1 <4]")
         self.requires("re2/20230301")
         self.requires("zlib/1.2.13")
-        # self.requires("protobuf/3.19.4", transitive_headers=True, transitive_libs=True, run=can_run(self))
-        self.requires("googleapis/cci.20221108")
+        self.requires(
+            "protobuf/3.19.4",
+            transitive_headers=True,
+            transitive_libs=True,
+            force=True,
+            run=can_run(self),
+        )
+        self.requires("googleapis/cci.20221108@xilinx/inference-server")
         self.requires("grpc-proto/cci.20220627")
 
     def package_id(self):
