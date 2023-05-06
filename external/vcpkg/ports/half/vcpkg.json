@@ -1,0 +1,9 @@
+{
+  "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg-tool/main/docs/vcpkg.schema.json",
+  "name": "half",
+  "version": "2.2.0",
+  "port-version": 0,
+  "description": "half is a C++ header-only library to provide an IEEE-754 conformant half-precision floating point type.",
+  "homepage": "https://half.sourceforge.net/",
+  "license": "MIT"
+}

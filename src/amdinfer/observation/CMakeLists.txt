@@ -28,6 +28,9 @@ amdinfer_add_targets(
   targets target_objects "${base_targets}" "${derived_targets}" ""
 )
 
+if(${AMDINFER_ENABLE_LOGGING})
+  target_link_libraries(logging PRIVATE spdlog::spdlog)
+endif()
 if(${AMDINFER_ENABLE_METRICS})
   target_link_libraries(metrics INTERFACE prometheus-cpp-core util)
 endif()

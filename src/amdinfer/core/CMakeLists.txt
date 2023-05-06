@@ -35,6 +35,8 @@ amdinfer_add_targets(
   targets target_objects "${base_targets}" "${derived_targets}" _core
 )
 
+target_link_libraries(data_types PRIVATE half::half)
+
 amdinfer_add_protobuf_target(lib_config model_config.proto OFF)
 
 target_include_directories(
