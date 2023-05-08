@@ -1,0 +1,31 @@
+# Copyright 2023 Advanced Micro Devices, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+--- CMakeLists.txt    2023-05-08 09:44:19.943213000 -0700
++++ CMakeLists.txt    2023-05-08 09:44:14.838329000 -0700
+@@ -32,13 +32,12 @@
+ else()
+   get_target_property(GLOG_INCLUDE_DIRS glog::glog INTERFACE_INCLUDE_DIRECTORIES)
+ endif(NOT glog_FOUND)
+-find_package(Protobuf REQUIRED) # rt-engine does not need
+ find_path(JSONC_INCLUDE_DIRS NAMES json-c)
+ find_library(JSONC_LIBRARIES NAMES json-c REQUIRED)
+ find_package(Threads REQUIRED)
+
+ # Temporary hack for windows
+-find_package(Boost)
++find_package(Boost COMPONENTS system filesystem thread serialization)
+
+ add_subdirectory(engine)
+ add_subdirectory(runner)

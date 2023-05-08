@@ -28,7 +28,7 @@ amdinfer_add_targets(
   targets target_objects "${base_targets}" "${derived_targets}" ""
 )
 
-target_link_libraries(base64 INTERFACE b64)
+target_link_libraries(base64 INTERFACE unofficial::b64::b64)
 target_link_libraries(compression INTERFACE z)
 target_link_libraries(exec INTERFACE Threads::Threads)
 

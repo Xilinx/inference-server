@@ -12,13 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set(VCPKG_TARGET_ARCHITECTURE x64)
-set(VCPKG_CRT_LINKAGE dynamic)
-set(VCPKG_LIBRARY_LINKAGE dynamic)
+--- src/AksTopContainer.cpp     2023-05-08 08:58:49.002769000 -0700
++++ src/AksTopContainer.cpp     2023-05-08 08:59:24.063746000 -0700
+@@ -43,6 +43,7 @@
+ void TopContainer::deleteGlobal()
+ {
+   delete _global;
++  _global = nullptr;
+ }
 
-# set(VCPKG_C_FLAGS ${VCPKG_C_FLAGS} -std=c++17)
-# set(VCPKG_CXX_FLAGS ${VCPKG_CXX_FLAGS} -std=c++17)
-
-set(VCPKG_CMAKE_SYSTEM_NAME Linux)
-# adds $ORIGIN to the RUNPATH so shared libraries are relocatable
-set(VCPKG_FIXUP_ELF_RPATH TRUE)
+ void TopContainer::addKernel(KernelDef *def)

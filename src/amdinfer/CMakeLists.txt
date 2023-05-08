@@ -62,6 +62,8 @@ set_target_properties(
   amdinfer-server-exe PROPERTIES OUTPUT_NAME amdinfer-server
 )
 target_link_libraries(amdinfer-server-exe PRIVATE amdinfer)
+# TODO(varunsh): fix this linkage. Suspected to come from spdlog
+target_link_libraries(amdinfer-server-exe PRIVATE fmt::fmt)
 
 # ~~~
 # include(GenerateExportHeader)

@@ -4,9 +4,14 @@
   "version-semver": "0.4.0",
   "dependencies": [
     {
+      "name": "b64",
+      "version>=": "2.0.0.1"
+    },
+    {
       "name": "benchmark",
       "version>=": "1.7.1"
     },
+    "boost-process",
     {
       "name": "concurrentqueue",
       "version>=": "1.0.3"
@@ -35,6 +40,10 @@
       ]
     },
     {
+      "name": "gtest",
+      "version>=": "1.11.0"
+    },
+    {
       "name": "opentelemetry-cpp",
       "version>=": "1.8.3",
       "features": [
@@ -51,10 +60,11 @@
       "version>=": "3.19.4"
     },
     {
-      "name": "opencv",
-      "version>=": "3.4.3-9",
+      "name": "opencv4",
+      "default-features": false,
       "features": [
-        "ffmpeg"
+        "ffmpeg",
+        "jpeg"
       ]
     },
     {
@@ -64,6 +74,10 @@
     {
       "name": "tomlplusplus",
       "version>=": "3.1.0"
+    },
+    {
+      "name": "unilog",
+      "version>=": "3.0.0"
     },
     {
       "name": "vcpkg-cmake",
@@ -80,12 +94,8 @@
       "version": "2.2.1"
     },
     {
-      "name": "opencv",
-      "version": "3.4.3-9"
-    },
-    {
-      "name": "python3",
-      "version": "3.8.10"
+      "name": "opentelemetry-cpp",
+      "version": "1.8.3#7"
     }
   ],
   "vcpkg-configuration": {

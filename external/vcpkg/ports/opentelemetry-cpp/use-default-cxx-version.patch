@@ -1,0 +1,38 @@
+# Copyright 2023 Advanced Micro Devices, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+--- CMakeLists.txt    2023-05-08 13:44:15.395330000 -0700
++++ CMakeLists.txt    2023-05-08 13:44:54.328154000 -0700
+@@ -126,20 +126,7 @@
+ option(OPENTELEMETRY_INSTALL "Whether to install opentelemetry targets"
+        ${OPENTELEMETRY_INSTALL_default})
+
+-if(NOT DEFINED CMAKE_CXX_STANDARD)
+-  if(WITH_STL)
+-    # Require at least C++17. C++20 is needed to avoid gsl::span
+-    if(CMAKE_VERSION VERSION_GREATER 3.11.999)
+-      # Ask for 20, may get anything below
+-      set(CMAKE_CXX_STANDARD 20)
+-    else()
+-      # Ask for 17, may get anything below
+-      set(CMAKE_CXX_STANDARD 17)
+-    endif()
+-  else()
+-    set(CMAKE_CXX_STANDARD 11)
+-  endif()
+-endif()
++set(CMAKE_CXX_STANDARD 17)
+
+ if(WITH_STL)
+   # These definitions are needed for test projects that do not link against

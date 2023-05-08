@@ -32,7 +32,7 @@ if(${AMDINFER_ENABLE_LOGGING})
   target_link_libraries(logging PRIVATE spdlog::spdlog)
 endif()
 if(${AMDINFER_ENABLE_METRICS})
-  target_link_libraries(metrics INTERFACE prometheus-cpp-core util)
+  target_link_libraries(metrics INTERFACE prometheus-cpp::core util)
 endif()
 if(${AMDINFER_ENABLE_TRACING})
   target_link_libraries(

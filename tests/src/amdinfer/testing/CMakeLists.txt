@@ -13,7 +13,7 @@
 # limitations under the License.
 
 add_library(test_main STATIC test_main.cpp)
-target_link_libraries(test_main PUBLIC gtest)
+target_link_libraries(test_main PUBLIC GTest::gtest PRIVATE cxxopts::cxxopts)
 set_target_options(test_main)
 
 set(files get_path_to_asset)

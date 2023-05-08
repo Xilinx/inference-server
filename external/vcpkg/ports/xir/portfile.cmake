@@ -12,13 +12,25 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set(VCPKG_TARGET_ARCHITECTURE x64)
-set(VCPKG_CRT_LINKAGE dynamic)
-set(VCPKG_LIBRARY_LINKAGE dynamic)
+# cmake-format: off
+vcpkg_from_github(
+  OUT_SOURCE_PATH SOURCE_PATH
+  REPO Xilinx/Vitis-AI
+  REF "v3.0"
+  SHA512 0
+  HEAD_REF master
+)
 
-# set(VCPKG_C_FLAGS ${VCPKG_C_FLAGS} -std=c++17)
-# set(VCPKG_CXX_FLAGS ${VCPKG_CXX_FLAGS} -std=c++17)
+vcpkg_cmake_configure(
+  SOURCE_PATH ${SOURCE_PATH}/src/vai_runtime/xir
+  OPTIONS -DBUILD_PYTHON=ON
+)
+# cmake-format: on
 
-set(VCPKG_CMAKE_SYSTEM_NAME Linux)
-# adds $ORIGIN to the RUNPATH so shared libraries are relocatable
-set(VCPKG_FIXUP_ELF_RPATH TRUE)
+vcpkg_cmake_install()
+
+vcpkg_cmake_config_fixup(CONFIG_PATH share/cmake/xir)
+
+vcpkg_copy_pdbs()
+
+vcpkg_install_copyright(FILE_LIST "${SOURCE_PATH}/LICENSE")
