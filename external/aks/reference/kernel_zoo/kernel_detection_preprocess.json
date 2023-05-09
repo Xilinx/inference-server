@@ -1,7 +1,7 @@
 {
   "description": "Preprocess an image for detection network",
   "device_type": "cpu",
-  "kernel_lib": "libs/libDetectionPreProcess.so",
+  "kernel_lib": "libs/libAksDetectionPreproc.so",
   "kernel_name": "DetectionPreProcess",
   "kernel_type": "cpp",
   "num_cu": 2,

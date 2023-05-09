@@ -53,7 +53,7 @@ target_include_directories(
 target_link_libraries(
   ${PROJECT_NAME}
   PRIVATE ${aks_LIBRARIES}
-  PRIVATE vart-runner
-  PRIVATE glog xir unilog
+  PRIVATE vart::runner
+  PRIVATE xir::xir unilog::unilog glog::glog
   PRIVATE ${CMAKE_THREAD_LIBS_INIT}
 )

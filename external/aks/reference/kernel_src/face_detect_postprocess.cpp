@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#include "AksFaceDetectPostProcess.hpp"
+#include "face_detect_postprocess.hpp"
 
 #include <aks/AksKernelBase.h>
 #include <aks/AksNodeParams.h>

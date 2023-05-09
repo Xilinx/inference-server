@@ -13,6 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+#ifndef GUARD_AKS_REFERENCE_KERNEL_SRC_AKSFACEDETECTPOSTPROCESS
+#define GUARD_AKS_REFERENCE_KERNEL_SRC_AKSFACEDETECTPOSTPROCESS
 #include <algorithm>
 #include <cmath>
 #include <iostream>
@@ -195,3 +198,5 @@ void displayResults(std::vector<std::vector<float>>& results,
     std::string("outputs/") + std::to_string(batch) + std::string(".jpg");
   cv::imwrite(outpath.c_str(), image);
 }
+
+#endif  // GUARD_AKS_REFERENCE_KERNEL_SRC_AKSFACEDETECTPOSTPROCESS

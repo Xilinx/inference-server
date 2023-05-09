@@ -12,13 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
---- a/src/AKS/src/AksTopContainer.cpp     2023-05-08 08:58:49.002769000 -0700
-+++ b/src/AKS/src/AksTopContainer.cpp     2023-05-08 08:59:24.063746000 -0700
-@@ -43,6 +43,7 @@
- void TopContainer::deleteGlobal()
- {
-   delete _global;
-+  _global = nullptr;
- }
-
- void TopContainer::addKernel(KernelDef *def)
+--- a/src/AKS/src/CMakeLists.txt     2023-05-09 09:12:50.563436000 -0700
++++ b/src/AKS/src/CMakeLists.txt    2023-05-09 09:13:00.282454000 -0700
+@@ -59,7 +59,7 @@
+ # Required Includes
+ target_include_directories(${PROJECT_NAME} PUBLIC
+   $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/>
+-  $<INSTALL_INTERFACE:aks>
++  $<INSTALL_INTERFACE:include/aks>
+   PRIVATE ${Python3_INCLUDE_DIRS}
+   PRIVATE ${pybind11_INCLUDE_DIR}
+ )

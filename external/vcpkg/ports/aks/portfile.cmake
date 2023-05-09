@@ -17,9 +17,11 @@ vcpkg_from_github(
   OUT_SOURCE_PATH SOURCE_PATH
   REPO Xilinx/Vitis-AI
   REF "v3.0"
-  SHA512 0
+  SHA512 4656943dcce918c9dfe79602168ddf0ee40446a7574c6372410d0f37bf7df0fe4f16d0f955b30bae472d0c08c32b3ae608df697152bf07ae630d5e99a7663718
   HEAD_REF master
-  PATCHES "fix-global.patch"
+  PATCHES
+    "fix-global.patch"
+    "fix-cmake.patch"
 )
 
 vcpkg_cmake_configure(
@@ -29,8 +31,24 @@ vcpkg_cmake_configure(
 
 vcpkg_cmake_install()
 
-vcpkg_cmake_config_fixup(CONFIG_PATH lib/cmake/aks)
+vcpkg_cmake_config_fixup(CONFIG_PATH share/cmake/aks)
+
+# message("BAZ" ${CURRENT_INSTALLED_DIR}/share)
+
+# vcpkg_execute_required_process(
+#   COMMAND ./cmake-kernels.sh --cmake-prefix-path="${CURRENT_INSTALLED_DIR}/share/xir;${CURRENT_INSTALLED_DIR}/share/unilog;${CURRENT_INSTALLED_DIR}/share/vart" --name add
+#   WORKING_DIRECTORY ${SOURCE_PATH}/src/AKS
+#   LOGNAME build-${TARGET_TRIPLET}-dbg
+#   OUTPUT_VARIABLE aks_build_output
+#   ERROR_VARIABLE aks_build_error
+# )
+
+# message(WARNING "FOO " ${aks_build_output})
+# message(FATAL_ERROR "BAR " ${aks_build_error})
 
 vcpkg_copy_pdbs()
 
 vcpkg_install_copyright(FILE_LIST "${SOURCE_PATH}/LICENSE")
+
+# remove duplicate include files from the debug/include directory per vcpkg warning
+file(REMOVE_RECURSE "${CURRENT_PACKAGES_DIR}/debug/include")

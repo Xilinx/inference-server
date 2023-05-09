@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#include "AksDPUHelper.h"
+#include "dpu_helper.h"
 
 #include <cassert>
 #include <numeric>

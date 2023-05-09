@@ -1,7 +1,7 @@
 {
   "description": "Reads an image from the image_path provided",
   "device_type": "cpu",
-  "kernel_lib": "libs/libImageRead.so",
+  "kernel_lib": "libs/libAksImageRead.so",
   "kernel_name": "ImageRead",
   "kernel_type": "cpp",
   "num_cu": 8,

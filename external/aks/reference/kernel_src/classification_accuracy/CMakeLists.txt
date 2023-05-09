@@ -34,7 +34,7 @@ message(STATUS "AKS Includes: ${aks_INCLUDE_DIRS}")
 
 execute_process(COMMAND uname -m OUTPUT_VARIABLE arch)
 if(${arch} MATCHES ".*x86.*")
-  find_package(Boost EXACT REQUIRED COMPONENTS system filesystem)
+  find_package(Boost REQUIRED COMPONENTS system filesystem)
 else()
   find_package(Boost REQUIRED COMPONENTS system filesystem)
 endif()
@@ -52,6 +52,6 @@ target_link_libraries(
   ${PROJECT_NAME}
   PRIVATE ${Boost_LIBRARY}
   PRIVATE ${aks_LIBRARIES}
-  PRIVATE vart-runner
-  PRIVATE xir unilog
+  PRIVATE vart::runner
+  PRIVATE xir::xir unilog::unilog
 )

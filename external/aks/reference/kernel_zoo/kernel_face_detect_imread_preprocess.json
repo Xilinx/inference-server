@@ -1,7 +1,7 @@
 {
   "description": "Reads an image and preprocesses it for face detect network",
   "device_type": "cpu",
-  "kernel_lib": "libs/libFaceDetectImreadPreProcess.so",
+  "kernel_lib": "libs/libAksFaceDetectImreadPreprocess.so",
   "kernel_name": "FaceDetectImreadPreProcess",
   "kernel_type": "cpp",
   "num_cu": 8,

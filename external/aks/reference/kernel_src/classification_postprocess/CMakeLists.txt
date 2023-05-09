@@ -44,6 +44,6 @@ target_include_directories(${PROJECT_NAME} PRIVATE ${aks_INCLUDE_DIRS})
 target_link_libraries(
   ${PROJECT_NAME}
   PRIVATE ${aks_LIBRARIES}
-  PRIVATE vart-runner
-  PRIVATE xir unilog
+  PRIVATE vart::runner
+  PRIVATE xir::xir unilog::unilog
 )

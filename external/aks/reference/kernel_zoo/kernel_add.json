@@ -1,7 +1,7 @@
 {
   "description": "Adds constant value to input",
   "device_type": "cpu",
-  "kernel_lib": "libs/libAddKernel.so",
+  "kernel_lib": "libs/libAksAddKernel.so",
   "kernel_name": "Add",
   "kernel_type": "cpp",
   "param_list": {

@@ -1,7 +1,7 @@
 {
   "description": "Measure accuracy of a classification network",
   "device_type": "cpu",
-  "kernel_lib": "libs/libClassificationAccuracy.so",
+  "kernel_lib": "libs/libAksClassificationAccuracy.so",
   "kernel_name": "ClassificationAccuracy",
   "kernel_type": "cpp",
   "param_list": {

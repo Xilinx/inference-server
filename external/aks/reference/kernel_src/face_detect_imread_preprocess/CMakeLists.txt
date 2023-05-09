@@ -49,6 +49,6 @@ target_link_libraries(
   ${PROJECT_NAME}
   PRIVATE opencv_core opencv_imgproc opencv_imgcodecs
   PRIVATE ${aks_LIBRARIES}
-  PRIVATE vart-runner
-  PRIVATE xir unilog
+  PRIVATE vart::runner
+  PRIVATE xir::xir unilog::unilog
 )
