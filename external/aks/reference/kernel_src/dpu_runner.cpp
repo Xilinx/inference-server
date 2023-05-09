@@ -28,7 +28,7 @@
 #include <tuple>
 #include <vector>
 
-#include "AksDPUHelper.h"
+#include "dpu_helper.h"
 
 // DPUNodeObject specifies everything associated with a
 // single DPU node in the graph

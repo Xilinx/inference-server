@@ -15,6 +15,7 @@
 set(kernels
     AddKernel
     ClassificationAccuracy
+    ClassificationImreadPre
     ClassificationImreadResizeCCrop
     ClassificationPostProc
     ClassificationPreProc
@@ -45,7 +46,9 @@ foreach(kernel ${kernels})
   amdinfer_get_kernel_target(target filename ${kernel})
   add_library(${target} SHARED ${filename}.cpp)
 
-  target_link_libraries(${target} PRIVATE aks::aks)
+  target_link_libraries(
+    ${target} PRIVATE aks::aks opencv_core opencv_imgproc opencv_imgcodecs
+  )
 
   add_custom_command(
     TARGET ${target}

@@ -9,6 +9,7 @@
   "supports": "!uwp",
   "dependencies": [
     "boost-graph",
+    "protobuf",
     {
       "name": "unilog",
       "version>=": "3.0.0"

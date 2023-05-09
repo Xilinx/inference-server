@@ -398,65 +398,6 @@ def build_optional():
     )
 
 
-def build_vitis():
-    return textwrap.dedent(
-        """\
-        # install json-c 0.15 for Vitis AI runtime
-        RUN wget --quiet https://github.com/json-c/json-c/archive/refs/tags/json-c-0.15-20200726.tar.gz \\
-            && tar -xzf json-c-0.15-20200726.tar.gz \\
-            && cd json-c-json-c-0.15-20200726 \\
-            && mkdir build \\
-            && cd build \\
-            && cmake .. \\
-                -DBUILD_SHARED_LIBS=ON \\
-                -DBUILD_STATIC_LIBS=OFF \\
-                -DBUILD_TESTING=OFF \\
-                -DCMAKE_BUILD_TYPE=Release \\
-            && make -j$(($(nproc) - 1)) \\
-            && make install \\
-            && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \\
-            && cat install_manifest.txt > ${MANIFESTS_DIR}/json-c.txt
-
-        # Install Vitis AI runtime and build dependencies
-        RUN git clone --recursive --single-branch --branch v3.0 --depth 1 https://github.com/Xilinx/Vitis-AI.git \\
-            && export VITIS_ROOT=/tmp/Vitis-AI/src/vai_runtime \\
-            && git clone --single-branch -b v2.0 --depth 1 https://github.com/Xilinx/rt-engine.git ${VITIS_ROOT}/rt-engine; \\
-            cd ${VITIS_ROOT}/unilog \\
-            && sed -i '33i   if(NOT TARGET glog::glog)' ./cmake/config.cmake.in \\
-            && sed -i '35i   endif()' ./cmake/config.cmake.in \\
-            && ./cmake.sh --clean --type=release --install-prefix /usr/local/ --build-dir ./build \\
-            && cd ./build && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \\
-            && cat install_manifest.txt > ${MANIFESTS_DIR}/unilog.txt \\
-            && cd ${VITIS_ROOT}/xir \\
-            # remove protobuf inclusion from the config
-            && sed -i '42 s/./#&/' ./cmake/config.cmake.in \\
-            && ./cmake.sh --clean --type=release --install-prefix /usr/local/ --build-dir ./build --build-python \\
-            && cd ./build && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \\
-            && cat install_manifest.txt > ${MANIFESTS_DIR}/xir.txt \\
-            && cd ${VITIS_ROOT}/target_factory \\
-            && ./cmake.sh --clean --type=release --install-prefix /usr/local/ --build-dir ./build \\
-            && cd ./build && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \\
-            && cat install_manifest.txt > ${MANIFESTS_DIR}/target_factory.txt \\
-            && cd ${VITIS_ROOT}/vart \\
-            && ./cmake.sh --clean --type=release --install-prefix /usr/local/ --cmake-options="-DBUILD_TEST=OFF" --build-python --build-dir ./build \\
-            && cd ./build && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \\
-            && cat install_manifest.txt > ${MANIFESTS_DIR}/vart.txt \\
-            && cd ${VITIS_ROOT}/rt-engine \\
-            # find the required components. Adding this was needed when using Boost from Ubuntu apt repositories
-            && sed -i '41s/.*/find_package(Boost COMPONENTS system filesystem thread serialization)/' ./CMakeLists.txt \\
-            && sed -i '35s/.*/find_package(protobuf REQUIRED)/' ./CMakeLists.txt \\
-            && ./cmake.sh --clean --build-dir=./build --type=release --cmake-options="-DXRM_DIR=/opt/xilinx/xrm/share/cmake" --cmake-options="-DBUILD_TESTS=OFF" --install-prefix /usr/local/ \\
-            && cd ./build && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \\
-            && cat install_manifest.txt > ${MANIFESTS_DIR}/rt-engine.txt \\
-            && cd /tmp/Vitis-AI/src/AKS \\
-            # fix bug in AKS
-            && sed -i '46i _global = nullptr;' ./src/AksTopContainer.cpp \\
-            && ./cmake.sh --clean --type=release --install-prefix /usr/local/ --build-dir ./build \\
-            && cd ./build && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \\
-            && cp install_manifest.txt ${MANIFESTS_DIR}/aks.txt"""
-    )
-
-
 def install_vitis(manager: PackageManager):
     if manager.name == "apt":
         packages = textwrap.dedent(
@@ -545,6 +486,11 @@ def install_dev_packages(manager: PackageManager, core):
                     # used for code formatting and style
                     clang-format-10 \\
                     clang-tidy-10 \\
+                    # for vcpkg
+                    unzip \\
+                    zip \\
+                    pkg-config \\
+                    nasm \\
                 # symlink the versioned clang-*-10 executables to clang-*
                 && ln -s /usr/bin/clang-format-10 /usr/bin/clang-format \\
                 && ln -s /usr/bin/clang-tidy-10 /usr/bin/clang-tidy \\"""
@@ -873,11 +819,6 @@ def generate(args: argparse.Namespace):
         )
     else:
         dockerfile = dockerfile.replace("$[INSTALL_XRT]", install_xrt(manager, None))
-
-    if args.custom_backends:
-        dockerfile = dockerfile.replace("$[BUILD_VITIS]", custom_backends.build_vitis())
-    else:
-        dockerfile = dockerfile.replace("$[BUILD_VITIS]", build_vitis())
 
     dockerfile = dockerfile.replace("$[INSTALL_VITIS]", install_vitis(manager))
 
