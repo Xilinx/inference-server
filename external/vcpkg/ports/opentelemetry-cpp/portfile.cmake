@@ -71,7 +71,7 @@ if(WITH_OTLP)
   )
   # Create empty .git directory to prevent opentelemetry from cloning it during build time
   file(MAKE_DIRECTORY "${SOURCE_PATH}/third_party/opentelemetry-proto/.git")
-  list(APPEND FEATURE_OPTIONS -DCMAKE_CXX_STANDARD=14)
+  list(APPEND FEATURE_OPTIONS -DCMAKE_CXX_STANDARD=17)
   list(
     APPEND
       FEATURE_OPTIONS
@@ -88,7 +88,6 @@ vcpkg_cmake_configure(
     # -DWITH_LOGS_PREVIEW=OFF
     -DOPENTELEMETRY_INSTALL=ON
     -DWITH_STL=ON
-    -DCMAKE_CXX_STANDARD=17
     ${FEATURE_OPTIONS}
   MAYBE_UNUSED_VARIABLES
     WITH_OTLP_GRPC

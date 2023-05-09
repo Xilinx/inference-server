@@ -17,7 +17,7 @@ vcpkg_from_github(
   OUT_SOURCE_PATH SOURCE_PATH
   REPO Xilinx/Vitis-AI
   REF "v3.0"
-  SHA512 0
+  SHA512 4656943dcce918c9dfe79602168ddf0ee40446a7574c6372410d0f37bf7df0fe4f16d0f955b30bae472d0c08c32b3ae608df697152bf07ae630d5e99a7663718
   HEAD_REF master
 )
 
@@ -28,7 +28,7 @@ vcpkg_cmake_configure(
 
 vcpkg_cmake_install()
 
-vcpkg_cmake_config_fixup(CONFIG_PATH lib/cmake/vart)
+vcpkg_cmake_config_fixup(CONFIG_PATH share/cmake/vart)
 
 vcpkg_copy_pdbs()
 

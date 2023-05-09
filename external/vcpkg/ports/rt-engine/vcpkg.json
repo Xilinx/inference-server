@@ -12,6 +12,7 @@
     "boost-serialization",
     "boost-system",
     "boost-thread",
+    "json-c",
     "vart",
     {
       "name": "vcpkg-cmake",

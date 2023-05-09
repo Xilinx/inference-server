@@ -17,20 +17,22 @@ vcpkg_from_github(
   OUT_SOURCE_PATH SOURCE_PATH
   REPO Xilinx/rt-engine
   REF "v3.0"
-  SHA512 0
+  SHA512 9263ed06938fe7eae91cfc25fea0de28596b3f15b5eabe2c9095ee7046123916ca38b7c7c7962eaf58851b22c90d14f12965497bc7ded9ec623f3a584d3a2f00
   HEAD_REF master
   PATCHES fix-cmake.patch
 )
 
 vcpkg_cmake_configure(
   SOURCE_PATH ${SOURCE_PATH}
-  OPTIONS "-DXRM_DIR=/opt/xilinx/xrm/share/cmake" "-DBUILD_TESTS=OFF"
+  OPTIONS
+    "-DXRM_DIR=/opt/xilinx/xrm/share/cmake"
+    "-DBUILD_TESTS=OFF"
 )
 # cmake-format: on
 
 vcpkg_cmake_install()
 
-vcpkg_cmake_config_fixup(CONFIG_PATH lib/cmake/unilog)
+vcpkg_cmake_config_fixup(CONFIG_PATH share/cmake/rt-engine)
 
 vcpkg_copy_pdbs()
 

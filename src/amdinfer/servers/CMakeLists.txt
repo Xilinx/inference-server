@@ -26,7 +26,7 @@ amdinfer_add_targets(
 )
 
 if(${AMDINFER_ENABLE_AKS})
-  target_link_libraries(server INTERFACE aks)
+  target_link_libraries(server INTERFACE aks::aks)
 endif()
 
 if(${AMDINFER_ENABLE_HTTP})

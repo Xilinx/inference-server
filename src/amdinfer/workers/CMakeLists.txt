@@ -66,7 +66,8 @@ target_link_libraries(
 )
 if(${AMDINFER_ENABLE_VITIS})
   target_link_libraries(
-    workerXmodel PRIVATE vart-runner target-factory xir observation util
+    workerXmodel PRIVATE vart::runner target-factory::target-factory xir::xir
+                         observation util
   )
 endif()
 
@@ -104,10 +105,11 @@ if(${AMDINFER_ENABLE_AKS})
     add_library(${target} SHARED ${filename}.cpp)
     target_link_options(${target} PUBLIC "LINKER:-E")
     target_link_libraries(
-      ${target} PRIVATE aks vart::runner xir opencv_core opencv_imgcodecs
+      ${target} PRIVATE aks::aks vart::runner xir::xir opencv_core
+                        opencv_imgcodecs
     )
     target_include_directories(${target} PRIVATE ${AMDINFER_INCLUDE_DIRS})
-    add_dependencies(${target} aks-kernels)
+    # add_dependencies(${target} aks-kernels)
     set_target_options(${target})
 
     list(APPEND WORKER_TARGETS ${target})

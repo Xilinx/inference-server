@@ -9,6 +9,10 @@
   "supports": "!uwp",
   "dependencies": [
     {
+      "name": "target-factory",
+      "version>=": "3.0.0"
+    },
+    {
       "name": "xir",
       "version>=": "3.0.0"
     },

@@ -69,8 +69,8 @@ target_link_libraries(
 target_link_libraries(shared_state INTERFACE Jsoncpp_lib)
 
 if(${AMDINFER_ENABLE_VITIS})
-  target_link_libraries(data_types_internal INTERFACE xir)
-  target_link_libraries(shared_state INTERFACE sockpp)
+  target_link_libraries(data_types_internal INTERFACE xir::xir)
+  target_link_libraries(shared_state INTERFACE ${SOCKPP_LIBRARIES})
 endif()
 
 if(${AMDINFER_ENABLE_GRPC})

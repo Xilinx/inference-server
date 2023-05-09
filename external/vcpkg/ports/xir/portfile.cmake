@@ -17,13 +17,18 @@ vcpkg_from_github(
   OUT_SOURCE_PATH SOURCE_PATH
   REPO Xilinx/Vitis-AI
   REF "v3.0"
-  SHA512 0
+  SHA512 4656943dcce918c9dfe79602168ddf0ee40446a7574c6372410d0f37bf7df0fe4f16d0f955b30bae472d0c08c32b3ae608df697152bf07ae630d5e99a7663718
   HEAD_REF master
+  PATCHES "remove-git-dependency.patch"
 )
 
 vcpkg_cmake_configure(
   SOURCE_PATH ${SOURCE_PATH}/src/vai_runtime/xir
-  OPTIONS -DBUILD_PYTHON=ON
+  OPTIONS
+    # turning it on means xir attempts to install the library to /usr/lib/python which fails
+    -DBUILD_PYTHON=OFF
+    -DPROJECT_GIT_COMMIT_ID="2057c588c241c3902353bc618afc8ab214d7aeed"
+    -DPROJECT_GIT_BRANCH_NAME="master"
 )
 # cmake-format: on
 

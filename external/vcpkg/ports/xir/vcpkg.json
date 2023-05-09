@@ -8,6 +8,7 @@
   "license": "Apache-2.0",
   "supports": "!uwp",
   "dependencies": [
+    "boost-graph",
     {
       "name": "unilog",
       "version>=": "3.0.0"

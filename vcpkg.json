@@ -4,6 +4,10 @@
   "version-semver": "0.4.0",
   "dependencies": [
     {
+      "name": "aks",
+      "version>=": "3.0.0"
+    },
+    {
       "name": "b64",
       "version>=": "2.0.0.1"
     },
@@ -68,6 +72,14 @@
       ]
     },
     {
+      "name": "rt-engine",
+      "version>=": "3.0.0"
+    },
+    {
+      "name": "sockpp",
+      "version>=": "0.7.1"
+    },
+    {
       "name": "spdlog",
       "version>=": "1.8.5"
     },
@@ -76,7 +88,7 @@
       "version>=": "3.1.0"
     },
     {
-      "name": "unilog",
+      "name": "vart",
       "version>=": "3.0.0"
     },
     {

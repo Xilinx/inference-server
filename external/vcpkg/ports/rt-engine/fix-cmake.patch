@@ -12,20 +12,94 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
---- CMakeLists.txt    2023-05-08 09:44:19.943213000 -0700
-+++ CMakeLists.txt    2023-05-08 09:44:14.838329000 -0700
-@@ -32,13 +32,12 @@
- else()
-   get_target_property(GLOG_INCLUDE_DIRS glog::glog INTERFACE_INCLUDE_DIRECTORIES)
- endif(NOT glog_FOUND)
--find_package(Protobuf REQUIRED) # rt-engine does not need
- find_path(JSONC_INCLUDE_DIRS NAMES json-c)
- find_library(JSONC_LIBRARIES NAMES json-c REQUIRED)
- find_package(Threads REQUIRED)
+--- a/runner/src/dpu_runner.hpp    2023-05-09 08:09:59.998985000 -0700
++++ b/runner/src/dpu_runner.hpp    2023-05-09 08:10:19.008009000 -0700
+@@ -27,8 +27,8 @@
+ #include "vart/runner.hpp"
+ #include "vart/runner_ext.hpp"
+ #include "dpu_controller.hpp"
+-#include "runner_helper.hpp"
+-//#include "vart/experimental/runner_helper.hpp"
++//#include "runner_helper.hpp"
++#include "vart/experimental/runner_helper.hpp"
 
- # Temporary hack for windows
--find_package(Boost)
-+find_package(Boost COMPONENTS system filesystem thread serialization)
+ /*
+  * References:
 
- add_subdirectory(engine)
- add_subdirectory(runner)
+--- a/controller/src/common/graph.cpp     2023-05-09 08:42:05.240740000 -0700
++++ b/controller/src/common/graph.cpp     2023-05-09 08:42:16.296735000 -0700
+@@ -37,8 +37,8 @@
+ #include "vitis/ai/env_config.hpp"
+ #include "vitis/ai/profiling.hpp"
+ #include "device_handle.hpp"
+-#include "trace.hpp"
+-//#include "vart/trace/trace.hpp"
++//#include "trace.hpp"
++#include "vart/trace/trace.hpp"
+ using namespace std;
+ using namespace chrono;
+ #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+
+--- a/controller/src/common/dpucloud_controller.cpp     2023-05-09 08:44:00.618806000 -0700
++++ b/controller/src/common/dpucloud_controller.cpp     2023-05-09 08:44:15.078818000 -0700
+@@ -38,10 +38,7 @@
+ #include "vitis/ai/env_config.hpp"
+ #include "vitis/ai/profiling.hpp"
+ #include "device_handle.hpp"
+-#ifndef _WIN32
+-#include "trace.hpp"
+-#endif
+-//#include "vart/trace/trace.hpp"
++#include "vart/trace/trace.hpp"
+
+ using namespace std;
+ using namespace chrono;
+
+--- a/controller/src/dpuv3me/dpuv3me_controller.cpp     2023-05-09 08:55:47.741777000 -0700
++++ b/controller/src/dpuv3me/dpuv3me_controller.cpp     2023-05-09 08:56:00.570787000 -0700
+@@ -35,8 +35,8 @@
+ #include "dpu_runner.hpp"
+ #include "xir/tensor/tensor.hpp"
+ #include "vart/tensor_buffer.hpp"
+-#include "trace.hpp"
+-//#include "vart/trace/trace.hpp"
++//#include "trace.hpp"
++#include "vart/trace/trace.hpp"
+
+
+ #include "vitis/ai/env_config.hpp"
+
+--- a/controller/src/common/dpucloud_xrtcontroller.cpp     2023-05-09 08:56:52.164822000 -0700
++++ b/controller/src/common/dpucloud_xrtcontroller.cpp     2023-05-09 08:57:06.401817000 -0700
+@@ -37,10 +37,10 @@
+ #include "vitis/ai/env_config.hpp"
+ #include "vitis/ai/profiling.hpp"
+ #include "device_handle.hpp"
+-#ifndef _WIN32
+-#include "trace.hpp"
+-#endif
+-//#include "vart/trace/trace.hpp"
++//#ifndef _WIN32
++//#include "trace.hpp"
++//#endif
++#include "vart/trace/trace.hpp"
+ //#include <experimental/xrt_queue.h>
+ using namespace std;
+ using namespace chrono;
+
+--- a/controller/src/xvdpu/xvdpu_controller.cpp     2023-05-09 08:57:51.130349000 -0700
++++ b/controller/src/xvdpu/xvdpu_controller.cpp     2023-05-09 08:58:16.828368000 -0700
+@@ -39,9 +39,10 @@
+ #include "vitis/ai/env_config.hpp"
+ #include "vitis/ai/profiling.hpp"
+ #include "device_handle.hpp"
+-#ifndef _WIN32
+-#include "trace.hpp"
+-#endif
++//#ifndef _WIN32
++//#include "trace.hpp"
++//#endif
++#include "vart/trace/trace.hpp"
+ using namespace std;
+ using namespace chrono;
+ #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
