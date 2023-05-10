@@ -36,4 +36,5 @@ vcpkg_cmake_config_fixup(CONFIG_PATH share/cmake/rt-engine)
 
 vcpkg_copy_pdbs()
 
+# there's no license file in rt-engine
 # vcpkg_install_copyright(FILE_LIST "${SOURCE_PATH}/LICENSE")

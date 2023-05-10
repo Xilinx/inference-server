@@ -278,14 +278,6 @@ $[INSTALL_DEV_PACKAGES]
 
 $[INSTALL_PYTHON_PACKAGES]
 
-RUN cd /opt \
-    && wget --quiet https://github.com/microsoft/vcpkg/archive/refs/tags/2023.04.15.tar.gz \
-    && tar -xzf 2023.04.15.tar.gz \
-    && mv vcpkg-2023.04.15 vcpkg \
-    && cd vcpkg \
-    && ./bootstrap-vcpkg.sh -disableMetrics \
-    && rm /opt/2023.04.15.tar.gz
-
 COPY --from=builder ${COPY_DIR} /
 COPY --from=common_builder ${COPY_DIR} /
 COPY --from=builder_dev ${COPY_DIR} /
