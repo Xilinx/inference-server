@@ -36,6 +36,61 @@ else()
   message(STATUS "Building version ${ver_major}.${ver_minor}.${ver_patch}")
 endif()
 
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+
+include(AddOption)
+
+# these need to be before the call to project() to configure the VCPKG features
+# correctly
+
+# these options get added as AMDINFER_* e.g. AMDINFER_BUILD_TESTING
+message(STATUS "Build Options:")
+add_option("ENABLE_HTTP" "Enable the HTTP server" ON)
+add_option("ENABLE_GRPC" "Enable the gRPC server" ON)
+add_option("ENABLE_METRICS" "Enable Prometheus metrics" ON)
+add_option("ENABLE_LOGGING" "Enable logging" ON)
+add_option("ENABLE_TRACING" "Enable OTLP tracing" OFF)
+add_option("BUILD_EXAMPLES" "Build examples" ON)
+add_option("BUILD_APPS" "Build apps" ON)
+add_option("BUILD_SHARED" "Build AMDinfer as a shared library" ON)
+add_option("ENABLE_IPO" "Enable interprocedural optimizations" OFF)
+add_option("ENABLE_LINTING" "Enable build-time linting" OFF)
+add_option("ENABLE_PYTHON_BINDINGS" "Build Python bindings" ON)
+add_option("INSTALL" "Set when invoking installation" OFF)
+
+add_option_env("ENABLE_PTZENDNN" "Enable PT+ZenDNN backend" OFF)
+add_option_env("ENABLE_TFZENDNN" "Enable TF+ZenDNN backend" OFF)
+add_option_env("ENABLE_MIGRAPHX" "Enable migraphx backend" OFF)
+add_option_env("ENABLE_AKS" "Enable AKS dependencies" OFF)
+add_option_env("ENABLE_VITIS" "Enable Vitis dependencies" OFF)
+
+# override tracing option and disable it if building Python bindings
+if(SKBUILD)
+  set(AMDINFER_ENABLE_TRACING OFF)
+endif()
+
+if(AMDINFER_ENABLE_HTTP)
+  list(APPEND VCPKG_MANIFEST_FEATURES "http")
+endif()
+
+if(AMDINFER_ENABLE_METRICS)
+  list(APPEND VCPKG_MANIFEST_FEATURES "metrics")
+endif()
+
+if(AMDINFER_ENABLE_LOGGING)
+  list(APPEND VCPKG_MANIFEST_FEATURES "logging")
+endif()
+
+if(AMDINFER_ENABLE_TRACING)
+  list(APPEND VCPKG_MANIFEST_FEATURES "tracing")
+endif()
+
+if(AMDINFER_ENABLE_AKS OR AMDINFER_ENABLE_VITIS)
+  list(APPEND VCPKG_MANIFEST_FEATURES "vitis")
+endif()
+
+list(APPEND VCPKG_MANIFEST_FEATURES "testing")
+
 # set the project name
 project(
   amdinfer
@@ -62,8 +117,6 @@ if(PROJECT_IS_TOP_LEVEL)
   )
 endif()
 
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
-
 if(CMAKE_BUILD_TYPE MATCHES Coverage)
   include(CodeCoverage)
 endif()
@@ -72,7 +125,6 @@ include(CTest)
 include(CheckIncludeFileCXX)
 # these are defined locally in ./cmake/*
 include(SetTargetOptions)
-include(AddOption)
 include(AddTargets)
 
 # check requirements
@@ -142,31 +194,7 @@ configure_file(
   ${PROJECT_SOURCE_DIR}/src/amdinfer/version.hpp
 )
 
-# these options get added as AMDINFER_* e.g. AMDINFER_BUILD_TESTING
-message(STATUS "Build Options:")
-add_option("ENABLE_HTTP" "Enable the HTTP server" ON)
-add_option("ENABLE_GRPC" "Enable the gRPC server" ${gRPC_FOUND})
-add_option("ENABLE_METRICS" "Enable Prometheus metrics" ON)
-add_option("ENABLE_LOGGING" "Enable logging" ${spdlog_FOUND})
-add_option("ENABLE_TRACING" "Enable OTLP tracing" OFF)
-add_option("ENABLE_AKS" "Enable AKS dependencies" ${AMDINFER_AKS_FOUND})
-add_option("ENABLE_VITIS" "Enable Vitis dependencies" ${AMDINFER_VITIS_FOUND})
-add_option("BUILD_EXAMPLES" "Build examples" ON)
-add_option("BUILD_APPS" "Build apps" ON)
-add_option("BUILD_SHARED" "Build AMDinfer as a shared library" ON)
 add_option("BUILD_TESTING" "Build C++ tests" ${PROJECT_IS_TOP_LEVEL})
-add_option("ENABLE_IPO" "Enable interprocedural optimizations" OFF)
-add_option("ENABLE_LINTING" "Enable build-time linting" OFF)
-add_option("ENABLE_TFZENDNN" "Enable TF+ZenDNN worker" ${tfzendnn_FOUND})
-add_option("ENABLE_PTZENDNN" "Enable PT+ZenDNN worker" ${ptzendnn_FOUND})
-add_option("ENABLE_MIGRAPHX" "Enable migraphx worker" ${migraphx_FOUND})
-add_option("ENABLE_PYTHON_BINDINGS" "Build Python bindings" ON)
-add_option("INSTALL" "Set when invoking installation" OFF)
-
-# override tracing option and disable it if building Python bindings
-if(SKBUILD)
-  set(AMDINFER_ENABLE_TRACING OFF)
-endif()
 
 configure_file(
   src/amdinfer/build_options.hpp.in

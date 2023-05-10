@@ -58,13 +58,13 @@ $[ADD_DEV_TOOLS]
 # add a newer compiler if required
 $[ADD_COMPILER]
 
-# install Cmake 3.21.1
+# install Cmake 3.24.2
 RUN if [[ ${TARGETPLATFORM} == "linux/amd64" ]]; then \
-        archive="cmake-3.22.1-linux-x86_64.tar.gz"; \
+        archive="cmake-3.24.2-linux-x86_64.tar.gz"; \
     elif [[ ${TARGETPLATFORM} == "linux/arm64" ]]; then \
-        archive="cmake-3.22.1-linux-aarch64.tar.gz"; \
+        archive="cmake-3.24.2-linux-aarch64.tar.gz"; \
     else false; fi; \
-    url="https://github.com/Kitware/CMake/releases/download/v3.22.1/${archive}" \
+    url="https://github.com/Kitware/CMake/releases/download/v3.24.2/${archive}" \
     && cd /tmp/ \
     && wget --quiet ${url} \
     && tar --strip-components=1 -xzf ${archive} -C /usr/local \
@@ -183,6 +183,8 @@ FROM dev_base AS vitis_installer_no
 FROM dev_base AS vitis_installer_yes
 
 ARG COPY_DIR
+ENV AMDINFER_ENABLE_VITIS=ON
+ENV AMDINFER_ENABLE_AKS=ON
 
 COPY --from=vitis_builder ${COPY_DIR} /
 
@@ -204,6 +206,7 @@ FROM vitis_installer_${ENABLE_VITIS} AS tfzendnn_installer_no
 FROM vitis_installer_${ENABLE_VITIS} AS tfzendnn_installer_yes
 
 ARG COPY_DIR
+ENV AMDINFER_ENABLE_TFZENDNN=ON
 
 COPY --from=tfzendnn_builder ${COPY_DIR} /
 
@@ -223,6 +226,7 @@ FROM tfzendnn_installer_${ENABLE_TFZENDNN} AS ptzendnn_installer_no
 FROM tfzendnn_installer_${ENABLE_TFZENDNN} AS ptzendnn_installer_yes
 
 ARG COPY_DIR
+ENV AMDINFER_ENABLE_PTZENDNN=ON
 
 COPY --from=ptzendnn_builder ${COPY_DIR} /
 
@@ -231,6 +235,7 @@ FROM ptzendnn_installer_${ENABLE_PTZENDNN} AS migraphx_installer_no
 FROM ptzendnn_installer_${ENABLE_PTZENDNN} AS migraphx_installer_yes
 
 ARG COPY_DIR
+ENV AMDINFER_ENABLE_MIGRAPHX=ON
 
 $[INSTALL_MIGRAPHX]
 
