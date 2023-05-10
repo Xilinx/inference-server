@@ -166,7 +166,7 @@ include_directories(SYSTEM ${HALF_INCLUDE_DIRS})
 find_package(xir QUIET)
 find_package(vart CONFIG COMPONENTS runner util QUIET)
 find_package(rt-engine QUIET)
-find_package(unilog CONFIG REQUIRED)
+find_package(unilog QUIET)
 find_package(target-factory QUIET)
 find_package(aks QUIET)
 if(${xir_FOUND}
