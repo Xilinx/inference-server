@@ -12,12 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set(tests)
-set(tests_libs)
+set(VCPKG_TARGET_ARCHITECTURE x64)
+set(VCPKG_CRT_LINKAGE dynamic)
+set(VCPKG_LIBRARY_LINKAGE static)
 
-if(AMDINFER_ENABLE_TRACING)
-  list(APPEND tests tracing)
-  list(APPEND tests_libs "tracing~parameters")
-endif()
-
-amdinfer_add_unit_tests("${tests}" "${tests_libs}")
+set(VCPKG_CMAKE_SYSTEM_NAME Linux)

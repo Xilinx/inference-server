@@ -33,3 +33,6 @@ vcpkg_cmake_config_fixup(CONFIG_PATH share/cmake/vart)
 vcpkg_copy_pdbs()
 
 vcpkg_install_copyright(FILE_LIST "${SOURCE_PATH}/LICENSE")
+
+# remove duplicate include files from the debug/* directory per vcpkg warning
+file(REMOVE_RECURSE "${CURRENT_PACKAGES_DIR}/debug/include")

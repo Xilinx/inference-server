@@ -398,10 +398,18 @@ class Build:
                     os.remove(file)
                 except OSError:
                     pass
+
+            toolchain_file = "/opt/vcpkg/scripts/buildsystems/vcpkg.cmake"
+            if os.path.exists(toolchain_file):
+                vcpkg = f"-DCMAKE_TOOLCHAIN_FILE={toolchain_file} \
+                    -DVCPKG_TARGET_TRIPLET=x64-linux-dynamic"
+            else:
+                vcpkg = ""
+
             command = f'cmake --no-warn-unused-cli -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE \
                 -DCMAKE_BUILD_TYPE:STRING={args.config} -DCMAKE_C_COMPILER:FILEPATH=/usr/bin/gcc \
                 -DCMAKE_CXX_COMPILER:FILEPATH=/usr/bin/g++ -H{Path.cwd()} -B{str(build_dir)} \
-                -DBoost_NO_WARN_NEW_VERSIONS=ON \
+                -DBoost_NO_WARN_NEW_VERSIONS=ON {vcpkg} \
                 -DCMAKE_PREFIX_PATH="$CMAKE_PREFIX_PATH" -G "Unix Makefiles" {build_options}'
             run_command(command, args.dry_run)
 
