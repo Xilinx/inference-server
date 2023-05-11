@@ -395,6 +395,7 @@ COPY --from=builder_prod $AMDINFER_ROOT/docker/.env /root/
 
 # run any final commands before finishing the production image
 RUN echo "/opt/rocm/lib" > /etc/ld.so.conf.d/rocm.conf \
+    && echo "/opt/vcpkg/x64-linux-dynamic/lib" > /etc/ld.so.conf.d/vcpkg.conf \
     && ldconfig
 
 # we need to run as root because KServe mounts models to /mnt/models which means

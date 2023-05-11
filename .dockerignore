@@ -21,6 +21,7 @@ docs/_*
 external/aks/libs
 external/artifacts
 external/repository
+external/vcpkg/vcpkg
 private/
 src/amdinfer/bindings/python/dist
 _skbuild
