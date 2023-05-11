@@ -300,6 +300,7 @@ COPY --from=builder_dev ${COPY_DIR} /
 COPY --from=builder_dev $AMDINFER_ROOT/docker/entrypoint.sh /root/entrypoint.sh
 COPY --from=builder_dev $AMDINFER_ROOT/docker/.bash* /home/${UNAME}/
 COPY --from=builder_dev $AMDINFER_ROOT/docker/.env /home/${UNAME}/
+COPY --from=builder_dev /opt/vcpkg /opt/vcpkg
 
 # run any final commands before finishing the dev image
 RUN git lfs install \
@@ -390,7 +391,6 @@ COPY --from=builder_prod /usr/local/bin/gosu /usr/local/bin/
 COPY --from=builder_prod $AMDINFER_ROOT/docker/.bash* $AMDINFER_ROOT/docker/.env /home/${UNAME}/
 COPY --from=builder_prod $AMDINFER_ROOT/docker/.root_bashrc /root/.bashrc
 COPY --from=builder_prod $AMDINFER_ROOT/docker/.env /root/
-COPY --from=builder_dev /opt/vcpkg /opt/vcpkg
 
 # run any final commands before finishing the production image
 RUN echo "/opt/rocm/lib" > /etc/ld.so.conf.d/rocm.conf \
