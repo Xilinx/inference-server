@@ -153,6 +153,10 @@
     {
       "name": "opentelemetry-cpp",
       "version": "1.8.3#7"
+    },
+    {
+      "name": "trantor",
+      "version": "1.5.11#2"
     }
   ],
   "vcpkg-configuration": {
