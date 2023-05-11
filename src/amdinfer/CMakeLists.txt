@@ -63,6 +63,7 @@ set_target_properties(
 )
 target_link_libraries(amdinfer-server-exe PRIVATE amdinfer)
 # TODO(varunsh): fix this linkage. Suspected to come from spdlog
+find_package(fmt)
 target_link_libraries(amdinfer-server-exe PRIVATE fmt::fmt)
 
 # ~~~

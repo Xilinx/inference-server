@@ -399,10 +399,10 @@ class Build:
                 except OSError:
                     pass
 
-            toolchain_file = "./external/vcpkg/vcpkg/scripts/buildsystems/vcpkg.cmake"
+            toolchain_file = "/opt/vcpkg/scripts/buildsystems/vcpkg.cmake"
             if os.path.exists(toolchain_file):
                 vcpkg = f"-DCMAKE_TOOLCHAIN_FILE={toolchain_file} \
-                    -DVCPKG_TARGET_TRIPLET=x64-linux-dynamic"
+                    -DVCPKG_TARGET_TRIPLET=x64-linux-dynamic -DVCPKG_INSTALLED_DIR=/opt/vcpkg"
             else:
                 print(
                     "vcpkg not found in submodule. Skipping automatic vcpkg integration."

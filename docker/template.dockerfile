@@ -271,6 +271,17 @@ RUN if [[ ${ENABLE_VITIS} == "yes" ]]; then \
         && cp dist/fpga_util ${COPY_DIR}/usr/local/bin/fpga-util; \
     fi
 
+RUN mkdir /opt/vcpkg \
+    && cd /opt/vcpkg \
+    && wget --quiet https://github.com/microsoft/vcpkg/archive/refs/tags/2023.04.15.tar.gz \
+    && tar -xzf 2023.04.15.tar.gz \
+    && mv vcpkg-2023.04.15 vcpkg \
+    && cd vcpkg \
+    && ./bootstrap-vcpkg.sh -disableMetrics \
+    && rm /opt/vcpkg/2023.04.15.tar.gz \
+    && cd $AMDINFER_ROOT \
+    && ./docker/install_vcpkg.sh --vitis ${ENABLE_VITIS}
+
 FROM migraphx_installer_${ENABLE_MIGRAPHX} AS dev
 
 ARG COPY_DIR
