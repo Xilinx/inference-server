@@ -320,7 +320,8 @@ ARG ENABLE_TFZENDNN
 
 COPY . $AMDINFER_ROOT
 
-RUN ldconfig \
+RUN export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/vcpkg/x64-linux-dynamic/lib \
+    && ldconfig \
     # delete any inherited artifacts and recreate
     && rm -rf ${COPY_DIR} && mkdir ${COPY_DIR} && mkdir -p ${MANIFESTS_DIR} \
     # install libamdinfer.so
@@ -353,7 +354,7 @@ COPY --from=builder_prod $AMDINFER_ROOT/docker/.env $AMDINFER_ROOT/external/over
 COPY --from=builder_prod $AMDINFER_ROOT/external/aks/graph_zoo/ /opt/xilinx/amdinfer/aks/graph_zoo/
 COPY --from=builder_prod $AMDINFER_ROOT/external/aks/kernel_zoo/ /opt/xilinx/amdinfer/aks/kernel_zoo/
 
-ENV LD_LIBRARY_PATH="/opt/xilinx/amdinfer/aks"
+ENV LD_LIBRARY_PATH="/opt/xilinx/amdinfer/aks:/opt/vcpkg/x64-linux-dynamic/lib"
 ENV XILINX_XRT="/opt/xilinx/xrt"
 # TODO(varunsh): we shouldn't hardcode dpuv3int8 here
 ENV XLNX_VART_FIRMWARE="/opt/xilinx/overlaybins/dpuv3int8"

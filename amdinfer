@@ -781,7 +781,7 @@ class Install:
 
         run_command(command, args.dry_run)
 
-        command = f"make -C {args.dir}/Release install"
+        command = f"cmake --build {args.dir}/Release --target install"
         # if user is root, no need for sudo
         if os.geteuid() == 0:
             run_command(command, args.dry_run)

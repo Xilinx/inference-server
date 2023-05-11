@@ -67,6 +67,8 @@ target_link_libraries(
 )
 
 target_link_libraries(shared_state INTERFACE Jsoncpp_lib)
+target_link_libraries(endpoints INTERFACE $<TARGET_OBJECTS:batcher>)
+target_link_libraries(worker_info INTERFACE $<TARGET_OBJECTS:batch>)
 
 if(${AMDINFER_ENABLE_VITIS})
   target_link_libraries(data_types_internal INTERFACE xir::xir)

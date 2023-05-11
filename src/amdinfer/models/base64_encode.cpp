@@ -50,7 +50,7 @@ const auto kMaxImageChannels = 3;
 const auto kMaxImageSize = kMaxImageHeight * kMaxImageWidth * kMaxImageChannels;
 
 amdinfer::BatchPtr run(amdinfer::Batch* batch) {
-  amdinfer::Logger logger{amdinfer::Loggers::Server};
+  AMDINFER_IF_LOGGING(amdinfer::Logger logger{amdinfer::Loggers::Server});
 
   auto new_batch = batch->propagate();
   const auto batch_size = batch->size();

@@ -22,8 +22,14 @@ amdinfer_add_targets(
   targets target_objects "${base_targets}" "${derived_targets}" ""
 )
 
+target_link_libraries(pool INTERFACE $<TARGET_OBJECTS:buffer>)
+target_link_libraries(cpu_allocator INTERFACE $<TARGET_OBJECTS:cpu_buffer>)
+
 if(${AMDINFER_ENABLE_VITIS})
-  target_link_libraries(vart_tensor_allocator INTERFACE vart::runner)
+  target_link_libraries(
+    vart_tensor_allocator INTERFACE vart::runner
+                                    $<TARGET_OBJECTS:vart_tensor_buffer>
+  )
 endif()
 
 add_library(memory_pool INTERFACE)

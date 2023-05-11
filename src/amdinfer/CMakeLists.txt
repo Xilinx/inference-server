@@ -62,8 +62,8 @@ set_target_properties(
   amdinfer-server-exe PROPERTIES OUTPUT_NAME amdinfer-server
 )
 target_link_libraries(amdinfer-server-exe PRIVATE amdinfer)
-# TODO(varunsh): fix this linkage. Suspected to come from spdlog
-find_package(fmt)
+# TODO(varunsh): fix this linkage. Coming from spdlog when using external fmt
+# like in vcpkg
 target_link_libraries(amdinfer-server-exe PRIVATE fmt::fmt)
 
 # ~~~
