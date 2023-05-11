@@ -31,4 +31,4 @@ else
     VITIS="--x-feature=testing"
 fi
 
-/opt/vcpkg/vcpkg install --x-install-root=/opt/vcpkg --triplet=x64-linux-dynamic --x-feature=tracing "$VITIS"
+/opt/vcpkg/vcpkg/vcpkg install --x-install-root=/opt/vcpkg --triplet=x64-linux-dynamic --x-feature=tracing "$VITIS"
