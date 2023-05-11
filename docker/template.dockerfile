@@ -341,7 +341,7 @@ ARG COPY_DIR
 ARG AMDINFER_ROOT
 
 # get AKS kernels
-COPY --from=builder_prod $AMDINFER_ROOT/external/aks/libs/ /opt/xilinx/amdinfer/aks/libs/
+COPY --from=builder_prod $AMDINFER_ROOT/external/aks/libs/* /opt/xilinx/amdinfer/aks/libs/
 # get the fpga-util executable
 COPY --from=builder_prod /usr/local/bin/fpga-util /opt/xilinx/amdinfer/bin/
 
