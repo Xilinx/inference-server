@@ -26,9 +26,10 @@ done
 # for some reason, vcpkg doesn't like passing an empty string as an argument
 # so set it to a real value when VITIS is "no" omitted
 if [[ "$VITIS" == "yes" ]]; then
-    VITIS="--x-feature=vitis --x-feature=testing"
+  FEATURES="--x-feature=vitis --x-feature=testing"
+  export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/xilinx/xrt/lib
 else
-    VITIS="--x-feature=testing"
+  FEATURES="--x-feature=testing"
 fi
 
-/opt/vcpkg/vcpkg/vcpkg install --x-install-root=/opt/vcpkg --triplet=x64-linux-dynamic $VITIS
+/opt/vcpkg/vcpkg/vcpkg install --x-install-root=/opt/vcpkg --triplet=x64-linux-dynamic $FEATURES
