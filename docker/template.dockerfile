@@ -354,13 +354,15 @@ COPY --from=builder_prod $AMDINFER_ROOT/docker/.env $AMDINFER_ROOT/external/over
 COPY --from=builder_prod $AMDINFER_ROOT/external/aks/graph_zoo/ /opt/xilinx/amdinfer/aks/graph_zoo/
 COPY --from=builder_prod $AMDINFER_ROOT/external/aks/kernel_zoo/ /opt/xilinx/amdinfer/aks/kernel_zoo/
 
-ENV LD_LIBRARY_PATH="/opt/xilinx/amdinfer/aks:/opt/vcpkg/x64-linux-dynamic/lib"
+ENV LD_LIBRARY_PATH="/opt/xilinx/amdinfer/aks"
 ENV XILINX_XRT="/opt/xilinx/xrt"
 # TODO(varunsh): we shouldn't hardcode dpuv3int8 here
 ENV XLNX_VART_FIRMWARE="/opt/xilinx/overlaybins/dpuv3int8"
 ENV AKS_ROOT="/opt/xilinx/amdinfer/aks"
 ENV AKS_XMODEL_ROOT="/opt/xilinx/amdinfer"
 ENV PATH="/opt/xilinx/amdinfer/bin:${PATH}"
+
+RUN echo "/opt/xilinx/xrt/lib" > /etc/ld.so.conf.d/xrt.conf
 
 FROM ${BASE_IMAGE} AS vitis_installer_prod_no
 
