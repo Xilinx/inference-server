@@ -127,7 +127,7 @@ add_vitis_deps() {
 
   vitis_manifests=(
     rt-engine
-    target_factory
+    target-factory
     unilog
     vart
     xir
@@ -141,9 +141,10 @@ add_vitis_deps() {
   done
 
   for manifest in ${vitis_manifests[@]}; do
-    lib_paths=$(grep -F .so ${manifests_dir}/$manifest.txt)
+    manifest_file=$(find /opt/vcpkg/vcpkg/info/ -name "$manifest*")
+    lib_paths=($(grep -F .so ${manifest_file}))
     for lib in ${lib_paths[@]}; do
-      get_dependencies $lib
+      get_dependencies /opt/vcpkg/$lib
     done
   done
 
