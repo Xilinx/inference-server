@@ -18,7 +18,7 @@ add_custom_target(extra)
 if(${AMDINFER_ENABLE_AKS})
   set(AKS_PATH ${CMAKE_CURRENT_SOURCE_DIR}/aks)
 
-  foreach(DIR graph_zoo kernel_src kernel_zoo cmake-kernels.sh)
+  foreach(DIR graph_zoo kernel_src kernel_zoo)
     if(NOT EXISTS ${AKS_PATH}/${DIR})
       file(COPY ${AKS_PATH}/reference/${DIR} DESTINATION ${AKS_PATH})
     endif()
@@ -30,16 +30,6 @@ if(${AMDINFER_ENABLE_AKS})
        ${AKS_PATH}/kernel_src/*.hpp
   )
 
-  add_custom_command(
-    OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/aks.out
-    DEPENDS ${AKS_KERNELS}
-    COMMAND bash cmake-kernels.sh --type release >
-            ${CMAKE_CURRENT_BINARY_DIR}/aks.out 2>&1
-    WORKING_DIRECTORY ${AKS_PATH}
-    COMMENT "Building AKS kernels"
-    VERBATIM
-  )
-
-  add_custom_target(aks-kernels DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/aks.out)
+  add_subdirectory(aks/kernel_src)
 
 endif()

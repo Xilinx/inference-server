@@ -182,7 +182,7 @@ class SingleThreadedWorker : public Worker {
   void run(BatchPtrQueue* input_queue, const MemoryPool* pool) override {
     this->status_ = WorkerStatus::Run;
     const auto& name = this->getName();
-    const auto logger = this->getLogger();
+    AMDINFER_IF_LOGGING(const auto logger = this->getLogger();)
     util::setThreadName(name);
 
     while (true) {
@@ -249,7 +249,7 @@ class MultiThreadedWorker : public Worker {
   void run(BatchPtrQueue* input_queue, const MemoryPool* pool) override {
     this->status_ = WorkerStatus::Run;
     const auto& name = this->getName();
-    const auto logger = this->getLogger();
+    AMDINFER_IF_LOGGING(const auto logger = this->getLogger());
     util::setThreadName(name);
     std::atomic_int32_t outstanding_batches = 0;
     // 4 is arbitrary

@@ -191,7 +191,9 @@ void HttpServer::getServerLive(
   Metrics::getInstance().incrementCounter(MetricCounterIDs::RestGet);
 #endif
 #ifdef AMDINFER_ENABLE_TRACING
-  auto trace = startTrace(&(__func__[0]), req->getHeaders());
+  const auto &drogon_headers = req->getHeaders();
+  StringMap headers{drogon_headers.begin(), drogon_headers.end()};
+  auto trace = startTrace(&(__func__[0]), headers);
 #else
   (void)req;  // suppress unused variable warning
 #endif
@@ -474,7 +476,9 @@ void HttpServer::modelInfer(
   std::function<void(const HttpResponsePtr &)> &&callback,
   std::string const &model) const {
 #ifdef AMDINFER_ENABLE_TRACING
-  auto trace = startTrace(&(__func__[0]), req->getHeaders());
+  const auto &drogon_headers = req->getHeaders();
+  StringMap headers{drogon_headers.begin(), drogon_headers.end()};
+  auto trace = startTrace(&(__func__[0]), headers);
   trace->setAttribute("model", model);
 #endif
 
@@ -520,7 +524,9 @@ void HttpServer::modelLoad(
   const std::string &model) const {
   auto model_lower = util::toLower(model);
 #ifdef AMDINFER_ENABLE_TRACING
-  auto trace = startTrace(&(__func__[0]), req->getHeaders());
+  const auto &drogon_headers = req->getHeaders();
+  StringMap headers{drogon_headers.begin(), drogon_headers.end()};
+  auto trace = startTrace(&(__func__[0]), headers);
   trace->setAttribute("model", model_lower);
 #endif
   AMDINFER_LOG_INFO(logger_, "Received modelLoad request for " + model_lower);
@@ -560,7 +566,9 @@ void HttpServer::modelUnload(
   const std::string &model) const {
   AMDINFER_LOG_INFO(logger_, "Received modelUnload request");
 #ifdef AMDINFER_ENABLE_TRACING
-  auto trace = startTrace(&(__func__[0]), req->getHeaders());
+  const auto &drogon_headers = req->getHeaders();
+  StringMap headers{drogon_headers.begin(), drogon_headers.end()};
+  auto trace = startTrace(&(__func__[0]), headers);
 #endif
 
   auto model_lower = util::toLower(model);
@@ -585,7 +593,9 @@ void HttpServer::workerLoad(
   const std::string &worker) const {
   AMDINFER_LOG_INFO(logger_, "Received load request");
 #ifdef AMDINFER_ENABLE_TRACING
-  auto trace = startTrace(&(__func__[0]), req->getHeaders());
+  const auto &drogon_headers = req->getHeaders();
+  StringMap headers{drogon_headers.begin(), drogon_headers.end()};
+  auto trace = startTrace(&(__func__[0]), headers);
 #endif
 
   auto json = req->getJsonObject();
@@ -626,7 +636,9 @@ void HttpServer::workerUnload(
   std::function<void(const HttpResponsePtr &)> &&callback,
   const std::string &worker) const {
 #ifdef AMDINFER_ENABLE_TRACING
-  auto trace = startTrace(&(__func__[0]), req->getHeaders());
+  const auto &drogon_headers = req->getHeaders();
+  StringMap headers{drogon_headers.begin(), drogon_headers.end()};
+  auto trace = startTrace(&(__func__[0]), headers);
 #endif
 
   auto worker_lower = util::toLower(worker);

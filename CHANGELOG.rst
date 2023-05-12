@@ -48,6 +48,8 @@ Changed
 * Update workers' ``doRun`` method signature to produce and return a batch (:pr:`176`)
 * Use TOML-based configuration files in the repository by default (:pr:`178`)
 * Location of test model lists moved to ``tests`` directory (:pr:`180`)
+* Close dynamically opened libraries (:pr:`186`)
+* Replace Jaeger exporter with OTLP (:pr:`187`)
 
 Deprecated
 ^^^^^^^^^^

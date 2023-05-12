@@ -1,0 +1,24 @@
+diff --git a/trantor/net/inner/AresResolver.cc b/trantor/net/inner/AresResolver.cc
+index ec844614..4e3767b9 100644
+--- a/trantor/net/inner/AresResolver.cc
++++ b/trantor/net/inner/AresResolver.cc
+@@ -202,9 +202,6 @@ void AresResolver::onSockCreate(int sockfd, int type)
+ void AresResolver::onSockStateChange(int sockfd, bool read, bool write)
+ {
+     (void)write;
+-    loop_->assertInLoopThread();
+-    ChannelList::iterator it = channels_.find(sockfd);
+-    assert(it != channels_.end());
+     if (read)
+     {
+         // update
+@@ -212,6 +209,9 @@ void AresResolver::onSockStateChange(int sockfd, bool read, bool write)
+     }
+     else if (*loopValid_)
+     {
++        loop_->assertInLoopThread();
++        ChannelList::iterator it = channels_.find(sockfd);
++        assert(it != channels_.end());
+         // remove
+         it->second->disableAll();
+         it->second->remove();

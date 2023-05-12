@@ -1,7 +1,7 @@
 {
   "description": "Postprocessing kernel for YOLO v2/v3 network",
   "device_type": "cpu",
-  "kernel_lib": "libs/libYoloPostProcess.so",
+  "kernel_lib": "libs/libAksYoloPostproc.so",
   "kernel_name": "YoloPostProcess",
   "kernel_type": "cpp",
   "param_list": {

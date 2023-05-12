@@ -19,12 +19,12 @@
  * the amdinfer-server executable
  */
 
-#include <csignal>              // for signal, SIGINT, SIGTERM
-#include <cstdint>              // for uint16_t
-#include <cstdlib>              // for exit
-#include <cxxopts/cxxopts.hpp>  // for value, OptionAdder, Options
-#include <iostream>             // for operator<<, basic_ostream
-#include <string>               // for string, allocator, char_...
+#include <csignal>      // for signal, SIGINT, SIGTERM
+#include <cstdint>      // for uint16_t
+#include <cstdlib>      // for exit
+#include <cxxopts.hpp>  // for value, OptionAdder, Options
+#include <iostream>     // for operator<<, basic_ostream
+#include <string>       // for string, allocator, char_...
 
 #include "amdinfer/build_options.hpp"        // for AMDINFER_ENABLE_HTTP
 #include "amdinfer/observation/logging.hpp"  // for AMDINFER_LOG_INFO, Logger

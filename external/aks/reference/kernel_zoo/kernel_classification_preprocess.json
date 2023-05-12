@@ -1,7 +1,7 @@
 {
   "description": "Preprocess an image for a classification network",
   "device_type": "cpu",
-  "kernel_lib": "libs/libClassificationPreProcess.so",
+  "kernel_lib": "libs/libAksClassificationPreProc.so",
   "kernel_name": "ClassificationPreProcess",
   "kernel_type": "cpp",
   "num_cu": 1,

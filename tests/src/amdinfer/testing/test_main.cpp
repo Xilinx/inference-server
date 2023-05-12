@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 
-#include "cxxopts/cxxopts.hpp"
+#include "cxxopts.hpp"
 #include "gtest/gtest.h"
 
 GTEST_API_ int main(int argc, char* argv[]) {

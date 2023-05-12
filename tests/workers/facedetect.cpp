@@ -24,7 +24,7 @@
 #include <cstdlib>   // for exit, getenv
 #include <iostream>  // for operator<<, basic_ostream, endl, cout
 
-#include "cxxopts/cxxopts.hpp"  // for value, OptionAdder, Options, OptionEx...
+#include "cxxopts.hpp"  // for value, OptionAdder, Options, OptionEx...
 
 void dequeue(FutureQueue& my_queue, int num_images) {
   for (int i = 0; i < num_images; i++) {

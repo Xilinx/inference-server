@@ -46,7 +46,7 @@ Use ``git`` to clone the repository from Github:
 
 .. code-block:: console
 
-    $ git clone https://github.com/Xilinx/inference-server.git
+    $ git clone --recurse-submodules https://github.com/Xilinx/inference-server.git
     $ cd inference-server
 
 Tests and examples need assets like images and videos to run.

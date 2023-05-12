@@ -36,6 +36,61 @@ else()
   message(STATUS "Building version ${ver_major}.${ver_minor}.${ver_patch}")
 endif()
 
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+
+include(AddOption)
+
+# these need to be before the call to project() to configure the VCPKG features
+# correctly
+
+# these options get added as AMDINFER_* e.g. AMDINFER_BUILD_TESTING
+message(STATUS "Build Options:")
+add_option("ENABLE_HTTP" "Enable the HTTP server" ON)
+add_option("ENABLE_GRPC" "Enable the gRPC server" ON)
+add_option("ENABLE_METRICS" "Enable Prometheus metrics" ON)
+add_option("ENABLE_LOGGING" "Enable logging" ON)
+add_option("ENABLE_TRACING" "Enable OTLP tracing" OFF)
+add_option("BUILD_EXAMPLES" "Build examples" ON)
+add_option("BUILD_APPS" "Build apps" ON)
+add_option("BUILD_SHARED" "Build AMDinfer as a shared library" ON)
+add_option("ENABLE_IPO" "Enable interprocedural optimizations" OFF)
+add_option("ENABLE_LINTING" "Enable build-time linting" OFF)
+add_option("ENABLE_PYTHON_BINDINGS" "Build Python bindings" ON)
+add_option("INSTALL" "Set when invoking installation" OFF)
+
+add_option_env("ENABLE_PTZENDNN" "Enable PT+ZenDNN backend" OFF)
+add_option_env("ENABLE_TFZENDNN" "Enable TF+ZenDNN backend" OFF)
+add_option_env("ENABLE_MIGRAPHX" "Enable migraphx backend" OFF)
+add_option_env("ENABLE_AKS" "Enable AKS dependencies" OFF)
+add_option_env("ENABLE_VITIS" "Enable Vitis dependencies" OFF)
+
+# override tracing option and disable it if building Python bindings
+if(SKBUILD)
+  set(AMDINFER_ENABLE_TRACING OFF)
+endif()
+
+if(AMDINFER_ENABLE_HTTP)
+  list(APPEND VCPKG_MANIFEST_FEATURES "http")
+endif()
+
+if(AMDINFER_ENABLE_METRICS)
+  list(APPEND VCPKG_MANIFEST_FEATURES "metrics")
+endif()
+
+if(AMDINFER_ENABLE_LOGGING)
+  list(APPEND VCPKG_MANIFEST_FEATURES "logging")
+endif()
+
+if(AMDINFER_ENABLE_TRACING)
+  list(APPEND VCPKG_MANIFEST_FEATURES "tracing")
+endif()
+
+if(AMDINFER_ENABLE_AKS OR AMDINFER_ENABLE_VITIS)
+  list(APPEND VCPKG_MANIFEST_FEATURES "vitis")
+endif()
+
+list(APPEND VCPKG_MANIFEST_FEATURES "testing")
+
 # set the project name
 project(
   amdinfer
@@ -62,20 +117,26 @@ if(PROJECT_IS_TOP_LEVEL)
   )
 endif()
 
-list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
-
 if(CMAKE_BUILD_TYPE MATCHES Coverage)
   include(CodeCoverage)
 endif()
 include(CMakeDependentOption)
 include(CTest)
+include(CheckIncludeFileCXX)
 # these are defined locally in ./cmake/*
 include(SetTargetOptions)
-include(AddOption)
 include(AddTargets)
-include(TomlPlusPlus)
 
 # check requirements
+# there's a weird error when using vcpkg if this is omitted though it should be
+# an internal dependency of drogon (possibly reported here:
+# https://github.com/drogonframework/drogon/issues/1422)
+find_package(c-ares)
+find_package(nlohmann_json CONFIG)
+
+find_package(unofficial-b64 CONFIG)
+find_package(cxxopts CONFIG REQUIRED)
+find_package(GTest CONFIG)
 find_package(Drogon CONFIG)
 find_package(OpenCV)
 find_package(opentelemetry-cpp CONFIG)
@@ -86,7 +147,7 @@ list(APPEND CMAKE_PREFIX_PATH /opt/rocm/hip /opt/rocm)
 find_package(migraphx QUIET)
 find_package(tfzendnn)
 find_package(ptzendnn)
-find_package(protobuf CONFIG)
+find_package(Protobuf CONFIG)
 find_package(absl CONFIG)
 find_package(gRPC CONFIG)
 find_package(Doxygen)
@@ -95,10 +156,12 @@ find_package(efsw)
 find_package(json-c QUIET)
 find_package(prometheus-cpp)
 find_package(sockpp QUIET)
-check_include_file_cxx(half/half.hpp HALF_INCLUDE)
-if(NOT HALF_INCLUDE)
+find_package(tomlplusplus CONFIG)
+find_path(HALF_INCLUDE_DIRS "half/half.hpp")
+if(NOT HALF_INCLUDE_DIRS)
   message(FATAL_ERROR "half could not be included, required for FP16 support")
 endif()
+include_directories(SYSTEM ${HALF_INCLUDE_DIRS})
 
 find_package(xir QUIET)
 find_package(vart CONFIG COMPONENTS runner util QUIET)
@@ -131,31 +194,7 @@ configure_file(
   ${PROJECT_SOURCE_DIR}/src/amdinfer/version.hpp
 )
 
-# these options get added as AMDINFER_* e.g. AMDINFER_BUILD_TESTING
-message(STATUS "Build Options:")
-add_option("ENABLE_HTTP" "Enable the HTTP server" ON)
-add_option("ENABLE_GRPC" "Enable the gRPC server" ${gRPC_FOUND})
-add_option("ENABLE_METRICS" "Enable Prometheus metrics" ON)
-add_option("ENABLE_LOGGING" "Enable logging" ${spdlog_FOUND})
-add_option("ENABLE_TRACING" "Enable OTLP tracing" ${opentelemetry-cpp_FOUND})
-add_option("ENABLE_AKS" "Enable AKS dependencies" ${AMDINFER_AKS_FOUND})
-add_option("ENABLE_VITIS" "Enable Vitis dependencies" ${AMDINFER_VITIS_FOUND})
-add_option("BUILD_EXAMPLES" "Build examples" ON)
-add_option("BUILD_APPS" "Build apps" ON)
-add_option("BUILD_SHARED" "Build AMDinfer as a shared library" ON)
 add_option("BUILD_TESTING" "Build C++ tests" ${PROJECT_IS_TOP_LEVEL})
-add_option("ENABLE_IPO" "Enable interprocedural optimizations" OFF)
-add_option("ENABLE_LINTING" "Enable build-time linting" OFF)
-add_option("ENABLE_TFZENDNN" "Enable TF+ZenDNN worker" ${tfzendnn_FOUND})
-add_option("ENABLE_PTZENDNN" "Enable PT+ZenDNN worker" ${ptzendnn_FOUND})
-add_option("ENABLE_MIGRAPHX" "Enable migraphx worker" ${migraphx_FOUND})
-add_option("ENABLE_PYTHON_BINDINGS" "Build Python bindings" ON)
-add_option("INSTALL" "Set when invoking installation" OFF)
-
-# override tracing option and disable it if building Python bindings
-if(SKBUILD)
-  set(AMDINFER_ENABLE_TRACING OFF)
-endif()
 
 configure_file(
   src/amdinfer/build_options.hpp.in
@@ -230,7 +269,6 @@ if(${AMDINFER_BUILD_EXAMPLES})
   add_subdirectory(examples)
 endif()
 if(${AMDINFER_BUILD_TESTING})
-  include(GTest)
   include(GoogleTest)
   add_subdirectory(tests)
 endif()

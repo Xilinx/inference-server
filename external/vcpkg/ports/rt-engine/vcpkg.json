@@ -1,0 +1,26 @@
+{
+  "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg-tool/main/docs/vcpkg.schema.json",
+  "name": "rt-engine",
+  "version-semver": "3.0.0",
+  "port-version": 0,
+  "description": "",
+  "homepage": "https://github.com/Xilinx/rt-engine",
+  "license": "Apache-2.0",
+  "supports": "!uwp",
+  "dependencies": [
+    "boost-filesystem",
+    "boost-serialization",
+    "boost-system",
+    "boost-thread",
+    "json-c",
+    "vart",
+    {
+      "name": "vcpkg-cmake",
+      "host": true
+    },
+    {
+      "name": "vcpkg-cmake-config",
+      "host": true
+    }
+  ]
+}

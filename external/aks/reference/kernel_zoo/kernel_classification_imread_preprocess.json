@@ -1,7 +1,7 @@
 {
   "description": "Reads an image and preprocesses it for classification network",
   "device_type": "cpu",
-  "kernel_lib": "libs/libClassificationImreadPreProcess.so",
+  "kernel_lib": "libs/libAksClassificationImreadPre.so",
   "kernel_name": "ClassificationImreadPreProcess",
   "kernel_type": "cpp",
   "num_cu": 8,

@@ -62,6 +62,9 @@ set_target_properties(
   amdinfer-server-exe PROPERTIES OUTPUT_NAME amdinfer-server
 )
 target_link_libraries(amdinfer-server-exe PRIVATE amdinfer)
+# TODO(varunsh): fix this linkage. Coming from spdlog when using external fmt
+# like in vcpkg
+target_link_libraries(amdinfer-server-exe PRIVATE fmt::fmt)
 
 # ~~~
 # include(GenerateExportHeader)
@@ -141,7 +144,7 @@ if(${AMDINFER_ENABLE_VITIS})
     APPEND dependencies
            json-c::json-c
            rt-engine::rt-engine
-           Sockpp::sockpp
+           ${SOCKPP_LIBRARIES}
            unilog::unilog
            vart::runner
            vart::util
@@ -150,12 +153,12 @@ if(${AMDINFER_ENABLE_VITIS})
   list(APPEND deb_dependencies libgoogle-glog0v5 xrt)
 
   if(${AMDINFER_ENABLE_PYTHON_BINDINGS})
-    find_package(Python COMPONENTS Interpreter Development)
-    execute_process(
-      COMMAND ${Python_EXECUTABLE} "-c" "import xir; print(xir.__file__)"
-      OUTPUT_VARIABLE PY_XIR_PATH OUTPUT_STRIP_TRAILING_WHITESPACE
-                                  COMMAND_ERROR_IS_FATAL ANY
-    )
+    # find_package(Python COMPONENTS Interpreter Development)
+    # execute_process(
+    #   COMMAND ${Python_EXECUTABLE} "-c" "import xir; print(xir.__file__)"
+    #   OUTPUT_VARIABLE PY_XIR_PATH OUTPUT_STRIP_TRAILING_WHITESPACE
+    #                               COMMAND_ERROR_IS_FATAL ANY
+    # )
     list(APPEND deb_dependencies "libpython3")
 
     # install(FILES ${PY_XIR_PATH} TYPE LIB COMPONENT amdinfer_Runtime)

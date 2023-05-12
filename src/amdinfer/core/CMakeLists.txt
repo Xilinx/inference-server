@@ -35,13 +35,16 @@ amdinfer_add_targets(
   targets target_objects "${base_targets}" "${derived_targets}" _core
 )
 
+target_include_directories(data_types PUBLIC ${HALF_INCLUDE_DIRS})
+
 amdinfer_add_protobuf_target(lib_config model_config.proto OFF)
 
 target_include_directories(
   model_repository PRIVATE $<TARGET_PROPERTY:lib_config,INCLUDE_DIRECTORIES>
 )
 target_link_libraries(
-  model_repository PRIVATE tomlplusplus::tomlplusplus INTERFACE efsw lib_config
+  model_repository PRIVATE tomlplusplus::tomlplusplus INTERFACE efsw::efsw
+                                                                lib_config
 )
 add_dependencies(model_repository lib_config)
 
@@ -64,10 +67,12 @@ target_link_libraries(
 )
 
 target_link_libraries(shared_state INTERFACE Jsoncpp_lib)
+target_link_libraries(endpoints INTERFACE $<TARGET_OBJECTS:batcher>)
+target_link_libraries(worker_info INTERFACE $<TARGET_OBJECTS:batch>)
 
 if(${AMDINFER_ENABLE_VITIS})
-  target_link_libraries(data_types_internal INTERFACE xir)
-  target_link_libraries(shared_state INTERFACE sockpp)
+  target_link_libraries(data_types_internal INTERFACE xir::xir)
+  target_link_libraries(shared_state INTERFACE ${SOCKPP_LIBRARIES})
 endif()
 
 if(${AMDINFER_ENABLE_GRPC})

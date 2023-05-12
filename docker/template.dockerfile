@@ -58,13 +58,13 @@ $[ADD_DEV_TOOLS]
 # add a newer compiler if required
 $[ADD_COMPILER]
 
-# install Cmake 3.21.1
+# install Cmake 3.24.2
 RUN if [[ ${TARGETPLATFORM} == "linux/amd64" ]]; then \
-        archive="cmake-3.22.1-linux-x86_64.tar.gz"; \
+        archive="cmake-3.24.2-linux-x86_64.tar.gz"; \
     elif [[ ${TARGETPLATFORM} == "linux/arm64" ]]; then \
-        archive="cmake-3.22.1-linux-aarch64.tar.gz"; \
+        archive="cmake-3.24.2-linux-aarch64.tar.gz"; \
     else false; fi; \
-    url="https://github.com/Kitware/CMake/releases/download/v3.22.1/${archive}" \
+    url="https://github.com/Kitware/CMake/releases/download/v3.24.2/${archive}" \
     && cd /tmp/ \
     && wget --quiet ${url} \
     && tar --strip-components=1 -xzf ${archive} -C /usr/local \
@@ -88,36 +88,6 @@ $[INSTALL_BUILD_PACKAGES]
 
 # install extra optional distro packages
 $[INSTALL_OPTIONAL_BUILD_PACKAGES]
-
-# install Boost for VAI and Apache Thrift. This must match the boost version installed by XRT package
-RUN wget --quiet https://boostorg.jfrog.io/artifactory/main/release/1.71.0/source/boost_1_71_0.tar.gz \
-    && tar -xzf boost_1_71_0.tar.gz \
-    && cd boost_1_71_0 \
-    # && PYTHON_ROOT=$(dirname $(find /usr/include -name pyconfig.h)) \
-    # && ./bootstrap.sh --with-python=/usr/bin/python3 --with-python-root=${PYTHON_ROOT} \
-    && INSTALL_DIR=/tmp/installed \
-    && mkdir -p ${INSTALL_DIR} \
-    && ./bootstrap.sh --without-libraries=python --prefix=${INSTALL_DIR} \
-    && ./b2 install -j $(($(nproc) - 1)) \
-    && find ${INSTALL_DIR} -type f -o -type l | sed 's/\/tmp\/installed/\/usr\/local/' > ${MANIFESTS_DIR}/boost.txt \
-    # && CPLUS_INCLUDE_PATH=${PYTHON_ROOT} ./b2 install --with=all -j $(($(nproc) - 1)) \
-    && cp -rf ${INSTALL_DIR}/* /usr/local \
-    && cat ${MANIFESTS_DIR}/boost.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
-    && cd /tmp \
-    && rm -rf /tmp/*
-
-# install protobuf 3.19.4 for gRPC - Used by Vitis AI and onnx
-# onnx requires 3.19.4 due to Protobuf python
-RUN VERSION=3.19.4 \
-    && wget --quiet https://github.com/protocolbuffers/protobuf/releases/download/v${VERSION}/protobuf-cpp-${VERSION}.tar.gz \
-    && tar -xzf protobuf-cpp-${VERSION}.tar.gz \
-    && cd protobuf-${VERSION}/cmake \
-    && cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -Dprotobuf_BUILD_TESTS=NO -DBUILD_SHARED_LIBS=YES \
-    && cmake --build build --target install -- -j$(($(nproc) - 1)) \
-    && cat build/install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
-    && cp build/install_manifest.txt ${MANIFESTS_DIR}/protobuf.txt \
-    && cd /tmp \
-    && rm -rf /tmp/*
 
 # install pybind11 2.9.1 - used by Vitis AI and inference server
 RUN VERSION=2.9.1 \
@@ -186,252 +156,6 @@ RUN if [[ ${TARGETPLATFORM} == "linux/amd64" ]]; then \
     && ar -tf ${archive} | sed 's,^[^/]*/,/usr/local/,' > ${MANIFESTS_DIR}/nodejs.txt \
     && rm -rf /tmp/*
 
-# install cxxopts 2.2.1 for argument parsing
-RUN wget --quiet https://github.com/jarro2783/cxxopts/archive/refs/tags/v2.2.1.tar.gz \
-    && tar -xzf v2.2.1.tar.gz \
-    && cd cxxopts-2.2.1 \
-    && mkdir -p ${COPY_DIR}/usr/local/include/cxxopts \
-    && cp include/cxxopts.hpp ${COPY_DIR}/usr/local/include/cxxopts \
-    && rm -rf /tmp/*
-
-# install concurrentqueue 1.0.3 for a lock-free multi-producer and consumer queue
-RUN wget --quiet https://github.com/cameron314/concurrentqueue/archive/refs/tags/v1.0.3.tar.gz \
-    && tar -xzf v1.0.3.tar.gz \
-    && cd concurrentqueue-1.0.3 \
-    && cmake . \
-    && make install \
-    && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
-    && cat install_manifest.txt > ${MANIFESTS_DIR}/concurrentqueue.txt \
-    && cd /tmp \
-    && rm -rf /tmp/*
-
-# install jsoncpp for Drogon
-RUN VERSION=1.7.4 \
-    && wget --quiet https://github.com/open-source-parsers/jsoncpp/archive/refs/tags/${VERSION}.tar.gz \
-    && tar -xzf ${VERSION}.tar.gz \
-    && cd jsoncpp-${VERSION} \
-    && cmake -S . -B build \
-        -DCMAKE_BUILD_TYPE=Release \
-        -DBUILD_SHARED_LIBS=ON \
-        -DBUILD_STATIC_LIBS=OFF \
-        -DJSONCPP_WITH_TESTS=OFF \
-        -DINCLUDE_INSTALL_DIR=/usr/local/include/jsoncpp \
-    && cmake --build build --target install -- -j$(($(nproc) - 1)) \
-    && cat build/install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
-    && cp build/install_manifest.txt ${MANIFESTS_DIR}/jsoncpp.txt \
-    && cd /tmp \
-    && rm -rf /tmp/*
-
-# install c-ares for gRPC and Drogon
-RUN VERSION=1_14_0 \
-    && wget --quiet https://github.com/c-ares/c-ares/archive/refs/tags/cares-${VERSION}.tar.gz \
-    && tar -xzf cares-${VERSION}.tar.gz \
-    && cd c-ares-cares-${VERSION} \
-    && cmake -S . -B build \
-    && cmake --build build --target install -- -j$(($(nproc) - 1)) \
-    && cat build/install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
-    && cp build/install_manifest.txt ${MANIFESTS_DIR}/c-ares.txt \
-    && cd /tmp \
-    && rm -rf /tmp/*
-
-# install drogon 1.8.1 for a http server
-RUN git clone -b v1.8.1 https://github.com/an-tao/drogon \
-    && cd drogon \
-    && git submodule update --init --recursive \
-    && cmake -S . -B build \
-        -DBUILD_EXAMPLES=OFF \
-        -DCMAKE_INSTALL_PREFIX=/usr/local \
-        -DCMAKE_BUILD_TYPE=Release \
-        -DBUILD_ORM=OFF \
-        -DBUILD_SHARED_LIBS=ON \
-        -DBUILD_CTL=OFF \
-    # work-around trantor bug (https://github.com/an-tao/trantor/issues/229)
-    && sed -i '205{h;d};214G' ./trantor/trantor/net/inner/AresResolver.cc \
-    && sed -i '205{h;d};214G' ./trantor/trantor/net/inner/AresResolver.cc \
-    && sed -i '205{h;d};214G' ./trantor/trantor/net/inner/AresResolver.cc \
-    && cmake --build build --target install -- -j$(($(nproc) - 1)) \
-    && cat build/install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
-    && cp build/install_manifest.txt ${MANIFESTS_DIR}/drogon.txt \
-    && cd /tmp \
-    && rm -rf /tmp/*
-
-# install libb64 2.0.0.1 - fpic for cibuildwheel
-RUN wget --quiet https://github.com/libb64/libb64/archive/refs/tags/v2.0.0.1.tar.gz \
-    && tar -xzf v2.0.0.1.tar.gz \
-    && cd libb64-2.0.0.1 \
-    && CFLAGS="-fpic" make -j$(($(nproc) - 1)) all_src \
-    && mkdir -p ${COPY_DIR}/usr/local/lib && cp src/libb64.a ${COPY_DIR}/usr/local/lib \
-    && mkdir -p ${COPY_DIR}/usr/local/include && cp -r include/b64 ${COPY_DIR}/usr/local/include \
-    && rm -rf /tmp/*
-
-# install GTest 1.11.0 for C++ testing
-RUN wget --quiet https://github.com/google/googletest/archive/refs/tags/release-1.11.0.tar.gz \
-    && tar -xzf release-1.11.0.tar.gz \
-    && cd googletest-release-1.11.0 \
-    && mkdir -p build && cd build \
-    && cmake .. \
-    && make install \
-    && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
-    && cat install_manifest.txt > ${MANIFESTS_DIR}/gtest.txt \
-    && cd /tmp \
-    && rm -rf /tmp/*
-
-# install FFmpeg 3.4.8 for opencv
-RUN wget --quiet https://github.com/FFmpeg/FFmpeg/archive/refs/tags/n3.4.8.tar.gz \
-    && tar -xzf n3.4.8.tar.gz \
-    && cd FFmpeg-n3.4.8 \
-    && ./configure --disable-static --enable-shared --disable-doc \
-    && make -j$(($(nproc) - 1)) \
-    && INSTALL_DIR=/tmp/installed \
-    && mkdir -p ${INSTALL_DIR} \
-    && make install DESTDIR=${INSTALL_DIR} \
-    && find ${INSTALL_DIR} -type f -o -type l | sed 's/\/tmp\/installed//' > ${MANIFESTS_DIR}/ffmpeg.txt \
-    && cp -rP ${INSTALL_DIR}/* / \
-    && cat ${MANIFESTS_DIR}/ffmpeg.txt | xargs -i bash -c "cp --parents -P {} ${COPY_DIR}" \
-    && cd /tmp \
-    && rm -rf /tmp/*
-
-# install opencv 3.4.3 for image and video processing
-# pkg-config is needed to find ffmpeg
-RUN wget --quiet https://github.com/opencv/opencv/archive/3.4.3.tar.gz \
-    && tar -xzf 3.4.3.tar.gz \
-    && cd opencv-3.4.3 \
-    && mkdir -p build \
-    && cd build \
-    && cmake -DBUILD_SHARED_LIBS=ON -DBUILD_TEST=OFF -DBUILD_PERF_TESTS=OFF -DWITH_FFMPEG=ON .. \
-    && make -j$(($(nproc) - 1)) \
-    && make install \
-    && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
-    && cp install_manifest.txt ${MANIFESTS_DIR}/opencv.txt \
-    && cd /tmp \
-    && rm -rf /tmp/*
-
-# install spdlog 1.8.2
-RUN wget --quiet https://github.com/gabime/spdlog/archive/refs/tags/v1.8.2.tar.gz \
-    && tar -xzf v1.8.2.tar.gz \
-    && cd spdlog-1.8.2 \
-    && mkdir -p build && cd build \
-    && cmake .. \
-    && make -j$(($(nproc) - 1)) \
-    && make install \
-    && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
-    && cat install_manifest.txt > ${MANIFESTS_DIR}/spdlog.txt \
-    && cd /tmp \
-    && rm -rf /tmp/*
-
-# install prometheus-cpp 1.1.0 for metrics
-RUN VERSION=1.1.0 \
-    && wget --quiet https://github.com/jupp0r/prometheus-cpp/archive/refs/tags/v${VERSION}.tar.gz \
-    && tar -xzf v${VERSION}.tar.gz \
-    && cd prometheus-cpp-${VERSION} \
-    && cmake -S . -B build \
-        -DENABLE_PUSH=OFF \
-        -DENABLE_PULL=OFF \
-        -DENABLE_TESTING=OFF \
-        -DBUILD_SHARED_LIBS=ON \
-        -DOVERRIDE_CXX_STANDARD_FLAGS=OFF \
-    && cmake --build build --target install -- -j$(($(nproc) - 1)) \
-    && cat ./build/install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
-    && cat ./build/install_manifest.txt > ${MANIFESTS_DIR}/prometheus-cpp.txt \
-    && cd /tmp \
-    && rm -rf /tmp/*
-
-# install gRPC 1.44.0
-RUN git clone --depth=1 --branch v1.44.0 --single-branch https://github.com/grpc/grpc \
-    && cd grpc \
-    && git submodule update --init third_party/abseil-cpp third_party/re2 \
-    && mkdir -p build && cd build \
-    && cmake -DgRPC_ZLIB_PROVIDER=package \
-        -DgRPC_CARES_PROVIDER=custom \
-        -D_gRPC_CARES_LIBRARIES=cares \
-        -DgRPC_SSL_PROVIDER=package \
-        -DgRPC_RE2_PROVIDER=module \
-        -DgRPC_PROTOBUF_PROVIDER=package \
-        -DgRPC_PROTOBUF_PACKAGE_TYPE="" \
-        -DgRPC_BUILD_TESTS=OFF \
-        -DgRPC_ABSL_PROVIDER=module \
-        .. \
-    && make -j$(($(nproc) - 1)) \
-    && make install \
-    && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
-    && cp install_manifest.txt ${MANIFESTS_DIR}/grpc.txt \
-    && cd /tmp \
-    && rm -fr /tmp/*
-
-# install opentelemetry 1.9.0 for tracing
-RUN VERSION=1.9.0 \
-    && wget --quiet https://github.com/open-telemetry/opentelemetry-cpp/archive/refs/tags/v${VERSION}.tar.gz \
-    && tar -xzf v${VERSION}.tar.gz \
-    && cd opentelemetry-cpp-${VERSION} \
-    && cmake -S . -B build \
-        -DWITH_OTLP=ON \
-        -DWITH_OTLP_HTTP=ON \
-        -DBUILD_TESTING=OFF \
-        -DWITH_EXAMPLES=OFF \
-        -DWITH_STL=ON \
-        -DCMAKE_POSITION_INDEPENDENT_CODE=ON \
-        -DBUILD_SHARED_LIBS=ON \
-    # necessary to pick up the protobuf install?
-    && ldconfig \
-    && cmake --build build --target install -- -j$(($(nproc) - 1)) \
-    && cat ./build/install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
-    && cp ./build/install_manifest.txt ${MANIFESTS_DIR}/opentelemetry.txt \
-    && cd /tmp \
-    && rm -rf /tmp/*
-
-# install efsw for directory monitoring
-RUN COMMIT=6b51944994b5c77dbd7edce66846e378a3bf4d8e \
-    && wget --quiet https://github.com/SpartanJ/efsw/archive/${COMMIT}.tar.gz \
-    && tar -xzf ${COMMIT}.tar.gz \
-    && cd efsw-${COMMIT}/ && mkdir build && cd build \
-    && cmake .. \
-    && make -j$(($(nproc) - 1)) \
-    && make install \
-    && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
-    && cat install_manifest.txt > ${MANIFESTS_DIR}/efsw.txt \
-    && cd /tmp && rm -fr /tmp/*
-
-# install half for FP16 data type
-RUN wget -O half_2.2.0.zip https://sourceforge.net/projects/half/files/latest/download \
-    && unzip half_2.2.0.zip -d half \
-    && mkdir -p ${COPY_DIR}/usr/local/include/half \
-    && mv half/include/half.hpp ${COPY_DIR}/usr/local/include/half \
-    && cd /tmp && rm -fr /tmp/*
-
-# install google benchmark for benchmarking apps
-RUN wget --quiet https://github.com/google/benchmark/archive/refs/tags/v1.7.1.tar.gz \
-    && tar -xzf v1.7.1.tar.gz \
-    && cd benchmark-1.7.1 \
-    && cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DBENCHMARK_ENABLE_TESTING=OFF \
-    && cmake --build build --target install -- -j$(($(nproc) - 1)) \
-    && cat build/install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
-    && cat build/install_manifest.txt > ${MANIFESTS_DIR}/benchmark.txt \
-    && cd /tmp && rm -fr /tmp/*
-
-# install yaml-cpp for yaml parsing
-# RUN wget --quet https://github.com/jbeder/yaml-cpp/archive/refs/tags/yaml-cpp-0.7.0.tar.gz \
-#     && tar -xzf yaml-cpp-0.7.0.tar.gz \
-#     && cd yaml-cpp-yaml-cpp-0.7.0 \
-#     && cmake -S . -B build -DYAML_CPP_BUILD_CONTRIB=OFF -DYAML_CPP_BUILD_TOOLS=OFF -DYAML_BUILD_SHARED_LIBS=OFF -DYAML_CPP_BUILD_TESTS=OFF \
-#     && cmake --build build --target install -- -j$(($(nproc) - 1)) \
-#     && cat build/install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
-#     && cat build/install_manifest.txt > ${MANIFESTS_DIR}/yaml-cpp.txt \
-#     && cd /tmp && rm -fr /tmp/*
-
-
-# install doxygen 1.9.2
-# RUN cd /tmp && wget --quiet https://github.com/doxygen/doxygen/archive/refs/tags/Release_1_9_2.tar.gz \
-#     && tar -xzf Release_1_9_2.tar.gz \
-#     && cd doxygen-Release_1_9_2/ \
-#     && mkdir -p build \
-#     && cd build \
-#     && cmake ..
-#     && make -j$(($(nproc) - 1)) \
-#     && make install \
-#     && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
-#     && cd /tmp \
-#     && rm -fr /tmp/*
-
 $[BUILD_OPTIONAL]
 
 #? This no longer seems needed but is kept around in case
@@ -454,25 +178,13 @@ RUN rm -rf ${COPY_DIR} && mkdir ${COPY_DIR} && mkdir -p ${MANIFESTS_DIR}
 # Install XRT and XRM
 $[INSTALL_XRT]
 
-$[BUILD_VITIS]
-
-RUN COMMIT=e5c51b541d5cbcf353d4165499103f5e6d7e7ea9 \
-    && wget --quiet https://github.com/fpagliughi/sockpp/archive/${COMMIT}.tar.gz \
-    && tar -xzf ${COMMIT}.tar.gz \
-    && cd sockpp-${COMMIT}/ \
-    && mkdir build && cd build \
-    && cmake .. \
-        -DCMAKE_BUILD_TYPE=Release \
-    && make -j$(($(nproc) - 1)) \
-    && make install \
-    && cat install_manifest.txt | xargs -i bash -c "if [ -f {} ]; then cp --parents -P {} ${COPY_DIR}; fi" \
-    && cat install_manifest.txt > ${MANIFESTS_DIR}/sockcpp.txt
-
 FROM dev_base AS vitis_installer_no
 
 FROM dev_base AS vitis_installer_yes
 
 ARG COPY_DIR
+ENV AMDINFER_ENABLE_VITIS=ON
+ENV AMDINFER_ENABLE_AKS=ON
 
 COPY --from=vitis_builder ${COPY_DIR} /
 
@@ -494,6 +206,7 @@ FROM vitis_installer_${ENABLE_VITIS} AS tfzendnn_installer_no
 FROM vitis_installer_${ENABLE_VITIS} AS tfzendnn_installer_yes
 
 ARG COPY_DIR
+ENV AMDINFER_ENABLE_TFZENDNN=ON
 
 COPY --from=tfzendnn_builder ${COPY_DIR} /
 
@@ -513,6 +226,7 @@ FROM tfzendnn_installer_${ENABLE_TFZENDNN} AS ptzendnn_installer_no
 FROM tfzendnn_installer_${ENABLE_TFZENDNN} AS ptzendnn_installer_yes
 
 ARG COPY_DIR
+ENV AMDINFER_ENABLE_PTZENDNN=ON
 
 COPY --from=ptzendnn_builder ${COPY_DIR} /
 
@@ -521,6 +235,7 @@ FROM ptzendnn_installer_${ENABLE_PTZENDNN} AS migraphx_installer_no
 FROM ptzendnn_installer_${ENABLE_PTZENDNN} AS migraphx_installer_yes
 
 ARG COPY_DIR
+ENV AMDINFER_ENABLE_MIGRAPHX=ON
 
 $[INSTALL_MIGRAPHX]
 
@@ -546,15 +261,40 @@ RUN pip3 install --no-cache-dir "pyinstaller!=4.6" \
     && cp dist/systemctl3 ${COPY_DIR}/usr/bin/systemctl \
     && rm -fr /tmp/*
 
-COPY . $AMDINFER_ROOT
+COPY docker/fpga_util.py /tmp/
 
 RUN if [[ ${ENABLE_VITIS} == "yes" ]]; then \
         # make binary for custom script to get FPGAs
-        pyinstaller $AMDINFER_ROOT/docker/fpga_util.py --onefile \
+        pyinstaller /tmp/fpga_util.py --onefile \
         && chmod a+x dist/fpga_util \
         && mkdir -p ${COPY_DIR}/usr/local/bin/ \
-        && cp dist/fpga_util ${COPY_DIR}/usr/local/bin/fpga-util; \
+    && cp dist/fpga_util ${COPY_DIR}/usr/local/bin/fpga-util; \
     fi
+
+FROM migraphx_installer_${ENABLE_MIGRAPHX} AS vcpkg_builder
+
+ARG ENABLE_VITIS
+ARG COPY_DIR
+WORKDIR /tmp
+
+$[VCPKG_BUILD]
+
+COPY vcpkg.json /tmp/vcpkg.json
+COPY external/vcpkg /tmp/external/vcpkg
+COPY docker/install_vcpkg.sh /tmp/docker/install_vcpkg.sh
+# copy pybind11
+COPY --from=common_builder ${COPY_DIR} /
+
+RUN mkdir /opt/vcpkg \
+    && cd /opt/vcpkg \
+    && wget --quiet https://github.com/microsoft/vcpkg/archive/refs/tags/2023.04.15.tar.gz \
+    && tar -xzf 2023.04.15.tar.gz \
+    && mv vcpkg-2023.04.15 vcpkg \
+    && cd vcpkg \
+    && ./bootstrap-vcpkg.sh -disableMetrics \
+    && rm /opt/vcpkg/2023.04.15.tar.gz \
+    && cd /tmp \
+    && ./docker/install_vcpkg.sh --vitis ${ENABLE_VITIS}
 
 FROM migraphx_installer_${ENABLE_MIGRAPHX} AS dev
 
@@ -571,9 +311,10 @@ $[INSTALL_PYTHON_PACKAGES]
 COPY --from=builder ${COPY_DIR} /
 COPY --from=common_builder ${COPY_DIR} /
 COPY --from=builder_dev ${COPY_DIR} /
-COPY --from=builder_dev $AMDINFER_ROOT/docker/entrypoint.sh /root/entrypoint.sh
-COPY --from=builder_dev $AMDINFER_ROOT/docker/.bash* /home/${UNAME}/
-COPY --from=builder_dev $AMDINFER_ROOT/docker/.env /home/${UNAME}/
+COPY --from=vcpkg_builder /opt/vcpkg /opt/vcpkg
+COPY docker/entrypoint.sh /root/entrypoint.sh
+COPY docker/.bash* /home/${UNAME}/
+COPY docker/.env /home/${UNAME}/
 
 # run any final commands before finishing the dev image
 RUN git lfs install \
@@ -593,7 +334,8 @@ ARG ENABLE_TFZENDNN
 
 COPY . $AMDINFER_ROOT
 
-RUN ldconfig \
+RUN export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/vcpkg/x64-linux-dynamic/lib \
+    && ldconfig \
     # delete any inherited artifacts and recreate
     && rm -rf ${COPY_DIR} && mkdir ${COPY_DIR} && mkdir -p ${MANIFESTS_DIR} \
     # install libamdinfer.so
@@ -613,7 +355,7 @@ ARG COPY_DIR
 ARG AMDINFER_ROOT
 
 # get AKS kernels
-COPY --from=builder_prod $AMDINFER_ROOT/external/aks/libs/ /opt/xilinx/amdinfer/aks/libs/
+COPY --from=builder_prod $AMDINFER_ROOT/external/aks/libs/* /opt/xilinx/amdinfer/aks/libs/
 # get the fpga-util executable
 COPY --from=builder_prod /usr/local/bin/fpga-util /opt/xilinx/amdinfer/bin/
 
@@ -626,13 +368,15 @@ COPY --from=builder_prod $AMDINFER_ROOT/docker/.env $AMDINFER_ROOT/external/over
 COPY --from=builder_prod $AMDINFER_ROOT/external/aks/graph_zoo/ /opt/xilinx/amdinfer/aks/graph_zoo/
 COPY --from=builder_prod $AMDINFER_ROOT/external/aks/kernel_zoo/ /opt/xilinx/amdinfer/aks/kernel_zoo/
 
-ENV LD_LIBRARY_PATH="/opt/xilinx/amdinfer/aks"
+ENV LD_LIBRARY_PATH="/opt/xilinx/amdinfer/aks:/opt/vcpkg/x64-linux-dynamic/lib"
 ENV XILINX_XRT="/opt/xilinx/xrt"
 # TODO(varunsh): we shouldn't hardcode dpuv3int8 here
 ENV XLNX_VART_FIRMWARE="/opt/xilinx/overlaybins/dpuv3int8"
 ENV AKS_ROOT="/opt/xilinx/amdinfer/aks"
 ENV AKS_XMODEL_ROOT="/opt/xilinx/amdinfer"
 ENV PATH="/opt/xilinx/amdinfer/bin:${PATH}"
+
+RUN echo "/opt/xilinx/xrt/lib" > /etc/ld.so.conf.d/xrt.conf
 
 FROM ${BASE_IMAGE} AS vitis_installer_prod_no
 
@@ -667,6 +411,7 @@ COPY --from=builder_prod $AMDINFER_ROOT/docker/.env /root/
 
 # run any final commands before finishing the production image
 RUN echo "/opt/rocm/lib" > /etc/ld.so.conf.d/rocm.conf \
+    && echo "/opt/vcpkg/x64-linux-dynamic/lib" > /etc/ld.so.conf.d/vcpkg.conf \
     && ldconfig
 
 # we need to run as root because KServe mounts models to /mnt/models which means

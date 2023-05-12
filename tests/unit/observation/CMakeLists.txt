@@ -12,8 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set(tests tracing)
+set(tests)
+set(tests_libs)
 
-set(tests_libs "tracing~parameters")
+if(AMDINFER_ENABLE_TRACING)
+  list(APPEND tests tracing)
+  list(APPEND tests_libs "tracing~parameters")
+endif()
 
 amdinfer_add_unit_tests("${tests}" "${tests_libs}")

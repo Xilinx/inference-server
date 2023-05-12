@@ -26,20 +26,24 @@ amdinfer_add_targets(
 )
 
 if(${AMDINFER_ENABLE_AKS})
-  target_link_libraries(server INTERFACE aks)
+  target_link_libraries(server INTERFACE aks::aks)
 endif()
 
 if(${AMDINFER_ENABLE_HTTP})
-  target_link_libraries(http_server PUBLIC Drogon::Drogon)
+  target_link_libraries(
+    http_server PUBLIC Drogon::Drogon INTERFACE $<TARGET_OBJECTS:http_internal>
+  )
   target_link_libraries(websocket_server PUBLIC Drogon::Drogon)
   target_link_libraries(server PUBLIC http_server)
 endif()
 
 if(${AMDINFER_ENABLE_GRPC})
   target_include_directories(
-    grpc_server PRIVATE $<TARGET_PROPERTY:lib_grpc,INCLUDE_DIRECTORIES>
+    grpc_server SYSTEM PRIVATE $<TARGET_PROPERTY:lib_grpc,INCLUDE_DIRECTORIES>
   )
-  target_link_libraries(grpc_server INTERFACE lib_grpc)
+  target_link_libraries(
+    grpc_server INTERFACE lib_grpc $<TARGET_OBJECTS:grpc_internal>
+  )
   add_dependencies(grpc_server lib_grpc)
 endif()
 

@@ -20,7 +20,7 @@
 #include <loadgen.h>
 #include <test_settings.h>
 
-#include <cxxopts/cxxopts.hpp>
+#include <cxxopts.hpp>
 #include <filesystem>
 #include <opencv2/core.hpp>       // for Mat, Vec3b, MatSize, Vec, CV_8SC3
 #include <opencv2/imgcodecs.hpp>  // for imread

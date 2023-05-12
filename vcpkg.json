@@ -1,0 +1,175 @@
+{
+  "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg-tool/main/docs/vcpkg.schema.json",
+  "name": "amdinfer",
+  "version-semver": "0.4.0",
+  "default-features": [
+    "http",
+    "grpc",
+    "metrics",
+    "logging"
+  ],
+  "dependencies": [
+    {
+      "name": "b64",
+      "version>=": "2.0.0.1"
+    },
+    "boost-process",
+    {
+      "name": "concurrentqueue",
+      "version>=": "1.0.3"
+    },
+    {
+      "name": "cxxopts",
+      "version>=": "2.2.1"
+    },
+    {
+      "name": "efsw",
+      "version>=": "1.3.1#1"
+    },
+    "fmt",
+    {
+      "name": "half",
+      "version>=": "2.2.0"
+    },
+    "jsoncpp",
+    {
+      "name": "protobuf",
+      "version>=": "3.19.4"
+    },
+    {
+      "name": "opencv4",
+      "default-features": false,
+      "features": [
+        "ffmpeg",
+        "jpeg"
+      ]
+    },
+    {
+      "name": "tomlplusplus",
+      "version>=": "3.1.0"
+    },
+    {
+      "name": "vcpkg-cmake",
+      "host": true
+    },
+    {
+      "name": "vcpkg-cmake-config",
+      "host": true
+    }
+  ],
+  "features": {
+    "http": {
+      "description": "Enable HTTP server",
+      "dependencies": [
+        {
+          "name": "drogon",
+          "version>=": "1.8.1"
+        }
+      ]
+    },
+    "grpc": {
+      "description": "Enable gRPC server",
+      "dependencies": [
+        {
+          "name": "grpc",
+          "version>=": "1.44.0",
+          "features": [
+            "codegen"
+          ]
+        }
+      ]
+    },
+    "metrics": {
+      "description": "Enable metrics with Prometheus",
+      "dependencies": [
+        {
+          "name": "prometheus-cpp",
+          "version>=": "1.1.0"
+        }
+      ]
+    },
+    "logging": {
+      "description": "Enable logging with spdlog",
+      "dependencies": [
+        {
+          "name": "spdlog",
+          "version>=": "1.8.5"
+        }
+      ]
+    },
+    "tracing": {
+      "description": "Enable tracing with OTLP",
+      "dependencies": [
+        {
+          "name": "opentelemetry-cpp",
+          "version>=": "1.8.3",
+          "features": [
+            "otlp",
+            "otlp-http"
+          ]
+        }
+      ]
+    },
+    "vitis": {
+      "description": "Enable Vitis AI backend",
+      "dependencies": [
+        {
+          "name": "aks",
+          "version>=": "3.0.0"
+        },
+        {
+          "name": "rt-engine",
+          "version>=": "3.0.0"
+        },
+        {
+          "name": "sockpp",
+          "version>=": "0.7.1"
+        },
+        {
+          "name": "vart",
+          "version>=": "3.0.0"
+        }
+      ]
+    },
+    "testing": {
+      "description": "Enable testing",
+      "dependencies": [
+        {
+          "name": "benchmark",
+          "version>=": "1.7.1"
+        },
+        {
+          "name": "gtest",
+          "version>=": "1.11.0"
+        }
+      ]
+    }
+  },
+  "overrides": [
+    {
+      "name": "cxxopts",
+      "version": "2.2.1"
+    },
+    {
+      "name": "opentelemetry-cpp",
+      "version": "1.8.3#7"
+    },
+    {
+      "name": "trantor",
+      "version": "1.5.11#2"
+    }
+  ],
+  "vcpkg-configuration": {
+    "default-registry": {
+      "kind": "git",
+      "repository": "https://github.com/microsoft/vcpkg",
+      "baseline": "501db0f17ef6df184fcdbfbe0f87cde2313b6ab1"
+    },
+    "overlay-ports": [
+      "./external/vcpkg/ports"
+    ],
+    "overlay-triplets": [
+      "./external/vcpkg/triplets"
+    ]
+  }
+}

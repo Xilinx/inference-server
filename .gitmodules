@@ -1,0 +1,4 @@
+[submodule "external/vcpkg/vcpkg"]
+	path = external/vcpkg/vcpkg
+	url = https://github.com/microsoft/vcpkg.git
+	branch = 2023.04.15

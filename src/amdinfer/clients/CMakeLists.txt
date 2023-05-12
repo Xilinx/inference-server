@@ -43,6 +43,8 @@ if(${AMDINFER_ENABLE_GRPC})
   target_include_directories(
     grpc_internal PRIVATE $<TARGET_PROPERTY:lib_grpc,INCLUDE_DIRECTORIES>
   )
+
+  target_link_libraries(grpc INTERFACE lib_grpc)
 endif()
 
 add_library(clients INTERFACE)

@@ -109,6 +109,7 @@ std::optional<Span> readStream(std::stringstream& ss) {
   return span;
 }
 
+#ifdef AMDINFER_ENABLE_TRACING
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST(UnitTracing, Basic) {
   std::stringstream ss;
@@ -149,5 +150,6 @@ TEST(UnitTracing, AutoDestroy) {
 
   stopTracer();
 }
+#endif
 
 }  // namespace amdinfer

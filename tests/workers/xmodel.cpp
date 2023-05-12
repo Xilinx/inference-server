@@ -20,8 +20,8 @@
 
 #include "xmodel.hpp"
 
-#include <cstdlib>              // for exit, getenv
-#include <cxxopts/cxxopts.hpp>  // for value, OptionAdder, Options, OptionEx...
+#include <cstdlib>      // for exit, getenv
+#include <cxxopts.hpp>  // for value, OptionAdder, Options, OptionEx...
 
 int main(int argc, char* argv[]) {
   const auto* aks_model_root = std::getenv("AKS_XMODEL_ROOT");

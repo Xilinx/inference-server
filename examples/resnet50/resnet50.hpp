@@ -15,7 +15,7 @@
 #ifndef GUARD_EXAMPLES_RESNET50_RESNET50
 #define GUARD_EXAMPLES_RESNET50_RESNET50
 
-#include <cxxopts/cxxopts.hpp>
+#include <cxxopts.hpp>
 #include <filesystem>
 #include <fstream>
 #include <iostream>

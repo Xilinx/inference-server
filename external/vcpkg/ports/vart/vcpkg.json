@@ -1,0 +1,28 @@
+{
+  "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg-tool/main/docs/vcpkg.schema.json",
+  "name": "vart",
+  "version-semver": "3.0.0",
+  "port-version": 0,
+  "description": "",
+  "homepage": "https://github.com/Xilinx/Vitis-AI",
+  "license": "Apache-2.0",
+  "supports": "!uwp",
+  "dependencies": [
+    {
+      "name": "target-factory",
+      "version>=": "3.0.0"
+    },
+    {
+      "name": "xir",
+      "version>=": "3.0.0"
+    },
+    {
+      "name": "vcpkg-cmake",
+      "host": true
+    },
+    {
+      "name": "vcpkg-cmake-config",
+      "host": true
+    }
+  ]
+}

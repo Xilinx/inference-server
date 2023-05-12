@@ -56,6 +56,7 @@ for dir in /workspace/*; do  # lists the absolute path to the file/directory
   fi
   # fix other permissions
   chown -R --silent amdinfer-user /home/amdinfer-user
+  chown -R --silent amdinfer-user /opt/vcpkg
 
   break
 done
