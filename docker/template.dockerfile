@@ -261,15 +261,29 @@ RUN pip3 install --no-cache-dir "pyinstaller!=4.6" \
     && cp dist/systemctl3 ${COPY_DIR}/usr/bin/systemctl \
     && rm -fr /tmp/*
 
-COPY . $AMDINFER_ROOT
+COPY docker/fpga_util.py /tmp/
 
 RUN if [[ ${ENABLE_VITIS} == "yes" ]]; then \
         # make binary for custom script to get FPGAs
-        pyinstaller $AMDINFER_ROOT/docker/fpga_util.py --onefile \
+        pyinstaller /tmp/fpga_util.py --onefile \
         && chmod a+x dist/fpga_util \
         && mkdir -p ${COPY_DIR}/usr/local/bin/ \
-        && cp dist/fpga_util ${COPY_DIR}/usr/local/bin/fpga-util; \
+    && cp dist/fpga_util ${COPY_DIR}/usr/local/bin/fpga-util; \
     fi
+
+FROM migraphx_installer_${ENABLE_MIGRAPHX} AS vcpkg_builder
+
+ARG ENABLE_VITIS
+ARG COPY_DIR
+WORKDIR /tmp
+
+$[VCPKG_BUILD]
+
+COPY vcpkg.json /tmp/vcpkg.json
+COPY external/vcpkg /tmp/external/vcpkg
+COPY docker/install_vcpkg.sh /tmp/docker/install_vcpkg.sh
+# copy pybind11
+COPY --from=common_builder ${COPY_DIR} /
 
 RUN mkdir /opt/vcpkg \
     && cd /opt/vcpkg \
@@ -279,7 +293,7 @@ RUN mkdir /opt/vcpkg \
     && cd vcpkg \
     && ./bootstrap-vcpkg.sh -disableMetrics \
     && rm /opt/vcpkg/2023.04.15.tar.gz \
-    && cd $AMDINFER_ROOT \
+    && cd /tmp \
     && ./docker/install_vcpkg.sh --vitis ${ENABLE_VITIS}
 
 FROM migraphx_installer_${ENABLE_MIGRAPHX} AS dev
@@ -297,10 +311,10 @@ $[INSTALL_PYTHON_PACKAGES]
 COPY --from=builder ${COPY_DIR} /
 COPY --from=common_builder ${COPY_DIR} /
 COPY --from=builder_dev ${COPY_DIR} /
-COPY --from=builder_dev $AMDINFER_ROOT/docker/entrypoint.sh /root/entrypoint.sh
-COPY --from=builder_dev $AMDINFER_ROOT/docker/.bash* /home/${UNAME}/
-COPY --from=builder_dev $AMDINFER_ROOT/docker/.env /home/${UNAME}/
-COPY --from=builder_dev /opt/vcpkg /opt/vcpkg
+COPY --from=vcpkg_builder /opt/vcpkg /opt/vcpkg
+COPY docker/entrypoint.sh /root/entrypoint.sh
+COPY docker/.bash* /home/${UNAME}/
+COPY docker/.env /home/${UNAME}/
 
 # run any final commands before finishing the dev image
 RUN git lfs install \

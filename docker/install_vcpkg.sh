@@ -25,10 +25,8 @@ done
 
 # for some reason, vcpkg doesn't like passing an empty string as an argument
 # so set it to a real value when VITIS is "no" omitted
-# Cannot use --x-feature-vitis here because rt-engine needs XRT which doesn't
-# exist at the point where this is being installed
 if [[ "$VITIS" == "yes" ]]; then
-  FEATURES="--x-feature=testing"
+  FEATURES="--x-feature=testing --x-feature=vitis"
 else
   FEATURES="--x-feature=testing"
 fi

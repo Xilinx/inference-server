@@ -762,6 +762,23 @@ def install_python_packages():
     )
 
 
+def vcpkg_build(manager):
+    return textwrap.dedent(
+        f"""\
+        RUN {manager.update} \\
+            && {manager.install} \\
+                curl \\
+                zip \\
+                unzip \\
+                tar \\
+                nasm \\
+                pkg-config \\
+                python3-dev \\
+            # clean up
+            {code_indent(manager.clean, 12)}"""
+    )
+
+
 def generate(args: argparse.Namespace):
     if args.custom_backends:
         # load a specific python file without consideration about modules/
@@ -857,6 +874,8 @@ def generate(args: argparse.Namespace):
         dockerfile = dockerfile.replace(
             "$[INSTALL_MIGRAPHX]", install_migraphx(manager, None)
         )
+
+    dockerfile = dockerfile.replace("$[VCPKG_BUILD]", vcpkg_build(manager))
 
     if args.cibuildwheel:
         entrypoint = textwrap.dedent(
