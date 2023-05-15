@@ -51,5 +51,10 @@ def get(args: argparse.Namespace):
             directory,
             "",
         )
+        models["onnx_resnet50_fp16"] = FloatOpenDownload(
+            "pt_resnet50v1.5_imagenet_224_224_0.4_4.9G_1.1_M2.4.zip",
+            directory,
+            "resnet50/float/resnet50_fp16.onnx",
+        )
 
     return models
