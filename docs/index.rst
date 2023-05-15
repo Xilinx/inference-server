@@ -44,6 +44,7 @@ To see other versions, you can use "Read the Docs" panel on the bottom-left or e
     model_repository
     ensembles
     deployment
+    client_api
     kserve
     performance_factors
     troubleshooting
