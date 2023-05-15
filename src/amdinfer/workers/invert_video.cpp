@@ -28,10 +28,10 @@
 #include <thread>                 // for thread
 #include <vector>                 // for vector
 
-#include "amdinfer/batching/batcher.hpp"  // for Batch, BatchPtrQueue
-#include "amdinfer/build_options.hpp"     // for AMDINFER_ENABLE_TRACING
-#include "amdinfer/core/data_types.hpp"   // for DataType, DataType::String
-#include "amdinfer/core/inference_request.hpp"   // for InferenceRequest
+#include "amdinfer/batching/batcher.hpp"        // for Batch, BatchPtrQueue
+#include "amdinfer/build_options.hpp"           // for AMDINFER_ENABLE_TRACING
+#include "amdinfer/core/data_types.hpp"         // for DataType, DataType::Bytes
+#include "amdinfer/core/inference_request.hpp"  // for InferenceRequest
 #include "amdinfer/core/inference_response.hpp"  // for InferenceResponse
 #include "amdinfer/core/parameters.hpp"          // for ParameterMap
 #include "amdinfer/declarations.hpp"         // for BufferPtr, InferenceRes...
@@ -90,7 +90,7 @@ const auto kMaxUrlLength = 128;
 void InvertVideo::doAcquire(ParameterMap* parameters) {
   (void)parameters;  // suppress unused variable warning
 
-  this->metadata_.addInputTensor("input", {kMaxUrlLength}, DataType::String);
+  this->metadata_.addInputTensor("input", {kMaxUrlLength}, DataType::Bytes);
   // TODO(varunsh): output is variable
   this->metadata_.addOutputTensor(
     "output", {kMaxImageHeight, kMaxImageWidth, kMaxImageChannels},
@@ -137,7 +137,7 @@ BatchPtr InvertVideo::doRun(Batch* batch,
 
       InferenceResponseOutput output;
       output.setName("key");
-      output.setDatatype(DataType::String);
+      output.setDatatype(DataType::Bytes);
       auto message = constructMessage(key, std::to_string(fps));
       std::vector<std::byte> buffer;
       buffer.resize(message.size());
@@ -166,7 +166,7 @@ BatchPtr InvertVideo::doRun(Batch* batch,
 
         InferenceResponseOutput output;
         output.setName("image");
-        output.setDatatype(DataType::String);
+        output.setDatatype(DataType::Bytes);
         message = constructMessage(key, encoded);
         buffer.resize(message.size());
         memcpy(buffer.data(), message.data(), message.size());

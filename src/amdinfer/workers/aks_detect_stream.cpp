@@ -42,7 +42,7 @@
 
 #include "amdinfer/batching/batcher.hpp"  // for BatchPtr, Batch, BatchP...
 #include "amdinfer/build_options.hpp"     // for AMDINFER_ENABLE_TRACING
-#include "amdinfer/core/data_types.hpp"   // for DataType, DataType::String
+#include "amdinfer/core/data_types.hpp"   // for DataType, DataType::Bytes
 #include "amdinfer/core/inference_request.hpp"   // for InferenceRequest
 #include "amdinfer/core/inference_response.hpp"  // for InferenceResponse
 #include "amdinfer/core/parameters.hpp"          // for ParameterMap
@@ -177,7 +177,7 @@ BatchPtr AksDetectStream::doRun(Batch* batch,
 
       InferenceResponseOutput output;
       output.setName("key");
-      output.setDatatype(DataType::String);
+      output.setDatatype(DataType::Bytes);
       std::string metadata = "[" + std::to_string(video_width) + "," +
                              std::to_string(video_height) + "]";
       auto message = constructMessage(key, std::to_string(fps), metadata);
@@ -276,7 +276,7 @@ BatchPtr AksDetectStream::doRun(Batch* batch,
 
             InferenceResponseOutput output;
             output.setName("image");
-            output.setDatatype(DataType::String);
+            output.setDatatype(DataType::Bytes);
             auto message = constructMessage(key, frames.front(), labels[j]);
             std::vector<std::byte> buffer;
             buffer.resize(message.size());
@@ -327,7 +327,7 @@ BatchPtr AksDetectStream::doRun(Batch* batch,
 
           InferenceResponseOutput output;
           output.setName("image");
-          output.setDatatype(DataType::String);
+          output.setDatatype(DataType::Bytes);
           auto message = constructMessage(key, frames.front(), labels[j]);
           buffer.resize(message.size());
           memcpy(buffer.data(), message.data(), message.size());

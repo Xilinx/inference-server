@@ -41,10 +41,10 @@
 #include <xir/tensor/tensor.hpp>   // for Tensor
 #include <xir/util/data_type.hpp>  // for create_data_type
 
-#include "amdinfer/batching/batcher.hpp"  // for BatchPtr, BatchPtrQueue
-#include "amdinfer/build_options.hpp"     // for AMDINFER_ENABLE_LOGGING
-#include "amdinfer/core/data_types.hpp"   // for DataType, DataType::String
-#include "amdinfer/core/inference_request.hpp"   // for InferenceRequest
+#include "amdinfer/batching/batcher.hpp"        // for BatchPtr, BatchPtrQueue
+#include "amdinfer/build_options.hpp"           // for AMDINFER_ENABLE_LOGGING
+#include "amdinfer/core/data_types.hpp"         // for DataType, DataType::Bytes
+#include "amdinfer/core/inference_request.hpp"  // for InferenceRequest
 #include "amdinfer/core/inference_response.hpp"  // for InferenceResponse
 #include "amdinfer/core/parameters.hpp"          // for ParameterMap
 #include "amdinfer/declarations.hpp"         // for BufferPtrs, InferenceRe...
@@ -182,7 +182,7 @@ BatchPtr ResNet50Stream::doRun(Batch* batch,
 
       InferenceResponseOutput output;
       output.setName("key");
-      output.setDatatype(DataType::String);
+      output.setDatatype(DataType::Bytes);
       std::string metadata = "[" + std::to_string(video_width) + "," +
                              std::to_string(video_height) + "]";
       auto message = constructMessage(key, std::to_string(fps), metadata);
@@ -255,7 +255,7 @@ BatchPtr ResNet50Stream::doRun(Batch* batch,
 
             InferenceResponseOutput output;
             output.setName("image");
-            output.setDatatype(DataType::String);
+            output.setDatatype(DataType::Bytes);
             auto message = constructMessage(key, frames.front(), labels);
             std::vector<std::byte> buffer;
             buffer.resize(message.size());
@@ -294,7 +294,7 @@ BatchPtr ResNet50Stream::doRun(Batch* batch,
 
           InferenceResponseOutput output;
           output.setName("image");
-          output.setDatatype(DataType::String);
+          output.setDatatype(DataType::Bytes);
           auto message = constructMessage(key, frames.front(), labels);
           std::vector<std::byte> buffer;
           buffer.resize(message.size());

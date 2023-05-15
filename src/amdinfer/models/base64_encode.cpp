@@ -86,7 +86,7 @@ amdinfer::BatchPtr run(amdinfer::Batch* batch) {
     }
 
     new_request->addInputTensor(nullptr, {encoded_size},
-                                amdinfer::DataType::String, "output");
+                                amdinfer::DataType::Bytes, "output");
     encoded_images.emplace_back(std::move(encoded));
 
     new_batch->addRequest(new_request);

@@ -54,7 +54,7 @@ void test(const amdinfer::Client* client) {
 
   InferenceRequestInput input_0;
   input_0.setName("input0");
-  input_0.setDatatype(DataType::String);
+  input_0.setDatatype(DataType::Bytes);
   input_0.setShape({encoded_data.size()});
   input_0.setData(encoded_data.data());
 
@@ -68,7 +68,7 @@ void test(const amdinfer::Client* client) {
   const auto& output = outputs[0];
   const auto& output_shape = output.getShape();
   EXPECT_TRUE(output_shape.size() == 1);
-  EXPECT_EQ(output.getDatatype(), DataType::String);
+  EXPECT_EQ(output.getDatatype(), DataType::Bytes);
   const auto* data = static_cast<char*>(output.getData());
 
   auto decoded_data = util::base64Decode(data, output_shape.at(0));
