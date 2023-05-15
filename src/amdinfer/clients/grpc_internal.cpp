@@ -185,8 +185,13 @@ struct SetOutputData {
       std::memcpy(data.data(), (*contents)->data(), size * sizeof(T));
       output->setData(std::move(data));
     } else {
-      if constexpr (util::is_any_v<T, int8_t, uint8_t, int16_t, uint16_t,
-                                   fp16>) {
+      if constexpr (std::is_same_v<T, fp16>) {
+        for (auto i = 0U; i < size; ++i) {
+          auto datum = static_cast<fp16>(contents[i]);
+          std::memcpy(&(data[i * sizeof(T)]), &(datum), sizeof(T));
+        }
+      } else if constexpr (util::is_any_v<T, int8_t, uint8_t, int16_t,
+                                          uint16_t>) {
         for (auto i = 0U; i < size; ++i) {
           std::memcpy(&(data[i * sizeof(T)]), &(contents[i]), sizeof(T));
         }
