@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
@@ -24,24 +24,27 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
       <link rel="stylesheet" href="_static/twemoji.css" type="text/css" />
-      <link rel="stylesheet" href="_static/custom.css" type="text/css" />
       <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
+      <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+      <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="_static/jquery.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
         <script src="_static/clipboard.min.js"></script>
         <script src="_static/copybutton.js"></script>
         <script src="https://twemoji.maxcdn.com/v/latest/twemoji.min.js"></script>
         <script src="_static/twemoji.js"></script>
         <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
         <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
-        <script defer="defer" src="_static/tippy/python.d205aa14-78e0-4db6-aa54-53293b0fd5fc.js"></script>
+        <script defer="defer" src="_static/tippy/python.894c8988-e2c1-4080-a946-fd7bb4a1d1c1.js"></script>
+        <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+        <script src="_static/dataTables.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -193,6 +196,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l2"><a class="reference internal" href="deployment.html#development-image">Development image</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="client_api.html">Client API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="client_api.html#include-the-api">Include the API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_api.html#create-a-client-object">Create a client object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_api.html#server-status">Server status</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_api.html#loading-a-backend">Loading a backend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_api.html#making-an-inference-request">Making an inference request</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_api.html#parsing-the-response">Parsing the response</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_api.html#next-steps">Next steps</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="kserve.html">KServe</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="kserve.html#set-up-kubernetes-and-kserve">Set up Kubernetes and KServe</a></li>
 <li class="toctree-l2"><a class="reference internal" href="kserve.html#get-or-build-the-amd-inference-server-image">Get or build the AMD Inference Server Image</a></li>
@@ -219,6 +232,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="troubleshooting.html#use-the-latest-version">Use the latest version</a></li>
 <li class="toctree-l2"><a class="reference internal" href="troubleshooting.html#use-server-logs">Use server logs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="troubleshooting.html#build-errors">Build errors</a></li>
 </ul>
 </li>
 </ul>
@@ -452,47 +466,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l3"><a class="reference internal" href="#build-wheels">Build wheels</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#module-amdinfer">API</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#amdinfer.BadStatus"><code class="docutils literal notranslate"><span class="pre">BadStatus</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#amdinfer.Client"><code class="docutils literal notranslate"><span class="pre">Client</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#amdinfer.ConnectionError"><code class="docutils literal notranslate"><span class="pre">ConnectionError</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#amdinfer.DataType"><code class="docutils literal notranslate"><span class="pre">DataType</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#amdinfer.EnvironmentNotSetError"><code class="docutils literal notranslate"><span class="pre">EnvironmentNotSetError</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#amdinfer.ExternalError"><code class="docutils literal notranslate"><span class="pre">ExternalError</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#amdinfer.FileNotFoundError"><code class="docutils literal notranslate"><span class="pre">FileNotFoundError</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#amdinfer.FileReadError"><code class="docutils literal notranslate"><span class="pre">FileReadError</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#amdinfer.GrpcClient"><code class="docutils literal notranslate"><span class="pre">GrpcClient</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#amdinfer.HttpClient"><code class="docutils literal notranslate"><span class="pre">HttpClient</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#amdinfer.ImageInferenceRequest"><code class="docutils literal notranslate"><span class="pre">ImageInferenceRequest()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#amdinfer.InferenceRequest"><code class="docutils literal notranslate"><span class="pre">InferenceRequest</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#amdinfer.InferenceRequestInput"><code class="docutils literal notranslate"><span class="pre">InferenceRequestInput</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#amdinfer.InferenceRequestOutput"><code class="docutils literal notranslate"><span class="pre">InferenceRequestOutput</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#amdinfer.InferenceResponse"><code class="docutils literal notranslate"><span class="pre">InferenceResponse</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#amdinfer.InferenceResponseOutput"><code class="docutils literal notranslate"><span class="pre">InferenceResponseOutput</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#amdinfer.InferenceTensor"><code class="docutils literal notranslate"><span class="pre">InferenceTensor</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#amdinfer.InvalidArgumentError"><code class="docutils literal notranslate"><span class="pre">InvalidArgumentError</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#amdinfer.ModelMetadata"><code class="docutils literal notranslate"><span class="pre">ModelMetadata</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#amdinfer.NativeClient"><code class="docutils literal notranslate"><span class="pre">NativeClient</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#amdinfer.ParameterMap"><code class="docutils literal notranslate"><span class="pre">ParameterMap</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#amdinfer.RuntimeError"><code class="docutils literal notranslate"><span class="pre">RuntimeError</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#amdinfer.Server"><code class="docutils literal notranslate"><span class="pre">Server</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#amdinfer.ServerMetadata"><code class="docutils literal notranslate"><span class="pre">ServerMetadata</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#amdinfer.Tensor"><code class="docutils literal notranslate"><span class="pre">Tensor</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#amdinfer.WebSocketClient"><code class="docutils literal notranslate"><span class="pre">WebSocketClient</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#amdinfer.inferAsyncOrdered"><code class="docutils literal notranslate"><span class="pre">inferAsyncOrdered()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#amdinfer.inferAsyncOrderedBatched"><code class="docutils literal notranslate"><span class="pre">inferAsyncOrderedBatched()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#amdinfer.inference_request_to_dict"><code class="docutils literal notranslate"><span class="pre">inference_request_to_dict()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#amdinfer.loadEnsemble"><code class="docutils literal notranslate"><span class="pre">loadEnsemble()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#amdinfer.parallel_infer"><code class="docutils literal notranslate"><span class="pre">parallel_infer()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#amdinfer.serverHasExtension"><code class="docutils literal notranslate"><span class="pre">serverHasExtension()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#amdinfer.start_http_client_server"><code class="docutils literal notranslate"><span class="pre">start_http_client_server()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#amdinfer.stringToArray"><code class="docutils literal notranslate"><span class="pre">stringToArray()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#amdinfer.unloadModels"><code class="docutils literal notranslate"><span class="pre">unloadModels()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#amdinfer.waitUntilModelNotReady"><code class="docutils literal notranslate"><span class="pre">waitUntilModelNotReady()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#amdinfer.waitUntilModelReady"><code class="docutils literal notranslate"><span class="pre">waitUntilModelReady()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#amdinfer.waitUntilServerReady"><code class="docutils literal notranslate"><span class="pre">waitUntilServerReady()</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-amdinfer">API</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="rest.html">REST Endpoints</a></li>
@@ -523,10 +497,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
            <div itemprop="articleBody">
              
   <section id="python">
-<h1>Python<a class="headerlink" href="#python" title="Permalink to this heading">¶</a></h1>
+<h1>Python<a class="headerlink" href="#python" title="Permalink to this headline">¶</a></h1>
 <p>The Python library for the AMD Inference Server allows you to communicate with the server using Python.</p>
 <section id="install-the-python-library">
-<h2>Install the Python library<a class="headerlink" href="#install-the-python-library" title="Permalink to this heading">¶</a></h2>
+<h2>Install the Python library<a class="headerlink" href="#install-the-python-library" title="Permalink to this headline">¶</a></h2>
 <p>The Python library is built and installed in the development container as part of the regular CMake build.
 To install it outside Docker or in different containers, you can use <code class="docutils literal notranslate"><span class="pre">pip</span></code>:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pip<span class="w"> </span>install<span class="w"> </span>amdinfer
@@ -538,7 +512,7 @@ To install it outside Docker or in different containers, you can use <code class
 If you are using the latest server from <code class="docutils literal notranslate"><span class="pre">main</span></code>, you may need to install the Python library with <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">--pre</span> <span class="pre">amdinfer</span></code> to install a pre-release package, if it exists.</p>
 </div>
 <section id="build-wheels">
-<h3>Build wheels<a class="headerlink" href="#build-wheels" title="Permalink to this heading">¶</a></h3>
+<h3>Build wheels<a class="headerlink" href="#build-wheels" title="Permalink to this headline">¶</a></h3>
 <p>You can build wheels for the Python library to make a precompiled package that can be installed in any Linux host, container or environment.
 It is recommended to perform the following steps on a fresh clone of the inference server repository.
 These instructions assume you’re only building wheels for x86_64 Linux with CPython.</p>
@@ -575,7 +549,7 @@ You can install these wheels in a virtual environment, Conda environment, a cont
 </section>
 </section>
 <section id="module-amdinfer">
-<span id="api"></span><h2>API<a class="headerlink" href="#module-amdinfer" title="Permalink to this heading">¶</a></h2>
+<span id="api"></span><span id="python-api"></span><h2>API<a class="headerlink" href="#module-amdinfer" title="Permalink to this headline">¶</a></h2>
 <dl class="py exception">
 <dt class="sig sig-object py" id="amdinfer.BadStatus">
 <em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">amdinfer.</span></span><span class="sig-name descname"><span class="pre">BadStatus</span></span><a class="headerlink" href="#amdinfer.BadStatus" title="Permalink to this definition">¶</a></dt>
@@ -602,6 +576,11 @@ You can install these wheels in a virtual environment, Conda environment, a cont
 <dd><dl class="py attribute">
 <dt class="sig sig-object py" id="amdinfer.DataType.BOOL">
 <span class="sig-name descname"><span class="pre">BOOL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">DataType(BOOL)</span> </em><a class="headerlink" href="#amdinfer.DataType.BOOL" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="amdinfer.DataType.BYTES">
+<span class="sig-name descname"><span class="pre">BYTES</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">DataType(BYTES)</span> </em><a class="headerlink" href="#amdinfer.DataType.BYTES" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -650,11 +629,6 @@ You can install these wheels in a virtual environment, Conda environment, a cont
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="amdinfer.DataType.STRING">
-<span class="sig-name descname"><span class="pre">STRING</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">DataType(STRING)</span> </em><a class="headerlink" href="#amdinfer.DataType.STRING" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
 <dt class="sig sig-object py" id="amdinfer.DataType.UINT16">
 <span class="sig-name descname"><span class="pre">UINT16</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">DataType(UINT16)</span> </em><a class="headerlink" href="#amdinfer.DataType.UINT16" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -692,10 +666,15 @@ You can install these wheels in a virtual environment, Conda environment, a cont
 <p>FLOAT32</p>
 <p>FP64</p>
 <p>FLOAT64</p>
-<p>STRING</p>
+<p>BYTES</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="amdinfer.DataType.Value.BOOL">
 <span class="sig-name descname"><span class="pre">BOOL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Value.BOOL:</span> <span class="pre">0&gt;</span></em><a class="headerlink" href="#amdinfer.DataType.Value.BOOL" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="amdinfer.DataType.Value.BYTES">
+<span class="sig-name descname"><span class="pre">BYTES</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Value.BYTES:</span> <span class="pre">12&gt;</span></em><a class="headerlink" href="#amdinfer.DataType.Value.BYTES" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -741,11 +720,6 @@ You can install these wheels in a virtual environment, Conda environment, a cont
 <dl class="py attribute">
 <dt class="sig sig-object py" id="amdinfer.DataType.Value.INT8">
 <span class="sig-name descname"><span class="pre">INT8</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Value.INT8:</span> <span class="pre">5&gt;</span></em><a class="headerlink" href="#amdinfer.DataType.Value.INT8" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="amdinfer.DataType.Value.STRING">
-<span class="sig-name descname"><span class="pre">STRING</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Value.STRING:</span> <span class="pre">12&gt;</span></em><a class="headerlink" href="#amdinfer.DataType.Value.STRING" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -854,7 +828,7 @@ device</p>
 </dd>
 </dl>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>bool - true if server has at least the requested number of the
 hardware device, false otherwise</p>
 </dd>
@@ -874,7 +848,7 @@ is for.</p>
 </dd>
 </dl>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>InferenceResponse</p>
 </dd>
 </dl>
@@ -885,7 +859,7 @@ is for.</p>
 <span class="sig-name descname"><span class="pre">modelList</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.GrpcClient" title="amdinfer.GrpcClient"><span class="pre">amdinfer.GrpcClient</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#amdinfer.GrpcClient.modelList" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets a list of active models on the server, returning their names</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>std::vector&lt;std::string&gt;</p>
 </dd>
 </dl>
@@ -916,7 +890,7 @@ its metadata in the right format.</p>
 </dd>
 </dl>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>ModelMetadata</p>
 </dd>
 </dl>
@@ -931,7 +905,7 @@ its metadata in the right format.</p>
 </dd>
 </dl>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>bool - true if model is ready, false otherwise</p>
 </dd>
 </dl>
@@ -953,7 +927,7 @@ in functionality to workerUnload and is provided for symmetry.</p>
 <span class="sig-name descname"><span class="pre">serverLive</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.GrpcClient" title="amdinfer.GrpcClient"><span class="pre">amdinfer.GrpcClient</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#amdinfer.GrpcClient.serverLive" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the server is live</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>bool - true if server is live, false otherwise</p>
 </dd>
 </dl>
@@ -964,7 +938,7 @@ in functionality to workerUnload and is provided for symmetry.</p>
 <span class="sig-name descname"><span class="pre">serverMetadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.GrpcClient" title="amdinfer.GrpcClient"><span class="pre">amdinfer.GrpcClient</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#amdinfer.ServerMetadata" title="amdinfer.ServerMetadata"><span class="pre">amdinfer.ServerMetadata</span></a></span></span><a class="headerlink" href="#amdinfer.GrpcClient.serverMetadata" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the server metadata as a ServerMetadata object</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>ServerMetadata</p>
 </dd>
 </dl>
@@ -975,7 +949,7 @@ in functionality to workerUnload and is provided for symmetry.</p>
 <span class="sig-name descname"><span class="pre">serverReady</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.GrpcClient" title="amdinfer.GrpcClient"><span class="pre">amdinfer.GrpcClient</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#amdinfer.GrpcClient.serverReady" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the server is ready</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>bool - true if server is ready, false otherwise</p>
 </dd>
 </dl>
@@ -993,7 +967,7 @@ in functionality to workerUnload and is provided for symmetry.</p>
 </dd>
 </dl>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>std::string</p>
 </dd>
 </dl>
@@ -1037,7 +1011,7 @@ device</p>
 </dd>
 </dl>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>bool - true if server has at least the requested number of the
 hardware device, false otherwise</p>
 </dd>
@@ -1057,7 +1031,7 @@ is for.</p>
 </dd>
 </dl>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>InferenceResponse</p>
 </dd>
 </dl>
@@ -1068,7 +1042,7 @@ is for.</p>
 <span class="sig-name descname"><span class="pre">modelList</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.HttpClient" title="amdinfer.HttpClient"><span class="pre">amdinfer.HttpClient</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#amdinfer.HttpClient.modelList" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets a list of active models on the server, returning their names</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>std::vector&lt;std::string&gt;</p>
 </dd>
 </dl>
@@ -1099,7 +1073,7 @@ its metadata in the right format.</p>
 </dd>
 </dl>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>ModelMetadata</p>
 </dd>
 </dl>
@@ -1114,7 +1088,7 @@ its metadata in the right format.</p>
 </dd>
 </dl>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>bool - true if model is ready, false otherwise</p>
 </dd>
 </dl>
@@ -1136,7 +1110,7 @@ in functionality to workerUnload and is provided for symmetry.</p>
 <span class="sig-name descname"><span class="pre">serverLive</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.HttpClient" title="amdinfer.HttpClient"><span class="pre">amdinfer.HttpClient</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#amdinfer.HttpClient.serverLive" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the server is live</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>bool - true if server is live, false otherwise</p>
 </dd>
 </dl>
@@ -1147,7 +1121,7 @@ in functionality to workerUnload and is provided for symmetry.</p>
 <span class="sig-name descname"><span class="pre">serverMetadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.HttpClient" title="amdinfer.HttpClient"><span class="pre">amdinfer.HttpClient</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#amdinfer.ServerMetadata" title="amdinfer.ServerMetadata"><span class="pre">amdinfer.ServerMetadata</span></a></span></span><a class="headerlink" href="#amdinfer.HttpClient.serverMetadata" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the server metadata as a ServerMetadata object</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>ServerMetadata</p>
 </dd>
 </dl>
@@ -1158,7 +1132,7 @@ in functionality to workerUnload and is provided for symmetry.</p>
 <span class="sig-name descname"><span class="pre">serverReady</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.HttpClient" title="amdinfer.HttpClient"><span class="pre">amdinfer.HttpClient</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#amdinfer.HttpClient.serverReady" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the server is ready</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>bool - true if server is ready, false otherwise</p>
 </dd>
 </dl>
@@ -1176,7 +1150,7 @@ in functionality to workerUnload and is provided for symmetry.</p>
 </dd>
 </dl>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>std::string</p>
 </dd>
 </dl>
@@ -1200,19 +1174,19 @@ in functionality to modelUnload and is provided for symmetry.</p>
 <span class="sig-prename descclassname"><span class="pre">amdinfer.</span></span><span class="sig-name descname"><span class="pre">ImageInferenceRequest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">images</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">asTensor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#amdinfer.ImageInferenceRequest" title="Permalink to this definition">¶</a></dt>
 <dd><p>Construct a request from an image or list of images</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>images</strong> (<em>image</em>) – Images may be numpy arrays or filepaths or a list of these</p></li>
 <li><p><strong>asTensor</strong> (<em>bool</em><em>, </em><em>optional</em>) – Send data as a tensor or as base64-encoded string. Defaults to True.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dt class="field-even">Raises</dt>
 <dd class="field-even"><p><strong>TypeError</strong> – Raised if an unknown image format is passed</p>
 </dd>
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>Request object</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><a class="reference internal" href="#amdinfer.InferenceRequest" title="amdinfer.InferenceRequest">InferenceRequest</a></p>
 </dd>
 </dl>
@@ -1494,11 +1468,6 @@ in functionality to modelUnload and is provided for symmetry.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="amdinfer.InferenceResponse.getContext">
-<span class="sig-name descname"><span class="pre">getContext</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.InferenceResponse" title="amdinfer.InferenceResponse"><span class="pre">amdinfer.InferenceResponse</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#amdinfer.InferenceResponse.getContext" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.InferenceResponse.getError">
 <span class="sig-name descname"><span class="pre">getError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.InferenceResponse" title="amdinfer.InferenceResponse"><span class="pre">amdinfer.InferenceResponse</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#amdinfer.InferenceResponse.getError" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the error message if it exists. Defaults to an empty string</p>
@@ -1530,11 +1499,6 @@ in functionality to modelUnload and is provided for symmetry.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="amdinfer.InferenceResponse.model">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">model</span></span><a class="headerlink" href="#amdinfer.InferenceResponse.model" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="amdinfer.InferenceResponse.setContext">
-<span class="sig-name descname"><span class="pre">setContext</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.InferenceResponse" title="amdinfer.InferenceResponse"><span class="pre">amdinfer.InferenceResponse</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.InferenceResponse.setContext" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -1812,7 +1776,7 @@ device</p>
 </dd>
 </dl>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>bool - true if server has at least the requested number of the
 hardware device, false otherwise</p>
 </dd>
@@ -1832,7 +1796,7 @@ is for.</p>
 </dd>
 </dl>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>InferenceResponse</p>
 </dd>
 </dl>
@@ -1843,7 +1807,7 @@ is for.</p>
 <span class="sig-name descname"><span class="pre">modelList</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.NativeClient" title="amdinfer.NativeClient"><span class="pre">amdinfer.NativeClient</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#amdinfer.NativeClient.modelList" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets a list of active models on the server, returning their names</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>std::vector&lt;std::string&gt;</p>
 </dd>
 </dl>
@@ -1874,7 +1838,7 @@ its metadata in the right format.</p>
 </dd>
 </dl>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>ModelMetadata</p>
 </dd>
 </dl>
@@ -1889,7 +1853,7 @@ its metadata in the right format.</p>
 </dd>
 </dl>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>bool - true if model is ready, false otherwise</p>
 </dd>
 </dl>
@@ -1911,7 +1875,7 @@ in functionality to workerUnload and is provided for symmetry.</p>
 <span class="sig-name descname"><span class="pre">serverLive</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.NativeClient" title="amdinfer.NativeClient"><span class="pre">amdinfer.NativeClient</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#amdinfer.NativeClient.serverLive" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the server is live</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>bool - true if server is live, false otherwise</p>
 </dd>
 </dl>
@@ -1922,7 +1886,7 @@ in functionality to workerUnload and is provided for symmetry.</p>
 <span class="sig-name descname"><span class="pre">serverMetadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.NativeClient" title="amdinfer.NativeClient"><span class="pre">amdinfer.NativeClient</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#amdinfer.ServerMetadata" title="amdinfer.ServerMetadata"><span class="pre">amdinfer.ServerMetadata</span></a></span></span><a class="headerlink" href="#amdinfer.NativeClient.serverMetadata" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the server metadata as a ServerMetadata object</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>ServerMetadata</p>
 </dd>
 </dl>
@@ -1933,7 +1897,7 @@ in functionality to workerUnload and is provided for symmetry.</p>
 <span class="sig-name descname"><span class="pre">serverReady</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.NativeClient" title="amdinfer.NativeClient"><span class="pre">amdinfer.NativeClient</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#amdinfer.NativeClient.serverReady" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the server is ready</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>bool - true if server is ready, false otherwise</p>
 </dd>
 </dl>
@@ -1951,7 +1915,7 @@ in functionality to workerUnload and is provided for symmetry.</p>
 </dd>
 </dl>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>std::string</p>
 </dd>
 </dl>
@@ -2020,7 +1984,7 @@ exist</p>
 </dd>
 </dl>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>T</p>
 </dd>
 </dl>
@@ -2037,7 +2001,7 @@ exist</p>
 </dd>
 </dl>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>T</p>
 </dd>
 </dl>
@@ -2054,7 +2018,7 @@ exist</p>
 </dd>
 </dl>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>T</p>
 </dd>
 </dl>
@@ -2071,7 +2035,7 @@ exist</p>
 </dd>
 </dl>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>T</p>
 </dd>
 </dl>
@@ -2086,7 +2050,7 @@ exist</p>
 </dd>
 </dl>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>bool</p>
 </dd>
 </dl>
@@ -2295,7 +2259,7 @@ device</p>
 </dd>
 </dl>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>bool - true if server has at least the requested number of the
 hardware device, false otherwise</p>
 </dd>
@@ -2315,7 +2279,7 @@ is for.</p>
 </dd>
 </dl>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>InferenceResponse</p>
 </dd>
 </dl>
@@ -2341,7 +2305,7 @@ side using the IDs of the responses.</p>
 <span class="sig-name descname"><span class="pre">modelList</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.WebSocketClient" title="amdinfer.WebSocketClient"><span class="pre">amdinfer.WebSocketClient</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#amdinfer.WebSocketClient.modelList" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets a list of active models on the server, returning their names</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>std::vector&lt;std::string&gt;</p>
 </dd>
 </dl>
@@ -2372,7 +2336,7 @@ its metadata in the right format.</p>
 </dd>
 </dl>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>ModelMetadata</p>
 </dd>
 </dl>
@@ -2387,7 +2351,7 @@ its metadata in the right format.</p>
 </dd>
 </dl>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>bool - true if model is ready, false otherwise</p>
 </dd>
 </dl>
@@ -2401,7 +2365,7 @@ modelInferWs request. The user should know beforehand how many
 messages are expected and should call this method the same number of
 times.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>std::string a JSON object encoded as a string</p>
 </dd>
 </dl>
@@ -2423,7 +2387,7 @@ in functionality to workerUnload and is provided for symmetry.</p>
 <span class="sig-name descname"><span class="pre">serverLive</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.WebSocketClient" title="amdinfer.WebSocketClient"><span class="pre">amdinfer.WebSocketClient</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#amdinfer.WebSocketClient.serverLive" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the server is live</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>bool - true if server is live, false otherwise</p>
 </dd>
 </dl>
@@ -2434,7 +2398,7 @@ in functionality to workerUnload and is provided for symmetry.</p>
 <span class="sig-name descname"><span class="pre">serverMetadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.WebSocketClient" title="amdinfer.WebSocketClient"><span class="pre">amdinfer.WebSocketClient</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#amdinfer.ServerMetadata" title="amdinfer.ServerMetadata"><span class="pre">amdinfer.ServerMetadata</span></a></span></span><a class="headerlink" href="#amdinfer.WebSocketClient.serverMetadata" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the server metadata as a ServerMetadata object</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>ServerMetadata</p>
 </dd>
 </dl>
@@ -2445,7 +2409,7 @@ in functionality to workerUnload and is provided for symmetry.</p>
 <span class="sig-name descname"><span class="pre">serverReady</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.WebSocketClient" title="amdinfer.WebSocketClient"><span class="pre">amdinfer.WebSocketClient</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#amdinfer.WebSocketClient.serverReady" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the server is ready</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>bool - true if server is ready, false otherwise</p>
 </dd>
 </dl>
@@ -2463,7 +2427,7 @@ in functionality to workerUnload and is provided for symmetry.</p>
 </dd>
 </dl>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>std::string</p>
 </dd>
 </dl>
@@ -2494,7 +2458,7 @@ in functionality to modelUnload and is provided for symmetry.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="amdinfer.inference_request_to_dict">
-<span class="sig-prename descclassname"><span class="pre">amdinfer.</span></span><span class="sig-name descname"><span class="pre">inference_request_to_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.InferenceRequest" title="amdinfer.InferenceRequest"><span class="pre">InferenceRequest</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#amdinfer.inference_request_to_dict" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">amdinfer.</span></span><span class="sig-name descname"><span class="pre">inference_request_to_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.InferenceRequest" title="amdinfer.InferenceRequest"><span class="pre">amdinfer.InferenceRequest</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#amdinfer.inference_request_to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
@@ -2507,7 +2471,7 @@ in functionality to modelUnload and is provided for symmetry.</p>
 <span class="sig-prename descclassname"><span class="pre">amdinfer.</span></span><span class="sig-name descname"><span class="pre">parallel_infer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">processes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#amdinfer.parallel_infer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Make an inference to the server in parallel with n processes</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>client</strong> (<em>amdinfer.client</em>) – Client to make the inference with</p></li>
 <li><p><strong>model</strong> (<em>str</em>) – Name of the model/worker to make the inference</p></li>
@@ -2515,10 +2479,10 @@ in functionality to modelUnload and is provided for symmetry.</p>
 <li><p><strong>processes</strong> (<em>int</em>) – number of processes to use</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Responses for each request</p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>list[<a class="reference internal" href="#amdinfer.InferenceResponse" title="amdinfer.InferenceResponse">amdinfer.InferenceResponse</a>]</p>
 </dd>
 </dl>
@@ -2584,7 +2548,7 @@ in functionality to modelUnload and is provided for symmetry.</p>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on April 20, 2023.
+      <span class="lastupdated">Last updated on May 15, 2023.
       </span></p>
   </div>
 

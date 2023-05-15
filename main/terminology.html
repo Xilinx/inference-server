@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
@@ -24,24 +24,27 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
       <link rel="stylesheet" href="_static/twemoji.css" type="text/css" />
-      <link rel="stylesheet" href="_static/custom.css" type="text/css" />
       <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
+      <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+      <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="_static/jquery.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
         <script src="_static/clipboard.min.js"></script>
         <script src="_static/copybutton.js"></script>
         <script src="https://twemoji.maxcdn.com/v/latest/twemoji.min.js"></script>
         <script src="_static/twemoji.js"></script>
         <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
         <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
-        <script defer="defer" src="_static/tippy/terminology.4f59f3d3-7931-486e-8fec-8843fec2ab1a.js"></script>
+        <script defer="defer" src="_static/tippy/terminology.1c4efaa9-9f99-4172-a5c0-fd316a3c0d7c.js"></script>
+        <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+        <script src="_static/dataTables.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -193,6 +196,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l2"><a class="reference internal" href="deployment.html#development-image">Development image</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="client_api.html">Client API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="client_api.html#include-the-api">Include the API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_api.html#create-a-client-object">Create a client object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_api.html#server-status">Server status</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_api.html#loading-a-backend">Loading a backend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_api.html#making-an-inference-request">Making an inference request</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_api.html#parsing-the-response">Parsing the response</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_api.html#next-steps">Next steps</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="kserve.html">KServe</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="kserve.html#set-up-kubernetes-and-kserve">Set up Kubernetes and KServe</a></li>
 <li class="toctree-l2"><a class="reference internal" href="kserve.html#get-or-build-the-amd-inference-server-image">Get or build the AMD Inference Server Image</a></li>
@@ -219,6 +232,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="troubleshooting.html#use-the-latest-version">Use the latest version</a></li>
 <li class="toctree-l2"><a class="reference internal" href="troubleshooting.html#use-server-logs">Use server logs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="troubleshooting.html#build-errors">Build errors</a></li>
 </ul>
 </li>
 </ul>
@@ -452,47 +466,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l3"><a class="reference internal" href="python.html#build-wheels">Build wheels</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="python.html#module-amdinfer">API</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.BadStatus"><code class="docutils literal notranslate"><span class="pre">BadStatus</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.Client"><code class="docutils literal notranslate"><span class="pre">Client</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.ConnectionError"><code class="docutils literal notranslate"><span class="pre">ConnectionError</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.DataType"><code class="docutils literal notranslate"><span class="pre">DataType</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.EnvironmentNotSetError"><code class="docutils literal notranslate"><span class="pre">EnvironmentNotSetError</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.ExternalError"><code class="docutils literal notranslate"><span class="pre">ExternalError</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.FileNotFoundError"><code class="docutils literal notranslate"><span class="pre">FileNotFoundError</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.FileReadError"><code class="docutils literal notranslate"><span class="pre">FileReadError</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.GrpcClient"><code class="docutils literal notranslate"><span class="pre">GrpcClient</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.HttpClient"><code class="docutils literal notranslate"><span class="pre">HttpClient</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.ImageInferenceRequest"><code class="docutils literal notranslate"><span class="pre">ImageInferenceRequest()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.InferenceRequest"><code class="docutils literal notranslate"><span class="pre">InferenceRequest</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.InferenceRequestInput"><code class="docutils literal notranslate"><span class="pre">InferenceRequestInput</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.InferenceRequestOutput"><code class="docutils literal notranslate"><span class="pre">InferenceRequestOutput</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.InferenceResponse"><code class="docutils literal notranslate"><span class="pre">InferenceResponse</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.InferenceResponseOutput"><code class="docutils literal notranslate"><span class="pre">InferenceResponseOutput</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.InferenceTensor"><code class="docutils literal notranslate"><span class="pre">InferenceTensor</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.InvalidArgumentError"><code class="docutils literal notranslate"><span class="pre">InvalidArgumentError</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.ModelMetadata"><code class="docutils literal notranslate"><span class="pre">ModelMetadata</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.NativeClient"><code class="docutils literal notranslate"><span class="pre">NativeClient</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.ParameterMap"><code class="docutils literal notranslate"><span class="pre">ParameterMap</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.RuntimeError"><code class="docutils literal notranslate"><span class="pre">RuntimeError</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.Server"><code class="docutils literal notranslate"><span class="pre">Server</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.ServerMetadata"><code class="docutils literal notranslate"><span class="pre">ServerMetadata</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.Tensor"><code class="docutils literal notranslate"><span class="pre">Tensor</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.WebSocketClient"><code class="docutils literal notranslate"><span class="pre">WebSocketClient</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.inferAsyncOrdered"><code class="docutils literal notranslate"><span class="pre">inferAsyncOrdered()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.inferAsyncOrderedBatched"><code class="docutils literal notranslate"><span class="pre">inferAsyncOrderedBatched()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.inference_request_to_dict"><code class="docutils literal notranslate"><span class="pre">inference_request_to_dict()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.loadEnsemble"><code class="docutils literal notranslate"><span class="pre">loadEnsemble()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.parallel_infer"><code class="docutils literal notranslate"><span class="pre">parallel_infer()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.serverHasExtension"><code class="docutils literal notranslate"><span class="pre">serverHasExtension()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.start_http_client_server"><code class="docutils literal notranslate"><span class="pre">start_http_client_server()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.stringToArray"><code class="docutils literal notranslate"><span class="pre">stringToArray()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.unloadModels"><code class="docutils literal notranslate"><span class="pre">unloadModels()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.waitUntilModelNotReady"><code class="docutils literal notranslate"><span class="pre">waitUntilModelNotReady()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.waitUntilModelReady"><code class="docutils literal notranslate"><span class="pre">waitUntilModelReady()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.waitUntilServerReady"><code class="docutils literal notranslate"><span class="pre">waitUntilServerReady()</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="python.html#module-amdinfer">API</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="rest.html">REST Endpoints</a></li>
@@ -523,10 +497,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
            <div itemprop="articleBody">
              
   <section id="terminology">
-<h1>Terminology<a class="headerlink" href="#terminology" title="Permalink to this heading">¶</a></h1>
+<h1>Terminology<a class="headerlink" href="#terminology" title="Permalink to this headline">¶</a></h1>
 <p>This page presents some important terminology to frame the rest of the documentation.</p>
 <section id="amdinfer">
-<h2>amdinfer<a class="headerlink" href="#amdinfer" title="Permalink to this heading">¶</a></h2>
+<h2>amdinfer<a class="headerlink" href="#amdinfer" title="Permalink to this headline">¶</a></h2>
 <p>Depending on the context, <em>amdinfer</em> can be used to refer to different things.
 If the usage is ambiguous, it will be qualified with the appropriate word to clarify the meaning:</p>
 <ul class="simple">
@@ -536,10 +510,10 @@ If the usage is ambiguous, it will be qualified with the appropriate word to cla
 </ul>
 </section>
 <section id="types-of-docker-images">
-<h2>Types of Docker images<a class="headerlink" href="#types-of-docker-images" title="Permalink to this heading">¶</a></h2>
+<h2>Types of Docker images<a class="headerlink" href="#types-of-docker-images" title="Permalink to this headline">¶</a></h2>
 <p>There are two types of Docker images that are used in this project: <em>development</em> and <em>deployment</em>.</p>
 <section id="development">
-<span id="terminology-development"></span><h3>Development<a class="headerlink" href="#development" title="Permalink to this heading">¶</a></h3>
+<span id="terminology-development"></span><h3>Development<a class="headerlink" href="#development" title="Permalink to this headline">¶</a></h3>
 <p>Development images contain both the build-time and run-time dependencies of the server executable.
 They also contains other tools such as linting tools to help the development process.
 These images are used to compile and test the server executable using the tests in the repository.
@@ -549,7 +523,7 @@ Instead, the standard workflow to use development images is to clone the inferen
 Under the standard naming convention used by the <em>amdinfer</em> script during the build, this image will be tagged as <code class="docutils literal notranslate"><span class="pre">$(whoami)/amdinfer-dev:latest</span></code>.</p>
 </section>
 <section id="deployment">
-<span id="terminology-deployment"></span><h3>Deployment<a class="headerlink" href="#deployment" title="Permalink to this heading">¶</a></h3>
+<span id="terminology-deployment"></span><h3>Deployment<a class="headerlink" href="#deployment" title="Permalink to this headline">¶</a></h3>
 <p>Deployment images contain only the the compiled server executable and its run-time dependencies.
 They are optimized for size and used to deploy the server locally, on Kubernetes or on KServe.
 By default, as deployment images start, they start the server executable automatically with the default arguments.
@@ -559,12 +533,12 @@ Under the standard naming convention used by the <em>amdinfer</em> script during
 </section>
 </section>
 <section id="types-of-users">
-<h2>Types of users<a class="headerlink" href="#types-of-users" title="Permalink to this heading">¶</a></h2>
+<h2>Types of users<a class="headerlink" href="#types-of-users" title="Permalink to this headline">¶</a></h2>
 <p>Different <em>users</em> of the AMD Inference Server have different needs.
 There are three overlapping sets of users for the inference server: <em>clients</em>, <em>administrators</em> and <em>developers</em>.
 Where appropriate, the documentation will note the intended audience of the content.</p>
 <section id="clients">
-<h3>Clients<a class="headerlink" href="#clients" title="Permalink to this heading">¶</a></h3>
+<h3>Clients<a class="headerlink" href="#clients" title="Permalink to this headline">¶</a></h3>
 <p>Clients interact with the server using its APIs to send it inference requests.
 The server also provides additional methods to check its status or that of the running models that clients can use.
 Clients can talk to the server over any of the protocols that the server exposes for communication such as HTTP/REST or gRPC.
@@ -572,7 +546,7 @@ Using the server’s C++ API, clients can write custom applications that use the
 The easiest way for clients to communicate to the server is using one of the provided client libraries but they can also use the supported protocols directly.</p>
 </section>
 <section id="administrators">
-<h3>Administrators<a class="headerlink" href="#administrators" title="Permalink to this heading">¶</a></h3>
+<h3>Administrators<a class="headerlink" href="#administrators" title="Permalink to this headline">¶</a></h3>
 <p>Administrators <em>deploy</em> the server by making it available to respond to inference requests from clients.
 They must configure which protocols the server will use, which models are active and how they are configured, and where the server will run.
 The AMD Inference Server is deployed with a deployment container running on a host machine with Docker.
@@ -583,7 +557,7 @@ Backends define how to execute a model.
 For example, the MIGraphX backend uses the MIGraphX library to execute ONNX models on AMD GPUs and it is only usable if the host machine has compatible GPUs.</p>
 </section>
 <section id="developers">
-<h3>Developers<a class="headerlink" href="#developers" title="Permalink to this heading">¶</a></h3>
+<h3>Developers<a class="headerlink" href="#developers" title="Permalink to this headline">¶</a></h3>
 <p>Developers tinker with the server executable itself by compiling it from source.
 Building the server from source requires using a development container.
 In the development container, developers can build the server executable and run tests using the executable directly.
@@ -615,7 +589,7 @@ After testing, developers build the deployment images containing the server exec
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on April 20, 2023.
+      <span class="lastupdated">Last updated on May 15, 2023.
       </span></p>
   </div>
 

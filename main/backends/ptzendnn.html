@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
@@ -24,17 +24,18 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
       <link rel="stylesheet" href="../_static/twemoji.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
       <link rel="stylesheet" href="../_static/tabs.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+      <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
-        <script src="../_static/sphinx_highlight.js"></script>
         <script src="../_static/clipboard.min.js"></script>
         <script src="../_static/copybutton.js"></script>
         <script src="https://twemoji.maxcdn.com/v/latest/twemoji.min.js"></script>
@@ -42,7 +43,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <script src="../_static/tabs.js"></script>
         <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
         <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
-        <script defer="defer" src="../_static/tippy/backends/ptzendnn.aec828a0-14e1-4f33-b3ee-30f968d1e217.js"></script>
+        <script defer="defer" src="../_static/tippy/backends/ptzendnn.d6713868-f7c1-4a9e-8475-e51ca53650a6.js"></script>
+        <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+        <script src="../_static/dataTables.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -194,6 +197,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l2"><a class="reference internal" href="../deployment.html#development-image">Development image</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../client_api.html">Client API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../client_api.html#include-the-api">Include the API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client_api.html#create-a-client-object">Create a client object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client_api.html#server-status">Server status</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client_api.html#loading-a-backend">Loading a backend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client_api.html#making-an-inference-request">Making an inference request</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client_api.html#parsing-the-response">Parsing the response</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client_api.html#next-steps">Next steps</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../kserve.html">KServe</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../kserve.html#set-up-kubernetes-and-kserve">Set up Kubernetes and KServe</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../kserve.html#get-or-build-the-amd-inference-server-image">Get or build the AMD Inference Server Image</a></li>
@@ -220,6 +233,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l1"><a class="reference internal" href="../troubleshooting.html">Troubleshooting</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../troubleshooting.html#use-the-latest-version">Use the latest version</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../troubleshooting.html#use-server-logs">Use server logs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../troubleshooting.html#build-errors">Build errors</a></li>
 </ul>
 </li>
 </ul>
@@ -453,47 +467,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l3"><a class="reference internal" href="../python.html#build-wheels">Build wheels</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../python.html#module-amdinfer">API</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.BadStatus"><code class="docutils literal notranslate"><span class="pre">BadStatus</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.Client"><code class="docutils literal notranslate"><span class="pre">Client</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.ConnectionError"><code class="docutils literal notranslate"><span class="pre">ConnectionError</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.DataType"><code class="docutils literal notranslate"><span class="pre">DataType</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.EnvironmentNotSetError"><code class="docutils literal notranslate"><span class="pre">EnvironmentNotSetError</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.ExternalError"><code class="docutils literal notranslate"><span class="pre">ExternalError</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.FileNotFoundError"><code class="docutils literal notranslate"><span class="pre">FileNotFoundError</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.FileReadError"><code class="docutils literal notranslate"><span class="pre">FileReadError</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.GrpcClient"><code class="docutils literal notranslate"><span class="pre">GrpcClient</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.HttpClient"><code class="docutils literal notranslate"><span class="pre">HttpClient</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.ImageInferenceRequest"><code class="docutils literal notranslate"><span class="pre">ImageInferenceRequest()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.InferenceRequest"><code class="docutils literal notranslate"><span class="pre">InferenceRequest</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.InferenceRequestInput"><code class="docutils literal notranslate"><span class="pre">InferenceRequestInput</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.InferenceRequestOutput"><code class="docutils literal notranslate"><span class="pre">InferenceRequestOutput</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.InferenceResponse"><code class="docutils literal notranslate"><span class="pre">InferenceResponse</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.InferenceResponseOutput"><code class="docutils literal notranslate"><span class="pre">InferenceResponseOutput</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.InferenceTensor"><code class="docutils literal notranslate"><span class="pre">InferenceTensor</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.InvalidArgumentError"><code class="docutils literal notranslate"><span class="pre">InvalidArgumentError</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.ModelMetadata"><code class="docutils literal notranslate"><span class="pre">ModelMetadata</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.NativeClient"><code class="docutils literal notranslate"><span class="pre">NativeClient</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.ParameterMap"><code class="docutils literal notranslate"><span class="pre">ParameterMap</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.RuntimeError"><code class="docutils literal notranslate"><span class="pre">RuntimeError</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.Server"><code class="docutils literal notranslate"><span class="pre">Server</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.ServerMetadata"><code class="docutils literal notranslate"><span class="pre">ServerMetadata</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.Tensor"><code class="docutils literal notranslate"><span class="pre">Tensor</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.WebSocketClient"><code class="docutils literal notranslate"><span class="pre">WebSocketClient</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.inferAsyncOrdered"><code class="docutils literal notranslate"><span class="pre">inferAsyncOrdered()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.inferAsyncOrderedBatched"><code class="docutils literal notranslate"><span class="pre">inferAsyncOrderedBatched()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.inference_request_to_dict"><code class="docutils literal notranslate"><span class="pre">inference_request_to_dict()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.loadEnsemble"><code class="docutils literal notranslate"><span class="pre">loadEnsemble()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.parallel_infer"><code class="docutils literal notranslate"><span class="pre">parallel_infer()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.serverHasExtension"><code class="docutils literal notranslate"><span class="pre">serverHasExtension()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.start_http_client_server"><code class="docutils literal notranslate"><span class="pre">start_http_client_server()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.stringToArray"><code class="docutils literal notranslate"><span class="pre">stringToArray()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.unloadModels"><code class="docutils literal notranslate"><span class="pre">unloadModels()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.waitUntilModelNotReady"><code class="docutils literal notranslate"><span class="pre">waitUntilModelNotReady()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.waitUntilModelReady"><code class="docutils literal notranslate"><span class="pre">waitUntilModelReady()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="../python.html#amdinfer.waitUntilServerReady"><code class="docutils literal notranslate"><span class="pre">waitUntilServerReady()</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="../python.html#module-amdinfer">API</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../rest.html">REST Endpoints</a></li>
@@ -525,24 +499,24 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
            <div itemprop="articleBody">
              
   <section id="ptzendnn">
-<h1>PtZenDNN<a class="headerlink" href="#ptzendnn" title="Permalink to this heading">¶</a></h1>
+<h1>PtZenDNN<a class="headerlink" href="#ptzendnn" title="Permalink to this headline">¶</a></h1>
 <p>The PtZenDNN backend executes a PyTorch model on CPUs.
 On AMD CPUs, the ZenDNN library offers optimized performance.</p>
 <section id="model-support">
-<h2>Model support<a class="headerlink" href="#model-support" title="Permalink to this heading">¶</a></h2>
+<h2>Model support<a class="headerlink" href="#model-support" title="Permalink to this headline">¶</a></h2>
 <p>The PtZenDNN backend currently only supports ResNet50.</p>
 <p>To use PyTorch models with this backend , you need to <a class="reference external" href="https://pytorch.org/tutorials/advanced/cpp_export.html#step-1-converting-your-pytorch-model-to-torch-script">convert downloaded PyTorch Eager models to TorchScript</a>.</p>
 </section>
 <section id="hardware-support">
-<h2>Hardware support<a class="headerlink" href="#hardware-support" title="Permalink to this heading">¶</a></h2>
+<h2>Hardware support<a class="headerlink" href="#hardware-support" title="Permalink to this headline">¶</a></h2>
 <p>Check the <a class="reference external" href="https://www.amd.com/content/dam/amd/en/documents/developer/zendnn-support-matrix-4.0.pdf">support matrix</a> for compatible AMD CPUs.</p>
 </section>
 <section id="host-setup">
-<h2>Host setup<a class="headerlink" href="#host-setup" title="Permalink to this heading">¶</a></h2>
+<h2>Host setup<a class="headerlink" href="#host-setup" title="Permalink to this headline">¶</a></h2>
 <p>No special host setup is required to use the PtZenDNN backend.</p>
 </section>
 <section id="build-an-image">
-<h2>Build an image<a class="headerlink" href="#build-an-image" title="Permalink to this heading">¶</a></h2>
+<h2>Build an image<a class="headerlink" href="#build-an-image" title="Permalink to this headline">¶</a></h2>
 <p>To build an image with the PtZenDNN backend enabled, you need to download the ZenDNN library and then build the image by pointing the build script to the location of this downloaded package.</p>
 <p>You can download the PT+ZenDNN package from the <a class="reference external" href="ZenDNN_download">ZenDNN developer downloads</a>: <code class="docutils literal notranslate"><span class="pre">PT_v1.12_ZenDNN_v4.0_C++_API.zip</span></code>.
 Before downloading this packages, you will be required to read and agree to the <a class="reference internal" href="../glossary.html#term-EULA"><span class="xref std std-term">EULA</span></a>.</p>
@@ -568,17 +542,17 @@ These instructions suggest using the repository root but any path that meets thi
 </div>
 </section>
 <section id="start-a-container">
-<h2>Start a container<a class="headerlink" href="#start-a-container" title="Permalink to this heading">¶</a></h2>
+<h2>Start a container<a class="headerlink" href="#start-a-container" title="Permalink to this headline">¶</a></h2>
 <p>Depending on your use case and how you are using the server, you can start a container to use this backend in multiple ways.</p>
 <section id="deployment">
-<h3>Deployment<a class="headerlink" href="#deployment" title="Permalink to this heading">¶</a></h3>
+<h3>Deployment<a class="headerlink" href="#deployment" title="Permalink to this headline">¶</a></h3>
 <p>You can start a deployment container with something like:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>run<span class="w"> </span>...
 </pre></div>
 </div>
 </section>
 <section id="development">
-<h3>Development<a class="headerlink" href="#development" title="Permalink to this heading">¶</a></h3>
+<h3>Development<a class="headerlink" href="#development" title="Permalink to this headline">¶</a></h3>
 <p>A development container can be started with:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./amdinfer<span class="w"> </span>run<span class="w"> </span>--dev
 </pre></div>
@@ -587,14 +561,14 @@ These instructions suggest using the repository root but any path that meets thi
 </section>
 </section>
 <section id="get-test-assets">
-<h2>Get test assets<a class="headerlink" href="#get-test-assets" title="Permalink to this heading">¶</a></h2>
+<h2>Get test assets<a class="headerlink" href="#get-test-assets" title="Permalink to this headline">¶</a></h2>
 <p>You can download the assets and models used with this backend for tests and examples with:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./amdinfer<span class="w"> </span>get<span class="w"> </span>--ptzendnn<span class="w"> </span>--all-models
 </pre></div>
 </div>
 </section>
 <section id="loading-the-backend">
-<h2>Loading the backend<a class="headerlink" href="#loading-the-backend" title="Permalink to this heading">¶</a></h2>
+<h2>Loading the backend<a class="headerlink" href="#loading-the-backend" title="Permalink to this headline">¶</a></h2>
 <p>There are multiple ways to load this backend to make it available for inference requests from clients.
 If you are using a client’s <code class="docutils literal notranslate"><span class="pre">workerLoad()</span></code> method:</p>
 <div class="sphinx-tabs docutils container">
@@ -627,9 +601,15 @@ In this case, the endpoint is defined in the model’s configuration file in the
 </div>
 </div></div>
 <section id="parameters">
-<h3>Parameters<a class="headerlink" href="#parameters" title="Permalink to this heading">¶</a></h3>
+<h3>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h3>
 <p>You can provide the following backend-specific parameters at load-time:</p>
 <table class="docutils align-default">
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Parameter</p></th>
 <th class="head"><p>Type</p></th>
@@ -673,12 +653,12 @@ In this case, the endpoint is defined in the model’s configuration file in the
 </section>
 </section>
 <section id="troubleshooting">
-<h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permalink to this heading">¶</a></h2>
+<h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permalink to this headline">¶</a></h2>
 <p>If you run into problems, first check the <a class="reference internal" href="../troubleshooting.html#troubleshooting"><span class="std std-ref">general troubleshooting guide</span></a> guide.
 Then continue on to this XModel specific troubleshooting guide.
 You will need access to the machine where the inference server is running to debug.</p>
 <section id="tune-performance">
-<h3>Tune performance<a class="headerlink" href="#tune-performance" title="Permalink to this heading">¶</a></h3>
+<h3>Tune performance<a class="headerlink" href="#tune-performance" title="Permalink to this headline">¶</a></h3>
 <p>For tuning ZenDNN performance, you can refer to the PyTorch + ZenDNN <a class="reference external" href="https://www.amd.com/content/dam/amd/en/documents/developer/pytorch-zendnn-user-guide-4.0.pdf">user guide</a>.</p>
 </section>
 </section>
@@ -706,7 +686,7 @@ You will need access to the machine where the inference server is running to deb
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on April 20, 2023.
+      <span class="lastupdated">Last updated on May 15, 2023.
       </span></p>
   </div>
 

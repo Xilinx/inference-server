@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
@@ -24,24 +24,27 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
       <link rel="stylesheet" href="_static/twemoji.css" type="text/css" />
-      <link rel="stylesheet" href="_static/custom.css" type="text/css" />
       <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
+      <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+      <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="_static/jquery.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
         <script src="_static/clipboard.min.js"></script>
         <script src="_static/copybutton.js"></script>
         <script src="https://twemoji.maxcdn.com/v/latest/twemoji.min.js"></script>
         <script src="_static/twemoji.js"></script>
         <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
         <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
-        <script defer="defer" src="_static/tippy/changelog.6e34bd03-b5d8-4cd6-9ec9-594bca8c8d11.js"></script>
+        <script defer="defer" src="_static/tippy/changelog.48c88414-739b-4f70-9401-6ff39aa1f142.js"></script>
+        <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+        <script src="_static/dataTables.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -193,6 +196,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l2"><a class="reference internal" href="deployment.html#development-image">Development image</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="client_api.html">Client API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="client_api.html#include-the-api">Include the API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_api.html#create-a-client-object">Create a client object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_api.html#server-status">Server status</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_api.html#loading-a-backend">Loading a backend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_api.html#making-an-inference-request">Making an inference request</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_api.html#parsing-the-response">Parsing the response</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_api.html#next-steps">Next steps</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="kserve.html">KServe</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="kserve.html#set-up-kubernetes-and-kserve">Set up Kubernetes and KServe</a></li>
 <li class="toctree-l2"><a class="reference internal" href="kserve.html#get-or-build-the-amd-inference-server-image">Get or build the AMD Inference Server Image</a></li>
@@ -219,6 +232,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="troubleshooting.html#use-the-latest-version">Use the latest version</a></li>
 <li class="toctree-l2"><a class="reference internal" href="troubleshooting.html#use-server-logs">Use server logs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="troubleshooting.html#build-errors">Build errors</a></li>
 </ul>
 </li>
 </ul>
@@ -452,47 +466,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l3"><a class="reference internal" href="python.html#build-wheels">Build wheels</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="python.html#module-amdinfer">API</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.BadStatus"><code class="docutils literal notranslate"><span class="pre">BadStatus</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.Client"><code class="docutils literal notranslate"><span class="pre">Client</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.ConnectionError"><code class="docutils literal notranslate"><span class="pre">ConnectionError</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.DataType"><code class="docutils literal notranslate"><span class="pre">DataType</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.EnvironmentNotSetError"><code class="docutils literal notranslate"><span class="pre">EnvironmentNotSetError</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.ExternalError"><code class="docutils literal notranslate"><span class="pre">ExternalError</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.FileNotFoundError"><code class="docutils literal notranslate"><span class="pre">FileNotFoundError</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.FileReadError"><code class="docutils literal notranslate"><span class="pre">FileReadError</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.GrpcClient"><code class="docutils literal notranslate"><span class="pre">GrpcClient</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.HttpClient"><code class="docutils literal notranslate"><span class="pre">HttpClient</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.ImageInferenceRequest"><code class="docutils literal notranslate"><span class="pre">ImageInferenceRequest()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.InferenceRequest"><code class="docutils literal notranslate"><span class="pre">InferenceRequest</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.InferenceRequestInput"><code class="docutils literal notranslate"><span class="pre">InferenceRequestInput</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.InferenceRequestOutput"><code class="docutils literal notranslate"><span class="pre">InferenceRequestOutput</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.InferenceResponse"><code class="docutils literal notranslate"><span class="pre">InferenceResponse</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.InferenceResponseOutput"><code class="docutils literal notranslate"><span class="pre">InferenceResponseOutput</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.InferenceTensor"><code class="docutils literal notranslate"><span class="pre">InferenceTensor</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.InvalidArgumentError"><code class="docutils literal notranslate"><span class="pre">InvalidArgumentError</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.ModelMetadata"><code class="docutils literal notranslate"><span class="pre">ModelMetadata</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.NativeClient"><code class="docutils literal notranslate"><span class="pre">NativeClient</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.ParameterMap"><code class="docutils literal notranslate"><span class="pre">ParameterMap</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.RuntimeError"><code class="docutils literal notranslate"><span class="pre">RuntimeError</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.Server"><code class="docutils literal notranslate"><span class="pre">Server</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.ServerMetadata"><code class="docutils literal notranslate"><span class="pre">ServerMetadata</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.Tensor"><code class="docutils literal notranslate"><span class="pre">Tensor</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.WebSocketClient"><code class="docutils literal notranslate"><span class="pre">WebSocketClient</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.inferAsyncOrdered"><code class="docutils literal notranslate"><span class="pre">inferAsyncOrdered()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.inferAsyncOrderedBatched"><code class="docutils literal notranslate"><span class="pre">inferAsyncOrderedBatched()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.inference_request_to_dict"><code class="docutils literal notranslate"><span class="pre">inference_request_to_dict()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.loadEnsemble"><code class="docutils literal notranslate"><span class="pre">loadEnsemble()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.parallel_infer"><code class="docutils literal notranslate"><span class="pre">parallel_infer()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.serverHasExtension"><code class="docutils literal notranslate"><span class="pre">serverHasExtension()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.start_http_client_server"><code class="docutils literal notranslate"><span class="pre">start_http_client_server()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.stringToArray"><code class="docutils literal notranslate"><span class="pre">stringToArray()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.unloadModels"><code class="docutils literal notranslate"><span class="pre">unloadModels()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.waitUntilModelNotReady"><code class="docutils literal notranslate"><span class="pre">waitUntilModelNotReady()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.waitUntilModelReady"><code class="docutils literal notranslate"><span class="pre">waitUntilModelReady()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.waitUntilServerReady"><code class="docutils literal notranslate"><span class="pre">waitUntilServerReady()</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="python.html#module-amdinfer">API</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="rest.html">REST Endpoints</a></li>
@@ -523,14 +497,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
            <div itemprop="articleBody">
              
   <span class="target" id="changelog"></span><section id="id1">
-<h1>Changelog<a class="headerlink" href="#id1" title="Permalink to this heading">¶</a></h1>
+<h1>Changelog<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
 <p>All notable changes to this project will be documented in this file.</p>
 <p>The format is based on <a class="reference external" href="https://keepachangelog.com/en/1.0.0/">Keep a Changelog</a>,
 and this project adheres to <a class="reference external" href="https://semver.org/spec/v2.0.0.html">Semantic Versioning</a>.</p>
 <section id="unreleased">
-<h2>Unreleased<a class="headerlink" href="#unreleased" title="Permalink to this heading">¶</a></h2>
+<h2>Unreleased<a class="headerlink" href="#unreleased" title="Permalink to this headline">¶</a></h2>
 <section id="added">
-<h3>Added<a class="headerlink" href="#added" title="Permalink to this heading">¶</a></h3>
+<h3>Added<a class="headerlink" href="#added" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>An example MLPerf app using the inference server API (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/129">#129</a>)</p></li>
 <li><p>Google Benchmark for writing performance-tracking tests (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/147">#147</a>)</p></li>
@@ -540,7 +514,7 @@ and this project adheres to <a class="reference external" href="https://semver.o
 </ul>
 </section>
 <section id="changed">
-<h3>Changed<a class="headerlink" href="#changed" title="Permalink to this heading">¶</a></h3>
+<h3>Changed<a class="headerlink" href="#changed" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Refactor how global state is managed (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/125">#125</a>)</p></li>
 <li><p>Require the server as an argument for creating the NativeClient (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/125">#125</a>)</p></li>
@@ -553,22 +527,24 @@ and this project adheres to <a class="reference external" href="https://semver.o
 <li><p>Update workers’ <code class="docutils literal notranslate"><span class="pre">doRun</span></code> method signature to produce and return a batch (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/176">#176</a>)</p></li>
 <li><p>Use TOML-based configuration files in the repository by default (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/178">#178</a>)</p></li>
 <li><p>Location of test model lists moved to <code class="docutils literal notranslate"><span class="pre">tests</span></code> directory (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/180">#180</a>)</p></li>
+<li><p>Close dynamically opened libraries (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/186">#186</a>)</p></li>
+<li><p>Replace Jaeger exporter with OTLP (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/187">#187</a>)</p></li>
 </ul>
 </section>
 <section id="deprecated">
-<h3>Deprecated<a class="headerlink" href="#deprecated" title="Permalink to this heading">¶</a></h3>
+<h3>Deprecated<a class="headerlink" href="#deprecated" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>N/A</p></li>
 </ul>
 </section>
 <section id="removed">
-<h3>Removed<a class="headerlink" href="#removed" title="Permalink to this heading">¶</a></h3>
+<h3>Removed<a class="headerlink" href="#removed" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>N/A</p></li>
 </ul>
 </section>
 <section id="fixed">
-<h3>Fixed<a class="headerlink" href="#fixed" title="Permalink to this heading">¶</a></h3>
+<h3>Fixed<a class="headerlink" href="#fixed" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Use the right unit for batcher timeout (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/129">#129</a>)</p></li>
 <li><p>Don’t call <code class="docutils literal notranslate"><span class="pre">next</span></code> and <code class="docutils literal notranslate"><span class="pre">prev</span></code> on end iterators (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/166">#166</a>)</p></li>
@@ -577,16 +553,16 @@ and this project adheres to <a class="reference external" href="https://semver.o
 </ul>
 </section>
 <section id="security">
-<h3>Security<a class="headerlink" href="#security" title="Permalink to this heading">¶</a></h3>
+<h3>Security<a class="headerlink" href="#security" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>N/A</p></li>
 </ul>
 </section>
 </section>
 <section id="id2">
-<h2><a class="reference external" href="https://github.com/Xilinx/inference-server/releases/tag/v0.3.0">0.3.0</a> - 2023-02-01<a class="headerlink" href="#id2" title="Permalink to this heading">¶</a></h2>
+<h2><a class="reference external" href="https://github.com/Xilinx/inference-server/releases/tag/v0.3.0">0.3.0</a> - 2023-02-01<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
 <section id="id3">
-<h3>Added<a class="headerlink" href="#id3" title="Permalink to this heading">¶</a></h3>
+<h3>Added<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Allow building Debian package (<a class="reference external" href="https://github.com/Xilinx/inference-server/commit/930fab2">&#64;930fab2</a>)</p></li>
 <li><p>Add <code class="docutils literal notranslate"><span class="pre">modelInferAsync</span></code> to the API (<a class="reference external" href="https://github.com/Xilinx/inference-server/commit/2f4a6c2">&#64;2f4a6c2</a>)</p></li>
@@ -606,7 +582,7 @@ and this project adheres to <a class="reference external" href="https://semver.o
 </ul>
 </section>
 <section id="id4">
-<h3>Changed<a class="headerlink" href="#id4" title="Permalink to this heading">¶</a></h3>
+<h3>Changed<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Refactor pre- and post-processing functions in C++ (<a class="reference external" href="https://github.com/Xilinx/inference-server/commit/42cf748">&#64;42cf748</a>)</p></li>
 <li><p>Templatize Dockerfile for different base images (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/71">#71</a>)</p></li>
@@ -622,20 +598,20 @@ and this project adheres to <a class="reference external" href="https://semver.o
 </ul>
 </section>
 <section id="id5">
-<h3>Deprecated<a class="headerlink" href="#id5" title="Permalink to this heading">¶</a></h3>
+<h3>Deprecated<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>ALL_CAPS style enums for the DataType (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/102">#102</a>)</p></li>
 </ul>
 </section>
 <section id="id6">
-<h3>Removed<a class="headerlink" href="#id6" title="Permalink to this heading">¶</a></h3>
+<h3>Removed<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Mappings between XIR data types &lt;-&gt; inference server data types from public API (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/102">#102</a>)</p></li>
 <li><p>Web GUI (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/110">#110</a>)</p></li>
 </ul>
 </section>
 <section id="id7">
-<h3>Fixed<a class="headerlink" href="#id7" title="Permalink to this heading">¶</a></h3>
+<h3>Fixed<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Use input tensors in requests correctly (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/61">#61</a>)</p></li>
 <li><p>Fix bug with multiple input tensors (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/74">#74</a>)</p></li>
@@ -649,9 +625,9 @@ and this project adheres to <a class="reference external" href="https://semver.o
 </section>
 </section>
 <section id="id8">
-<h2><a class="reference external" href="https://github.com/Xilinx/inference-server/releases/tag/v0.2.0">0.2.0</a> - 2022-08-05<a class="headerlink" href="#id8" title="Permalink to this heading">¶</a></h2>
+<h2><a class="reference external" href="https://github.com/Xilinx/inference-server/releases/tag/v0.2.0">0.2.0</a> - 2022-08-05<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h2>
 <section id="id9">
-<h3>Added<a class="headerlink" href="#id9" title="Permalink to this heading">¶</a></h3>
+<h3>Added<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>HTTP/REST C++ client (<a class="reference external" href="https://github.com/Xilinx/inference-server/commit/cbf33b8">&#64;cbf33b8</a>)</p></li>
 <li><p>gRPC API based on KServe v2 API (<a class="reference external" href="https://github.com/Xilinx/inference-server/commit/37a6aad">&#64;37a6aad</a> and others)</p></li>
@@ -666,7 +642,7 @@ and this project adheres to <a class="reference external" href="https://semver.o
 </ul>
 </section>
 <section id="id10">
-<h3>Changed<a class="headerlink" href="#id10" title="Permalink to this heading">¶</a></h3>
+<h3>Changed<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Use Pybind11 to create Python API (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/20">#20</a>)</p></li>
 <li><p>Two logs are created now: server and client</p></li>
@@ -679,7 +655,7 @@ and this project adheres to <a class="reference external" href="https://semver.o
 </ul>
 </section>
 <section id="id11">
-<h3>Fixed<a class="headerlink" href="#id11" title="Permalink to this heading">¶</a></h3>
+<h3>Fixed<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Get the right request size in the batcher when enqueuing with the C++ API (<a class="reference external" href="https://github.com/Xilinx/inference-server/commit/d1ad81d">&#64;d1ad81d</a>)</p></li>
 <li><p>Construct responses correctly in the XModel worker if there are multiple input buffers (<a class="reference external" href="https://github.com/Xilinx/inference-server/commit/d1ad81d">&#64;d1ad81d</a>)</p></li>
@@ -693,9 +669,9 @@ and this project adheres to <a class="reference external" href="https://semver.o
 </section>
 </section>
 <section id="id12">
-<h2><a class="reference external" href="https://github.com/Xilinx/inference-server/releases/tag/v0.1.0">0.1.0</a> - 2022-02-08<a class="headerlink" href="#id12" title="Permalink to this heading">¶</a></h2>
+<h2><a class="reference external" href="https://github.com/Xilinx/inference-server/releases/tag/v0.1.0">0.1.0</a> - 2022-02-08<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h2>
 <section id="id13">
-<h3>Added<a class="headerlink" href="#id13" title="Permalink to this heading">¶</a></h3>
+<h3>Added<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Core inference server functionality</p></li>
 <li><p>Batching support</p></li>
@@ -735,7 +711,7 @@ and this project adheres to <a class="reference external" href="https://semver.o
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on April 20, 2023.
+      <span class="lastupdated">Last updated on May 15, 2023.
       </span></p>
   </div>
 

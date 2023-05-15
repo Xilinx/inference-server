@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
@@ -24,29 +24,32 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
       <link rel="stylesheet" href="_static/twemoji.css" type="text/css" />
-      <link rel="stylesheet" href="_static/custom.css" type="text/css" />
       <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
+      <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+      <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="_static/jquery.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
         <script src="_static/clipboard.min.js"></script>
         <script src="_static/copybutton.js"></script>
         <script src="https://twemoji.maxcdn.com/v/latest/twemoji.min.js"></script>
         <script src="_static/twemoji.js"></script>
         <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
         <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
-        <script defer="defer" src="_static/tippy/kserve.76527293-bac9-4bfc-90f2-e46ccb1a2602.js"></script>
+        <script defer="defer" src="_static/tippy/kserve.6a5996f6-0206-4892-a5af-3268023834ae.js"></script>
+        <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+        <script src="_static/dataTables.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Performance Factors" href="performance_factors.html" />
-    <link rel="prev" title="Deployment" href="deployment.html" /> 
+    <link rel="prev" title="Client API" href="client_api.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -193,6 +196,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l2"><a class="reference internal" href="deployment.html#development-image">Development image</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="client_api.html">Client API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="client_api.html#include-the-api">Include the API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_api.html#create-a-client-object">Create a client object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_api.html#server-status">Server status</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_api.html#loading-a-backend">Loading a backend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_api.html#making-an-inference-request">Making an inference request</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_api.html#parsing-the-response">Parsing the response</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_api.html#next-steps">Next steps</a></li>
+</ul>
+</li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">KServe</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#set-up-kubernetes-and-kserve">Set up Kubernetes and KServe</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#get-or-build-the-amd-inference-server-image">Get or build the AMD Inference Server Image</a></li>
@@ -219,6 +232,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="troubleshooting.html#use-the-latest-version">Use the latest version</a></li>
 <li class="toctree-l2"><a class="reference internal" href="troubleshooting.html#use-server-logs">Use server logs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="troubleshooting.html#build-errors">Build errors</a></li>
 </ul>
 </li>
 </ul>
@@ -452,47 +466,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l3"><a class="reference internal" href="python.html#build-wheels">Build wheels</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="python.html#module-amdinfer">API</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.BadStatus"><code class="docutils literal notranslate"><span class="pre">BadStatus</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.Client"><code class="docutils literal notranslate"><span class="pre">Client</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.ConnectionError"><code class="docutils literal notranslate"><span class="pre">ConnectionError</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.DataType"><code class="docutils literal notranslate"><span class="pre">DataType</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.EnvironmentNotSetError"><code class="docutils literal notranslate"><span class="pre">EnvironmentNotSetError</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.ExternalError"><code class="docutils literal notranslate"><span class="pre">ExternalError</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.FileNotFoundError"><code class="docutils literal notranslate"><span class="pre">FileNotFoundError</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.FileReadError"><code class="docutils literal notranslate"><span class="pre">FileReadError</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.GrpcClient"><code class="docutils literal notranslate"><span class="pre">GrpcClient</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.HttpClient"><code class="docutils literal notranslate"><span class="pre">HttpClient</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.ImageInferenceRequest"><code class="docutils literal notranslate"><span class="pre">ImageInferenceRequest()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.InferenceRequest"><code class="docutils literal notranslate"><span class="pre">InferenceRequest</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.InferenceRequestInput"><code class="docutils literal notranslate"><span class="pre">InferenceRequestInput</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.InferenceRequestOutput"><code class="docutils literal notranslate"><span class="pre">InferenceRequestOutput</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.InferenceResponse"><code class="docutils literal notranslate"><span class="pre">InferenceResponse</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.InferenceResponseOutput"><code class="docutils literal notranslate"><span class="pre">InferenceResponseOutput</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.InferenceTensor"><code class="docutils literal notranslate"><span class="pre">InferenceTensor</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.InvalidArgumentError"><code class="docutils literal notranslate"><span class="pre">InvalidArgumentError</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.ModelMetadata"><code class="docutils literal notranslate"><span class="pre">ModelMetadata</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.NativeClient"><code class="docutils literal notranslate"><span class="pre">NativeClient</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.ParameterMap"><code class="docutils literal notranslate"><span class="pre">ParameterMap</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.RuntimeError"><code class="docutils literal notranslate"><span class="pre">RuntimeError</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.Server"><code class="docutils literal notranslate"><span class="pre">Server</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.ServerMetadata"><code class="docutils literal notranslate"><span class="pre">ServerMetadata</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.Tensor"><code class="docutils literal notranslate"><span class="pre">Tensor</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.WebSocketClient"><code class="docutils literal notranslate"><span class="pre">WebSocketClient</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.inferAsyncOrdered"><code class="docutils literal notranslate"><span class="pre">inferAsyncOrdered()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.inferAsyncOrderedBatched"><code class="docutils literal notranslate"><span class="pre">inferAsyncOrderedBatched()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.inference_request_to_dict"><code class="docutils literal notranslate"><span class="pre">inference_request_to_dict()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.loadEnsemble"><code class="docutils literal notranslate"><span class="pre">loadEnsemble()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.parallel_infer"><code class="docutils literal notranslate"><span class="pre">parallel_infer()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.serverHasExtension"><code class="docutils literal notranslate"><span class="pre">serverHasExtension()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.start_http_client_server"><code class="docutils literal notranslate"><span class="pre">start_http_client_server()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.stringToArray"><code class="docutils literal notranslate"><span class="pre">stringToArray()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.unloadModels"><code class="docutils literal notranslate"><span class="pre">unloadModels()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.waitUntilModelNotReady"><code class="docutils literal notranslate"><span class="pre">waitUntilModelNotReady()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.waitUntilModelReady"><code class="docutils literal notranslate"><span class="pre">waitUntilModelReady()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.waitUntilServerReady"><code class="docutils literal notranslate"><span class="pre">waitUntilServerReady()</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="python.html#module-amdinfer">API</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="rest.html">REST Endpoints</a></li>
@@ -523,10 +497,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
            <div itemprop="articleBody">
              
   <section id="kserve">
-<h1>KServe<a class="headerlink" href="#kserve" title="Permalink to this heading">¶</a></h1>
+<h1>KServe<a class="headerlink" href="#kserve" title="Permalink to this headline">¶</a></h1>
 <p>You can use the AMD Inference Server with <a class="reference external" href="https://github.com/kserve/kserve">KServe</a> to deploy the server on a Kubernetes cluster.</p>
 <section id="set-up-kubernetes-and-kserve">
-<h2>Set up Kubernetes and KServe<a class="headerlink" href="#set-up-kubernetes-and-kserve" title="Permalink to this heading">¶</a></h2>
+<h2>Set up Kubernetes and KServe<a class="headerlink" href="#set-up-kubernetes-and-kserve" title="Permalink to this headline">¶</a></h2>
 <p>To use KServe, you will need a Kubernetes cluster.
 There are many ways to set up and configure a Kubernetes cluster depending on your use cases.
 Instructions for installing and configuring Kubernetes are out of this scope.</p>
@@ -543,12 +517,12 @@ Refer to the documentation for these respective projects on installation details
 The <a class="reference external" href="https://github.com/prometheus-operator/kube-prometheus/">kube-prometheus</a> project is a good starting point to install some of these tools.</p>
 </section>
 <section id="get-or-build-the-amd-inference-server-image">
-<h2>Get or build the AMD Inference Server Image<a class="headerlink" href="#get-or-build-the-amd-inference-server-image" title="Permalink to this heading">¶</a></h2>
+<h2>Get or build the AMD Inference Server Image<a class="headerlink" href="#get-or-build-the-amd-inference-server-image" title="Permalink to this headline">¶</a></h2>
 <p>To use with KServe, you will need a <a class="reference internal" href="deployment.html#deployment-image"><span class="std std-ref">deployment image</span></a>.
 Once you have it somewhere, make sure you can use <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">pull</span> <span class="pre">&lt;image&gt;</span></code> on all the nodes in the Kubernetes cluster to get the image.</p>
 </section>
 <section id="start-an-inference-service">
-<h2>Start an inference service<a class="headerlink" href="#start-an-inference-service" title="Permalink to this heading">¶</a></h2>
+<h2>Start an inference service<a class="headerlink" href="#start-an-inference-service" title="Permalink to this headline">¶</a></h2>
 <p>Services in Kubernetes can be started with YAML configuration files.
 To add a service to your cluster, create the configuration file and use <code class="docutils literal notranslate"><span class="pre">kubectl</span> <span class="pre">apply</span> <span class="pre">-f</span> <span class="pre">&lt;path</span> <span class="pre">to</span> <span class="pre">yaml</span> <span class="pre">file&gt;</span></code>.
 KServe provides a number of Custom Resource Definitions (CRDs) that you can use to serve inferences with the AMD Inference Server.
@@ -560,7 +534,7 @@ If you use HTTP, the model should be zipped and should unzip in the expected mod
 Other archive formats such as <code class="docutils literal notranslate"><span class="pre">.tar.gz</span></code> may not work as expected.
 Wherever you store it, the URI will be needed to start inference services.</p>
 <section id="serving-runtime">
-<h3>Serving Runtime<a class="headerlink" href="#serving-runtime" title="Permalink to this heading">¶</a></h3>
+<h3>Serving Runtime<a class="headerlink" href="#serving-runtime" title="Permalink to this headline">¶</a></h3>
 <p>KServe defines two CRDs called <code class="docutils literal notranslate"><span class="pre">ServingRuntime</span></code> and <code class="docutils literal notranslate"><span class="pre">ClusterServingRuntime</span></code>, where the only difference is that the former is namespace-scoped and the latter is cluster-scoped.
 You can see more information about these CRDs in <a class="reference external" href="https://kserve.github.io/website/0.9/modelserving/servingruntimes/">KServe’s documentation</a>.
 The AMD Inference Server is not included by default in the standard KServe installation but you can add the runtime to your cluster.
@@ -643,7 +617,7 @@ Once it’s added, you can launch inference services using the runtime like:</p>
 </div>
 </section>
 <section id="custom-container">
-<h3>Custom container<a class="headerlink" href="#custom-container" title="Permalink to this heading">¶</a></h3>
+<h3>Custom container<a class="headerlink" href="#custom-container" title="Permalink to this headline">¶</a></h3>
 <p>This approach uses an older method of starting inference services using the <code class="docutils literal notranslate"><span class="pre">InferenceService</span></code> and <code class="docutils literal notranslate"><span class="pre">TrainedModel</span></code> CRDs, where you start a custom container directly and add models to it.
 Initially, no models are loaded on the server as it uses the multi-model serving mechanism of KServe that was a precursor to ModelMesh to support inference servers running multiple models.
 Once an <code class="docutils literal notranslate"><span class="pre">InferenceService</span></code> is up, you can load models to it by applying one or more <code class="docutils literal notranslate"><span class="pre">TrainedModel</span></code> CRDs.
@@ -702,7 +676,7 @@ A sample YAML file is provided below.</p>
 </section>
 </section>
 <section id="making-requests">
-<h2>Making Requests<a class="headerlink" href="#making-requests" title="Permalink to this heading">¶</a></h2>
+<h2>Making Requests<a class="headerlink" href="#making-requests" title="Permalink to this headline">¶</a></h2>
 <p>The method by which you communicate with your service depends on your Kubernetes cluster configuration.
 For example, one way to make requests is to <a class="reference external" href="https://kserve.github.io/website/master/get_started/first_isvc/#4-determine-the-ingress-ip-and-ports">get the address of the INGRESS_HOST and INGRESS_PORT</a>, and then make requests to this URL by setting the <code class="docutils literal notranslate"><span class="pre">Host</span></code> header on all requests to your targeted service.
 This use case may be needed if your cluster doesn’t have a load-balancer and/or DNS enabled.</p>
@@ -711,7 +685,7 @@ The request will be routed to the server and the response will be returned.
 You can see some examples of using the KServe Python API to make requests in the <a class="reference external" href="https://github.com/Xilinx/inference-server/tree/main/tests/kserve">tests</a>.</p>
 </section>
 <section id="debugging">
-<h2>Debugging<a class="headerlink" href="#debugging" title="Permalink to this heading">¶</a></h2>
+<h2>Debugging<a class="headerlink" href="#debugging" title="Permalink to this headline">¶</a></h2>
 <p>Debugging the inference server with KServe adds some additional complexity.
 You may have issues with your KServe installation itself (in which case you need to debug KServe alone until you can <a class="reference external" href="https://kserve.github.io/website/get_started/first_isvc/">run a basic InferenceService</a>).
 Once the default KServe example works, then you can begin debugging any inference server specific issues.</p>
@@ -751,7 +725,7 @@ amdinfer<span class="w"> </span>attach<span class="w"> </span>-n<span class="w">
                   </style>
 				  
 				  <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="deployment.html" class="btn btn-neutral float-left" title="Deployment" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="client_api.html" class="btn btn-neutral float-left" title="Client API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="performance_factors.html" class="btn btn-neutral float-right" title="Performance Factors" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
@@ -759,7 +733,7 @@ amdinfer<span class="w"> </span>attach<span class="w"> </span>-n<span class="w">
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on April 20, 2023.
+      <span class="lastupdated">Last updated on May 15, 2023.
       </span></p>
   </div>
 

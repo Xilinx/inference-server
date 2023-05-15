@@ -38,3 +38,10 @@ a[href*="glossary.html"] {
 .has-tippy:hover {
     cursor: help;
 }
+
+.datatable-top:after { 
+    content: " "; 
+    display: block;
+    clear: both;
+} 
+

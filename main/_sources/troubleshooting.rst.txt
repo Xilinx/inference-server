@@ -36,3 +36,14 @@ By default, the server logs are in ``~/.amdinfer/logs/server.log``.
 The home directory where the logs are located depend on how the server was started.
 If it is running as root, as is the case in deployment containers, the root user's home directory is in ``/root/*``.
 If it is running as the non-root user in the development container, the home directory is in ``/home/amdinfer-user/*``.
+
+Build errors
+------------
+
+You may encounter some errors during building the server with ``amdinfer build``.
+Most commonly, the resolution to these errors is to try building again with one or more flags:
+
+* ``--regen``: delete the CMakeCache.txt and regenerate the CMake configuration. This will help rebuild the project if you have cached variables or if the configuration is incomplete
+* ``--clean``: do a clean build
+
+If you have build errors, try adding one or both of these flags to see if that resolves your problem first.

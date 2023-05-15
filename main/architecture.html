@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
@@ -24,24 +24,27 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
       <link rel="stylesheet" href="_static/twemoji.css" type="text/css" />
-      <link rel="stylesheet" href="_static/custom.css" type="text/css" />
       <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
+      <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+      <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="_static/jquery.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
         <script src="_static/clipboard.min.js"></script>
         <script src="_static/copybutton.js"></script>
         <script src="https://twemoji.maxcdn.com/v/latest/twemoji.min.js"></script>
         <script src="_static/twemoji.js"></script>
         <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
         <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
-        <script defer="defer" src="_static/tippy/architecture.a31366d2-9083-433a-9feb-94c0dd48d080.js"></script>
+        <script defer="defer" src="_static/tippy/architecture.f0b693a1-1d14-48fb-b55b-513b060f5bf8.js"></script>
+        <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+        <script src="_static/dataTables.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -193,6 +196,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l2"><a class="reference internal" href="deployment.html#development-image">Development image</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="client_api.html">Client API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="client_api.html#include-the-api">Include the API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_api.html#create-a-client-object">Create a client object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_api.html#server-status">Server status</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_api.html#loading-a-backend">Loading a backend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_api.html#making-an-inference-request">Making an inference request</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_api.html#parsing-the-response">Parsing the response</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_api.html#next-steps">Next steps</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="kserve.html">KServe</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="kserve.html#set-up-kubernetes-and-kserve">Set up Kubernetes and KServe</a></li>
 <li class="toctree-l2"><a class="reference internal" href="kserve.html#get-or-build-the-amd-inference-server-image">Get or build the AMD Inference Server Image</a></li>
@@ -219,6 +232,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="troubleshooting.html#use-the-latest-version">Use the latest version</a></li>
 <li class="toctree-l2"><a class="reference internal" href="troubleshooting.html#use-server-logs">Use server logs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="troubleshooting.html#build-errors">Build errors</a></li>
 </ul>
 </li>
 </ul>
@@ -452,47 +466,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l3"><a class="reference internal" href="python.html#build-wheels">Build wheels</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="python.html#module-amdinfer">API</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.BadStatus"><code class="docutils literal notranslate"><span class="pre">BadStatus</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.Client"><code class="docutils literal notranslate"><span class="pre">Client</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.ConnectionError"><code class="docutils literal notranslate"><span class="pre">ConnectionError</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.DataType"><code class="docutils literal notranslate"><span class="pre">DataType</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.EnvironmentNotSetError"><code class="docutils literal notranslate"><span class="pre">EnvironmentNotSetError</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.ExternalError"><code class="docutils literal notranslate"><span class="pre">ExternalError</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.FileNotFoundError"><code class="docutils literal notranslate"><span class="pre">FileNotFoundError</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.FileReadError"><code class="docutils literal notranslate"><span class="pre">FileReadError</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.GrpcClient"><code class="docutils literal notranslate"><span class="pre">GrpcClient</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.HttpClient"><code class="docutils literal notranslate"><span class="pre">HttpClient</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.ImageInferenceRequest"><code class="docutils literal notranslate"><span class="pre">ImageInferenceRequest()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.InferenceRequest"><code class="docutils literal notranslate"><span class="pre">InferenceRequest</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.InferenceRequestInput"><code class="docutils literal notranslate"><span class="pre">InferenceRequestInput</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.InferenceRequestOutput"><code class="docutils literal notranslate"><span class="pre">InferenceRequestOutput</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.InferenceResponse"><code class="docutils literal notranslate"><span class="pre">InferenceResponse</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.InferenceResponseOutput"><code class="docutils literal notranslate"><span class="pre">InferenceResponseOutput</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.InferenceTensor"><code class="docutils literal notranslate"><span class="pre">InferenceTensor</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.InvalidArgumentError"><code class="docutils literal notranslate"><span class="pre">InvalidArgumentError</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.ModelMetadata"><code class="docutils literal notranslate"><span class="pre">ModelMetadata</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.NativeClient"><code class="docutils literal notranslate"><span class="pre">NativeClient</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.ParameterMap"><code class="docutils literal notranslate"><span class="pre">ParameterMap</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.RuntimeError"><code class="docutils literal notranslate"><span class="pre">RuntimeError</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.Server"><code class="docutils literal notranslate"><span class="pre">Server</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.ServerMetadata"><code class="docutils literal notranslate"><span class="pre">ServerMetadata</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.Tensor"><code class="docutils literal notranslate"><span class="pre">Tensor</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.WebSocketClient"><code class="docutils literal notranslate"><span class="pre">WebSocketClient</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.inferAsyncOrdered"><code class="docutils literal notranslate"><span class="pre">inferAsyncOrdered()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.inferAsyncOrderedBatched"><code class="docutils literal notranslate"><span class="pre">inferAsyncOrderedBatched()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.inference_request_to_dict"><code class="docutils literal notranslate"><span class="pre">inference_request_to_dict()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.loadEnsemble"><code class="docutils literal notranslate"><span class="pre">loadEnsemble()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.parallel_infer"><code class="docutils literal notranslate"><span class="pre">parallel_infer()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.serverHasExtension"><code class="docutils literal notranslate"><span class="pre">serverHasExtension()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.start_http_client_server"><code class="docutils literal notranslate"><span class="pre">start_http_client_server()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.stringToArray"><code class="docutils literal notranslate"><span class="pre">stringToArray()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.unloadModels"><code class="docutils literal notranslate"><span class="pre">unloadModels()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.waitUntilModelNotReady"><code class="docutils literal notranslate"><span class="pre">waitUntilModelNotReady()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.waitUntilModelReady"><code class="docutils literal notranslate"><span class="pre">waitUntilModelReady()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.waitUntilServerReady"><code class="docutils literal notranslate"><span class="pre">waitUntilServerReady()</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="python.html#module-amdinfer">API</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="rest.html">REST Endpoints</a></li>
@@ -523,7 +497,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
            <div itemprop="articleBody">
              
   <section id="architecture">
-<h1>Architecture<a class="headerlink" href="#architecture" title="Permalink to this heading">¶</a></h1>
+<h1>Architecture<a class="headerlink" href="#architecture" title="Permalink to this headline">¶</a></h1>
 <figure class="align-left" id="id3">
 <span id="architecture-overview"></span><a class="reference internal image-reference" href="_images/architecture.png"><img alt="Diagram showing AMD Inference Server's architecture" src="_images/architecture.png" style="height: 400px;" /></a>
 <figcaption>
@@ -533,9 +507,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </figcaption>
 </figure>
 <section id="overview">
-<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading">¶</a></h2>
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference internal" href="#architecture-overview"><span class="std std-numref">Fig. 1</span></a> shows a high-level view of the Server’s architecture.
-At the top, we have a client who can make a request to the Server using HTTP/REST, WebSocket, gRPC or the C++ API <a class="footnote-reference brackets" href="#f1" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>.
+At the top, we have a client who can make a request to the Server using HTTP/REST, WebSocket, gRPC or the C++ API <a class="footnote-reference brackets" href="#f1" id="id1">1</a>.
 This request must be made to a particular worker that must be active in the Server.
 Each received request is passed to a batcher associated with the targeted worker independent of its origin.
 The batcher will combine individual requests into a batch and pass it to the worker for execution.
@@ -545,13 +519,13 @@ This flexibility enables the Server to take advantage of any hardware accelerato
 The response to the client is made using the same API as the original request.</p>
 </section>
 <section id="ingestion">
-<h2>Ingestion<a class="headerlink" href="#ingestion" title="Permalink to this heading">¶</a></h2>
+<h2>Ingestion<a class="headerlink" href="#ingestion" title="Permalink to this headline">¶</a></h2>
 <p>There are a number of ways to get data into the system for inference.
 In general, each protocol has a custom interface to the client and requires explicit handling in the Server to accept this initial request.
 After receiving the client’s request in the Server, each supported protocols’ handler converts the incoming data into an <code class="docutils literal notranslate"><span class="pre">InferenceRequest</span></code> object.
 This object, plus some metadata, is packed into a <code class="docutils literal notranslate"><span class="pre">RequestContainer</span></code> object and passed to the appropriate batcher.</p>
 <section id="api">
-<h3>API<a class="headerlink" href="#api" title="Permalink to this heading">¶</a></h3>
+<h3>API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h3>
 <p>The APIs used for this project are based on ‘<a class="reference external" href="https://github.com/kserve/kserve/blob/master/docs/predict-api/v2/required_api.md">KServe’s v2 specification</a>’ where possible.
 The API defines endpoints in different categories: health, metrics and prediction.
 The health APIs define endpoints to get Server metadata and check server readiness.
@@ -572,7 +546,7 @@ After a particular worker is loaded, inference requests can be made to it by con
 The format of the request object in HTTP matches KServe’s specification while an equivalent C++ object is used for the C++ API.</p>
 </section>
 <section id="http-rest-and-websocket">
-<h3>HTTP/REST and WebSocket<a class="headerlink" href="#http-rest-and-websocket" title="Permalink to this heading">¶</a></h3>
+<h3>HTTP/REST and WebSocket<a class="headerlink" href="#http-rest-and-websocket" title="Permalink to this headline">¶</a></h3>
 <p>The HTTP/REST and WebSocket functionality in the Server is provided using <a class="reference external" href="https://github.com/drogonframework/drogon">Drogon</a>. We chose to use Drogon for our web framework for a few reasons:</p>
 <ul class="simple">
 <li><p>Based on the benchmarks at ‘<a class="reference external" href="https://github.com/TechEmpower/FrameworkBenchmarks/">&lt;TechEmpower</a>’, Drogon is high-performing (unlike CppCMS and Treefrog)</p></li>
@@ -591,7 +565,7 @@ At this time, the client provides a URL to a video that the worker will retrieve
 The WebSocket server code is in <code class="docutils literal notranslate"><span class="pre">src/amdinfer/servers/websocket_server.*</span></code>.</p>
 </section>
 <section id="grpc">
-<h3>gRPC<a class="headerlink" href="#grpc" title="Permalink to this heading">¶</a></h3>
+<h3>gRPC<a class="headerlink" href="#grpc" title="Permalink to this headline">¶</a></h3>
 <p>The gRPC functionality is provided through a custom implementation of a gRPC server.
 There are some examples in the <a class="reference external" href="https://github.com/grpc/grpc/tree/master/examples/cpp">gRPC repository on Github</a> that can be used for reference.
 It makes new dynamic objects to keep track of the incoming requests and a state machine is embedded inside to track state.
@@ -600,7 +574,7 @@ After the response, the state machine is marked to finish and the object dealloc
 The gRPC server code is in <code class="docutils literal notranslate"><span class="pre">src/amdinfer/servers/grpc_server.*</span></code>.</p>
 </section>
 <section id="c-api">
-<h3>C++ API<a class="headerlink" href="#c-api" title="Permalink to this heading">¶</a></h3>
+<h3>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h3>
 <p>The C++ API allows users to compile custom applications that link directly to the Server’s backend.
 As a result, using the C++ API will yield the highest performance of any ingestion method.</p>
 <p>The C++ API provides functions similar to the prediction API used in HTTP.
@@ -611,7 +585,7 @@ An <code class="docutils literal notranslate"><span class="pre">std::promise</sp
 </section>
 </section>
 <section id="batching">
-<h2>Batching<a class="headerlink" href="#batching" title="Permalink to this heading">¶</a></h2>
+<h2>Batching<a class="headerlink" href="#batching" title="Permalink to this headline">¶</a></h2>
 <figure class="align-left" id="id4">
 <span id="architecture-detail"></span><a class="reference internal image-reference" href="_images/architecture_detailed.png"><img alt="Diagram showing more detail in to the AMD Inference Server's architecture" src="_images/architecture_detailed.png" style="height: 400px;" /></a>
 <figcaption>
@@ -645,7 +619,7 @@ As new requests come in, their data is copied over to the newly allocated memory
 The memory that was used initially by the ingestion layer can now be freed.</p>
 </section>
 <section id="workers">
-<span id="architectureworkers"></span><h2>Workers<a class="headerlink" href="#workers" title="Permalink to this heading">¶</a></h2>
+<span id="architectureworkers"></span><h2>Workers<a class="headerlink" href="#workers" title="Permalink to this headline">¶</a></h2>
 <p>Workers perform the computation.
 They are the smallest unit that the Server manages.
 A worker may be as simple or complex as you like: as long as it adheres to the interface.
@@ -654,7 +628,7 @@ Thus, new workers can be loaded and unloaded without stopping the server.</p>
 <p>Workers are defined in <code class="docutils literal notranslate"><span class="pre">src/amdinfer/workers</span></code>.
 The <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> file builds each worker as <code class="docutils literal notranslate"><span class="pre">libworkerX.so</span></code> where <em>X</em> corresponds to the name of the C++ file defining the worker in PascalCase.</p>
 <section id="organization-and-lifecycle">
-<h3>Organization and Lifecycle<a class="headerlink" href="#organization-and-lifecycle" title="Permalink to this heading">¶</a></h3>
+<h3>Organization and Lifecycle<a class="headerlink" href="#organization-and-lifecycle" title="Permalink to this headline">¶</a></h3>
 <p>The base Worker class provides the template of all workers for the Server.
 This class defines the lifecycle methods of the worker that are called by the Server.
 This lifecycle is defined as follows:</p>
@@ -688,7 +662,7 @@ This thread is joined and the last two lifecycle methods are called to safely cl
 </div>
 </section>
 <section id="improving-performance">
-<h3>Improving Performance<a class="headerlink" href="#improving-performance" title="Permalink to this heading">¶</a></h3>
+<h3>Improving Performance<a class="headerlink" href="#improving-performance" title="Permalink to this headline">¶</a></h3>
 <p>Having multiple workers of the same kind can improve performance if there are many incoming batches.
 Multiple identical workers are grouped into one worker group (see <a class="reference internal" href="#architecture-detail"><span class="std std-numref">Fig. 2</span></a>).
 Each worker group shares one batcher group i.e. each batcher in a batcher group pushes its batches to a common queue that each worker in a worker group is dequeuing from.
@@ -697,7 +671,7 @@ Therefore, each worker should only pull from this common queue when it can actua
 To load a new worker into an existing group, the worker should be loaded with the load-time parameter <code class="docutils literal notranslate"><span class="pre">share</span></code> set to <em>false</em>.</p>
 </section>
 <section id="external-processing">
-<h3>External Processing<a class="headerlink" href="#external-processing" title="Permalink to this heading">¶</a></h3>
+<h3>External Processing<a class="headerlink" href="#external-processing" title="Permalink to this headline">¶</a></h3>
 <p>Workers, by virtue of their generic structure, may be highly complex and call entirely external applications for processing data.
 The AMD Inference Server supports this use case and suggests the following for organizing code:</p>
 <ul class="simple">
@@ -712,7 +686,7 @@ The AMD Inference Server supports this use case and suggests the following for o
 For example, the Server will eventually need to send health check requests to workers that must be responded to appropriately.</p>
 </section>
 <section id="xmodel">
-<h3>XModel<a class="headerlink" href="#xmodel" title="Permalink to this heading">¶</a></h3>
+<h3>XModel<a class="headerlink" href="#xmodel" title="Permalink to this headline">¶</a></h3>
 <figure class="align-left" id="id5">
 <span id="fig-xmodel"></span><a class="reference internal image-reference" href="_images/xmodel.png"><img alt="Diagram showing the structure of the XModel worker" src="_images/xmodel.png" style="height: 300px;" /></a>
 <figcaption>
@@ -722,7 +696,7 @@ For example, the Server will eventually need to send health check requests to wo
 </figcaption>
 </figure>
 <p>As perhaps the most complex worker thus far, the architecture of the XModel worker is examined here in greater detail.
-The XModel worker is intended to run an arbitrary XModel specified by the user on a Xilinx FPGA <a class="footnote-reference brackets" href="#f2" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>.
+The XModel worker is intended to run an arbitrary XModel specified by the user on a Xilinx FPGA <a class="footnote-reference brackets" href="#f2" id="id2">2</a>.
 We take a look at the lifecycle of this worker in the following sections.
 The XModel worker is using the <code class="docutils literal notranslate"><span class="pre">VartTensor</span></code> allocator.</p>
 <div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">MemoryAllocators</span><span class="o">&gt;</span><span class="w"> </span><span class="n">Xmodel</span><span class="o">::</span><span class="n">getAllocators</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
@@ -731,7 +705,7 @@ The XModel worker is using the <code class="docutils literal notranslate"><span 
 </pre></div>
 </div>
 <section id="initialization">
-<h4>Initialization<a class="headerlink" href="#initialization" title="Permalink to this heading">¶</a></h4>
+<h4>Initialization<a class="headerlink" href="#initialization" title="Permalink to this headline">¶</a></h4>
 <p>The XModel worker needs a path to an XModel to run at load-time.
 This XModel file is opened and parsed to get the graph and the first DPU subgraph (i.e. the first subgraph in the graph that is supposed to run on the FPGA).
 In the future, we may support running an arbitrary number of subgraphs but this simple case is often sufficient.
@@ -739,13 +713,13 @@ Using this subgraph, we create a <em>Runner</em>, which is a thread-safe object 
 These objects are all saved as part of the internal state of the worker.</p>
 </section>
 <section id="acquisition">
-<h4>Acquisition<a class="headerlink" href="#acquisition" title="Permalink to this heading">¶</a></h4>
+<h4>Acquisition<a class="headerlink" href="#acquisition" title="Permalink to this headline">¶</a></h4>
 <p>Since the Runner is thread-safe, we can use multiple threads to push data to the FPGA from the same Runner to improve throughput.
 To enable this functionality, we incorporate an internal thread pool in the XModel worker.
 Here, we set the size of this thread pool based on user parameters.</p>
 </section>
 <section id="run">
-<h4>Run<a class="headerlink" href="#run" title="Permalink to this heading">¶</a></h4>
+<h4>Run<a class="headerlink" href="#run" title="Permalink to this headline">¶</a></h4>
 <p>As with all workers, the XModel worker pulls batches from its inputs queue and checks if it’s a <code class="docutils literal notranslate"><span class="pre">nullptr</span></code> before continuing to process the batch.
 If valid, the batch is pushed into the thread pool, which internally assigns a lambda function to one of its internal threads to perform the processing.
 This lambda function performs the same work that other workers normally perform directly in the <code class="docutils literal notranslate"><span class="pre">run()</span></code> method itself.
@@ -756,14 +730,14 @@ If the number is above a configured amount, then the worker doesn’t pull more 
 This throttling is necessary for the work-stealing model for workers to work.</p>
 </section>
 <section id="cleanup">
-<h4>Cleanup<a class="headerlink" href="#cleanup" title="Permalink to this heading">¶</a></h4>
+<h4>Cleanup<a class="headerlink" href="#cleanup" title="Permalink to this headline">¶</a></h4>
 <p>There is almost no special cleanup required as the Vitis-AI objects that are part of the worker’s state are smart pointers and are cleaned by the worker’s destructor.
 THe only non-default implementation of the clean-up functions is to stop the internal thread pool and join the threads.</p>
 </section>
 </section>
 </section>
 <section id="shared-state">
-<h2>Shared State<a class="headerlink" href="#shared-state" title="Permalink to this heading">¶</a></h2>
+<h2>Shared State<a class="headerlink" href="#shared-state" title="Permalink to this headline">¶</a></h2>
 <p>The shared state of the AMD Inference Server is maintained by the <code class="docutils literal notranslate"><span class="pre">shared_state</span></code>—the active workers, their buffer pools, the endpoints, the load-time parameters associated with them, global memory pool and the repository—is visualized in <a class="reference internal" href="#architecture-detail"><span class="std std-numref">Fig. 2</span></a>.
 This information enables the ingestion protocols to query the State to retrieve a pointer to the correct batcher to use to push the <code class="docutils literal notranslate"><span class="pre">RequestContainer</span></code> object to the right one corresponding to the targeted worker.
 To manage multiple versions of workers that may be running with different configurations, the State stores the load-time parameters, if any, and compares new parameters with ones its seen before to determine whether the newly loaded worker should be part of an existing worker group or a new one.
@@ -784,18 +758,18 @@ The queue enforces serialization and defines an ordering for all incoming reques
 Here, duplicate or contradictory requests can be silently dropped so the shared state isn’t corrupted.</p>
 </section>
 <section id="observation">
-<h2>Observation<a class="headerlink" href="#observation" title="Permalink to this heading">¶</a></h2>
+<h2>Observation<a class="headerlink" href="#observation" title="Permalink to this headline">¶</a></h2>
 <p>Visibility into the server and its operations is provided through logging, metrics and tracing.
 The implementations of these components is in <code class="docutils literal notranslate"><span class="pre">src/amdinfer/observation</span></code>.</p>
 <section id="logging">
-<h3>Logging<a class="headerlink" href="#logging" title="Permalink to this heading">¶</a></h3>
+<h3>Logging<a class="headerlink" href="#logging" title="Permalink to this headline">¶</a></h3>
 <p>The Server uses <a class="reference external" href="https://github.com/gabime/spdlog">spdlog</a> to provide logging.
 By default, one logger is configured with <code class="docutils literal notranslate"><span class="pre">initLogging()</span></code>, which logs data to a file on the disk and prints warning messages to the terminal as well.
 The preprocesser directive form of logging is used throughout the Server, which enables all logging data to be optionally removed at compile-time.</p>
 <p>Look at <a class="reference internal" href="logging.html#logs"><span class="std std-ref">Logs</span></a> for more information.</p>
 </section>
 <section id="metrics">
-<h3>Metrics<a class="headerlink" href="#metrics" title="Permalink to this heading">¶</a></h3>
+<h3>Metrics<a class="headerlink" href="#metrics" title="Permalink to this headline">¶</a></h3>
 <p>The Server uses <a class="reference external" href="https://github.com/jupp0r/prometheus-cpp">prometheus-cpp</a> to provide metric collection in the Prometheus format.
 The metric data can be queried via the web server at the <code class="docutils literal notranslate"><span class="pre">/metrics</span></code> endpoint.
 At compile-time, the metrics of interest must be defined in the <code class="docutils literal notranslate"><span class="pre">Metrics</span></code> class.
@@ -804,22 +778,20 @@ Metric collection can be disabled at compile-time with a CMake option.</p>
 <p>Look at <a class="reference internal" href="metrics.html#metrics"><span class="std std-ref">Metrics</span></a> for more information.</p>
 </section>
 <section id="tracing">
-<h3>Tracing<a class="headerlink" href="#tracing" title="Permalink to this heading">¶</a></h3>
+<h3>Tracing<a class="headerlink" href="#tracing" title="Permalink to this headline">¶</a></h3>
 <p>The Server uses <a class="reference external" href="https://github.com/open-telemetry/opentelemetry-cpp">opentelemetry-cpp</a> to provide tracing.
 Tracing tracks the time taken for different sections of the architecture to process a single request.
 This data can be visualized in the Jaeger UI or Grafana.
 Tracing data can be disabled at compile-time with a CMake option.</p>
 <p>Look at <a class="reference internal" href="tracing.html#tracing"><span class="std std-ref">Tracing</span></a> for more information.</p>
-<aside class="footnote-list brackets">
-<aside class="footnote brackets" id="f1" role="note">
-<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
-<p>Using the C++ API requires compiling an application linked against <code class="docutils literal notranslate"><span class="pre">libamdinfer.so</span></code> rather than making requests to a server.</p>
-</aside>
-<aside class="footnote brackets" id="f2" role="note">
-<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">2</a><span class="fn-bracket">]</span></span>
-<p>There are currently some restrictions on what may be run such as the number of input tensors.</p>
-</aside>
-</aside>
+<dl class="footnote brackets">
+<dt class="label" id="f1"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dd><p>Using the C++ API requires compiling an application linked against <code class="docutils literal notranslate"><span class="pre">libamdinfer.so</span></code> rather than making requests to a server.</p>
+</dd>
+<dt class="label" id="f2"><span class="brackets"><a class="fn-backref" href="#id2">2</a></span></dt>
+<dd><p>There are currently some restrictions on what may be run such as the number of input tensors.</p>
+</dd>
+</dl>
 </section>
 </section>
 </section>
@@ -846,7 +818,7 @@ Tracing data can be disabled at compile-time with a CMake option.</p>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on April 20, 2023.
+      <span class="lastupdated">Last updated on May 15, 2023.
       </span></p>
   </div>
 

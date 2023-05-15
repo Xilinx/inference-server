@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
@@ -24,24 +24,27 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
       <link rel="stylesheet" href="_static/twemoji.css" type="text/css" />
-      <link rel="stylesheet" href="_static/custom.css" type="text/css" />
       <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
+      <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+      <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="_static/jquery.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
         <script src="_static/clipboard.min.js"></script>
         <script src="_static/copybutton.js"></script>
         <script src="https://twemoji.maxcdn.com/v/latest/twemoji.min.js"></script>
         <script src="_static/twemoji.js"></script>
         <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
         <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
-        <script defer="defer" src="_static/tippy/amdinfer_script.fbda1da1-cac4-460e-8dd9-6f51dd5b5041.js"></script>
+        <script defer="defer" src="_static/tippy/amdinfer_script.38121aa2-164e-4f58-b731-f6ef40565aa4.js"></script>
+        <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+        <script src="_static/dataTables.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -193,6 +196,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l2"><a class="reference internal" href="deployment.html#development-image">Development image</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="client_api.html">Client API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="client_api.html#include-the-api">Include the API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_api.html#create-a-client-object">Create a client object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_api.html#server-status">Server status</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_api.html#loading-a-backend">Loading a backend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_api.html#making-an-inference-request">Making an inference request</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_api.html#parsing-the-response">Parsing the response</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_api.html#next-steps">Next steps</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="kserve.html">KServe</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="kserve.html#set-up-kubernetes-and-kserve">Set up Kubernetes and KServe</a></li>
 <li class="toctree-l2"><a class="reference internal" href="kserve.html#get-or-build-the-amd-inference-server-image">Get or build the AMD Inference Server Image</a></li>
@@ -219,6 +232,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="troubleshooting.html#use-the-latest-version">Use the latest version</a></li>
 <li class="toctree-l2"><a class="reference internal" href="troubleshooting.html#use-server-logs">Use server logs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="troubleshooting.html#build-errors">Build errors</a></li>
 </ul>
 </li>
 </ul>
@@ -452,47 +466,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l3"><a class="reference internal" href="python.html#build-wheels">Build wheels</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="python.html#module-amdinfer">API</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.BadStatus"><code class="docutils literal notranslate"><span class="pre">BadStatus</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.Client"><code class="docutils literal notranslate"><span class="pre">Client</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.ConnectionError"><code class="docutils literal notranslate"><span class="pre">ConnectionError</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.DataType"><code class="docutils literal notranslate"><span class="pre">DataType</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.EnvironmentNotSetError"><code class="docutils literal notranslate"><span class="pre">EnvironmentNotSetError</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.ExternalError"><code class="docutils literal notranslate"><span class="pre">ExternalError</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.FileNotFoundError"><code class="docutils literal notranslate"><span class="pre">FileNotFoundError</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.FileReadError"><code class="docutils literal notranslate"><span class="pre">FileReadError</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.GrpcClient"><code class="docutils literal notranslate"><span class="pre">GrpcClient</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.HttpClient"><code class="docutils literal notranslate"><span class="pre">HttpClient</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.ImageInferenceRequest"><code class="docutils literal notranslate"><span class="pre">ImageInferenceRequest()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.InferenceRequest"><code class="docutils literal notranslate"><span class="pre">InferenceRequest</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.InferenceRequestInput"><code class="docutils literal notranslate"><span class="pre">InferenceRequestInput</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.InferenceRequestOutput"><code class="docutils literal notranslate"><span class="pre">InferenceRequestOutput</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.InferenceResponse"><code class="docutils literal notranslate"><span class="pre">InferenceResponse</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.InferenceResponseOutput"><code class="docutils literal notranslate"><span class="pre">InferenceResponseOutput</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.InferenceTensor"><code class="docutils literal notranslate"><span class="pre">InferenceTensor</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.InvalidArgumentError"><code class="docutils literal notranslate"><span class="pre">InvalidArgumentError</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.ModelMetadata"><code class="docutils literal notranslate"><span class="pre">ModelMetadata</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.NativeClient"><code class="docutils literal notranslate"><span class="pre">NativeClient</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.ParameterMap"><code class="docutils literal notranslate"><span class="pre">ParameterMap</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.RuntimeError"><code class="docutils literal notranslate"><span class="pre">RuntimeError</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.Server"><code class="docutils literal notranslate"><span class="pre">Server</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.ServerMetadata"><code class="docutils literal notranslate"><span class="pre">ServerMetadata</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.Tensor"><code class="docutils literal notranslate"><span class="pre">Tensor</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.WebSocketClient"><code class="docutils literal notranslate"><span class="pre">WebSocketClient</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.inferAsyncOrdered"><code class="docutils literal notranslate"><span class="pre">inferAsyncOrdered()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.inferAsyncOrderedBatched"><code class="docutils literal notranslate"><span class="pre">inferAsyncOrderedBatched()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.inference_request_to_dict"><code class="docutils literal notranslate"><span class="pre">inference_request_to_dict()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.loadEnsemble"><code class="docutils literal notranslate"><span class="pre">loadEnsemble()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.parallel_infer"><code class="docutils literal notranslate"><span class="pre">parallel_infer()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.serverHasExtension"><code class="docutils literal notranslate"><span class="pre">serverHasExtension()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.start_http_client_server"><code class="docutils literal notranslate"><span class="pre">start_http_client_server()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.stringToArray"><code class="docutils literal notranslate"><span class="pre">stringToArray()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.unloadModels"><code class="docutils literal notranslate"><span class="pre">unloadModels()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.waitUntilModelNotReady"><code class="docutils literal notranslate"><span class="pre">waitUntilModelNotReady()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.waitUntilModelReady"><code class="docutils literal notranslate"><span class="pre">waitUntilModelReady()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.waitUntilServerReady"><code class="docutils literal notranslate"><span class="pre">waitUntilServerReady()</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="python.html#module-amdinfer">API</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="rest.html">REST Endpoints</a></li>
@@ -523,7 +497,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
            <div itemprop="articleBody">
              
   <section id="amdinfer-script">
-<h1>amdinfer Script<a class="headerlink" href="#amdinfer-script" title="Permalink to this heading">¶</a></h1>
+<h1>amdinfer Script<a class="headerlink" href="#amdinfer-script" title="Permalink to this headline">¶</a></h1>
 <p>The <em>amdinfer</em> script provides an easy way to launch containers and build the server during development.
 The documentation for the options available in this Python script can be seen here or on the terminal using the <code class="docutils literal notranslate"><span class="pre">--help</span></code> flag.</p>
 <p><p>AMD Inference Server helper script</p>
@@ -532,7 +506,7 @@ The documentation for the options available in this Python script can be seen he
 </pre></div>
 </div>
 <section id="commands">
-<h2>Commands<a class="headerlink" href="#commands" title="Permalink to this heading">¶</a></h2>
+<h2>Commands<a class="headerlink" href="#commands" title="Permalink to this headline">¶</a></h2>
 <dl class="option-list">
 <dt><kbd>command</kbd></dt>
 <dd><p>Possible choices: attach, benchmark, build, clean, dockerize, get, install, list, make, run, start, test, up</p>
@@ -540,7 +514,7 @@ The documentation for the options available in this Python script can be seen he
 </dl>
 </section>
 <section id="options">
-<h2>Options<a class="headerlink" href="#options" title="Permalink to this heading">¶</a></h2>
+<h2>Options<a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h2>
 <dl class="option-list">
 <dt><kbd>--dry-run</kbd></dt>
 <dd><p>print the actual commands that would be run without running them</p>
@@ -552,15 +526,15 @@ The documentation for the options available in this Python script can be seen he
 </dl>
 </section>
 <section id="Sub-commands">
-<h2>Sub-commands<a class="headerlink" href="#Sub-commands" title="Permalink to this heading">¶</a></h2>
+<h2>Sub-commands<a class="headerlink" href="#Sub-commands" title="Permalink to this headline">¶</a></h2>
 <section id="attach">
-<h3>attach<a class="headerlink" href="#attach" title="Permalink to this heading">¶</a></h3>
+<h3>attach<a class="headerlink" href="#attach" title="Permalink to this headline">¶</a></h3>
 <p>Attach to a running container</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">amdinfer</span> <span class="n">attach</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="n">name</span><span class="p">]</span>
 </pre></div>
 </div>
 <section id="options_repeat1">
-<h4>Options<a class="headerlink" href="#options_repeat1" title="Permalink to this heading">¶</a></h4>
+<h4>Options<a class="headerlink" href="#options_repeat1" title="Permalink to this headline">¶</a></h4>
 <dl class="option-list">
 <dt><kbd>name</kbd></dt>
 <dd><p>name of the container to attach to. Defaults to latest running container</p>
@@ -569,20 +543,20 @@ The documentation for the options available in this Python script can be seen he
 </section>
 </section>
 <section id="benchmark">
-<h3>benchmark<a class="headerlink" href="#benchmark" title="Permalink to this heading">¶</a></h3>
+<h3>benchmark<a class="headerlink" href="#benchmark" title="Permalink to this headline">¶</a></h3>
 <p>Run the benchmarks</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">amdinfer</span> <span class="n">benchmark</span>
 </pre></div>
 </div>
 </section>
 <section id="build">
-<h3>build<a class="headerlink" href="#build" title="Permalink to this heading">¶</a></h3>
+<h3>build<a class="headerlink" href="#build" title="Permalink to this headline">¶</a></h3>
 <p>Build the amdinfer project</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">amdinfer</span> <span class="n">build</span> <span class="p">[</span><span class="o">--</span><span class="n">coverage</span> <span class="o">|</span> <span class="o">--</span><span class="n">debug</span> <span class="o">|</span> <span class="o">--</span><span class="n">release</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">a</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">c</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">d</span> <span class="n">DIR</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">l</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">r</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">t</span> <span class="n">THREADS</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span>
 </pre></div>
 </div>
 <section id="named-arguments">
-<h4>Named Arguments<a class="headerlink" href="#named-arguments" title="Permalink to this heading">¶</a></h4>
+<h4>Named Arguments<a class="headerlink" href="#named-arguments" title="Permalink to this headline">¶</a></h4>
 <dl class="option-list">
 <dt><kbd>--coverage</kbd></dt>
 <dd><p>build the coverage configuration</p>
@@ -596,7 +570,7 @@ The documentation for the options available in this Python script can be seen he
 </dl>
 </section>
 <section id="options_repeat2">
-<h4>Options<a class="headerlink" href="#options_repeat2" title="Permalink to this heading">¶</a></h4>
+<h4>Options<a class="headerlink" href="#options_repeat2" title="Permalink to this headline">¶</a></h4>
 <dl class="option-list">
 <dt><kbd>-a, --all</kbd></dt>
 <dd><p>Build additional optional targets</p>
@@ -626,13 +600,13 @@ The documentation for the options available in this Python script can be seen he
 </section>
 </section>
 <section id="clean">
-<h3>clean<a class="headerlink" href="#clean" title="Permalink to this heading">¶</a></h3>
+<h3>clean<a class="headerlink" href="#clean" title="Permalink to this headline">¶</a></h3>
 <p>Delete all generated files, restoring the repo to clean state</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">amdinfer</span> <span class="n">clean</span> <span class="p">[</span><span class="o">--</span><span class="n">artifacts</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span>
 </pre></div>
 </div>
 <section id="options_repeat3">
-<h4>Options<a class="headerlink" href="#options_repeat3" title="Permalink to this heading">¶</a></h4>
+<h4>Options<a class="headerlink" href="#options_repeat3" title="Permalink to this headline">¶</a></h4>
 <dl class="option-list">
 <dt><kbd>--artifacts</kbd></dt>
 <dd><p>Delete downloaded artifacts</p>
@@ -642,13 +616,13 @@ The documentation for the options available in this Python script can be seen he
 </section>
 </section>
 <section id="dockerize">
-<h3>dockerize<a class="headerlink" href="#dockerize" title="Permalink to this heading">¶</a></h3>
+<h3>dockerize<a class="headerlink" href="#dockerize" title="Permalink to this headline">¶</a></h3>
 <p>Build a docker image</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">amdinfer</span> <span class="n">dockerize</span> <span class="p">[</span><span class="o">--</span><span class="n">dev</span><span class="o">-</span><span class="n">base</span> <span class="n">DEV_BASE</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">vitis</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">production</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">push</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">registry</span> <span class="n">REGISTRY</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">tfzendnn_path</span> <span class="n">TFZENDNN_PATH</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">ptzendnn_path</span> <span class="n">PTZENDNN_PATH</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">migraphx</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">suffix</span> <span class="n">SUFFIX</span><span class="p">]</span>
 </pre></div>
 </div>
 <section id="options_repeat4">
-<h4>Options<a class="headerlink" href="#options_repeat4" title="Permalink to this heading">¶</a></h4>
+<h4>Options<a class="headerlink" href="#options_repeat4" title="Permalink to this headline">¶</a></h4>
 <dl class="option-list">
 <dt><kbd>--dev-base</kbd></dt>
 <dd><p>Name of the image to use as dev image to build the production image.</p>
@@ -688,14 +662,14 @@ The documentation for the options available in this Python script can be seen he
 </section>
 </section>
 <section id="get">
-<h3>get<a class="headerlink" href="#get" title="Permalink to this heading">¶</a></h3>
+<h3>get<a class="headerlink" href="#get" title="Permalink to this headline">¶</a></h3>
 <p>Get artifacts (images, videos and models) for examples and tests</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">amdinfer</span> <span class="n">get</span> <span class="p">[</span><span class="o">--</span><span class="n">destination</span> <span class="n">DESTINATION</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="nb">all</span><span class="o">-</span><span class="n">backends</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">vitis</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">ptzendnn</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">tfzendnn</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">zendnn</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">migraphx</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="nb">all</span><span class="o">-</span><span class="n">models</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">assets</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">bert</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">densebox</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">repository</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">resnet50</span><span class="p">]</span>
-             <span class="p">[</span><span class="o">--</span><span class="n">yolov3</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">yolov4</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">amdinfer</span> <span class="n">get</span> <span class="p">[</span><span class="o">--</span><span class="n">destination</span> <span class="n">DESTINATION</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="nb">all</span><span class="o">-</span><span class="n">backends</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">vitis</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">ptzendnn</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">tfzendnn</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">zendnn</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">migraphx</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="nb">all</span><span class="o">-</span><span class="n">models</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">assets</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">bert</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">densebox</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">repository</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">resnet50</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">yolov3</span><span class="p">]</span>
+             <span class="p">[</span><span class="o">--</span><span class="n">yolov4</span><span class="p">]</span>
 </pre></div>
 </div>
 <section id="options_repeat5">
-<h4>Options<a class="headerlink" href="#options_repeat5" title="Permalink to this heading">¶</a></h4>
+<h4>Options<a class="headerlink" href="#options_repeat5" title="Permalink to this headline">¶</a></h4>
 <dl class="option-list">
 <dt><kbd>--destination</kbd></dt>
 <dd><p>path to save the downloaded files to. Defaults to /workspace/amdinfer/external/artifacts</p>
@@ -704,7 +678,7 @@ The documentation for the options available in this Python script can be seen he
 </dl>
 </section>
 <section id="backends">
-<h4>Backends<a class="headerlink" href="#backends" title="Permalink to this heading">¶</a></h4>
+<h4>Backends<a class="headerlink" href="#backends" title="Permalink to this headline">¶</a></h4>
 <dl class="option-list">
 <dt><kbd>--all-backends</kbd></dt>
 <dd><p>download files for all backends</p>
@@ -733,7 +707,7 @@ The documentation for the options available in this Python script can be seen he
 </dl>
 </section>
 <section id="models">
-<h4>Models<a class="headerlink" href="#models" title="Permalink to this heading">¶</a></h4>
+<h4>Models<a class="headerlink" href="#models" title="Permalink to this headline">¶</a></h4>
 <dl class="option-list">
 <dt><kbd>--all-models</kbd></dt>
 <dd><p>download files for all models</p>
@@ -771,13 +745,13 @@ The documentation for the options available in this Python script can be seen he
 </section>
 </section>
 <section id="install">
-<h3>install<a class="headerlink" href="#install" title="Permalink to this heading">¶</a></h3>
+<h3>install<a class="headerlink" href="#install" title="Permalink to this headline">¶</a></h3>
 <p>Install amdinfer. Any unknown arguments are passed to the build command. Use – –help to see options.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">amdinfer</span> <span class="n">install</span> <span class="p">[</span><span class="o">-</span><span class="n">d</span> <span class="n">DIR</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">get</span><span class="o">-</span><span class="n">manifest</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span>
 </pre></div>
 </div>
 <section id="options_repeat6">
-<h4>Options<a class="headerlink" href="#options_repeat6" title="Permalink to this heading">¶</a></h4>
+<h4>Options<a class="headerlink" href="#options_repeat6" title="Permalink to this headline">¶</a></h4>
 <dl class="option-list">
 <dt><kbd>-d, --dir</kbd></dt>
 <dd><p>root path to the build tree. Defaults to /tmp/amdinfer/build</p>
@@ -791,13 +765,13 @@ The documentation for the options available in this Python script can be seen he
 </section>
 </section>
 <section id="list">
-<h3>list<a class="headerlink" href="#list" title="Permalink to this heading">¶</a></h3>
+<h3>list<a class="headerlink" href="#list" title="Permalink to this headline">¶</a></h3>
 <p>List containers and images on the host.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">amdinfer</span> <span class="nb">list</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="nb">type</span><span class="p">]</span>
 </pre></div>
 </div>
 <section id="positional-arguments">
-<h4>Positional Arguments<a class="headerlink" href="#positional-arguments" title="Permalink to this heading">¶</a></h4>
+<h4>Positional Arguments<a class="headerlink" href="#positional-arguments" title="Permalink to this headline">¶</a></h4>
 <dl class="option-list">
 <dt><kbd>type</kbd></dt>
 <dd><p>List the active containers (default) or specify ‘images’ or ‘labels’</p>
@@ -807,13 +781,13 @@ The documentation for the options available in this Python script can be seen he
 </section>
 </section>
 <section id="make">
-<h3>make<a class="headerlink" href="#make" title="Permalink to this heading">¶</a></h3>
+<h3>make<a class="headerlink" href="#make" title="Permalink to this headline">¶</a></h3>
 <p>This is a wrapper around make for the current build configuration.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">amdinfer</span> <span class="n">make</span> <span class="p">[</span><span class="o">--</span><span class="nb">dir</span> <span class="n">DIR</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">j</span> <span class="p">[</span><span class="n">JOBS</span><span class="p">]]</span>
 </pre></div>
 </div>
 <section id="options_repeat7">
-<h4>Options<a class="headerlink" href="#options_repeat7" title="Permalink to this heading">¶</a></h4>
+<h4>Options<a class="headerlink" href="#options_repeat7" title="Permalink to this headline">¶</a></h4>
 <dl class="option-list">
 <dt><kbd>--dir</kbd></dt>
 <dd><p>root path to the build tree. Defaults to ./build</p>
@@ -827,13 +801,13 @@ The documentation for the options available in this Python script can be seen he
 </section>
 </section>
 <section id="run">
-<h3>run<a class="headerlink" href="#run" title="Permalink to this heading">¶</a></h3>
+<h3>run<a class="headerlink" href="#run" title="Permalink to this headline">¶</a></h3>
 <p>This is a wrapper around ‘docker run’ with preset options. Any unparsed arguments are directly passed to ‘docker run’. Use ‘docker run –help’ to see the options.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">amdinfer</span> <span class="n">run</span> <span class="p">[</span><span class="o">--</span><span class="n">dev</span> <span class="o">|</span> <span class="o">--</span><span class="n">autotest</span><span class="o">-</span><span class="n">dev</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">command</span> <span class="n">COMMAND</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">devices</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">image</span> <span class="n">IMAGE</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">interactive</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">net</span><span class="o">-</span><span class="n">host</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">rm</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">user</span><span class="o">-</span><span class="n">config</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">working</span><span class="o">-</span><span class="nb">dir</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">xclbins</span><span class="p">]</span>
 </pre></div>
 </div>
 <section id="presets">
-<h4>Presets<a class="headerlink" href="#presets" title="Permalink to this heading">¶</a></h4>
+<h4>Presets<a class="headerlink" href="#presets" title="Permalink to this headline">¶</a></h4>
 <p>Presets define a set of options together for convenience. If additional options are provided, they override those set in the preset.</p>
 <dl class="option-list">
 <dt><kbd>--dev</kbd></dt>
@@ -845,7 +819,7 @@ The documentation for the options available in this Python script can be seen he
 </dl>
 </section>
 <section id="options_repeat8">
-<h4>Options<a class="headerlink" href="#options_repeat8" title="Permalink to this heading">¶</a></h4>
+<h4>Options<a class="headerlink" href="#options_repeat8" title="Permalink to this headline">¶</a></h4>
 <p>These options may default to a value if a preset is selected.</p>
 <dl class="option-list">
 <dt><kbd>--command</kbd></dt>
@@ -879,13 +853,13 @@ The documentation for the options available in this Python script can be seen he
 </section>
 </section>
 <section id="start">
-<h3>start<a class="headerlink" href="#start" title="Permalink to this heading">¶</a></h3>
+<h3>start<a class="headerlink" href="#start" title="Permalink to this headline">¶</a></h3>
 <p>Start amdinfer-server with the current build configuration. Unknown arguments are passed to amdinfer-server.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">amdinfer</span> <span class="n">start</span> <span class="p">[</span><span class="o">--</span><span class="nb">dir</span> <span class="n">DIR</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">gdb</span><span class="p">]</span>
 </pre></div>
 </div>
 <section id="options_repeat9">
-<h4>Options<a class="headerlink" href="#options_repeat9" title="Permalink to this heading">¶</a></h4>
+<h4>Options<a class="headerlink" href="#options_repeat9" title="Permalink to this headline">¶</a></h4>
 <dl class="option-list">
 <dt><kbd>--dir</kbd></dt>
 <dd><p>root path to the build tree. Defaults to ./build</p>
@@ -899,17 +873,16 @@ The documentation for the options available in this Python script can be seen he
 </section>
 </section>
 <section id="test">
-<h3>test<a class="headerlink" href="#test" title="Permalink to this heading">¶</a></h3>
+<h3>test<a class="headerlink" href="#test" title="Permalink to this headline">¶</a></h3>
 <p>Run the test suite with pytest. All unknown arguments are passed to pytest</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">amdinfer</span> <span class="n">test</span> <span class="p">[</span><span class="o">--</span><span class="n">mode</span> <span class="p">{</span><span class="nb">all</span><span class="p">,</span><span class="n">examples</span><span class="p">,</span><span class="n">tests</span><span class="p">}]</span> <span class="p">[</span><span class="o">--</span><span class="n">hostname</span> <span class="n">HOSTNAME</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">http</span><span class="o">-</span><span class="n">port</span> <span class="n">HTTP_PORT</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">load</span><span class="o">-</span><span class="n">before</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">build</span> <span class="n">BUILD</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">benchmark</span> <span class="p">{</span><span class="n">only</span><span class="p">,</span><span class="nb">all</span><span class="p">,</span><span class="n">skip</span><span class="p">}]</span> <span class="p">[</span><span class="o">--</span><span class="n">perf</span> <span class="p">{</span><span class="n">only</span><span class="p">,</span><span class="nb">all</span><span class="p">,</span><span class="n">skip</span><span class="p">}]</span>
-              <span class="p">[</span><span class="o">--</span><span class="n">cpp</span> <span class="p">{</span><span class="n">only</span><span class="p">,</span><span class="nb">all</span><span class="p">,</span><span class="n">skip</span><span class="p">}]</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">amdinfer</span> <span class="n">test</span> <span class="p">[</span><span class="o">--</span><span class="n">mode</span> <span class="p">{</span><span class="n">examples</span><span class="p">,</span><span class="nb">all</span><span class="p">,</span><span class="n">tests</span><span class="p">}]</span> <span class="p">[</span><span class="o">--</span><span class="n">hostname</span> <span class="n">HOSTNAME</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">http</span><span class="o">-</span><span class="n">port</span> <span class="n">HTTP_PORT</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">load</span><span class="o">-</span><span class="n">before</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">build</span> <span class="n">BUILD</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">benchmark</span> <span class="p">{</span><span class="nb">all</span><span class="p">,</span><span class="n">only</span><span class="p">,</span><span class="n">skip</span><span class="p">}]</span> <span class="p">[</span><span class="o">--</span><span class="n">perf</span> <span class="p">{</span><span class="nb">all</span><span class="p">,</span><span class="n">only</span><span class="p">,</span><span class="n">skip</span><span class="p">}]</span> <span class="p">[</span><span class="o">--</span><span class="n">cpp</span> <span class="p">{</span><span class="nb">all</span><span class="p">,</span><span class="n">only</span><span class="p">,</span><span class="n">skip</span><span class="p">}]</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span>
 </pre></div>
 </div>
 <section id="options_repeat10">
-<h4>Options<a class="headerlink" href="#options_repeat10" title="Permalink to this heading">¶</a></h4>
+<h4>Options<a class="headerlink" href="#options_repeat10" title="Permalink to this headline">¶</a></h4>
 <dl class="option-list">
 <dt><kbd>--mode</kbd></dt>
-<dd><p>Possible choices: all, examples, tests</p>
+<dd><p>Possible choices: examples, all, tests</p>
 <p>Type of tests to run. Defaults to tests</p>
 <p>Default: “tests”</p>
 </dd>
@@ -930,17 +903,17 @@ The documentation for the options available in this Python script can be seen he
 <p>Default: “Debug”</p>
 </dd>
 <dt><kbd>--benchmark</kbd></dt>
-<dd><p>Possible choices: only, all, skip</p>
+<dd><p>Possible choices: all, only, skip</p>
 <p>Run benchmark tests. Defaults to skip. Ignored if -m is specified</p>
 <p>Default: “skip”</p>
 </dd>
 <dt><kbd>--perf</kbd></dt>
-<dd><p>Possible choices: only, all, skip</p>
+<dd><p>Possible choices: all, only, skip</p>
 <p>Run perf tests. Defaults to skip. Ignored if -m is specified</p>
 <p>Default: “skip”</p>
 </dd>
 <dt><kbd>--cpp</kbd></dt>
-<dd><p>Possible choices: only, all, skip</p>
+<dd><p>Possible choices: all, only, skip</p>
 <p>Run cpp tests. Defaults to all. Ignored if -m is specified</p>
 <p>Default: “all”</p>
 </dd>
@@ -948,13 +921,13 @@ The documentation for the options available in this Python script can be seen he
 </section>
 </section>
 <section id="up">
-<h3>up<a class="headerlink" href="#up" title="Permalink to this heading">¶</a></h3>
+<h3>up<a class="headerlink" href="#up" title="Permalink to this headline">¶</a></h3>
 <p>Start docker-compose services</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">amdinfer</span> <span class="n">up</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">p</span> <span class="n">PROFILE</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">registry</span> <span class="n">REGISTRY</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">suffix</span> <span class="n">SUFFIX</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">service</span><span class="o">-</span><span class="n">suffix</span> <span class="n">SERVICE_SUFFIX</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">v</span> <span class="n">VERSION</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">write</span><span class="o">-</span><span class="n">only</span><span class="p">]</span>
 </pre></div>
 </div>
 <section id="options_repeat11">
-<h4>Options<a class="headerlink" href="#options_repeat11" title="Permalink to this heading">¶</a></h4>
+<h4>Options<a class="headerlink" href="#options_repeat11" title="Permalink to this headline">¶</a></h4>
 <dl class="option-list">
 <dt><kbd>-p, --profile</kbd></dt>
 <dd><p>profile to run (dev|prod|test|autotest-dev|autotest). Defaults to autotest-dev</p>
@@ -1008,7 +981,7 @@ The documentation for the options available in this Python script can be seen he
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on April 20, 2023.
+      <span class="lastupdated">Last updated on May 15, 2023.
       </span></p>
   </div>
 

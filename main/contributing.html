@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
@@ -24,24 +24,27 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
       <link rel="stylesheet" href="_static/twemoji.css" type="text/css" />
-      <link rel="stylesheet" href="_static/custom.css" type="text/css" />
       <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
+      <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+      <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="_static/jquery.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
         <script src="_static/clipboard.min.js"></script>
         <script src="_static/copybutton.js"></script>
         <script src="https://twemoji.maxcdn.com/v/latest/twemoji.min.js"></script>
         <script src="_static/twemoji.js"></script>
         <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
         <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
-        <script defer="defer" src="_static/tippy/contributing.58e34aa2-e90c-4910-ae77-487bea5af9ed.js"></script>
+        <script defer="defer" src="_static/tippy/contributing.15b094ef-5e68-4e59-9bf2-cc4831e28393.js"></script>
+        <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+        <script src="_static/dataTables.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -193,6 +196,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l2"><a class="reference internal" href="deployment.html#development-image">Development image</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="client_api.html">Client API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="client_api.html#include-the-api">Include the API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_api.html#create-a-client-object">Create a client object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_api.html#server-status">Server status</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_api.html#loading-a-backend">Loading a backend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_api.html#making-an-inference-request">Making an inference request</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_api.html#parsing-the-response">Parsing the response</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_api.html#next-steps">Next steps</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="kserve.html">KServe</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="kserve.html#set-up-kubernetes-and-kserve">Set up Kubernetes and KServe</a></li>
 <li class="toctree-l2"><a class="reference internal" href="kserve.html#get-or-build-the-amd-inference-server-image">Get or build the AMD Inference Server Image</a></li>
@@ -219,6 +232,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="troubleshooting.html#use-the-latest-version">Use the latest version</a></li>
 <li class="toctree-l2"><a class="reference internal" href="troubleshooting.html#use-server-logs">Use server logs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="troubleshooting.html#build-errors">Build errors</a></li>
 </ul>
 </li>
 </ul>
@@ -452,47 +466,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l3"><a class="reference internal" href="python.html#build-wheels">Build wheels</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="python.html#module-amdinfer">API</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.BadStatus"><code class="docutils literal notranslate"><span class="pre">BadStatus</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.Client"><code class="docutils literal notranslate"><span class="pre">Client</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.ConnectionError"><code class="docutils literal notranslate"><span class="pre">ConnectionError</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.DataType"><code class="docutils literal notranslate"><span class="pre">DataType</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.EnvironmentNotSetError"><code class="docutils literal notranslate"><span class="pre">EnvironmentNotSetError</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.ExternalError"><code class="docutils literal notranslate"><span class="pre">ExternalError</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.FileNotFoundError"><code class="docutils literal notranslate"><span class="pre">FileNotFoundError</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.FileReadError"><code class="docutils literal notranslate"><span class="pre">FileReadError</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.GrpcClient"><code class="docutils literal notranslate"><span class="pre">GrpcClient</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.HttpClient"><code class="docutils literal notranslate"><span class="pre">HttpClient</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.ImageInferenceRequest"><code class="docutils literal notranslate"><span class="pre">ImageInferenceRequest()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.InferenceRequest"><code class="docutils literal notranslate"><span class="pre">InferenceRequest</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.InferenceRequestInput"><code class="docutils literal notranslate"><span class="pre">InferenceRequestInput</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.InferenceRequestOutput"><code class="docutils literal notranslate"><span class="pre">InferenceRequestOutput</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.InferenceResponse"><code class="docutils literal notranslate"><span class="pre">InferenceResponse</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.InferenceResponseOutput"><code class="docutils literal notranslate"><span class="pre">InferenceResponseOutput</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.InferenceTensor"><code class="docutils literal notranslate"><span class="pre">InferenceTensor</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.InvalidArgumentError"><code class="docutils literal notranslate"><span class="pre">InvalidArgumentError</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.ModelMetadata"><code class="docutils literal notranslate"><span class="pre">ModelMetadata</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.NativeClient"><code class="docutils literal notranslate"><span class="pre">NativeClient</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.ParameterMap"><code class="docutils literal notranslate"><span class="pre">ParameterMap</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.RuntimeError"><code class="docutils literal notranslate"><span class="pre">RuntimeError</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.Server"><code class="docutils literal notranslate"><span class="pre">Server</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.ServerMetadata"><code class="docutils literal notranslate"><span class="pre">ServerMetadata</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.Tensor"><code class="docutils literal notranslate"><span class="pre">Tensor</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.WebSocketClient"><code class="docutils literal notranslate"><span class="pre">WebSocketClient</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.inferAsyncOrdered"><code class="docutils literal notranslate"><span class="pre">inferAsyncOrdered()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.inferAsyncOrderedBatched"><code class="docutils literal notranslate"><span class="pre">inferAsyncOrderedBatched()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.inference_request_to_dict"><code class="docutils literal notranslate"><span class="pre">inference_request_to_dict()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.loadEnsemble"><code class="docutils literal notranslate"><span class="pre">loadEnsemble()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.parallel_infer"><code class="docutils literal notranslate"><span class="pre">parallel_infer()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.serverHasExtension"><code class="docutils literal notranslate"><span class="pre">serverHasExtension()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.start_http_client_server"><code class="docutils literal notranslate"><span class="pre">start_http_client_server()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.stringToArray"><code class="docutils literal notranslate"><span class="pre">stringToArray()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.unloadModels"><code class="docutils literal notranslate"><span class="pre">unloadModels()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.waitUntilModelNotReady"><code class="docutils literal notranslate"><span class="pre">waitUntilModelNotReady()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.waitUntilModelReady"><code class="docutils literal notranslate"><span class="pre">waitUntilModelReady()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python.html#amdinfer.waitUntilServerReady"><code class="docutils literal notranslate"><span class="pre">waitUntilServerReady()</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="python.html#module-amdinfer">API</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="rest.html">REST Endpoints</a></li>
@@ -523,21 +497,21 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
            <div itemprop="articleBody">
              
   <section id="contributing">
-<h1>Contributing<a class="headerlink" href="#contributing" title="Permalink to this heading">¶</a></h1>
+<h1>Contributing<a class="headerlink" href="#contributing" title="Permalink to this headline">¶</a></h1>
 <p>AMD Inference Server is in active development and many things need to be done so thanks for helping!</p>
 <section id="ways-to-contribute">
-<h2>Ways to contribute<a class="headerlink" href="#ways-to-contribute" title="Permalink to this heading">¶</a></h2>
+<h2>Ways to contribute<a class="headerlink" href="#ways-to-contribute" title="Permalink to this headline">¶</a></h2>
 <p>You can contribute in a variety of ways depending on your experience, time, and permissions.
 The easiest way to help out is react and vote up issues and discussions that are important to you.</p>
 <section id="idea-generation">
-<h3>Idea generation<a class="headerlink" href="#idea-generation" title="Permalink to this heading">¶</a></h3>
+<h3>Idea generation<a class="headerlink" href="#idea-generation" title="Permalink to this headline">¶</a></h3>
 <p>If you have ideas on new things that may be needed or changing something, <a class="reference external" href="https://github.com/Xilinx/inference-server/discussions/new?category=ideas">start a discussion</a>.
 New idea discussions don’t need to be fully fleshed out or limited in scope.
 Instead, use it as a notepad for ideas that you have so they can be remembered and tracked.
 Having it as a discussion allows the community and maintainers to elaborate on the idea and determine if it’s something of interest.</p>
 </section>
 <section id="raise-issues">
-<h3>Raise issues<a class="headerlink" href="#raise-issues" title="Permalink to this heading">¶</a></h3>
+<h3>Raise issues<a class="headerlink" href="#raise-issues" title="Permalink to this headline">¶</a></h3>
 <p>An issue can be a bug report, a new feature request, or a change to documentation.
 They’re used to track concrete measurable tasks that need to get done, which means there should be a clear way to determine that the issue is resolved.
 If you find a bug, give us as much information as you can about your environment, hardware, steps to reproduce and relevant logs.
@@ -548,7 +522,7 @@ These related issues aimed at implementing this idea should link back to the ori
 If an issue is better suited as a discussion before being formalized as an issue, it will be moved.</p>
 </section>
 <section id="triage">
-<h3>Triage<a class="headerlink" href="#triage" title="Permalink to this heading">¶</a></h3>
+<h3>Triage<a class="headerlink" href="#triage" title="Permalink to this headline">¶</a></h3>
 <p>Managing and organizing the repository are tasks for those with appropriate permissions:</p>
 <ul class="simple">
 <li><p>Issues that are better suited for discussions should be moved</p></li>
@@ -558,17 +532,17 @@ If an issue is better suited as a discussion before being formalized as an issue
 </ul>
 </section>
 <section id="raise-pull-requests">
-<h3>Raise pull requests<a class="headerlink" href="#raise-pull-requests" title="Permalink to this heading">¶</a></h3>
+<h3>Raise pull requests<a class="headerlink" href="#raise-pull-requests" title="Permalink to this headline">¶</a></h3>
 <p>A pull request should be made against an active issue.
 An active issue indicates that it has gone through a discussion already and is approved for development.
 You can fork the repository, make your additions and raise a pull request.
-Remember to <a href="#id1"><span class="problematic" id="id2">:ref:`sign your git commits &lt;Sign your work&gt;`_</span></a>.
+Remember to <a class="reference internal" href="#sign-your-work"><span class="std std-ref">sign your git commits</span></a>.
 The pull request will be reviewed by an owner and eventually approved for testing.
 If the automated testing passes, then it can be merged in.
 All code is licensed under the terms of the LICENSE file included in the repository.
 Your contribution will be accepted under the same license.</p>
 <section id="sign-your-work">
-<h4>Sign your work<a class="headerlink" href="#sign-your-work" title="Permalink to this heading">¶</a></h4>
+<span id="id1"></span><h4>Sign your work<a class="headerlink" href="#sign-your-work" title="Permalink to this headline">¶</a></h4>
 <p>Please use the <em>Signed-off-by</em> line at the end of your patch which indicates that you accept the <a class="reference external" href="https://developercertificate.org/">Developer Certificate of Origin (DCO)</a>, reproduced below:</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Developer Certificate of Origin
 Version 1.1
@@ -625,16 +599,16 @@ You can see more information about commit signature verification on <a class="re
 </section>
 </section>
 <section id="style-guide">
-<h2>Style guide<a class="headerlink" href="#style-guide" title="Permalink to this heading">¶</a></h2>
+<h2>Style guide<a class="headerlink" href="#style-guide" title="Permalink to this headline">¶</a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">pre-commit</span></code> is used to enforce style and is included in the development container.
 Install it with <code class="docutils literal notranslate"><span class="pre">pre-commit</span> <span class="pre">install</span></code> to configure the pre-commit hook.
 Add tests to validate your changes.</p>
 <section id="documentation">
-<h3>Documentation<a class="headerlink" href="#documentation" title="Permalink to this heading">¶</a></h3>
+<h3>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">¶</a></h3>
 <p>The documentation for the AMD Inference Server is written in reStructuredText and is located in the <code class="docutils literal notranslate"><span class="pre">docs/</span></code> directory.
 If you are unfamiliar with reStructuredText, check out a <a class="reference external" href="https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html">basic tutorial</a></p>
 <section id="headers">
-<h4>Headers<a class="headerlink" href="#headers" title="Permalink to this heading">¶</a></h4>
+<h4>Headers<a class="headerlink" href="#headers" title="Permalink to this headline">¶</a></h4>
 <p>Headers are denoted in reStructuredText with a series of punctuation characters at least as long as the title.
 While it does not enforce that a particular character denotes a particular hierarchy, you should use the following convention that matches the <a class="reference external" href="https://devguide.python.org/documentation/markup/#sections">Python convention</a>:</p>
 <ul class="simple">
@@ -647,7 +621,7 @@ While it does not enforce that a particular character denotes a particular hiera
 </ul>
 </section>
 <section id="admonitions">
-<h4>Admonitions<a class="headerlink" href="#admonitions" title="Permalink to this heading">¶</a></h4>
+<h4>Admonitions<a class="headerlink" href="#admonitions" title="Permalink to this headline">¶</a></h4>
 <p>Admonition boxes can be used to highlight and draw attention to points.
 They should be used sparingly to avoid distracting the reader.
 While reStructuredText supports many types of admonitions, the following groups of admonitions share the same coloring style in our theme.</p>
@@ -659,6 +633,10 @@ While reStructuredText supports many types of admonitions, the following groups 
 </ul>
 <p>For maintaining visual consistency, admonitions in the same class should convey the same relative importance.</p>
 <table class="docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Admonition</p></th>
 <th class="head"><p>Usage</p></th>
@@ -706,7 +684,7 @@ While reStructuredText supports many types of admonitions, the following groups 
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on April 20, 2023.
+      <span class="lastupdated">Last updated on May 15, 2023.
       </span></p>
   </div>
 
