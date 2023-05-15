@@ -29,15 +29,37 @@
 
 namespace amdinfer {
 
-using Images = std::vector<std::vector<fp16>>;
+template <typename T>
+using Images = std::vector<std::vector<T>>;
 
-Images preprocess(const std::vector<std::string>& paths) {
+Images<float> preprocess_fp32(const std::vector<std::string>& paths) {
+  const std::array<float, 3> mean{0.485F, 0.456F, 0.406F};
+  const std::array<float, 3> std{4.367F, 4.464F, 4.444F};
+  const auto image_size = 224;
+  const auto convert_scale = 1 / 255.0;
+
+  amdinfer::pre_post::ImagePreprocessOptions<float, 3> options;
+  options.order = amdinfer::pre_post::ImageOrder::NCHW;
+  options.height = image_size;
+  options.width = image_size;
+  options.mean = mean;
+  options.std = std;
+  options.normalize = true;
+  options.convert_color = true;
+  options.color_code = cv::COLOR_BGR2RGB;
+  options.convert_type = true;
+  options.type = CV_32FC3;
+  options.convert_scale = convert_scale;
+  return amdinfer::pre_post::imagePreprocess(paths, options);
+}
+
+Images<fp16> preprocess_fp16(const std::vector<std::string>& paths) {
   const std::array<fp16, 3> mean{static_cast<fp16>(0.485F),
                                  static_cast<fp16>(0.456F),
                                  static_cast<fp16>(0.406F)};
-  const std::array<fp16, 3> std{static_cast<fp16>(4.367),
-                                static_cast<fp16>(4.464),
-                                static_cast<fp16>(4.444)};
+  const std::array<fp16, 3> std{static_cast<fp16>(4.367F),
+                                static_cast<fp16>(4.464F),
+                                static_cast<fp16>(4.444F)};
   const auto image_size = 224;
   const auto convert_scale = 1 / 255.0;
 
@@ -56,46 +78,66 @@ Images preprocess(const std::vector<std::string>& paths) {
   return amdinfer::pre_post::imagePreprocess(paths, options);
 }
 
+template <typename T>
 std::vector<int> postprocess(const amdinfer::InferenceResponseOutput& output,
                              int k) {
   return amdinfer::pre_post::resnet50Postprocess(
-    static_cast<fp16*>(output.getData()), output.getSize(), k);
+    static_cast<T*>(output.getData()), output.getSize(), k);
 }
 
 std::string workerLoad(Client* client, const ParameterMap& parameters) {
   return client->workerLoad("Migraphx", parameters);
 }
 
-std::vector<InferenceRequest> constructRequests(const Images& images) {
+template <typename T>
+std::vector<InferenceRequest> constructRequests(const Images<T>& images) {
   std::vector<InferenceRequest> requests;
   requests.reserve(images.size());
 
   const std::initializer_list<uint64_t> shape = {224, 224, 3};
 
+  DataType type;
+  if constexpr (std::is_same_v<T, fp16>) {
+    type = DataType::Fp16;
+  } else {
+    type = DataType::Fp32;
+  }
+
   for (const auto& image : images) {
     requests.emplace_back();
     // NOLINTNEXTLINE(google-readability-casting)
-    requests.back().addInputTensor((void*)image.data(), shape, DataType::Fp16);
+    requests.back().addInputTensor((void*)image.data(), shape, type);
   }
 
   return requests;
 }
 
-void validate(const std::vector<InferenceResponse>& responses) {
-  const std::array golden{259, 261, 260, 154, 157};
+template <typename T, int K>
+void validate(const std::vector<InferenceResponse>& responses,
+              const std::array<int, K>& golden) {
   const auto k = golden.size();
 
   for (const auto& response : responses) {
     auto outputs = response.getOutputs();
     ASSERT_EQ(outputs.size(), 1);
-    auto top_k = postprocess(outputs[0], k);
+    auto top_k = postprocess<T>(outputs[0], k);
     for (auto j = 0U; j < k; ++j) {
       EXPECT_EQ(top_k.at(j), golden.at(j));
     }
   }
 }
 
-void test0(Client* client) {
+void validateFp16(const std::vector<InferenceResponse>& responses) {
+  const std::array golden{259, 261, 260, 154, 157};
+  validate<fp16, 5>(responses, golden);
+}
+
+void validateFp32(const std::vector<InferenceResponse>& responses) {
+  const std::array golden{259, 261, 157, 260, 154};
+  validate<float, 5>(responses, golden);
+}
+
+void test_fp16(Client* client) {
   if (!serverHasExtension(client, "migraphx")) {
     GTEST_SKIP() << "MIGraphX support required from the server but not found";
   }
@@ -106,30 +148,69 @@ void test0(Client* client) {
   amdinfer::ParameterMap parameters;
   parameters.put("model", model);
 
-  auto images = preprocess({test_asset});
+  auto images = preprocess_fp16({test_asset});
   auto endpoint = workerLoad(client, parameters);
   auto requests = constructRequests(images);
   auto responses = inferAsyncOrdered(client, endpoint, requests);
-  validate(responses);
+  validateFp16(responses);
+
+  client->workerUnload(endpoint);
+  waitUntilModelNotReady(client, endpoint);
+}
+
+void test_fp32(Client* client) {
+  if (!serverHasExtension(client, "migraphx")) {
+    GTEST_SKIP() << "MIGraphX support required from the server but not found";
+  }
+
+  const auto test_asset = getPathToAsset("asset_dog-3619020_640.jpg");
+  const auto model = getPathToAsset("onnx_resnet50");
+
+  amdinfer::ParameterMap parameters;
+  parameters.put("model", model);
+
+  auto images = preprocess_fp32({test_asset});
+  auto endpoint = workerLoad(client, parameters);
+  auto requests = constructRequests(images);
+  auto responses = inferAsyncOrdered(client, endpoint, requests);
+  validateFp32(responses);
+
+  client->workerUnload(endpoint);
+  waitUntilModelNotReady(client, endpoint);
 }
 
 #ifdef AMDINFER_ENABLE_GRPC
 // @pytest.mark.extensions(["migraphx"])
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
-TEST_F(GrpcFixture, WorkersMigraphxResnet50) { test0(client_.get()); }
+TEST_F(GrpcFixture, WorkersMigraphxResnet50Fp16) { test_fp16(client_.get()); }
+
+// @pytest.mark.extensions(["migraphx"])
+// NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
+TEST_F(GrpcFixture, WorkersMigraphxResnet50Fp32) { test_fp32(client_.get()); }
 #endif
 
 // @pytest.mark.extensions(["migraphx"])
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
-TEST_F(BaseFixture, WorkersMigraphxResnet50) {
+TEST_F(BaseFixture, WorkersMigraphxResnet50Fp16) {
   NativeClient client(&server_);
-  test0(&client);
+  test_fp16(&client);
+}
+
+// @pytest.mark.extensions(["migraphx"])
+// NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
+TEST_F(BaseFixture, WorkersMigraphxResnet50Fp32) {
+  NativeClient client(&server_);
+  test_fp32(&client);
 }
 
 #ifdef AMDINFER_ENABLE_HTTP
 // @pytest.mark.extensions(["migraphx"])
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
-TEST_F(HttpFixture, WorkersMigraphxResnet50) { test0(client_.get()); }
+TEST_F(HttpFixture, WorkersMigraphxResnet50Fp16) { test_fp16(client_.get()); }
+
+// @pytest.mark.extensions(["migraphx"])
+// NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
+TEST_F(HttpFixture, WorkersMigraphxResnet50Fp32) { test_fp32(client_.get()); }
 #endif
 
 }  // namespace amdinfer
