@@ -123,15 +123,15 @@ ModelConfig openConfigFile(const fs::path& config_path) {
     config_path.extension().string());
 }
 
-ModelConfig parseModel(const fs::path& repository, const std::string& model) {
+ModelConfig parseModel(const fs::path& repository, const std::string& model,
+                       const std::string& version) {
   AMDINFER_IF_LOGGING(Logger logger{Loggers::Server};)
   auto model_path = repository / model;
 
   auto config_path = findConfigFile(model_path, model);
   auto config = openConfigFile(config_path);
 
-  // TODO(varunsh): support other versions than 1/
-  const auto model_base = config_path.parent_path() / "1";
+  const auto model_base = config_path.parent_path() / version;
 
   config.setModelFiles(model_base);
   return config;
@@ -182,7 +182,9 @@ void UpdateListener::handleFileAction(
       std::this_thread::sleep_for(delay);
       auto model_name = fs::path(dir).parent_path().filename();
       try {
-        auto config = parseModel(repository_, model_name);
+        // when auto-loading, only auto load the first version, which is
+        // guaranteed to exist
+        auto config = parseModel(repository_, model_name, "1");
         for (const auto& [model, parameters] : config) {
           endpoints_->load(model, parameters);
         }

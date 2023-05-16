@@ -72,11 +72,12 @@ ServerMetadata SharedState::serverMetadata() {
   return metadata;
 }
 
-void SharedState::modelLoad(const std::string& model,
+void SharedState::modelLoad(const std::string& versioned_model,
                             const ParameterMap& parameters) {
-  assert(util::isLower(model));
+  assert(util::isLower(versioned_model));
 
-  auto model_config = parseModel(repository_.getRepository(), model);
+  const auto [model, version] = splitVersionedEndpoint(versioned_model);
+  auto model_config = parseModel(repository_.getRepository(), model, version);
   const auto end = model_config.crend();
   for (auto it = model_config.crbegin(); it != end; ++it) {
     const auto& [model_name, model_parameters] = *it;
@@ -85,12 +86,13 @@ void SharedState::modelLoad(const std::string& model,
     for (const auto& [key, value] : parameters) {
       updated_parameters.put(key, value);
     }
-    endpoints_.load(model_name, updated_parameters);
+    auto versioned_endpoint = getVersionedEndpoint(model_name, version);
+    endpoints_.load(versioned_endpoint, updated_parameters);
   }
 }
 
-void SharedState::modelUnload(const std::string& model) {
-  this->workerUnload(model);
+void SharedState::modelUnload(const std::string& versioned_model) {
+  this->workerUnload(versioned_model);
 }
 
 std::string SharedState::workerLoad(const std::string& worker,

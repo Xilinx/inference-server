@@ -240,8 +240,7 @@ void getModelReady(DrogonCallback &&callback, SharedState *state,
 void HttpServer::getModelReady([[maybe_unused]] const HttpRequestPtr &req,
                                DrogonCallback &&callback,
                                std::string const &model) const {
-  amdinfer::getModelReady(std::move(callback), state_,
-                          getVersionedEndpoint(model, "1"));
+  amdinfer::getModelReady(std::move(callback), state_, model);
 }
 
 void HttpServer::getModelReadyVersion(
@@ -300,8 +299,7 @@ void getModelMetadata(DrogonCallback &&callback, SharedState *state,
 void HttpServer::getModelMetadata([[maybe_unused]] const HttpRequestPtr &req,
                                   DrogonCallback &&callback,
                                   const std::string &model) const {
-  amdinfer::getModelMetadata(std::move(callback), state_,
-                             getVersionedEndpoint(model, "1"));
+  amdinfer::getModelMetadata(std::move(callback), state_, model);
 }
 
 void HttpServer::getModelMetadataVersion(
@@ -536,8 +534,7 @@ void modelInfer(const HttpRequestPtr &req, DrogonCallback &&callback,
 void HttpServer::modelInfer(const HttpRequestPtr &req,
                             DrogonCallback &&callback,
                             const std::string &model) const {
-  amdinfer::modelInfer(req, std::move(callback), state_,
-                       getVersionedEndpoint(model, "1"));
+  amdinfer::modelInfer(req, std::move(callback), state_, model);
 }
 
 void HttpServer::modelInferVersion(const HttpRequestPtr &req,
@@ -591,8 +588,7 @@ void modelLoad(const HttpRequestPtr &req, DrogonCallback &&callback,
 
 void HttpServer::modelLoad(const HttpRequestPtr &req, DrogonCallback &&callback,
                            const std::string &model) const {
-  amdinfer::modelLoad(req, std::move(callback), state_,
-                      getVersionedEndpoint(model, "1"));
+  amdinfer::modelLoad(req, std::move(callback), state_, model);
 }
 
 void HttpServer::modelLoadVersion(const HttpRequestPtr &req,
@@ -633,8 +629,7 @@ void modelUnload([[maybe_unused]] const HttpRequestPtr &req,
 void HttpServer::modelUnload(const HttpRequestPtr &req,
                              DrogonCallback &&callback,
                              const std::string &model) const {
-  amdinfer::modelUnload(req, std::move(callback), state_,
-                        getVersionedEndpoint(model, "1"));
+  amdinfer::modelUnload(req, std::move(callback), state_, model);
 }
 
 void HttpServer::modelUnloadVersion(const HttpRequestPtr &req,

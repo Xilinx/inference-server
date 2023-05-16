@@ -238,6 +238,7 @@ void Endpoints::updateManager(UpdateCommandQueue* input_queue) {
   AMDINFER_LOG_DEBUG(logger_, "Ending update_thread");
 }
 
+// TODO(varunsh): clarify nomenclature here with worker/model/versioned_model
 std::string Endpoints::unsafeLoad(const std::string& worker,
                                   ParameterMap* parameters) {
   bool share = true;
