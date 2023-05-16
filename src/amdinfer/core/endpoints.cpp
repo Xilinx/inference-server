@@ -19,7 +19,8 @@
 
 #include "amdinfer/core/endpoints.hpp"
 
-#include <cassert>      // for assert
+#include <cassert>  // for assert
+#include <regex>
 #include <type_traits>  // for __decay_and_strip<>::__type
 
 #include "amdinfer/batching/batcher.hpp"        // for Batcher
@@ -39,15 +40,20 @@ std::string getVersionedEndpoint(const std::string& model,
 }
 
 std::pair<std::string, std::string> splitVersionedEndpoint(
-  std::string_view endpoint) {
-  auto pos = endpoint.find_last_of("_");
-  if (pos == std::string::npos) {
-    throw invalid_argument("No '_' found in endpoint.");
+  const std::string& endpoint) {
+  // match the last _<#> in the string
+  static std::regex version_regex{R"(([\w-]+)(_)(\d+))"};
+  // match[1] is the model, match[2] is _, and match[3] is the version
+  std::smatch match;
+  auto found = std::regex_search(endpoint, match, version_regex);
+  if (!found) {
+    return {std::string{endpoint}, ""};
   }
-  auto model = endpoint.substr(0, pos);
-  auto version = endpoint.substr(pos + 1);
 
-  return {std::string{model}, std::string{version}};
+  auto model = std::string(match[1].first, match[1].second);
+  auto version = std::string(match[3].first, match[3].second);
+
+  return {model, version};
 }
 
 Endpoints::Endpoints() {

@@ -76,7 +76,11 @@ void SharedState::modelLoad(const std::string& versioned_model,
                             const ParameterMap& parameters) {
   assert(util::isLower(versioned_model));
 
-  const auto [model, version] = splitVersionedEndpoint(versioned_model);
+  auto [model, version] = splitVersionedEndpoint(versioned_model);
+  bool versioned = !version.empty();
+  if (!versioned) {
+    version = "1";
+  }
   auto model_config = parseModel(repository_.getRepository(), model, version);
   const auto end = model_config.crend();
   for (auto it = model_config.crbegin(); it != end; ++it) {
@@ -86,7 +90,8 @@ void SharedState::modelLoad(const std::string& versioned_model,
     for (const auto& [key, value] : parameters) {
       updated_parameters.put(key, value);
     }
-    auto versioned_endpoint = getVersionedEndpoint(model_name, version);
+    auto versioned_endpoint =
+      versioned ? getVersionedEndpoint(model_name, version) : model_name;
     endpoints_.load(versioned_endpoint, updated_parameters);
   }
 }

@@ -40,9 +40,7 @@ void test(const amdinfer::Client* client) {
 
   client->modelUnload(model);  // unload the model
 
-  while (!client->modelList().empty()) {
-    std::this_thread::yield();
-  }
+  waitUntilModelNotReady(client, model);
 }
 
 #ifdef AMDINFER_ENABLE_GRPC
