@@ -51,9 +51,7 @@ class GrpcFixture : public BaseFixture {
       BaseFixture::SetUp();
       server_.startGrpc(kDefaultGrpcPort);
       started_ = true;
-      while (!client_->serverLive()) {
-        std::this_thread::yield();
-      }
+      amdinfer::waitUntilServerReady(client_.get());
     }
   }
 
@@ -76,9 +74,7 @@ class HttpFixture : public BaseFixture {
     if (!client_->serverLive()) {
       server_.startHttp(kDefaultHttpPort);
       started_ = true;
-      while (!client_->serverLive()) {
-        std::this_thread::yield();
-      }
+      amdinfer::waitUntilServerReady(client_.get());
     }
   }
 
