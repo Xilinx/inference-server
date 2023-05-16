@@ -137,7 +137,7 @@ The configuration file for this ensemble could be:
 
     [[models.inputs]]
     name = "image_in"
-    datatype = "STRING"
+    datatype = "BYTES"
     shape = [1048576]
     id = ""
 
@@ -177,7 +177,7 @@ The configuration file for this ensemble could be:
 
     [[models.outputs]]
     name = "image_out"
-    datatype = "STRING"
+    datatype = "BYTES"
     shape = [1048576]
     id = ""
 

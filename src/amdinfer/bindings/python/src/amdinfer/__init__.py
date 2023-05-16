@@ -56,7 +56,7 @@ def _set_data(input_n, image):
         input_n.setFp32Data(image)
     elif input_n.datatype == DataType.FP64:
         input_n.setFp64Data(image)
-    elif input_n.datatype == DataType.STRING:
+    elif input_n.datatype == DataType.BYTES:
         input_n.setStringData(image)
     else:
         raise ValueError("Unsupported type")
@@ -100,7 +100,7 @@ def ImageInferenceRequest(images, asTensor=True):
                 input_n.shape = [*read_image.shape]  # Convert tuple to list
                 input_n = _set_data(input_n, read_image.flatten())
             else:
-                input_n.datatype = DataType.STRING
+                input_n.datatype = DataType.BYTES
                 with open(image, "rb") as f:
                     data = base64.b64encode(f.read()).decode("utf-8")
                     input_n = _set_data(input_n, stringToArray(data))
@@ -200,7 +200,7 @@ def _get_data(request_input: InferenceRequestInput):
         return request_input.getFp32Data()
     if datatype == DataType.FP64:
         return request_input.getFp64Data()
-    if datatype == DataType.STRING:
+    if datatype == DataType.BYTES:
         return request_input.getStringData()
     raise NotImplementedError(f"{datatype.str()} not supported")
 

@@ -70,7 +70,7 @@ def validate(response, image):
     assert len(outputs) == 1
 
     output = outputs[0]
-    if output.datatype == amdinfer.DataType.STRING:
+    if output.datatype == amdinfer.DataType.BYTES:
         data = output.getStringData()
         compare_jpgs(data, image)
         assert output.parameters.empty()

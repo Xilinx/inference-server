@@ -91,7 +91,7 @@ TEST(UnitModelConfig, Chain) {
 
     [[models.inputs]]
     name = "image_in"
-    datatype = "STRING"
+    datatype = "BYTES"
     shape = [1048576]
     id = ""
 
@@ -131,7 +131,7 @@ TEST(UnitModelConfig, Chain) {
 
     [[models.outputs]]
     name = "image_out"
-    datatype = "STRING"
+    datatype = "BYTES"
     shape = [1048576]
     id = "postprocessed_image"
   )"sv;
