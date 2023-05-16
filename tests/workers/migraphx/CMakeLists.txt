@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set(tests resnet50_fp16)
+set(tests resnet50)
 
 amdinfer_add_system_tests("${tests}")
 
