@@ -43,6 +43,10 @@ foreach(test ${tests})
   endif()
 endforeach()
 
+if(${AMDINFER_ENABLE_MIGRAPHX})
+  add_subdirectory(migraphx)
+endif()
+
 if(${AMDINFER_ENABLE_VITIS})
   add_subdirectory(xmodel)
 endif()
