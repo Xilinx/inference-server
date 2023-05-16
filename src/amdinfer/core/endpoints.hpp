@@ -55,6 +55,11 @@ enum class UpdateCommandType {
   Shutdown,
 };
 
+std::string getVersionedEndpoint(const std::string& model,
+                                 const std::string& version);
+std::pair<std::string, std::string> splitVersionedEndpoint(
+  std::string_view endpoint);
+
 /**
  * @brief Commands sent to update the Manager consist of an ID, a key
  * value (string), an integer, and a pointer to an exception so if the update

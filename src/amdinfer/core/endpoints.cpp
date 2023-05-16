@@ -33,6 +33,23 @@
 
 namespace amdinfer {
 
+std::string getVersionedEndpoint(const std::string& model,
+                                 const std::string& version) {
+  return model + "_" + version;
+}
+
+std::pair<std::string, std::string> splitVersionedEndpoint(
+  std::string_view endpoint) {
+  auto pos = endpoint.find_last_of("_");
+  if (pos == std::string::npos) {
+    throw invalid_argument("No '_' found in endpoint.");
+  }
+  auto model = endpoint.substr(0, pos);
+  auto version = endpoint.substr(pos + 1);
+
+  return {std::string{model}, std::string{version}};
+}
+
 Endpoints::Endpoints() {
   update_thread_ = std::thread(&Endpoints::updateManager, this, &update_queue_);
 }
