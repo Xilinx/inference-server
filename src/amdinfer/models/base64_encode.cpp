@@ -43,12 +43,6 @@ std::vector<amdinfer::Tensor> getInputs() {
 
 std::vector<amdinfer::Tensor> getOutputs() { return {}; }
 
-// Support up to Full HD
-const auto kMaxImageHeight = 1080;
-const auto kMaxImageWidth = 1920;
-const auto kMaxImageChannels = 3;
-const auto kMaxImageSize = kMaxImageHeight * kMaxImageWidth * kMaxImageChannels;
-
 amdinfer::BatchPtr run(amdinfer::Batch* batch) {
   AMDINFER_IF_LOGGING(amdinfer::Logger logger{amdinfer::Loggers::Server});
 
