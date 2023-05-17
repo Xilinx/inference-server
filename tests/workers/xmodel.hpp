@@ -188,7 +188,7 @@ inline int run(const std::string& xmodel, int images, int threads,
     std::ignore = client.workerLoad("Xmodel", &parameters);
   }
 
-  std::vector<uint64_t> shape;
+  std::vector<int64_t> shape;
   amdinfer::DataType type = amdinfer::DataType::Int8;
   {
     std::unique_ptr<xir::Graph> graph = xir::Graph::deserialize(xmodel);

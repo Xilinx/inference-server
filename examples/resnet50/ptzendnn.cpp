@@ -23,7 +23,7 @@
 #include <array>                // for array
 #include <cassert>              // for assert
 #include <chrono>               // for duration
-#include <cstdint>              // for uint64_t
+#include <cstdint>              // for int64_t
 #include <cstdlib>              // for exit, getenv
 #include <exception>            // for exception
 #include <filesystem>           // for path, oper...
@@ -97,11 +97,11 @@ std::vector<int> postprocess(const amdinfer::InferenceResponseOutput& output,
  * @return std::vector<amdinfer::InferenceRequest>
  */
 std::vector<amdinfer::InferenceRequest> constructRequests(const Images& images,
-                                                          uint64_t input_size) {
+                                                          int64_t input_size) {
   std::vector<amdinfer::InferenceRequest> requests;
   requests.reserve(images.size());
 
-  const std::initializer_list<uint64_t> shape = {input_size, input_size, 3};
+  const std::initializer_list<int64_t> shape = {input_size, input_size, 3};
 
   for (const auto& image : images) {
     requests.emplace_back();

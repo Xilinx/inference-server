@@ -41,7 +41,7 @@ namespace amdinfer {
 
 void wrapInferenceTensor(py::module_ &m) {
   py::class_<InferenceTensor, Tensor>(m, "InferenceTensor")
-    .def(py::init<std::string, std::vector<uint64_t>, amdinfer::DataType>(),
+    .def(py::init<std::string, std::vector<int64_t>, amdinfer::DataType>(),
          DOCS(InferenceTensor, InferenceTensor), py::arg("name"),
          py::arg("shape"), py::arg("dataType"))
     .def(py::init<Tensor>(), DOCS(InferenceTensor, InferenceTensor, 2),

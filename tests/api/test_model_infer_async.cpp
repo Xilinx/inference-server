@@ -30,7 +30,7 @@ void test(const Client* client) {
   EXPECT_EQ(endpoint, "cplusplus");
 
   std::vector<uint32_t> img_data;
-  auto shape = {1UL};
+  auto shape = {1L};
   auto size = 1;
   img_data.reserve(size);
   img_data.push_back(1);

@@ -30,9 +30,9 @@
 #include "amdinfer/util/timer.hpp"
 
 const int kInputTensors = 2;
-const std::array<size_t, kInputTensors> kInputLengths = {1, 2};
+const std::array<int64_t, kInputTensors> kInputLengths = {1, 2};
 const int kOutputTensors = 3;
-const std::array<size_t, kOutputTensors> kOutputLengths = {1, 4, 3};
+const std::array<int64_t, kOutputTensors> kOutputLengths = {1, 4, 3};
 
 extern "C" {
 
@@ -40,7 +40,7 @@ std::vector<amdinfer::Tensor> getInputs() {
   std::vector<amdinfer::Tensor> input_tensors;
   input_tensors.reserve(kInputTensors);
   for (auto i = 0; i < kInputTensors; ++i) {
-    std::vector<size_t> shape = {kInputLengths.at(i)};
+    std::vector<int64_t> shape = {kInputLengths.at(i)};
     input_tensors.emplace_back("input" + std::to_string(i), shape,
                                amdinfer::DataType::Uint32);
   }
@@ -72,7 +72,7 @@ amdinfer::BatchPtr run(amdinfer::Batch* batch) {
     const auto& req = batch->getRequest(j);
     auto new_request = req->propagate();
     for (auto i = 0; i < kOutputTensors; ++i) {
-      std::vector<size_t> shape = {kOutputLengths.at(i)};
+      std::vector<int64_t> shape = {kOutputLengths.at(i)};
       auto* data_ptr =
         input_buffers.at(i)->data(j * kOutputLengths.at(i) * data_size);
       new_request->addInputTensor(data_ptr, shape, amdinfer::DataType::Uint32,

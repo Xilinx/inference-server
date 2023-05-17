@@ -57,7 +57,7 @@ std::vector<InferenceRequest> constructRequests(const Images& images) {
   std::vector<InferenceRequest> requests;
   requests.reserve(images.size());
 
-  const std::initializer_list<uint64_t> shape = {224, 224, 3};
+  const std::initializer_list<int64_t> shape = {224, 224, 3};
 
   for (const auto& image : images) {
     requests.emplace_back();

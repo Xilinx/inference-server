@@ -133,9 +133,10 @@ void ResNet50Stream::doAcquire(ParameterMap* parameters) {
 
   this->graph_ = this->sys_manager_->getGraph(this->graph_name_);
 
-  this->metadata_.addInputTensor(
-    "input", {this->batch_size_, kImageHeight, kImageWidth, kImageChannels},
-    DataType::Int8);
+  this->metadata_.addInputTensor("input",
+                                 {static_cast<int64_t>(batch_size_),
+                                  kImageHeight, kImageWidth, kImageChannels},
+                                 DataType::Int8);
   // TODO(varunsh): what should we return here?
   this->metadata_.addOutputTensor("output", {0}, DataType::Uint32);
   this->metadata_.setName(this->graph_name_);
@@ -190,7 +191,7 @@ BatchPtr ResNet50Stream::doRun(Batch* batch,
       buffer.resize(message.size());
       memcpy(buffer.data(), message.data(), message.size());
       output.setData(std::move(buffer));
-      output.setShape({message.size()});
+      output.setShape({static_cast<int64_t>(message.size())});
       resp.addOutput(output);
       req->runCallback(resp);
       // round to nearest multiple of batch size
@@ -261,7 +262,7 @@ BatchPtr ResNet50Stream::doRun(Batch* batch,
             buffer.resize(message.size());
             memcpy(buffer.data(), message.data(), message.size());
             output.setData(std::move(buffer));
-            output.setShape({message.size()});
+            output.setShape({static_cast<int64_t>(message.size())});
             resp.addOutput(output);
             req->runCallback(resp);
             frames.pop();
@@ -300,7 +301,7 @@ BatchPtr ResNet50Stream::doRun(Batch* batch,
           buffer.resize(message.size());
           memcpy(buffer.data(), message.data(), message.size());
           output.setData(std::move(buffer));
-          output.setShape({message.size()});
+          output.setShape({static_cast<int64_t>(message.size())});
           resp.addOutput(output);
           req->runCallback(resp);
           frames.pop();

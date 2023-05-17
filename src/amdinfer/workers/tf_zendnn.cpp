@@ -245,9 +245,10 @@ void TfZendnn::doAcquire(ParameterMap* parameters) {
   AMDINFER_LOG_INFO(logger, "TF Session Created, Ready for prediction");
 
   // Adding metadata for input and output
-  this->metadata_.addInputTensor(
-    "input", {this->batch_size_, image_height_, image_width_, image_channels_},
-    input_dt_);
+  this->metadata_.addInputTensor("input",
+                                 {static_cast<int64_t>(batch_size_),
+                                  image_height_, image_width_, image_channels_},
+                                 input_dt_);
   this->metadata_.addOutputTensor("output", {output_classes_}, DataType::Fp32);
   this->metadata_.setName("TfZendnn");
 }
@@ -314,7 +315,7 @@ BatchPtr TfZendnn::doRun(Batch* batch, const MemoryPool* pool) {
 
   // Copy the output from the model to the response object
   size_t response_size = output_classes_;
-  std::vector<size_t> new_shape = {response_size};
+  std::vector<int64_t> new_shape = {static_cast<int64_t>(response_size)};
 
   auto new_batch = batch->propagate();
   std::vector<BufferPtr> input_buffers;

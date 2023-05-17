@@ -85,7 +85,7 @@ amdinfer::BatchPtr run(amdinfer::Batch* batch) {
       max_encoded_size = encoded_size;
     }
 
-    new_request->addInputTensor(nullptr, {encoded_size},
+    new_request->addInputTensor(nullptr, {static_cast<int64_t>(encoded_size)},
                                 amdinfer::DataType::Bytes, "output");
     encoded_images.emplace_back(std::move(encoded));
 

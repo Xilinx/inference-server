@@ -81,7 +81,7 @@ class UnitSoftBatcherFixture : public testing::TestWithParam<BatchConfig> {
     const auto& batch_config = GetParam();
     int batch_size = batch_config.batch_size;
 
-    const auto data_shape = {1UL, 2UL, 50UL};
+    const auto data_shape = {1L, 2L, 50L};
     // the product of the data shape < 255 to fit into uint8
     const uint8_t data_size = 100;
 
@@ -179,7 +179,7 @@ class UnitSoftBatcherFixture : public testing::TestWithParam<BatchConfig> {
  private:
   int data_size_ = 0;
   BufferPtr buffer_;
-  std::initializer_list<uint64_t> data_shape_;
+  std::initializer_list<int64_t> data_shape_;
   InferenceRequestPtr request_;
   std::optional<WorkerInfo> worker_;
   std::optional<SoftBatcher> batcher_;

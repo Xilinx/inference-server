@@ -42,7 +42,7 @@ namespace amdinfer {
 
 class ModelConfigTensor : public Tensor {
  public:
-  ModelConfigTensor(std::string name, std::vector<uint64_t> shape,
+  ModelConfigTensor(std::string name, std::vector<int64_t> shape,
                     DataType data_type, std::string id);
 
   const std::string& id() const&;

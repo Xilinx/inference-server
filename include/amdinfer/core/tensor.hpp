@@ -33,7 +33,7 @@ namespace amdinfer {
  */
 class Tensor : public Serializable {
  public:
-  Tensor(std::string name, std::vector<uint64_t> shape, DataType data_type);
+  Tensor(std::string name, std::vector<int64_t> shape, DataType data_type);
 
   /// Get the tensor's name
   [[nodiscard]] const std::string &getName() const &;
@@ -42,10 +42,10 @@ class Tensor : public Serializable {
   void setName(std::string name);
 
   /// Get the tensor's shape
-  [[nodiscard]] const std::vector<uint64_t> &getShape() const &;
-  [[nodiscard]] std::vector<uint64_t> getShape() &&;
+  [[nodiscard]] const std::vector<int64_t> &getShape() const &;
+  [[nodiscard]] std::vector<int64_t> getShape() &&;
   /// Sets the tensor's shape
-  void setShape(std::vector<uint64_t> shape);
+  void setShape(std::vector<int64_t> shape);
 
   /// Get the tensor's datatype
   [[nodiscard]] DataType getDatatype() const;
@@ -80,7 +80,7 @@ class Tensor : public Serializable {
 
  private:
   std::string name_;
-  std::vector<uint64_t> shape_;
+  std::vector<int64_t> shape_;
   DataType data_type_;
 };
 

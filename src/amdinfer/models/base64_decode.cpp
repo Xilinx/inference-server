@@ -104,8 +104,8 @@ amdinfer::BatchPtr run(amdinfer::Batch* batch) {
       max_decoded_size = decoded_size;
     }
 
-    std::vector<uint64_t> shape{static_cast<uint64_t>(img.rows),
-                                static_cast<uint64_t>(img.cols), 3};
+    std::vector<int64_t> shape{static_cast<int64_t>(img.rows),
+                               static_cast<int64_t>(img.cols), 3};
 
     new_request->addInputTensor(nullptr, shape, amdinfer::DataType::Uint8,
                                 "output");

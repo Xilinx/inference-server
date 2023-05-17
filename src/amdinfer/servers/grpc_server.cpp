@@ -313,7 +313,7 @@ InferenceRequestInput getInput(
   InferenceRequestInput input;
   input.setName(req.name());
 
-  std::vector<uint64_t> shape_vector;
+  std::vector<int64_t> shape_vector;
   shape_vector.reserve(req.shape_size());
   for (const auto& index : req.shape()) {
     shape_vector.push_back(static_cast<size_t>(index));

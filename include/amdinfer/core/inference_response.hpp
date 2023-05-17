@@ -43,7 +43,7 @@ class InferenceResponseOutput : public InferenceTensor {
   //  * @param data_type type of the data
   //  * @param name name to assign
   //  */
-  // InferenceResponseOutput(void *data, std::vector<uint64_t> shape,
+  // InferenceResponseOutput(void *data, std::vector<int64_t> shape,
   //                       DataType data_type, std::string name = "");
 
   /// Set the request's data

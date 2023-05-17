@@ -444,10 +444,10 @@ BatchPtr MIGraphXWorker::doRun(Batch* batch, const MemoryPool* pool) {
     assert(output_shapes.size() == num_output_tensors);
     input_buffers.reserve(num_output_tensors);
     for (auto i = 0U; i < num_output_tensors; ++i) {
-      auto migraphx_shape = migraphx_output[i].get_shape();
-      auto shape = migraphx_shape.lengths();
+      auto migraphx_shape = migraphx_output[i].get_shape().lengths();
       // erase the leading batch size to get the tensor size
-      shape.erase(shape.begin());
+      std::vector<int64_t> shape{migraphx_shape.begin() + 1,
+                                 migraphx_shape.end()};
 
       datatypes.push_back(toDataType(output_shapes[i].type()));
 
@@ -461,10 +461,10 @@ BatchPtr MIGraphXWorker::doRun(Batch* batch, const MemoryPool* pool) {
       auto new_request = req->propagate();
 
       for (auto i = 0U; i < num_output_tensors; ++i) {
-        auto migraphx_shape = migraphx_output[i].get_shape();
-        auto shape = migraphx_shape.lengths();
+        auto migraphx_shape = migraphx_output[i].get_shape().lengths();
         // erase the leading batch size to get the tensor size
-        shape.erase(shape.begin());
+        std::vector<int64_t> shape{migraphx_shape.begin() + 1,
+                                   migraphx_shape.end()};
 
         const auto& datatype = datatypes.at(i);
 

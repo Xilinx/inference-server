@@ -192,7 +192,7 @@ BatchPtr XModel::doRun(Batch* batch, const MemoryPool* pool) {
   auto output_tensors = this->getRunner()->get_output_tensors();
   for (const auto* tensor : output_tensors) {
     auto xir_shape = tensor->get_shape();
-    std::vector<size_t> shape{xir_shape.begin(), xir_shape.end()};
+    std::vector<int64_t> shape{xir_shape.begin(), xir_shape.end()};
     auto xir_type = tensor->get_data_type();
     auto type = mapXirToType(xir_type);
     InferenceRequestInput input(nullptr, shape, type, tensor->get_name());
@@ -242,7 +242,7 @@ BatchPtr XModel::doRun(Batch* batch, const MemoryPool* pool) {
     const auto num_outputs = outputs_ptr.size();
     for (unsigned int i = 0; i < num_outputs; i++) {
       auto output_shape = output_tensors[i]->get_shape();
-      std::vector<uint64_t> new_shape;
+      std::vector<int64_t> new_shape;
       new_shape.reserve(output_shape.size() - 1);
       for (auto j = 1U; j < output_shape.size(); j++) {
         new_shape.push_back(output_shape[j]);

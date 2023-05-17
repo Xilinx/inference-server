@@ -41,12 +41,12 @@ struct VartTensorHeader {
   bool free;
 
   std::string name;
-  std::vector<uint64_t> shape;
+  std::vector<int64_t> shape;
   DataType datatype;
   size_t batch_size;
 
   VartTensorHeader(std::byte* address, bool free, const std::string& name,
-                   const std::vector<uint64_t>& shape, DataType datatype,
+                   const std::vector<int64_t>& shape, DataType datatype,
                    size_t batch_size)
     : address(address),
       free(free),

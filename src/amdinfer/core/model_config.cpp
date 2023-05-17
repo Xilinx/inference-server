@@ -108,7 +108,7 @@ std::vector<T> extractArray(const toml::table& table, const std::string& key) {
 ModelConfigTensor extractModelConfigTensor(const toml::table& table) {
   auto name = extractString(table, "name", true);
   auto datatype_str = extractString(table, "datatype", true);
-  auto shape = extractArray<uint64_t>(table, "shape");
+  auto shape = extractArray<int64_t>(table, "shape");
   auto id = extractString(table, "id", false);
 
   DataType datatype{datatype_str.c_str()};
@@ -128,7 +128,7 @@ ModelConfigData extractConfig(const toml::table& table, bool is_ensemble) {
 }
 
 ModelConfigTensor::ModelConfigTensor(std::string name,
-                                     std::vector<uint64_t> shape,
+                                     std::vector<int64_t> shape,
                                      DataType data_type, std::string id)
   : Tensor(std::move(name), std::move(shape), data_type), id_(std::move(id)) {}
 
@@ -220,7 +220,7 @@ ModelConfig::ModelConfig(const inference::Config& config,
     const auto& name = input.name();
     const DataType datatype{input.datatype().c_str()};
     const auto& proto_shape = input.shape();
-    std::vector<uint64_t> shape;
+    std::vector<int64_t> shape;
     shape.reserve(proto_shape.size());
     for (const auto& index : proto_shape) {
       shape.push_back(index);
@@ -234,7 +234,7 @@ ModelConfig::ModelConfig(const inference::Config& config,
     const auto& name = output.name();
     const DataType datatype{output.datatype().c_str()};
     const auto& proto_shape = output.shape();
-    std::vector<uint64_t> shape;
+    std::vector<int64_t> shape;
     shape.reserve(proto_shape.size());
     for (const auto& index : proto_shape) {
       shape.push_back(index);

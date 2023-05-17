@@ -94,7 +94,7 @@ std::vector<InferenceRequest> constructRequests(const Images<T>& images) {
   std::vector<InferenceRequest> requests;
   requests.reserve(images.size());
 
-  const std::initializer_list<uint64_t> shape = {224, 224, 3};
+  const std::initializer_list<int64_t> shape = {224, 224, 3};
 
   DataType type;
   if constexpr (std::is_same_v<T, fp16>) {

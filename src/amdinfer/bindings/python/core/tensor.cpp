@@ -41,7 +41,7 @@ namespace amdinfer {
 
 void wrapTensor(py::module_ &m) {
   py::class_<Tensor>(m, "Tensor")
-    .def(py::init<std::string, std::vector<uint64_t>, amdinfer::DataType>(),
+    .def(py::init<std::string, std::vector<int64_t>, amdinfer::DataType>(),
          DOCS(Tensor), py::arg("name"), py::arg("shape"), py::arg("dataType"))
     .def_property("name", &Tensor::getName, &Tensor::setName)
     .def_property("shape", &Tensor::getShape, &Tensor::setShape)

@@ -362,7 +362,7 @@ InferenceRequestInput getInput(const Json::Value &json,
     throw invalid_argument("No 'shape' key present in request input");
   }
   auto shape = json.get("shape", Json::arrayValue);
-  std::vector<uint64_t> shape_vector;
+  std::vector<int64_t> shape_vector;
   shape_vector.reserve(shape.size());
   for (auto const &i : shape) {
     if (!i.isUInt64()) {

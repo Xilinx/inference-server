@@ -55,7 +55,7 @@ void test(const amdinfer::Client* client, const std::string& version) {
   InferenceRequestInput input_0;
   input_0.setName("input0");
   input_0.setDatatype(DataType::Bytes);
-  input_0.setShape({encoded_data.size()});
+  input_0.setShape({static_cast<int64_t>(encoded_data.size())});
   input_0.setData(encoded_data.data());
 
   InferenceRequest request;

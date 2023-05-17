@@ -121,9 +121,10 @@ void ResNet50::doAcquire(ParameterMap* parameters) {
 
   this->graph_ = this->sys_manager_->getGraph(this->graph_name_);
 
-  this->metadata_.addInputTensor(
-    "input", {this->batch_size_, kImageHeight, kImageWidth, kImageChannels},
-    DataType::Int8);
+  this->metadata_.addInputTensor("input",
+                                 {static_cast<int64_t>(batch_size_),
+                                  kImageHeight, kImageWidth, kImageChannels},
+                                 DataType::Int8);
   // TODO(varunsh): what should we return here?
   this->metadata_.addOutputTensor("output", {0}, DataType::Uint32);
   this->metadata_.setName(this->graph_name_);
@@ -172,7 +173,7 @@ BatchPtr ResNet50::doRun(Batch* batch, const MemoryPool* pool) {
   auto shape = out_data_descriptor[0]->get_tensor()->get_shape();
 
   int response_size = 0;
-  std::vector<uint64_t> new_shape;
+  std::vector<int64_t> new_shape;
   if (shape.size() > 1) {  // [batch, a, b, c]
     response_size = util::containerProduct(shape.begin() + 1, shape.end());
     // We exclude the batch size from the returned shape

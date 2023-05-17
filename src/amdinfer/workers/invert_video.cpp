@@ -143,7 +143,7 @@ BatchPtr InvertVideo::doRun(Batch* batch,
       buffer.resize(message.size());
       memcpy(buffer.data(), message.data(), message.size());
       output.setData(std::move(buffer));
-      output.setShape({message.size()});
+      output.setShape({static_cast<int64_t>(message.size())});
       resp.addOutput(output);
       req->runCallback(resp);
       for (int num_frames = 0; num_frames < count; num_frames++) {
@@ -171,7 +171,7 @@ BatchPtr InvertVideo::doRun(Batch* batch,
         buffer.resize(message.size());
         memcpy(buffer.data(), message.data(), message.size());
         output.setData(std::move(buffer));
-        output.setShape({message.size()});
+        output.setShape({static_cast<int64_t>(message.size())});
         resp.addOutput(output);
         req->runCallback(resp);
       }

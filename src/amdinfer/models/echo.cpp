@@ -31,14 +31,14 @@ extern "C" {
 
 std::vector<amdinfer::Tensor> getInputs() {
   std::vector<amdinfer::Tensor> input_tensors;
-  std::vector<size_t> shape = {1};
+  std::vector<int64_t> shape = {1};
   input_tensors.emplace_back("", shape, amdinfer::DataType::Uint32);
   return input_tensors;
 }
 
 std::vector<amdinfer::Tensor> getOutputs() {
   std::vector<amdinfer::Tensor> output_tensors;
-  std::vector<size_t> shape = {1};
+  std::vector<int64_t> shape = {1};
   output_tensors.emplace_back("", shape, amdinfer::DataType::Uint32);
   return output_tensors;
 }
