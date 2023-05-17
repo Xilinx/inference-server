@@ -5,7 +5,7 @@ id = "base64_decode.so"
 
 [[models.inputs]]
 name = "image_in"
-datatype = "STRING"
+datatype = "BYTES"
 shape = [1048576]
 id = ""
 
@@ -45,6 +45,6 @@ id = "inverted_image"
 
 [[models.outputs]]
 name = "image_out"
-datatype = "STRING"
+datatype = "BYTES"
 shape = [1048576]
 id = "postprocessed_image"
