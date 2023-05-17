@@ -23,41 +23,17 @@
 #include <regex>
 #include <type_traits>  // for __decay_and_strip<>::__type
 
-#include "amdinfer/batching/batcher.hpp"        // for Batcher
-#include "amdinfer/build_options.hpp"           // for kMaxModelNameSize
-#include "amdinfer/core/exceptions.hpp"         // for invalid_argument
-#include "amdinfer/core/parameters.hpp"         // for ParameterMap
-#include "amdinfer/core/request_container.hpp"  // for RequestContainer
-#include "amdinfer/core/worker_info.hpp"        // for WorkerInfo
-#include "amdinfer/util/string.hpp"             // for startsWith
-#include "amdinfer/util/thread.hpp"             // for setThreadName
+#include "amdinfer/batching/batcher.hpp"         // for Batcher
+#include "amdinfer/build_options.hpp"            // for kMaxModelNameSize
+#include "amdinfer/core/exceptions.hpp"          // for invalid_argument
+#include "amdinfer/core/parameters.hpp"          // for ParameterMap
+#include "amdinfer/core/request_container.hpp"   // for RequestContainer
+#include "amdinfer/core/versioned_endpoint.hpp"  // for getVersionedEndpoint
+#include "amdinfer/core/worker_info.hpp"         // for WorkerInfo
+#include "amdinfer/util/string.hpp"              // for startsWith
+#include "amdinfer/util/thread.hpp"              // for setThreadName
 
 namespace amdinfer {
-
-std::string getVersionedEndpoint(const std::string& model,
-                                 const std::string& version) {
-  if (version.empty()) {
-    return model;
-  }
-  return model + "_" + version;
-}
-
-std::pair<std::string, std::string> splitVersionedEndpoint(
-  const std::string& endpoint) {
-  // match the last _<#> in the string
-  static std::regex version_regex{R"(([\w-]+)(_)(\d+))"};
-  // match[1] is the model, match[2] is _, and match[3] is the version
-  std::smatch match;
-  auto found = std::regex_search(endpoint, match, version_regex);
-  if (!found) {
-    return {std::string{endpoint}, ""};
-  }
-
-  auto model = std::string(match[1].first, match[1].second);
-  auto version = std::string(match[3].first, match[3].second);
-
-  return {model, version};
-}
 
 Endpoints::Endpoints() {
   update_thread_ = std::thread(&Endpoints::updateManager, this, &update_queue_);
@@ -283,6 +259,9 @@ std::string Endpoints::unsafeLoad(const std::string& worker,
       if (parameters->has("next")) {
         auto next_endpoint = parameters->get<std::string>("next");
         const auto* next_info = this->unsafeGet(next_endpoint);
+        if (next_info == nullptr) {
+          throw invalid_argument("No next endpoint found at: " + next_endpoint);
+        }
         next = next_info->getInputQueue();
         next_allocators = next_info->getAllocators();
       } else if (worker != "responder") {

@@ -53,19 +53,20 @@ void wrapClient(py::module_& m) {
         py::arg("extension"));
   m.def("waitUntilServerReady", &waitUntilServerReady, py::arg("client"));
   m.def("waitUntilModelReady", &waitUntilModelReady, py::arg("client"),
-        py::arg("model"));
+        py::arg("model"), py::arg("version") = "");
   m.def("waitUntilModelNotReady", &waitUntilModelNotReady, py::arg("client"),
-        py::arg("model"));
+        py::arg("model"), py::arg("version") = "");
 
   m.def("inferAsyncOrdered", &inferAsyncOrdered, py::arg("client"),
-        py::arg("model"), py::arg("requests"));
+        py::arg("model"), py::arg("requests"), py::arg("version") = "");
   m.def("inferAsyncOrderedBatched", &inferAsyncOrderedBatched,
         py::arg("client"), py::arg("model"), py::arg("requests"),
-        py::arg("batch_sizes"));
+        py::arg("batch_sizes"), py::arg("version") = "");
 
   m.def("loadEnsemble", &loadEnsemble, py::arg("client"), py::arg("models"),
         py::arg("parameters"));
-  m.def("unloadModels", &unloadModels, py::arg("client"), py::arg("models"));
+  m.def("unloadModels", &unloadModels, py::arg("client"), py::arg("models"),
+        py::arg("version") = "");
 }
 
 }  // namespace amdinfer

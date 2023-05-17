@@ -24,42 +24,68 @@
 
 namespace amdinfer {
 
-void test(const amdinfer::Client* client) {
+void prerequisites(const Client* client) {
   if (!serverHasExtension(client, "tfzendnn")) {
     GTEST_SKIP() << "This test requires TF+ZenDNN support.";
   }
 
-  const std::string model = "mnist";
-
   EXPECT_TRUE(client->modelList().empty());
+}
 
-  // load one worker
+std::string getModel() { return "mnist"; }
+
+void testWithoutVersion(const Client* client) {
+  prerequisites(client);
+
+  const auto model = getModel();
   client->modelLoad(model, {});
-
   EXPECT_TRUE(client->modelReady(model));
-
-  client->modelUnload(model);  // unload the model
-
+  client->modelUnload(model);
   waitUntilModelNotReady(client, model);
+}
+
+void testWithVersion(const Client* client, const std::string& version) {
+  prerequisites(client);
+
+  const auto model = getModel();
+  client->modelLoad(model, {}, version);
+  EXPECT_TRUE(client->modelReady(model, version));
+  client->modelUnload(model, version);
+  waitUntilModelNotReady(client, model, version);
 }
 
 #ifdef AMDINFER_ENABLE_GRPC
 // @pytest.mark.extensions(["tfzendnn"])
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
-TEST_F(GrpcFixture, modelLoad) { test(client_.get()); }
+TEST_F(GrpcFixture, modelLoad) { testWithoutVersion(client_.get()); }
+
+// @pytest.mark.extensions(["tfzendnn"])
+// NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
+TEST_F(GrpcFixture, modelLoadVersioned) { testWithVersion(client_.get(), "1"); }
 #endif
 
 // @pytest.mark.extensions(["tfzendnn"])
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST_F(BaseFixture, modelLoad) {
   amdinfer::NativeClient client(&server_);
-  test(&client);
+  testWithoutVersion(&client);
+}
+
+// @pytest.mark.extensions(["tfzendnn"])
+// NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
+TEST_F(BaseFixture, modelLoadVersioned) {
+  amdinfer::NativeClient client(&server_);
+  testWithVersion(&client, "1");
 }
 
 #ifdef AMDINFER_ENABLE_HTTP
 // @pytest.mark.extensions(["tfzendnn"])
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
-TEST_F(HttpFixture, modelLoad) { test(client_.get()); }
+TEST_F(HttpFixture, modelLoad) { testWithoutVersion(client_.get()); }
+
+// @pytest.mark.extensions(["tfzendnn"])
+// NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
+TEST_F(HttpFixture, modelLoadVersioned) { testWithVersion(client_.get(), "1"); }
 #endif
 
 }  // namespace amdinfer

@@ -77,8 +77,8 @@ class ModelConfig {
   using ConstReverseIterator = Container::const_reverse_iterator;
 
  public:
-  explicit ModelConfig(const toml::v3::table& config);
-  explicit ModelConfig(const inference::Config& config);
+  ModelConfig(const toml::v3::table& config, const std::string& version);
+  ModelConfig(const inference::Config& config, const std::string& version);
 
   std::pair<std::string, ParameterMap> get(size_t index);
   void setModelFiles(const std::filesystem::path& base_path);

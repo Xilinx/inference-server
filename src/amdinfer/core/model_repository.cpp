@@ -93,7 +93,8 @@ fs::path findConfigFile(const fs::path& model_path, const std::string& model) {
                              model_path.string());
 }
 
-ModelConfig openConfigFile(const fs::path& config_path) {
+ModelConfig openConfigFile(const fs::path& config_path,
+                           const std::string& version) {
   if (config_path.extension() == ".pbtxt") {
     inference::Config proto_config;
 
@@ -112,11 +113,11 @@ ModelConfig openConfigFile(const fs::path& config_path) {
                             " could not be parsed");
     }
 
-    return ModelConfig{proto_config};
+    return ModelConfig{proto_config, version};
   } else if (config_path.extension() == ".toml") {
     auto toml = toml::parse_file(config_path.string());
 
-    return ModelConfig{toml};
+    return ModelConfig{toml, version};
   }
   throw invalid_argument(
     "Unknown config file extension passed to openConfigFile: " +
@@ -129,7 +130,7 @@ ModelConfig parseModel(const fs::path& repository, const std::string& model,
   auto model_path = repository / model;
 
   auto config_path = findConfigFile(model_path, model);
-  auto config = openConfigFile(config_path);
+  auto config = openConfigFile(config_path, version);
 
   const auto assigned_version = version.empty() ? "1" : version;
   const auto model_base = config_path.parent_path() / assigned_version;

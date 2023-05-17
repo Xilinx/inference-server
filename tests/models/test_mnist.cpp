@@ -32,7 +32,7 @@ const int kImageSize = 28;
 // mnist classifies 10 digits
 const int kOutputClasses = 10;
 
-void test(amdinfer::Client* client) {
+void test(const Client* client, const std::string& version) {
   if (!serverHasExtension(client, "tfzendnn")) {
     GTEST_SKIP() << "This test requires TF+ZenDNN support.";
   }
@@ -44,8 +44,8 @@ void test(amdinfer::Client* client) {
 
   EXPECT_TRUE(client->modelList().empty());
 
-  client->modelLoad(model, {});
-  EXPECT_TRUE(client->modelReady(model));
+  client->modelLoad(model, {}, version);
+  EXPECT_TRUE(client->modelReady(model, version));
 
   auto img = cv::imread(path);
   cv::cvtColor(img, img, cv::COLOR_BGR2GRAY);
@@ -62,7 +62,7 @@ void test(amdinfer::Client* client) {
   InferenceRequest request;
   request.addInputTensor(input_0);
 
-  auto response = client->modelInfer(model, request);
+  auto response = client->modelInfer(model, request, version);
 
   const auto& outputs = response.getOutputs();
   EXPECT_EQ(outputs.size(), 1);
@@ -81,7 +81,7 @@ void test(amdinfer::Client* client) {
   }
   EXPECT_EQ(index, 9);
 
-  client->modelUnload(model);  // unload the model
+  client->modelUnload(model, version);
 
   while (!client->modelList().empty()) {
     std::this_thread::yield();
@@ -91,20 +91,35 @@ void test(amdinfer::Client* client) {
 #ifdef AMDINFER_ENABLE_GRPC
 // @pytest.mark.extensions(["tfzendnn"])
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
-TEST_F(GrpcFixture, mnist) { test(client_.get()); }
+TEST_F(GrpcFixture, mnist) { test(client_.get(), ""); }
+
+// @pytest.mark.extensions(["tfzendnn"])
+// NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
+TEST_F(GrpcFixture, mnistVersioned) { test(client_.get(), "1"); }
 #endif
 
 // @pytest.mark.extensions(["tfzendnn"])
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST_F(BaseFixture, mnist) {
   NativeClient client(&server_);
-  test(&client);
+  test(&client, "");
+}
+
+// @pytest.mark.extensions(["tfzendnn"])
+// NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
+TEST_F(BaseFixture, mnistVersioned) {
+  NativeClient client(&server_);
+  test(&client, "1");
 }
 
 #ifdef AMDINFER_ENABLE_HTTP
 // @pytest.mark.extensions(["tfzendnn"])
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
-TEST_F(HttpFixture, mnist) { test(client_.get()); }
+TEST_F(HttpFixture, mnist) { test(client_.get(), ""); }
+
+// @pytest.mark.extensions(["tfzendnn"])
+// NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
+TEST_F(HttpFixture, mnistVersioned) { test(client_.get(), "1"); }
 #endif
 
 }  // namespace amdinfer

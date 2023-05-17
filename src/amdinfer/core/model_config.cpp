@@ -24,6 +24,7 @@
 #include <filesystem>
 
 #include "amdinfer/core/exceptions.hpp"
+#include "amdinfer/core/versioned_endpoint.hpp"  // for getVersionedEndpoint
 #include "amdinfer/util/filesystem.hpp"
 #include "model_config.pb.h"  // for Config, InferP...
 
@@ -187,7 +188,7 @@ void ModelConfig::createModels() {
   }
 }
 
-ModelConfig::ModelConfig(const toml::table& toml) {
+ModelConfig::ModelConfig(const toml::table& toml, const std::string& version) {
   if (toml.empty()) {
     throw invalid_argument("The configuration cannot be empty");
   }
@@ -198,10 +199,15 @@ ModelConfig::ModelConfig(const toml::table& toml) {
     configs_.emplace_back(extractConfig(toml, false));
   }
 
+  for (auto& config : configs_) {
+    config.name = getVersionedEndpoint(config.name, version);
+  }
+
   this->createModels();
 }
 
-ModelConfig::ModelConfig(const inference::Config& config) {
+ModelConfig::ModelConfig(const inference::Config& config,
+                         const std::string& version) {
   // proto does not support ensembles so id is fixed to empty
   const std::string id;
 
@@ -236,7 +242,8 @@ ModelConfig::ModelConfig(const inference::Config& config) {
     outputs.emplace_back(name, shape, datatype, id);
   }
 
-  configs_.emplace_back(model_name, platform, id, inputs, outputs);
+  configs_.emplace_back(getVersionedEndpoint(model_name, version), platform, id,
+                        inputs, outputs);
 
   this->createModels();
 }

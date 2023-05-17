@@ -86,7 +86,8 @@ void SharedState::modelLoad(const std::string& model,
     for (const auto& [key, value] : parameters) {
       updated_parameters.put(key, value);
     }
-    endpoints_.load(model_name, version, updated_parameters);
+    // the config will add the versioned model name already
+    endpoints_.load(model_name, "", updated_parameters);
   }
 }
 

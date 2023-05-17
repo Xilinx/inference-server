@@ -261,14 +261,16 @@ void waitUntilServerReady(const Client* client);
  * @param client a pointer to a client object
  * @param model the model/worker to wait for
  */
-void waitUntilModelReady(const Client* client, const std::string& model);
+void waitUntilModelReady(const Client* client, const std::string& model,
+                         const std::string& version = "");
 /**
  * @brief Blocks until the named model/worker is not ready
  *
  * @param client a pointer to a client object
  * @param model the model/worker to wait for
  */
-void waitUntilModelNotReady(const Client* client, const std::string& model);
+void waitUntilModelNotReady(const Client* client, const std::string& model,
+                            const std::string& version = "");
 
 /**
  * @brief Load an ensemble - a chain of connected workers. This implementation
@@ -290,7 +292,8 @@ std::vector<std::string> loadEnsemble(const Client* client,
  * @param client a pointer to a client object
  * @param models a list of models to unload
  */
-void unloadModels(const Client* client, const std::vector<std::string>& models);
+void unloadModels(const Client* client, const std::vector<std::string>& models,
+                  const std::string& version = "");
 
 /**
  * @brief Makes inference requests in parallel to the specified model. All
@@ -304,7 +307,8 @@ void unloadModels(const Client* client, const std::vector<std::string>& models);
  */
 std::vector<InferenceResponse> inferAsyncOrdered(
   const Client* client, const std::string& model,
-  const std::vector<InferenceRequest>& requests);
+  const std::vector<InferenceRequest>& requests,
+  const std::string& version = "");
 /**
  * @brief Makes inference requests in parallel to the specified model in
  * batches. Each batch of requests are gathered and the responses are added to a
@@ -319,7 +323,8 @@ std::vector<InferenceResponse> inferAsyncOrdered(
  */
 std::vector<InferenceResponse> inferAsyncOrderedBatched(
   const Client* client, const std::string& model,
-  const std::vector<InferenceRequest>& requests, size_t batch_size);
+  const std::vector<InferenceRequest>& requests, size_t batch_size,
+  const std::string& version = "");
 
 }  // namespace amdinfer
 

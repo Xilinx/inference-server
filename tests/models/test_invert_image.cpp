@@ -29,7 +29,7 @@
 
 namespace amdinfer {
 
-void test(const amdinfer::Client* client) {
+void test(const amdinfer::Client* client, const std::string& version) {
   const auto path = getPathToAsset("asset_dog-3619020_640.jpg");
 
   const std::string model = "invert_image";
@@ -38,9 +38,9 @@ void test(const amdinfer::Client* client) {
 
   EXPECT_TRUE(client->modelList().empty());
 
-  client->modelLoad(model, {});
+  client->modelLoad(model, {}, version);
   for (const auto& endpoint : endpoints) {
-    EXPECT_TRUE(client->modelReady(endpoint));
+    EXPECT_TRUE(client->modelReady(endpoint, version));
   }
 
   auto img = cv::imread(path);
@@ -61,7 +61,7 @@ void test(const amdinfer::Client* client) {
   InferenceRequest request;
   request.addInputTensor(input_0);
 
-  auto response = client->modelInfer(endpoints[0], request);
+  auto response = client->modelInfer(endpoints[0], request, version);
 
   const auto& outputs = response.getOutputs();
   EXPECT_EQ(outputs.size(), 1);
@@ -72,8 +72,8 @@ void test(const amdinfer::Client* client) {
   const auto* data = static_cast<char*>(output.getData());
 
   auto decoded_data = util::base64Decode(data, output_shape.at(0));
-  std::vector<char> foo(decoded_data.begin(), decoded_data.end());
-  auto received_image = cv::imdecode(foo, cv::IMREAD_UNCHANGED);
+  std::vector<char> buffer(decoded_data.begin(), decoded_data.end());
+  auto received_image = cv::imdecode(buffer, cv::IMREAD_UNCHANGED);
   ASSERT_FALSE(received_image.empty());
 
   cv::Mat diff;
@@ -82,30 +82,45 @@ void test(const amdinfer::Client* client) {
   auto manhattan_norm_per_pixel = manhattan_norm / golden_shape;
   EXPECT_TRUE(manhattan_norm_per_pixel < 2);
 
-  unloadModels(client, endpoints);
+  unloadModels(client, endpoints, version);
 
   while (!client->modelList().empty()) {
-    std::this_thread::yield();
+    std::this_thread::sleep_for(std::chrono::seconds(1));
   }
 }
 
 #ifdef AMDINFER_ENABLE_GRPC
 // @pytest.mark.extensions(["tfzendnn"])
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
-TEST_F(GrpcFixture, InvertImage) { test(client_.get()); }
+TEST_F(GrpcFixture, InvertImage) { test(client_.get(), ""); }
+
+// @pytest.mark.extensions(["tfzendnn"])
+// NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
+TEST_F(GrpcFixture, InvertImageVersioned) { test(client_.get(), "1"); }
 #endif
 
 // @pytest.mark.extensions(["tfzendnn"])
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST_F(BaseFixture, InvertImage) {
   NativeClient client(&server_);
-  test(&client);
+  test(&client, "");
+}
+
+// @pytest.mark.extensions(["tfzendnn"])
+// NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
+TEST_F(BaseFixture, InvertImageVersioned) {
+  NativeClient client(&server_);
+  test(&client, "1");
 }
 
 #ifdef AMDINFER_ENABLE_HTTP
 // @pytest.mark.extensions(["tfzendnn"])
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
-TEST_F(HttpFixture, InvertImage) { test(client_.get()); }
+TEST_F(HttpFixture, InvertImage) { test(client_.get(), ""); }
+
+// @pytest.mark.extensions(["tfzendnn"])
+// NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
+TEST_F(HttpFixture, InvertImageVersioned) { test(client_.get(), "1"); }
 #endif
 
 }  // namespace amdinfer
