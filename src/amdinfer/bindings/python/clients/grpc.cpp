@@ -42,23 +42,10 @@ void wrapGrpcClient(py::module_ &m) {
          DOCS(GrpcClient, serverMetadata))
     .def("serverLive", &GrpcClient::serverLive, DOCS(GrpcClient, serverLive))
     .def("serverReady", &GrpcClient::serverReady, DOCS(GrpcClient, serverReady))
-    .def("modelReady", &GrpcClient::modelReady, py::arg("model"),
-         DOCS(GrpcClient, modelReady))
-    .def("modelMetadata", &GrpcClient::modelMetadata, py::arg("model"),
-         DOCS(GrpcClient, modelMetadata))
-    .def("modelLoad", &GrpcClient::modelLoad, py::arg("model"),
-         py::arg("parameters") = ParameterMap(), DOCS(GrpcClient, modelLoad))
-    .def("modelUnload", &GrpcClient::modelUnload, py::arg("model"),
-         DOCS(GrpcClient, modelUnload))
     .def("workerLoad", &GrpcClient::workerLoad, py::arg("model"),
          py::arg("parameters") = ParameterMap(), DOCS(GrpcClient, workerLoad))
     .def("workerUnload", &GrpcClient::workerUnload, py::arg("model"),
          DOCS(GrpcClient, workerUnload))
-    .def("modelInfer", &GrpcClient::modelInfer, py::arg("model"),
-         py::arg("request"), DOCS(GrpcClient, modelInfer))
-    // cannot wrap future directly in Python
-    // .def("modelInferAsync", &GrpcClient::modelInferAsync, py::arg("model"),
-    //      py::arg("request"), DOCS(GrpcClient, modelInferAsync))
     .def("modelList", &GrpcClient::modelList, DOCS(GrpcClient, modelList))
     .def("hasHardware", &GrpcClient::hasHardware, py::arg("name"),
          py::arg("num"), DOCS(GrpcClient, hasHardware));

@@ -131,7 +131,8 @@ ModelConfig parseModel(const fs::path& repository, const std::string& model,
   auto config_path = findConfigFile(model_path, model);
   auto config = openConfigFile(config_path);
 
-  const auto model_base = config_path.parent_path() / version;
+  const auto assigned_version = version.empty() ? "1" : version;
+  const auto model_base = config_path.parent_path() / assigned_version;
 
   config.setModelFiles(model_base);
   return config;
@@ -147,7 +148,7 @@ void ModelRepository::setRepository(const fs::path& repository_path,
         auto model = path.path().filename();
         try {
           ParameterMap params;
-          endpoints_->load(model, params);
+          endpoints_->load(model, "", params);
         } catch (const amdinfer::runtime_error& e) {
           AMDINFER_LOG_INFO(
             logger, "Error loading " + model.string() + ": " + e.what());
@@ -182,11 +183,9 @@ void UpdateListener::handleFileAction(
       std::this_thread::sleep_for(delay);
       auto model_name = fs::path(dir).parent_path().filename();
       try {
-        // when auto-loading, only auto load the first version, which is
-        // guaranteed to exist
-        auto config = parseModel(repository_, model_name, "1");
+        auto config = parseModel(repository_, model_name, "");
         for (const auto& [model, parameters] : config) {
-          endpoints_->load(model, parameters);
+          endpoints_->load(model, "", parameters);
         }
       } catch (const runtime_error&) {
         AMDINFER_LOG_INFO(logger, "Error loading " + model_name.string());
@@ -195,7 +194,7 @@ void UpdateListener::handleFileAction(
       // arbitrary delay to make sure filesystem has settled
       std::this_thread::sleep_for(delay);
       auto model = fs::path(dir).parent_path().filename();
-      endpoints_->unload(model.string());
+      endpoints_->unload(model.string(), "");
     }
   }
 

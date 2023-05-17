@@ -219,7 +219,7 @@ void HttpServer::getServerReady(const HttpRequestPtr &req,
 }
 
 void getModelReady(DrogonCallback &&callback, SharedState *state,
-                   const std::string &endpoint) {
+                   const std::string &endpoint, const std::string &version) {
   AMDINFER_IF_LOGGING(Logger logger{Loggers::Server});
   AMDINFER_LOG_INFO(logger, "Received getModelReady request");
 #ifdef AMDINFER_ENABLE_METRICS
@@ -227,7 +227,7 @@ void getModelReady(DrogonCallback &&callback, SharedState *state,
 #endif
   auto resp = HttpResponse::newHttpResponse();
   try {
-    if (!state->modelReady(endpoint)) {
+    if (!state->modelReady(endpoint, version)) {
       resp->setStatusCode(HttpStatusCode::k503ServiceUnavailable);
     }
   } catch (const invalid_argument &e) {
@@ -240,14 +240,13 @@ void getModelReady(DrogonCallback &&callback, SharedState *state,
 void HttpServer::getModelReady([[maybe_unused]] const HttpRequestPtr &req,
                                DrogonCallback &&callback,
                                std::string const &model) const {
-  amdinfer::getModelReady(std::move(callback), state_, model);
+  amdinfer::getModelReady(std::move(callback), state_, model, "");
 }
 
 void HttpServer::getModelReadyVersion(
   [[maybe_unused]] const HttpRequestPtr &req, DrogonCallback &&callback,
   const std::string &model, const std::string &version) const {
-  amdinfer::getModelReady(std::move(callback), state_,
-                          getVersionedEndpoint(model, version));
+  amdinfer::getModelReady(std::move(callback), state_, model, version);
 }
 
 void HttpServer::getServerMetadata(const HttpRequestPtr &req,
@@ -272,7 +271,7 @@ void HttpServer::getServerMetadata(const HttpRequestPtr &req,
 }
 
 void getModelMetadata(DrogonCallback &&callback, SharedState *state,
-                      const std::string &endpoint) {
+                      const std::string &endpoint, const std::string &version) {
   AMDINFER_IF_LOGGING(Logger logger{Loggers::Server});
   AMDINFER_LOG_INFO(logger, "Received getModelMetadata request");
 #ifdef AMDINFER_ENABLE_METRICS
@@ -282,7 +281,7 @@ void getModelMetadata(DrogonCallback &&callback, SharedState *state,
   Json::Value ret;
   bool error = false;
   try {
-    auto metadata = state->modelMetadata(endpoint);
+    auto metadata = state->modelMetadata(endpoint, version);
     ret = modelMetadataToJson(metadata);
   } catch (const runtime_error &e) {
     ret["error"] = e.what();
@@ -299,14 +298,13 @@ void getModelMetadata(DrogonCallback &&callback, SharedState *state,
 void HttpServer::getModelMetadata([[maybe_unused]] const HttpRequestPtr &req,
                                   DrogonCallback &&callback,
                                   const std::string &model) const {
-  amdinfer::getModelMetadata(std::move(callback), state_, model);
+  amdinfer::getModelMetadata(std::move(callback), state_, model, "");
 }
 
 void HttpServer::getModelMetadataVersion(
   [[maybe_unused]] const HttpRequestPtr &req, DrogonCallback &&callback,
   const std::string &model, const std::string &version) const {
-  amdinfer::getModelMetadata(std::move(callback), state_,
-                             getVersionedEndpoint(model, version));
+  amdinfer::getModelMetadata(std::move(callback), state_, model, version);
 }
 
 void HttpServer::modelList(const drogon::HttpRequestPtr &req,
@@ -486,7 +484,8 @@ InferenceRequestPtr getRequest(const std::shared_ptr<Json::Value> &json,
 }
 
 void modelInfer(const HttpRequestPtr &req, DrogonCallback &&callback,
-                SharedState *state, const std::string &endpoint) {
+                SharedState *state, const std::string &endpoint,
+                const std::string &version) {
 #ifdef AMDINFER_ENABLE_TRACING
   const auto &drogon_headers = req->getHeaders();
   StringMap headers{drogon_headers.begin(), drogon_headers.end()};
@@ -518,7 +517,7 @@ void modelInfer(const HttpRequestPtr &req, DrogonCallback &&callback,
     trace->endSpan();
     request_container->trace = std::move(trace);
 #endif
-    state->modelInfer(endpoint, std::move(request_container));
+    state->modelInfer(endpoint, std::move(request_container), version);
   } catch (const invalid_argument &e) {
     AMDINFER_LOG_INFO(logger, e.what());
     auto resp = errorHttpResponse(e.what(), HttpStatusCode::k400BadRequest);
@@ -534,19 +533,19 @@ void modelInfer(const HttpRequestPtr &req, DrogonCallback &&callback,
 void HttpServer::modelInfer(const HttpRequestPtr &req,
                             DrogonCallback &&callback,
                             const std::string &model) const {
-  amdinfer::modelInfer(req, std::move(callback), state_, model);
+  amdinfer::modelInfer(req, std::move(callback), state_, model, "");
 }
 
 void HttpServer::modelInferVersion(const HttpRequestPtr &req,
                                    DrogonCallback &&callback,
                                    const std::string &model,
                                    const std::string &version) const {
-  amdinfer::modelInfer(req, std::move(callback), state_,
-                       getVersionedEndpoint(model, version));
+  amdinfer::modelInfer(req, std::move(callback), state_, model, version);
 }
 
 void modelLoad(const HttpRequestPtr &req, DrogonCallback &&callback,
-               SharedState *state, const std::string &model) {
+               SharedState *state, const std::string &model,
+               const std::string &version) {
   auto model_lower = util::toLower(model);
 #ifdef AMDINFER_ENABLE_TRACING
   const auto &drogon_headers = req->getHeaders();
@@ -567,7 +566,7 @@ void modelLoad(const HttpRequestPtr &req, DrogonCallback &&callback,
 #endif
 
   try {
-    state->modelLoad(model_lower, parameters);
+    state->modelLoad(model_lower, version, parameters);
   } catch (const runtime_error &e) {
     AMDINFER_LOG_ERROR(logger, e.what());
     auto resp = errorHttpResponse(e.what(), HttpStatusCode::k400BadRequest);
@@ -588,20 +587,19 @@ void modelLoad(const HttpRequestPtr &req, DrogonCallback &&callback,
 
 void HttpServer::modelLoad(const HttpRequestPtr &req, DrogonCallback &&callback,
                            const std::string &model) const {
-  amdinfer::modelLoad(req, std::move(callback), state_, model);
+  amdinfer::modelLoad(req, std::move(callback), state_, model, "");
 }
 
 void HttpServer::modelLoadVersion(const HttpRequestPtr &req,
                                   DrogonCallback &&callback,
                                   const std::string &model,
                                   const std::string &version) const {
-  amdinfer::modelLoad(req, std::move(callback), state_,
-                      getVersionedEndpoint(model, version));
+  amdinfer::modelLoad(req, std::move(callback), state_, model, version);
 }
 
 void modelUnload([[maybe_unused]] const HttpRequestPtr &req,
                  DrogonCallback &&callback, SharedState *state,
-                 const std::string &endpoint) {
+                 const std::string &endpoint, const std::string &version) {
   AMDINFER_IF_LOGGING(Logger logger{Loggers::Server});
   AMDINFER_LOG_INFO(logger, "Received modelUnload request");
 #ifdef AMDINFER_ENABLE_TRACING
@@ -616,7 +614,7 @@ void modelUnload([[maybe_unused]] const HttpRequestPtr &req,
   trace->setAttribute("model", endpoint_lower);
 #endif
 
-  state->modelUnload(endpoint_lower);
+  state->modelUnload(endpoint_lower, version);
 
   auto resp = HttpResponse::newHttpResponse();
 #ifdef AMDINFER_ENABLE_TRACING
@@ -629,15 +627,14 @@ void modelUnload([[maybe_unused]] const HttpRequestPtr &req,
 void HttpServer::modelUnload(const HttpRequestPtr &req,
                              DrogonCallback &&callback,
                              const std::string &model) const {
-  amdinfer::modelUnload(req, std::move(callback), state_, model);
+  amdinfer::modelUnload(req, std::move(callback), state_, model, "");
 }
 
 void HttpServer::modelUnloadVersion(const HttpRequestPtr &req,
                                     DrogonCallback &&callback,
                                     const std::string &model,
                                     const std::string &version) const {
-  amdinfer::modelUnload(req, std::move(callback), state_,
-                        getVersionedEndpoint(model, version));
+  amdinfer::modelUnload(req, std::move(callback), state_, model, version);
 }
 
 void HttpServer::workerLoad(const HttpRequestPtr &req,

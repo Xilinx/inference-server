@@ -33,7 +33,21 @@ namespace py = pybind11;
 namespace amdinfer {
 
 void wrapClient(py::module_& m) {
-  py::class_<Client> client{m, "Client"};
+  py::class_<Client>(m, "Client")
+    .def("modelReady", &Client::modelReady, py::arg("model"),
+         py::arg("version") = "", DOCS(Client, modelReady))
+    .def("modelMetadata", &Client::modelMetadata, py::arg("model"),
+         py::arg("version") = "", DOCS(Client, modelMetadata))
+    .def("modelLoad", &Client::modelLoad, py::arg("model"),
+         py::arg("parameters") = ParameterMap(), py::arg("version") = "",
+         DOCS(Client, modelLoad))
+    .def("modelUnload", &Client::modelUnload, py::arg("model"),
+         py::arg("version") = "", DOCS(Client, modelUnload))
+    .def("modelInfer", &Client::modelInfer, py::arg("model"),
+         py::arg("request"), py::arg("version") = "", DOCS(Client, modelInfer));
+  // cannot wrap future directly in Python
+  // .def("modelInferAsync", &GrpcClient::modelInferAsync, py::arg("model"),
+  //      py::arg("request"), DOCS(GrpcClient, modelInferAsync))
 
   m.def("serverHasExtension", &serverHasExtension, py::arg("client"),
         py::arg("extension"));

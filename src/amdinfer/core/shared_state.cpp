@@ -72,15 +72,11 @@ ServerMetadata SharedState::serverMetadata() {
   return metadata;
 }
 
-void SharedState::modelLoad(const std::string& versioned_model,
+void SharedState::modelLoad(const std::string& model,
+                            const std::string& version,
                             const ParameterMap& parameters) {
-  assert(util::isLower(versioned_model));
+  assert(util::isLower(model));
 
-  auto [model, version] = splitVersionedEndpoint(versioned_model);
-  bool versioned = !version.empty();
-  if (!versioned) {
-    version = "1";
-  }
   auto model_config = parseModel(repository_.getRepository(), model, version);
   const auto end = model_config.crend();
   for (auto it = model_config.crbegin(); it != end; ++it) {
@@ -90,14 +86,13 @@ void SharedState::modelLoad(const std::string& versioned_model,
     for (const auto& [key, value] : parameters) {
       updated_parameters.put(key, value);
     }
-    auto versioned_endpoint =
-      versioned ? getVersionedEndpoint(model_name, version) : model_name;
-    endpoints_.load(versioned_endpoint, updated_parameters);
+    endpoints_.load(model_name, version, updated_parameters);
   }
 }
 
-void SharedState::modelUnload(const std::string& versioned_model) {
-  this->workerUnload(versioned_model);
+void SharedState::modelUnload(const std::string& model,
+                              const std::string& version) {
+  endpoints_.unload(model, version);
 }
 
 std::string SharedState::workerLoad(const std::string& worker,
@@ -106,27 +101,30 @@ std::string SharedState::workerLoad(const std::string& worker,
 
   auto updated_parameters = parameters;
   updated_parameters.put("worker", worker);
-  return endpoints_.load(worker, updated_parameters);
+  return endpoints_.load(worker, "", updated_parameters);
 }
 
 void SharedState::workerUnload(const std::string& worker) {
   assert(util::isLower(worker));
-  endpoints_.unload(worker);
+  endpoints_.unload(worker, "");
 }
 
 void SharedState::modelInfer(const std::string& model,
-                             std::unique_ptr<RequestContainer> request) {
-  endpoints_.infer(model, std::move(request));
+                             std::unique_ptr<RequestContainer> request,
+                             const std::string& version) {
+  endpoints_.infer(model, std::move(request), version);
 }
 
-bool SharedState::modelReady(const std::string& model) {
-  return endpoints_.ready(model);
+bool SharedState::modelReady(const std::string& model,
+                             const std::string& version) {
+  return endpoints_.ready(model, version);
 }
 
 std::vector<std::string> SharedState::modelList() { return endpoints_.list(); }
 
-ModelMetadata SharedState::modelMetadata(const std::string& model) {
-  return endpoints_.metadata(model);
+ModelMetadata SharedState::modelMetadata(const std::string& model,
+                                         const std::string& version) {
+  return endpoints_.metadata(model, version);
 }
 
 Kernels SharedState::getHardware() {

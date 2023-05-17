@@ -91,18 +91,21 @@ class Endpoints {
   Endpoints();
   ~Endpoints();
 
-  std::string load(const std::string& worker, ParameterMap parameters);
-  void unload(const std::string& endpoint);
+  std::string load(const std::string& worker, const std::string& version,
+                   ParameterMap parameters);
+  void unload(const std::string& endpoint, const std::string& version);
 
   void infer(const std::string& endpoint,
-             std::unique_ptr<RequestContainer> request) const;
+             std::unique_ptr<RequestContainer> request,
+             const std::string& version) const;
 
   bool exists(const std::string& endpoint);
   // WorkerInfo* get(const std::string& endpoint);
-  bool ready(const std::string& endpoint);
+  bool ready(const std::string& endpoint, const std::string& version);
 
   std::vector<std::string> list();
-  ModelMetadata metadata(const std::string& endpoint);
+  ModelMetadata metadata(const std::string& endpoint,
+                         const std::string& version);
 
   const MemoryPool* getPool() const;
 

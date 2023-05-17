@@ -48,26 +48,11 @@ void wrapWebSocketClient(py::module_ &m) {
          DOCS(WebSocketClient, serverLive))
     .def("serverReady", &WebSocketClient::serverReady,
          DOCS(WebSocketClient, serverReady))
-    .def("modelReady", &WebSocketClient::modelReady, py::arg("model"),
-         DOCS(WebSocketClient, modelReady))
-    .def("modelMetadata", &WebSocketClient::modelMetadata, py::arg("model"),
-         DOCS(WebSocketClient, modelMetadata))
-    .def("modelLoad", &WebSocketClient::modelLoad, py::arg("model"),
-         py::arg("parameters") = ParameterMap(),
-         DOCS(WebSocketClient, modelLoad))
-    .def("modelUnload", &WebSocketClient::modelUnload, py::arg("model"),
-         DOCS(WebSocketClient, modelUnload))
     .def("workerLoad", &WebSocketClient::workerLoad, py::arg("model"),
          py::arg("parameters") = ParameterMap(),
          DOCS(WebSocketClient, workerLoad))
     .def("workerUnload", &WebSocketClient::workerUnload, py::arg("model"),
          DOCS(WebSocketClient, workerUnload))
-    .def("modelInfer", &WebSocketClient::modelInfer, py::arg("model"),
-         py::arg("request"), DOCS(WebSocketClient, modelInfer))
-    // cannot wrap future directly in Python
-    // .def("modelInferAsync", &WebSocketClient::modelInferAsync,
-    // py::arg("model"),
-    //      py::arg("request"), DOCS(WebSocketClient, modelInferAsync))
     .def("modelInferWs", &WebSocketClient::modelInferWs, py::arg("model"),
          py::arg("request"), DOCS(WebSocketClient, modelInferWs))
     .def("modelRecv", &WebSocketClient::modelRecv,

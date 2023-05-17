@@ -42,23 +42,10 @@ void wrapNativeClient(py::module_ &m) {
          DOCS(NativeClient, serverLive))
     .def("serverReady", &NativeClient::serverReady,
          DOCS(NativeClient, serverReady))
-    .def("modelReady", &NativeClient::modelReady, py::arg("model"),
-         DOCS(NativeClient, modelReady))
-    .def("modelMetadata", &NativeClient::modelMetadata, py::arg("model"),
-         DOCS(NativeClient, modelMetadata))
-    .def("modelLoad", &NativeClient::modelLoad, py::arg("model"),
-         py::arg("parameters") = ParameterMap(), DOCS(NativeClient, modelLoad))
-    .def("modelUnload", &NativeClient::modelUnload, py::arg("model"),
-         DOCS(NativeClient, modelUnload))
     .def("workerLoad", &NativeClient::workerLoad, py::arg("model"),
          py::arg("parameters") = ParameterMap(), DOCS(NativeClient, workerLoad))
     .def("workerUnload", &NativeClient::workerUnload, py::arg("model"),
          DOCS(NativeClient, workerUnload))
-    .def("modelInfer", &NativeClient::modelInfer, py::arg("model"),
-         py::arg("request"), DOCS(NativeClient, modelInfer))
-    // cannot wrap future directly in Python
-    // .def("modelInferAsync", &NativeClient::modelInferAsync, py::arg("model"),
-    //      py::arg("request"), DOCS(NativeClient, modelInferAsync))
     .def("modelList", &NativeClient::modelList, DOCS(NativeClient, modelList))
     .def("hasHardware", &NativeClient::hasHardware, py::arg("name"),
          py::arg("num"), DOCS(NativeClient, hasHardware));

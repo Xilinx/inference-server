@@ -38,20 +38,22 @@ class ParameterMap;
 
 class SharedState {
  public:
-  void modelLoad(const std::string& versioned_model,
+  void modelLoad(const std::string& model, const std::string& version,
                  const ParameterMap& parameters);
-  void modelUnload(const std::string& versioned_model);
+  void modelUnload(const std::string& model, const std::string& version);
   std::string workerLoad(const std::string& worker,
                          const ParameterMap& parameters);
   void workerUnload(const std::string& worker);
 
   static ServerMetadata serverMetadata();
   std::vector<std::string> modelList();
-  bool modelReady(const std::string& model);
-  ModelMetadata modelMetadata(const std::string& model);
+  bool modelReady(const std::string& model, const std::string& version = "");
+  ModelMetadata modelMetadata(const std::string& model,
+                              const std::string& version = "");
 
   void modelInfer(const std::string& model,
-                  std::unique_ptr<RequestContainer> request);
+                  std::unique_ptr<RequestContainer> request,
+                  const std::string& version = "");
 
   static Kernels getHardware();
   static bool hasHardware(const std::string& name, int num);

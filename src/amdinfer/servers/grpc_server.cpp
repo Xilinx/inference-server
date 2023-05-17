@@ -441,8 +441,9 @@ CALLDATA_IMPL_END
 
 CALLDATA_IMPL(ModelReady, Unary) {
   const auto& model = request_.name();
+  const auto& version = request_.version();
   try {
-    reply_.set_ready(state_->modelReady(model));
+    reply_.set_ready(state_->modelReady(model, version));
     finish(::grpc::Status::OK);
   } catch (const invalid_argument& e) {
     reply_.set_ready(false);
@@ -456,8 +457,9 @@ CALLDATA_IMPL_END
 
 CALLDATA_IMPL(ModelMetadata, Unary) {
   const auto& model = request_.name();
+  const auto& version = request_.version();
   try {
-    auto metadata = state_->modelMetadata(model);
+    auto metadata = state_->modelMetadata(model, version);
     mapModelMetadataToProto(metadata, reply_);
     finish(::grpc::Status::OK);
   } catch (const invalid_argument& e) {
@@ -492,9 +494,10 @@ CALLDATA_IMPL(ModelLoad, Unary) {
   auto parameters = mapProtoToParameters(request_.parameters());
 
   auto* model = request_.mutable_name();
+  const auto& version = request_.version();
   util::toLower(model);
   try {
-    state_->modelLoad(*model, parameters);
+    state_->modelLoad(*model, version, parameters);
   } catch (const runtime_error& e) {
     AMDINFER_LOG_ERROR(logger_, e.what());
     finish(::grpc::Status(StatusCode::NOT_FOUND, e.what()));
@@ -511,7 +514,8 @@ CALLDATA_IMPL_END
 CALLDATA_IMPL(ModelUnload, Unary) {
   auto* model = request_.mutable_name();
   util::toLower(model);
-  state_->modelUnload(*model);
+  const std::string& version = request_.version();
+  state_->modelUnload(*model, version);
   finish(::grpc::Status::OK);
 }
 CALLDATA_IMPL_END
@@ -553,6 +557,7 @@ CALLDATA_IMPL_END
 
 void CallDataModelInfer::handleRequest() noexcept {
   const auto& model = request_.model_name();
+  const auto& version = request_.model_version();
 #ifdef AMDINFER_ENABLE_TRACING
   auto trace = startTrace(&(__func__[0]));
   trace->setAttribute("model", model);
@@ -568,7 +573,7 @@ void CallDataModelInfer::handleRequest() noexcept {
     trace->endSpan();
     request_container->trace = std::move(trace);
 #endif
-    state_->modelInfer(model, std::move(request_container));
+    state_->modelInfer(model, std::move(request_container), version);
   } catch (const invalid_argument& e) {
     AMDINFER_LOG_INFO(logger_, e.what());
     finish(::grpc::Status(StatusCode::NOT_FOUND, e.what()));

@@ -30,6 +30,38 @@
 
 namespace amdinfer {
 
+bool Client::modelReady(const std::string& model,
+                        const std::string& version) const {
+  return modelReadyImpl(model, version);
+}
+
+ModelMetadata Client::modelMetadata(const std::string& model,
+                                    const std::string& version) const {
+  return modelMetadataImpl(model, version);
+}
+
+void Client::modelLoad(const std::string& model, const ParameterMap& parameters,
+                       const std::string& version) const {
+  modelLoadImpl(model, parameters, version);
+}
+
+void Client::modelUnload(const std::string& model,
+                         const std::string& version) const {
+  modelUnloadImpl(model, version);
+}
+
+InferenceResponse Client::modelInfer(const std::string& model,
+                                     const InferenceRequest& request,
+                                     const std::string& version) const {
+  return modelInferImpl(model, request, version);
+}
+
+InferenceResponseFuture Client::modelInferAsync(
+  const std::string& model, const InferenceRequest& request,
+  const std::string& version) const {
+  return modelInferAsyncImpl(model, request, version);
+}
+
 void initializeClientLogging() {
 #ifdef AMDINFER_ENABLE_LOGGING
   LogOptions options{

@@ -121,13 +121,15 @@ bool GrpcClient::serverReady() const {
   throw bad_status(status.error_message());
 }
 
-bool GrpcClient::modelReady(const std::string& model) const {
+bool GrpcClient::modelReadyImpl(const std::string& model,
+                                const std::string& version) const {
   inference::ModelReadyRequest request;
   inference::ModelReadyResponse reply;
 
   ClientContext context;
 
   request.set_name(model);
+  request.set_version(version);
 
   auto* stub = this->impl_->getStub();
   Status status = stub->ModelReady(&context, request, &reply);
@@ -164,13 +166,15 @@ ModelMetadata mapProtoToModelMetadata(
   return metadata;
 }
 
-ModelMetadata GrpcClient::modelMetadata(const std::string& model) const {
+ModelMetadata GrpcClient::modelMetadataImpl(const std::string& model,
+                                            const std::string& version) const {
   inference::ModelMetadataRequest request;
   inference::ModelMetadataResponse reply;
 
   ClientContext context;
 
   request.set_name(model);
+  request.set_version(version);
 
   auto* stub = this->impl_->getStub();
   Status status = stub->ModelMetadata(&context, request, &reply);
@@ -198,8 +202,9 @@ std::vector<std::string> GrpcClient::modelList() const {
   throw bad_status(status.error_message());
 }
 
-void GrpcClient::modelLoad(const std::string& model,
-                           const ParameterMap& parameters) const {
+void GrpcClient::modelLoadImpl(const std::string& model,
+                               const ParameterMap& parameters,
+                               const std::string& version) const {
   inference::ModelLoadRequest request;
   inference::ModelLoadResponse reply;
 
@@ -208,6 +213,7 @@ void GrpcClient::modelLoad(const std::string& model,
   request.set_name(model);
   auto* params = request.mutable_parameters();
   mapParametersToProto(parameters.data(), params);
+  request.set_version(version);
 
   auto* stub = this->impl_->getStub();
   Status status = stub->ModelLoad(&context, request, &reply);
@@ -217,13 +223,15 @@ void GrpcClient::modelLoad(const std::string& model,
   }
 }
 
-void GrpcClient::modelUnload(const std::string& model) const {
+void GrpcClient::modelUnloadImpl(const std::string& model,
+                                 const std::string& version) const {
   inference::ModelUnloadRequest request;
   inference::ModelUnloadResponse reply;
 
   ClientContext context;
 
   request.set_name(model);
+  request.set_version(version);
 
   auto* stub = this->impl_->getStub();
   Status status = stub->ModelUnload(&context, request, &reply);
@@ -271,7 +279,8 @@ void GrpcClient::workerUnload(const std::string& worker) const {
 
 InferenceResponse runInference(inference::GRPCInferenceService::Stub* stub,
                                const std::string& model,
-                               const InferenceRequest& request) {
+                               const InferenceRequest& request,
+                               const std::string& version) {
   inference::ModelInferRequest grpc_request;
   inference::ModelInferResponse reply;
 
@@ -281,6 +290,7 @@ InferenceResponse runInference(inference::GRPCInferenceService::Stub* stub,
   AMDINFER_IF_LOGGING(observer.logger = Logger{Loggers::Client});
 
   grpc_request.set_model_name(model);
+  grpc_request.set_model_version(version);
   mapRequestToProto(request, grpc_request, observer);
 
   Status status = stub->ModelInfer(&context, grpc_request, &reply);
@@ -294,14 +304,17 @@ InferenceResponse runInference(inference::GRPCInferenceService::Stub* stub,
   return response;
 }
 
-InferenceResponseFuture GrpcClient::modelInferAsync(
-  const std::string& model, const InferenceRequest& request) const {
-  return std::async(runInference, this->impl_->getStub(), model, request);
+InferenceResponseFuture GrpcClient::modelInferAsyncImpl(
+  const std::string& model, const InferenceRequest& request,
+  const std::string& version) const {
+  return std::async(runInference, this->impl_->getStub(), model, request,
+                    version);
 }
 
-InferenceResponse GrpcClient::modelInfer(
-  const std::string& model, const InferenceRequest& request) const {
-  return runInference(this->impl_->getStub(), model, request);
+InferenceResponse GrpcClient::modelInferImpl(const std::string& model,
+                                             const InferenceRequest& request,
+                                             const std::string& version) const {
+  return runInference(this->impl_->getStub(), model, request, version);
 }
 
 bool GrpcClient::hasHardware(const std::string& name, int num) const {
