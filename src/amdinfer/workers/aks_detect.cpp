@@ -135,9 +135,10 @@ void AksDetect::doAcquire(ParameterMap* parameters) {
 
   this->graph_ = this->sys_manager_->getGraph(this->graph_name_);
 
-  this->metadata_.addInputTensor(
-    "input", {this->batch_size_, kImageHeight, kImageWidth, kImageChannels},
-    DataType::Int8);
+  this->metadata_.addInputTensor("input",
+                                 {static_cast<int64_t>(batch_size_),
+                                  kImageHeight, kImageWidth, kImageChannels},
+                                 DataType::Int8);
   this->metadata_.addOutputTensor("output", {0, 6}, DataType::FP32);
   this->metadata_.setName(this->graph_name_);
 }
@@ -210,14 +211,19 @@ BatchPtr AksDetect::doRun(Batch* batch, const MemoryPool* pool) {
   std::vector<BufferPtr> input_buffers;
   input_buffers.push_back(
     pool->get(next_allocators_,
-              Tensor{"name", {max_boxes, kDetectResponseSize}, DataType::Fp32},
+              Tensor{"name",
+                     {static_cast<int64_t>(max_boxes), kDetectResponseSize},
+                     DataType::Fp32},
               batch_size));
 
   for (auto i = 0U; i < batch_size; ++i) {
     const auto& req = batch->getRequest(i);
     auto new_request = req->propagate();
     new_request->addInputTensor(InferenceRequestInput{
-      nullptr, {boxes.at(i), kDetectResponseSize}, DataType::Fp32, ""});
+      nullptr,
+      {static_cast<int64_t>(boxes.at(i)), kDetectResponseSize},
+      DataType::Fp32,
+      ""});
     auto* data_ptr = input_buffers.at(0)->data(
       i * max_boxes * kDetectResponseSize * DataType("Fp32").size());
     new_request->setInputTensorData(0, data_ptr);

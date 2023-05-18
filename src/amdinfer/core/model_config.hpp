@@ -42,7 +42,7 @@ namespace amdinfer {
 
 class ModelConfigTensor : public Tensor {
  public:
-  ModelConfigTensor(std::string name, std::vector<uint64_t> shape,
+  ModelConfigTensor(std::string name, std::vector<int64_t> shape,
                     DataType data_type, std::string id);
 
   const std::string& id() const&;
@@ -77,8 +77,8 @@ class ModelConfig {
   using ConstReverseIterator = Container::const_reverse_iterator;
 
  public:
-  explicit ModelConfig(const toml::v3::table& config);
-  explicit ModelConfig(const inference::Config& config);
+  ModelConfig(const toml::v3::table& config, const std::string& version);
+  ModelConfig(const inference::Config& config, const std::string& version);
 
   std::pair<std::string, ParameterMap> get(size_t index);
   void setModelFiles(const std::filesystem::path& base_path);

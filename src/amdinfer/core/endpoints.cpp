@@ -19,17 +19,19 @@
 
 #include "amdinfer/core/endpoints.hpp"
 
-#include <cassert>      // for assert
+#include <cassert>  // for assert
+#include <regex>
 #include <type_traits>  // for __decay_and_strip<>::__type
 
-#include "amdinfer/batching/batcher.hpp"        // for Batcher
-#include "amdinfer/build_options.hpp"           // for kMaxModelNameSize
-#include "amdinfer/core/exceptions.hpp"         // for invalid_argument
-#include "amdinfer/core/parameters.hpp"         // for ParameterMap
-#include "amdinfer/core/request_container.hpp"  // for RequestContainer
-#include "amdinfer/core/worker_info.hpp"        // for WorkerInfo
-#include "amdinfer/util/string.hpp"             // for startsWith
-#include "amdinfer/util/thread.hpp"             // for setThreadName
+#include "amdinfer/batching/batcher.hpp"         // for Batcher
+#include "amdinfer/build_options.hpp"            // for kMaxModelNameSize
+#include "amdinfer/core/exceptions.hpp"          // for invalid_argument
+#include "amdinfer/core/parameters.hpp"          // for ParameterMap
+#include "amdinfer/core/request_container.hpp"   // for RequestContainer
+#include "amdinfer/core/versioned_endpoint.hpp"  // for getVersionedEndpoint
+#include "amdinfer/core/worker_info.hpp"         // for WorkerInfo
+#include "amdinfer/util/string.hpp"              // for startsWith
+#include "amdinfer/util/thread.hpp"              // for setThreadName
 
 namespace amdinfer {
 
@@ -40,13 +42,15 @@ Endpoints::Endpoints() {
 Endpoints::~Endpoints() { this->shutdown(); }
 
 std::string Endpoints::load(const std::string& worker,
+                            const std::string& version,
                             ParameterMap parameters) {
   std::shared_ptr<amdinfer::UpdateCommand> request;
   std::string retval;
   retval.reserve(kMaxModelNameSize);
   retval = "";
-  request = std::make_shared<UpdateCommand>(UpdateCommandType::Load, worker,
-                                            &parameters, &retval);
+  const auto& versioned_endpoint = getVersionedEndpoint(worker, version);
+  request = std::make_shared<UpdateCommand>(
+    UpdateCommandType::Load, versioned_endpoint, &parameters, &retval);
   update_queue_.enqueue(request);
 
   while (static_cast<std::string*>(request->retval)->empty() &&
@@ -60,20 +64,24 @@ std::string Endpoints::load(const std::string& worker,
   return endpoint;
 }
 
-void Endpoints::unload(const std::string& endpoint) {
-  if (this->exists(endpoint)) {
-    auto request =
-      std::make_shared<UpdateCommand>(UpdateCommandType::Unload, endpoint);
+void Endpoints::unload(const std::string& endpoint,
+                       const std::string& version) {
+  const auto& versioned_endpoint = getVersionedEndpoint(endpoint, version);
+  if (this->exists(versioned_endpoint)) {
+    auto request = std::make_shared<UpdateCommand>(UpdateCommandType::Unload,
+                                                   versioned_endpoint);
     update_queue_.enqueue(request);
   }
 }
 
 // TODO(varunsh): race condition if workers are shutting down
 void Endpoints::infer(const std::string& endpoint,
-                      std::unique_ptr<RequestContainer> request) const {
-  WorkerInfo* worker = this->unsafeGet(endpoint);
+                      std::unique_ptr<RequestContainer> request,
+                      const std::string& version) const {
+  auto versioned_endpoint = getVersionedEndpoint(endpoint, version);
+  WorkerInfo* worker = this->unsafeGet(versioned_endpoint);
   if (worker == nullptr) {
-    throw invalid_argument("Worker " + endpoint + " not found");
+    throw invalid_argument("Worker " + versioned_endpoint + " not found");
   }
   const auto* batcher = worker->getBatcher();
   batcher->enqueue(std::move(request));
@@ -94,11 +102,12 @@ bool Endpoints::exists(const std::string& endpoint) {
   return retval != 0;
 }
 
-bool Endpoints::ready(const std::string& endpoint) {
+bool Endpoints::ready(const std::string& endpoint, const std::string& version) {
   std::shared_ptr<amdinfer::UpdateCommand> request;
   int ready = -1;
-  request = std::make_shared<UpdateCommand>(UpdateCommandType::Ready, endpoint,
-                                            nullptr, &ready);
+  auto versioned_endpoint = getVersionedEndpoint(endpoint, version);
+  request = std::make_shared<UpdateCommand>(
+    UpdateCommandType::Ready, versioned_endpoint, nullptr, &ready);
   update_queue_.enqueue(request);
   while (ready == -1 && request->eptr == nullptr) {
     std::this_thread::yield();
@@ -125,12 +134,14 @@ std::vector<std::string> Endpoints::list() {
   return endpoints;
 }
 
-ModelMetadata Endpoints::metadata(const std::string& endpoint) {
+ModelMetadata Endpoints::metadata(const std::string& endpoint,
+                                  const std::string& version) {
   std::shared_ptr<amdinfer::UpdateCommand> request;
   ModelMetadata metadata{"", ""};
   bool retval = false;
-  request = std::make_shared<UpdateCommand>(UpdateCommandType::Metadata,
-                                            endpoint, &metadata, &retval);
+  auto versioned_endpoint = getVersionedEndpoint(endpoint, version);
+  request = std::make_shared<UpdateCommand>(
+    UpdateCommandType::Metadata, versioned_endpoint, &metadata, &retval);
   update_queue_.enqueue(request);
   while (!retval && request->eptr == nullptr) {
     std::this_thread::yield();
@@ -221,6 +232,7 @@ void Endpoints::updateManager(UpdateCommandQueue* input_queue) {
   AMDINFER_LOG_DEBUG(logger_, "Ending update_thread");
 }
 
+// TODO(varunsh): clarify nomenclature here with worker/model/versioned_model
 std::string Endpoints::unsafeLoad(const std::string& worker,
                                   ParameterMap* parameters) {
   bool share = true;
@@ -247,6 +259,9 @@ std::string Endpoints::unsafeLoad(const std::string& worker,
       if (parameters->has("next")) {
         auto next_endpoint = parameters->get<std::string>("next");
         const auto* next_info = this->unsafeGet(next_endpoint);
+        if (next_info == nullptr) {
+          throw invalid_argument("No next endpoint found at: " + next_endpoint);
+        }
         next = next_info->getInputQueue();
         next_allocators = next_info->getAllocators();
       } else if (worker != "responder") {

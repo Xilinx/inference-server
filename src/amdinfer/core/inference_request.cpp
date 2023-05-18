@@ -59,7 +59,7 @@ void InferenceRequest::runCallbackError(std::string_view error_msg) {
 }
 
 void InferenceRequest::addInputTensor(void *data,
-                                      const std::vector<uint64_t> &shape,
+                                      const std::vector<int64_t> &shape,
                                       DataType data_type,
                                       const std::string &name) {
   this->inputs_.emplace_back(data, shape, data_type, name);
@@ -92,7 +92,7 @@ void InferenceRequest::addOutputTensor(const InferenceRequestOutput &output) {
 }
 
 InferenceRequestInput::InferenceRequestInput(void *data,
-                                             std::vector<uint64_t> shape,
+                                             std::vector<int64_t> shape,
                                              DataType data_type,
                                              std::string name)
   : InferenceTensor(std::move(name), std::move(shape), data_type),

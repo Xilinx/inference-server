@@ -42,7 +42,7 @@
 
 #include "amdinfer/batching/batcher.hpp"  // for BatchPtr, Batch, BatchP...
 #include "amdinfer/build_options.hpp"     // for AMDINFER_ENABLE_TRACING
-#include "amdinfer/core/data_types.hpp"   // for DataType, DataType::String
+#include "amdinfer/core/data_types.hpp"   // for DataType, DataType::Bytes
 #include "amdinfer/core/inference_request.hpp"   // for InferenceRequest
 #include "amdinfer/core/inference_response.hpp"  // for InferenceResponse
 #include "amdinfer/core/parameters.hpp"          // for ParameterMap
@@ -126,9 +126,10 @@ void AksDetectStream::doAcquire(ParameterMap* parameters) {
   }
   this->graph_ = this->sys_manager_->getGraph(graph_name);
 
-  this->metadata_.addInputTensor(
-    "input", {this->batch_size_, kImageHeight, kImageWidth, kImageChannels},
-    DataType::Int8);
+  this->metadata_.addInputTensor("input",
+                                 {static_cast<int64_t>(batch_size_),
+                                  kImageHeight, kImageWidth, kImageChannels},
+                                 DataType::Int8);
   // TODO(varunsh): what should we return here?
   this->metadata_.addOutputTensor("output", {0}, DataType::Uint32);
   this->metadata_.setName(graph_name);
@@ -177,7 +178,7 @@ BatchPtr AksDetectStream::doRun(Batch* batch,
 
       InferenceResponseOutput output;
       output.setName("key");
-      output.setDatatype(DataType::String);
+      output.setDatatype(DataType::Bytes);
       std::string metadata = "[" + std::to_string(video_width) + "," +
                              std::to_string(video_height) + "]";
       auto message = constructMessage(key, std::to_string(fps), metadata);
@@ -185,7 +186,7 @@ BatchPtr AksDetectStream::doRun(Batch* batch,
       buffer.resize(message.size());
       memcpy(buffer.data(), message.data(), message.size());
       output.setData(std::move(buffer));
-      output.setShape({message.size()});
+      output.setShape({static_cast<int64_t>(message.size())});
       resp.addOutput(output);
       req->runCallback(resp);
 
@@ -276,13 +277,13 @@ BatchPtr AksDetectStream::doRun(Batch* batch,
 
             InferenceResponseOutput output;
             output.setName("image");
-            output.setDatatype(DataType::String);
+            output.setDatatype(DataType::Bytes);
             auto message = constructMessage(key, frames.front(), labels[j]);
             std::vector<std::byte> buffer;
             buffer.resize(message.size());
             memcpy(buffer.data(), message.data(), message.size());
             output.setData(std::move(buffer));
-            output.setShape({message.size()});
+            output.setShape({static_cast<int64_t>(message.size())});
             resp.addOutput(output);
             req->runCallback(resp);
             frames.pop();
@@ -327,12 +328,12 @@ BatchPtr AksDetectStream::doRun(Batch* batch,
 
           InferenceResponseOutput output;
           output.setName("image");
-          output.setDatatype(DataType::String);
+          output.setDatatype(DataType::Bytes);
           auto message = constructMessage(key, frames.front(), labels[j]);
           buffer.resize(message.size());
           memcpy(buffer.data(), message.data(), message.size());
           output.setData(std::move(buffer));
-          output.setShape({message.size()});
+          output.setShape({static_cast<int64_t>(message.size())});
           resp.addOutput(output);
           req->runCallback(resp);
           frames.pop();

@@ -76,7 +76,7 @@ TEST_P(UnitVectorBufferFixture, TestFixtureState) {  // NOLINT
   }
 }
 
-// Excluding STRING as it doesn't have a defined size to pre-allocate
+// Excluding BYTES as it doesn't have a defined size to pre-allocate
 // NOLINTNEXTLINE(cert-err58-cpp)
 const std::array<DataType, 12> kDataTypes{
   amdinfer::DataType::Bool,   amdinfer::DataType::Uint8,

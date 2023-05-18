@@ -60,14 +60,16 @@ ServerMetadata NativeClient::serverMetadata() const {
 bool NativeClient::serverLive() const { return true; }
 bool NativeClient::serverReady() const { return true; }
 
-ModelMetadata NativeClient::modelMetadata(const std::string& model) const {
-  return impl_->state->modelMetadata(model);
+ModelMetadata NativeClient::modelMetadataImpl(
+  const std::string& model, const std::string& version) const {
+  return impl_->state->modelMetadata(model, version);
 }
 
-void NativeClient::modelLoad(const std::string& model,
-                             const ParameterMap& parameters) const {
+void NativeClient::modelLoadImpl(const std::string& model,
+                                 const ParameterMap& parameters,
+                                 const std::string& version) const {
   auto model_lower = util::toLower(model);
-  impl_->state->modelLoad(model_lower, parameters);
+  impl_->state->modelLoad(model_lower, version, parameters);
 }
 
 std::string NativeClient::workerLoad(const std::string& worker,
@@ -103,8 +105,9 @@ InferenceResponseFuture setCallback(InferenceRequest* request) {
   return future;
 }
 
-InferenceResponseFuture NativeClient::modelInferAsync(
-  const std::string& model, const InferenceRequest& request) const {
+InferenceResponseFuture NativeClient::modelInferAsyncImpl(
+  const std::string& model, const InferenceRequest& request,
+  const std::string& version) const {
 #ifdef AMDINFER_ENABLE_METRICS
   Metrics::getInstance().incrementCounter(MetricCounterIDs::CppNative);
 #endif
@@ -122,20 +125,22 @@ InferenceResponseFuture NativeClient::modelInferAsync(
   trace->endSpan();
   request_container->trace = std::move(trace);
 #endif
-  impl_->state->modelInfer(model, std::move(request_container));
+  impl_->state->modelInfer(model, std::move(request_container), version);
 
   return future;
 }
 
-InferenceResponse NativeClient::modelInfer(
-  const std::string& model, const InferenceRequest& request) const {
-  auto future = modelInferAsync(model, request);
+InferenceResponse NativeClient::modelInferImpl(
+  const std::string& model, const InferenceRequest& request,
+  const std::string& version) const {
+  auto future = modelInferAsync(model, request, version);
   return future.get();
 }
 
-void NativeClient::modelUnload(const std::string& model) const {
+void NativeClient::modelUnloadImpl(const std::string& model,
+                                   const std::string& version) const {
   auto model_lower = util::toLower(model);
-  impl_->state->modelUnload(model_lower);
+  impl_->state->modelUnload(model_lower, version);
 }
 
 void NativeClient::workerUnload(const std::string& worker) const {
@@ -143,9 +148,10 @@ void NativeClient::workerUnload(const std::string& worker) const {
   impl_->state->workerUnload(worker_lower);
 }
 
-bool NativeClient::modelReady(const std::string& model) const {
+bool NativeClient::modelReadyImpl(const std::string& model,
+                                  const std::string& version) const {
   try {
-    return impl_->state->modelReady(model);
+    return impl_->state->modelReady(model, version);
   } catch (const invalid_argument&) {
     return false;
   }

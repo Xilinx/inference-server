@@ -53,23 +53,10 @@ void wrapHttpClient(py::module_ &m) {
          DOCS(HttpClient, serverMetadata))
     .def("serverLive", &HttpClient::serverLive, DOCS(HttpClient, serverLive))
     .def("serverReady", &HttpClient::serverReady, DOCS(HttpClient, serverReady))
-    .def("modelReady", &HttpClient::modelReady, py::arg("model"),
-         DOCS(HttpClient, modelReady))
-    .def("modelMetadata", &HttpClient::modelMetadata, py::arg("model"),
-         DOCS(HttpClient, modelMetadata))
-    .def("modelLoad", &HttpClient::modelLoad, py::arg("model"),
-         py::arg("parameters") = ParameterMap(), DOCS(HttpClient, modelLoad))
-    .def("modelUnload", &HttpClient::modelUnload, py::arg("model"),
-         DOCS(HttpClient, modelUnload))
     .def("workerLoad", &HttpClient::workerLoad, py::arg("model"),
          py::arg("parameters") = ParameterMap(), DOCS(HttpClient, workerLoad))
     .def("workerUnload", &HttpClient::workerUnload, py::arg("model"),
          DOCS(HttpClient, workerUnload))
-    .def("modelInfer", &HttpClient::modelInfer, py::arg("model"),
-         py::arg("request"), DOCS(HttpClient, modelInfer))
-    // cannot wrap future directly in Python
-    // .def("modelInferAsync", &HttpClient::modelInferAsync, py::arg("model"),
-    //      py::arg("request"), DOCS(HttpClient, modelInferAsync))
     .def("modelList", &HttpClient::modelList, DOCS(HttpClient, modelList))
     .def("hasHardware", &HttpClient::hasHardware, py::arg("name"),
          py::arg("num"), DOCS(HttpClient, hasHardware));

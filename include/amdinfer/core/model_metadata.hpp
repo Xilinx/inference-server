@@ -55,7 +55,7 @@ class ModelMetadata {
    * @param datatype datatype of the tensor
    */
   void addInputTensor(const std::string &name,
-                      std::initializer_list<uint64_t> shape, DataType datatype);
+                      std::initializer_list<int64_t> shape, DataType datatype);
   /**
    * @brief Adds an input tensor to this model
    *
@@ -87,8 +87,7 @@ class ModelMetadata {
    * @param datatype datatype of the tensor
    */
   void addOutputTensor(const std::string &name,
-                       std::initializer_list<uint64_t> shape,
-                       DataType datatype);
+                       std::initializer_list<int64_t> shape, DataType datatype);
   /**
    * @brief Adds an output tensor to this model
    *

@@ -164,9 +164,10 @@ void PtZendnn::doAcquire(ParameterMap* parameters) {
   this->model_ = torch_module;
 
   // Adding metadata for input and output
-  this->metadata_.addInputTensor(
-    "input", {this->batch_size_, image_height_, image_width_, image_channels_},
-    input_dt_);
+  this->metadata_.addInputTensor("input",
+                                 {static_cast<int64_t>(batch_size_),
+                                  image_height_, image_width_, image_channels_},
+                                 input_dt_);
   this->metadata_.addOutputTensor("output", {0}, DataType::FP32);
   this->metadata_.setName("PtZendnn");
 }
@@ -247,7 +248,7 @@ BatchPtr PtZendnn::doRun(Batch* batch, const MemoryPool* pool) {
 
   // Copy the output from the model to the response object
   size_t response_size = output_classes_;
-  std::vector<size_t> new_shape = {response_size};
+  std::vector<int64_t> new_shape = {static_cast<int64_t>(response_size)};
 
   auto new_batch = batch->propagate();
   std::vector<BufferPtr> input_buffers;

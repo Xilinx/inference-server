@@ -48,9 +48,9 @@ inline void enqueue(const amdinfer::NativeClient& client,
                     FutureQueue& my_queue) {
   for (int i = 0; i < count; i++) {
     auto img = cv::imread(image_paths[start_index]);
-    auto shape = {static_cast<uint64_t>(img.size[0]),
-                  static_cast<uint64_t>(img.size[1]),
-                  static_cast<uint64_t>(img.channels())};
+    auto shape = {static_cast<int64_t>(img.size[0]),
+                  static_cast<int64_t>(img.size[1]),
+                  static_cast<int64_t>(img.channels())};
     auto size = img.size[0] * img.size[1] * 3;
     img_data.reserve(size);
     memcpy(img_data.data(), img.data, size);

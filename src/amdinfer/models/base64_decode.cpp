@@ -43,22 +43,11 @@ std::vector<amdinfer::Tensor> getInputs() {
 
 std::vector<amdinfer::Tensor> getOutputs() { return {}; }
 
-// Support up to Full HD
-const auto kMaxImageHeight = 1080;
-const auto kMaxImageWidth = 1920;
-const auto kMaxImageChannels = 3;
-const auto kMaxImageSize = kMaxImageHeight * kMaxImageWidth * kMaxImageChannels;
-
 amdinfer::BatchPtr run(amdinfer::Batch* batch) {
   amdinfer::Logger logger{amdinfer::Loggers::Server};
 
   auto new_batch = batch->propagate();
   const auto batch_size = batch->size();
-
-  // const auto data_size = amdinfer::DataType("Uint8").size();
-  // std::vector<amdinfer::BufferPtr> input_buffers;
-  // input_buffers.emplace_back(std::make_unique<amdinfer::VectorBuffer>(
-  //   kMaxImageSize * batch_size * data_size));
 
   std::vector<cv::Mat> decoded_images;
   size_t max_decoded_size = 0;
@@ -104,8 +93,8 @@ amdinfer::BatchPtr run(amdinfer::Batch* batch) {
       max_decoded_size = decoded_size;
     }
 
-    std::vector<uint64_t> shape{static_cast<uint64_t>(img.rows),
-                                static_cast<uint64_t>(img.cols), 3};
+    std::vector<int64_t> shape{static_cast<int64_t>(img.rows),
+                               static_cast<int64_t>(img.cols), 3};
 
     new_request->addInputTensor(nullptr, shape, amdinfer::DataType::Uint8,
                                 "output");

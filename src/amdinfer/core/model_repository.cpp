@@ -93,7 +93,8 @@ fs::path findConfigFile(const fs::path& model_path, const std::string& model) {
                              model_path.string());
 }
 
-ModelConfig openConfigFile(const fs::path& config_path) {
+ModelConfig openConfigFile(const fs::path& config_path,
+                           const std::string& version) {
   if (config_path.extension() == ".pbtxt") {
     inference::Config proto_config;
 
@@ -112,26 +113,27 @@ ModelConfig openConfigFile(const fs::path& config_path) {
                             " could not be parsed");
     }
 
-    return ModelConfig{proto_config};
+    return ModelConfig{proto_config, version};
   } else if (config_path.extension() == ".toml") {
     auto toml = toml::parse_file(config_path.string());
 
-    return ModelConfig{toml};
+    return ModelConfig{toml, version};
   }
   throw invalid_argument(
     "Unknown config file extension passed to openConfigFile: " +
     config_path.extension().string());
 }
 
-ModelConfig parseModel(const fs::path& repository, const std::string& model) {
+ModelConfig parseModel(const fs::path& repository, const std::string& model,
+                       const std::string& version) {
   AMDINFER_IF_LOGGING(Logger logger{Loggers::Server};)
   auto model_path = repository / model;
 
   auto config_path = findConfigFile(model_path, model);
-  auto config = openConfigFile(config_path);
+  auto config = openConfigFile(config_path, version);
 
-  // TODO(varunsh): support other versions than 1/
-  const auto model_base = config_path.parent_path() / "1";
+  const auto assigned_version = version.empty() ? "1" : version;
+  const auto model_base = config_path.parent_path() / assigned_version;
 
   config.setModelFiles(model_base);
   return config;
@@ -147,7 +149,7 @@ void ModelRepository::setRepository(const fs::path& repository_path,
         auto model = path.path().filename();
         try {
           ParameterMap params;
-          endpoints_->load(model, params);
+          endpoints_->load(model, "", params);
         } catch (const amdinfer::runtime_error& e) {
           AMDINFER_LOG_INFO(
             logger, "Error loading " + model.string() + ": " + e.what());
@@ -182,9 +184,9 @@ void UpdateListener::handleFileAction(
       std::this_thread::sleep_for(delay);
       auto model_name = fs::path(dir).parent_path().filename();
       try {
-        auto config = parseModel(repository_, model_name);
+        auto config = parseModel(repository_, model_name, "");
         for (const auto& [model, parameters] : config) {
-          endpoints_->load(model, parameters);
+          endpoints_->load(model, "", parameters);
         }
       } catch (const runtime_error&) {
         AMDINFER_LOG_INFO(logger, "Error loading " + model_name.string());
@@ -193,7 +195,7 @@ void UpdateListener::handleFileAction(
       // arbitrary delay to make sure filesystem has settled
       std::this_thread::sleep_for(delay);
       auto model = fs::path(dir).parent_path().filename();
-      endpoints_->unload(model.string());
+      endpoints_->unload(model.string(), "");
     }
   }
 

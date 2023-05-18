@@ -66,17 +66,20 @@ class Client {
    * @brief Checks if a model/worker is ready
    *
    * @param model name of the model to check
+   * @param version version of the model to check
    * @return bool - true if model is ready, false otherwise
    */
-  [[nodiscard]] virtual bool modelReady(const std::string& model) const = 0;
+  [[nodiscard]] bool modelReady(const std::string& model,
+                                const std::string& version = "") const;
   /**
    * @brief Returns the metadata associated with a ready model/worker
    *
    * @param model name of the model/worker to get metadata
+   * @param version version of the model to get metadata
    * @return ModelMetadata
    */
-  [[nodiscard]] virtual ModelMetadata modelMetadata(
-    const std::string& model) const = 0;
+  [[nodiscard]] ModelMetadata modelMetadata(
+    const std::string& model, const std::string& version = "") const;
 
   /**
    * @brief Loads a model with the given name and load-time parameters. This
@@ -86,16 +89,19 @@ class Client {
    *
    * @param model name of the model to load from the model repository directory
    * @param parameters load-time parameters for the worker supporting the model
+   * @param version model version to load from the model repository directory
    */
-  virtual void modelLoad(const std::string& model,
-                         const ParameterMap& parameters) const = 0;
+  void modelLoad(const std::string& model, const ParameterMap& parameters,
+                 const std::string& version = "") const;
   /**
    * @brief Unloads a previously loaded model and shut it down. This is
    * identical in functionality to workerUnload and is provided for symmetry.
    *
    * @param model name of the model to unload
+   * @param version version of the model to unload
    */
-  virtual void modelUnload(const std::string& model) const = 0;
+  void modelUnload(const std::string& model,
+                   const std::string& version = "") const;
 
   /**
    * @brief Makes a synchronous inference request to the given model/worker. The
@@ -104,10 +110,12 @@ class Client {
    *
    * @param model name of the model/worker to request inference to
    * @param request the request
+   * @param version version of the model to request inference to
    * @return InferenceResponse
    */
-  [[nodiscard]] virtual InferenceResponse modelInfer(
-    const std::string& model, const InferenceRequest& request) const = 0;
+  [[nodiscard]] InferenceResponse modelInfer(
+    const std::string& model, const InferenceRequest& request,
+    const std::string& version = "") const;
   /**
    * @brief Makes an asynchronous inference request to the given model/worker.
    * The contents of the request depends on the model/worker that the request
@@ -116,10 +124,12 @@ class Client {
    *
    * @param model name of the model/worker to request inference to
    * @param request the request
+   * @param version version of the model to request inference to
    * @return InferenceResponseFuture
    */
-  [[nodiscard]] virtual InferenceResponseFuture modelInferAsync(
-    const std::string& model, const InferenceRequest& request) const = 0;
+  [[nodiscard]] InferenceResponseFuture modelInferAsync(
+    const std::string& model, const InferenceRequest& request,
+    const std::string& version = "") const;
   /**
    * @brief Gets a list of active models on the server, returning their names
    *
@@ -158,6 +168,77 @@ class Client {
 
  protected:
   Client();
+
+  /**
+   * @brief Checks if a model/worker is ready
+   *
+   * @param model name of the model to check
+   * @param version version of the model to check
+   * @return bool - true if model is ready, false otherwise
+   */
+  [[nodiscard]] virtual bool modelReadyImpl(
+    const std::string& model, const std::string& version) const = 0;
+
+  /**
+   * @brief Returns the metadata associated with a ready model/worker
+   *
+   * @param model name of the model/worker to get metadata
+   * @param version version of the model to get metadata
+   * @return ModelMetadata
+   */
+  [[nodiscard]] virtual ModelMetadata modelMetadataImpl(
+    const std::string& model, const std::string& version) const = 0;
+
+  /**
+   * @brief Loads a model with the given name and load-time parameters. This
+   * method assumes that a directory with this model name already exists in the
+   * model repository directory for the server containing the model and its
+   * metadata in the right format.
+   *
+   * @param model name of the model to load from the model repository directory
+   * @param parameters load-time parameters for the worker supporting the model
+   * @param version model version to load from the model repository directory
+   */
+  virtual void modelLoadImpl(const std::string& model,
+                             const ParameterMap& parameters,
+                             const std::string& version) const = 0;
+  /**
+   * @brief Unloads a previously loaded model and shut it down. This is
+   * identical in functionality to workerUnload and is provided for symmetry.
+   *
+   * @param model name of the model to unload
+   * @param version version of the model to unload
+   */
+  virtual void modelUnloadImpl(const std::string& model,
+                               const std::string& version) const = 0;
+
+  /**
+   * @brief Makes a synchronous inference request to the given model/worker. The
+   * contents of the request depends on the model/worker that the request is
+   * for.
+   *
+   * @param model name of the model/worker to request inference to
+   * @param request the request
+   * @param version version of the model to request inference to
+   * @return InferenceResponse
+   */
+  [[nodiscard]] virtual InferenceResponse modelInferImpl(
+    const std::string& model, const InferenceRequest& request,
+    const std::string& version) const = 0;
+  /**
+   * @brief Makes an asynchronous inference request to the given model/worker.
+   * The contents of the request depends on the model/worker that the request
+   * is for. The user must save the Future object and use it to get the results
+   * of the inference later.
+   *
+   * @param model name of the model/worker to request inference to
+   * @param request the request
+   * @param version version of the model to request inference to
+   * @return InferenceResponseFuture
+   */
+  [[nodiscard]] virtual InferenceResponseFuture modelInferAsyncImpl(
+    const std::string& model, const InferenceRequest& request,
+    const std::string& version) const = 0;
 };
 
 /**
@@ -180,14 +261,16 @@ void waitUntilServerReady(const Client* client);
  * @param client a pointer to a client object
  * @param model the model/worker to wait for
  */
-void waitUntilModelReady(const Client* client, const std::string& model);
+void waitUntilModelReady(const Client* client, const std::string& model,
+                         const std::string& version = "");
 /**
  * @brief Blocks until the named model/worker is not ready
  *
  * @param client a pointer to a client object
  * @param model the model/worker to wait for
  */
-void waitUntilModelNotReady(const Client* client, const std::string& model);
+void waitUntilModelNotReady(const Client* client, const std::string& model,
+                            const std::string& version = "");
 
 /**
  * @brief Load an ensemble - a chain of connected workers. This implementation
@@ -209,7 +292,8 @@ std::vector<std::string> loadEnsemble(const Client* client,
  * @param client a pointer to a client object
  * @param models a list of models to unload
  */
-void unloadModels(const Client* client, const std::vector<std::string>& models);
+void unloadModels(const Client* client, const std::vector<std::string>& models,
+                  const std::string& version = "");
 
 /**
  * @brief Makes inference requests in parallel to the specified model. All
@@ -223,7 +307,8 @@ void unloadModels(const Client* client, const std::vector<std::string>& models);
  */
 std::vector<InferenceResponse> inferAsyncOrdered(
   const Client* client, const std::string& model,
-  const std::vector<InferenceRequest>& requests);
+  const std::vector<InferenceRequest>& requests,
+  const std::string& version = "");
 /**
  * @brief Makes inference requests in parallel to the specified model in
  * batches. Each batch of requests are gathered and the responses are added to a
@@ -238,7 +323,8 @@ std::vector<InferenceResponse> inferAsyncOrdered(
  */
 std::vector<InferenceResponse> inferAsyncOrderedBatched(
   const Client* client, const std::string& model,
-  const std::vector<InferenceRequest>& requests, size_t batch_size);
+  const std::vector<InferenceRequest>& requests, size_t batch_size,
+  const std::string& version = "");
 
 }  // namespace amdinfer
 

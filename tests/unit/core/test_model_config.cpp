@@ -16,8 +16,9 @@
 
 #include <iostream>
 
-#include "amdinfer/core/model_config.hpp"  // for ModelConfig
-#include "gtest/gtest.h"                   // for Message, TestPartResult, Test
+#include "amdinfer/core/model_config.hpp"        // for ModelConfig
+#include "amdinfer/core/versioned_endpoint.hpp"  // for getVersionedEndpoint
+#include "gtest/gtest.h"  // for Message, TestPartResult, Test
 
 using namespace std::string_view_literals;
 
@@ -41,7 +42,7 @@ TEST(UnitModelConfig, Basic) {
   )"sv;
 
   const auto toml = toml::parse(toml_str);
-  ModelConfig config{toml};
+  ModelConfig config{toml, ""};
 
   ASSERT_EQ(config.size(), 1);
   for (const auto& [model, parameters] : config) {
@@ -72,7 +73,7 @@ TEST(UnitModelConfig, SingleEnsemble) {
   )"sv;
 
   const auto toml = toml::parse(toml_str);
-  ModelConfig config{toml};
+  ModelConfig config{toml, ""};
 
   ASSERT_EQ(config.size(), 1);
   for (const auto& [model, parameters] : config) {
@@ -91,7 +92,7 @@ TEST(UnitModelConfig, Chain) {
 
     [[models.inputs]]
     name = "image_in"
-    datatype = "STRING"
+    datatype = "BYTES"
     shape = [1048576]
     id = ""
 
@@ -131,13 +132,14 @@ TEST(UnitModelConfig, Chain) {
 
     [[models.outputs]]
     name = "image_out"
-    datatype = "STRING"
+    datatype = "BYTES"
     shape = [1048576]
     id = "postprocessed_image"
   )"sv;
 
   const auto toml = toml::parse(toml_str);
-  ModelConfig config{toml};
+  const std::string version{"1"};
+  ModelConfig config{toml, version};
 
   ASSERT_EQ(config.size(), 3);
   std::array<std::string, 3> models{"invert_image", "execute",
@@ -145,7 +147,7 @@ TEST(UnitModelConfig, Chain) {
 
   auto index = 0;
   for (const auto& [model, parameters] : config) {
-    ASSERT_EQ(model, models.at(index));
+    ASSERT_EQ(model, getVersionedEndpoint(models.at(index), version));
     ASSERT_EQ(parameters.get<std::string>("worker"), "cplusplus");
     index++;
   }

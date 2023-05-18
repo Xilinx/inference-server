@@ -24,6 +24,7 @@
 #include <filesystem>
 
 #include "amdinfer/core/exceptions.hpp"
+#include "amdinfer/core/versioned_endpoint.hpp"  // for getVersionedEndpoint
 #include "amdinfer/util/filesystem.hpp"
 #include "model_config.pb.h"  // for Config, InferP...
 
@@ -107,7 +108,7 @@ std::vector<T> extractArray(const toml::table& table, const std::string& key) {
 ModelConfigTensor extractModelConfigTensor(const toml::table& table) {
   auto name = extractString(table, "name", true);
   auto datatype_str = extractString(table, "datatype", true);
-  auto shape = extractArray<uint64_t>(table, "shape");
+  auto shape = extractArray<int64_t>(table, "shape");
   auto id = extractString(table, "id", false);
 
   DataType datatype{datatype_str.c_str()};
@@ -127,7 +128,7 @@ ModelConfigData extractConfig(const toml::table& table, bool is_ensemble) {
 }
 
 ModelConfigTensor::ModelConfigTensor(std::string name,
-                                     std::vector<uint64_t> shape,
+                                     std::vector<int64_t> shape,
                                      DataType data_type, std::string id)
   : Tensor(std::move(name), std::move(shape), data_type), id_(std::move(id)) {}
 
@@ -187,7 +188,7 @@ void ModelConfig::createModels() {
   }
 }
 
-ModelConfig::ModelConfig(const toml::table& toml) {
+ModelConfig::ModelConfig(const toml::table& toml, const std::string& version) {
   if (toml.empty()) {
     throw invalid_argument("The configuration cannot be empty");
   }
@@ -198,10 +199,15 @@ ModelConfig::ModelConfig(const toml::table& toml) {
     configs_.emplace_back(extractConfig(toml, false));
   }
 
+  for (auto& config : configs_) {
+    config.name = getVersionedEndpoint(config.name, version);
+  }
+
   this->createModels();
 }
 
-ModelConfig::ModelConfig(const inference::Config& config) {
+ModelConfig::ModelConfig(const inference::Config& config,
+                         const std::string& version) {
   // proto does not support ensembles so id is fixed to empty
   const std::string id;
 
@@ -214,7 +220,7 @@ ModelConfig::ModelConfig(const inference::Config& config) {
     const auto& name = input.name();
     const DataType datatype{input.datatype().c_str()};
     const auto& proto_shape = input.shape();
-    std::vector<uint64_t> shape;
+    std::vector<int64_t> shape;
     shape.reserve(proto_shape.size());
     for (const auto& index : proto_shape) {
       shape.push_back(index);
@@ -228,7 +234,7 @@ ModelConfig::ModelConfig(const inference::Config& config) {
     const auto& name = output.name();
     const DataType datatype{output.datatype().c_str()};
     const auto& proto_shape = output.shape();
-    std::vector<uint64_t> shape;
+    std::vector<int64_t> shape;
     shape.reserve(proto_shape.size());
     for (const auto& index : proto_shape) {
       shape.push_back(index);
@@ -236,7 +242,8 @@ ModelConfig::ModelConfig(const inference::Config& config) {
     outputs.emplace_back(name, shape, datatype, id);
   }
 
-  configs_.emplace_back(model_name, platform, id, inputs, outputs);
+  configs_.emplace_back(getVersionedEndpoint(model_name, version), platform, id,
+                        inputs, outputs);
 
   this->createModels();
 }

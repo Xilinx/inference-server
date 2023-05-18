@@ -190,19 +190,34 @@ bool HttpClient::serverReady() const {
   return response->statusCode() == drogon::k200OK;
 }
 
-bool HttpClient::modelReady(const std::string& model) const {
+bool HttpClient::modelReadyImpl(const std::string& model,
+                                const std::string& version) const {
   auto* client = this->impl_->getClient();
-  auto req =
-    createGetRequest("/v2/models/" + model + "/ready", impl_->getHeaders());
+  drogon::HttpRequestPtr req;
+  if (version.empty()) {
+    req =
+      createGetRequest("/v2/models/" + model + "/ready", impl_->getHeaders());
+  } else {
+    req = createGetRequest(
+      "/v2/models/" + model + "/versions/" + version + "/ready",
+      impl_->getHeaders());
+  }
 
   auto [result, response] = client->sendRequest(req);
   checkError(result);
   return response->statusCode() == drogon::k200OK;
 }
 
-ModelMetadata HttpClient::modelMetadata(const std::string& model) const {
+ModelMetadata HttpClient::modelMetadataImpl(const std::string& model,
+                                            const std::string& version) const {
   auto* client = this->impl_->getClient();
-  auto req = createGetRequest("/v2/models/" + model, impl_->getHeaders());
+  drogon::HttpRequestPtr req;
+  if (version.empty()) {
+    req = createGetRequest("/v2/models/" + model, impl_->getHeaders());
+  } else {
+    req = createGetRequest("/v2/models/" + model + "/versions/" + version,
+                           impl_->getHeaders());
+  }
 
   auto [result, response] = client->sendRequest(req);
   checkError(result);
@@ -210,15 +225,23 @@ ModelMetadata HttpClient::modelMetadata(const std::string& model) const {
   return mapJsonToModelMetadata(resp.get());
 }
 
-void HttpClient::modelLoad(const std::string& model,
-                           const ParameterMap& parameters) const {
+void HttpClient::modelLoadImpl(const std::string& model,
+                               const ParameterMap& parameters,
+                               const std::string& version) const {
   auto* client = this->impl_->getClient();
 
   Json::Value json = Json::objectValue;
   json = mapParametersToJson(parameters);
 
-  auto req = createPostRequest(json, "/v2/repository/models/" + model + "/load",
-                               impl_->getHeaders());
+  drogon::HttpRequestPtr req;
+  if (version.empty()) {
+    req = createPostRequest(json, "/v2/repository/models/" + model + "/load",
+                            impl_->getHeaders());
+  } else {
+    req = createPostRequest(
+      json, "/v2/repository/models/" + model + "/versions/" + version + "/load",
+      impl_->getHeaders());
+  }
 
   auto [result, response] = client->sendRequest(req);
   checkError(result);
@@ -227,12 +250,21 @@ void HttpClient::modelLoad(const std::string& model,
   }
 }
 
-void HttpClient::modelUnload(const std::string& model) const {
+void HttpClient::modelUnloadImpl(const std::string& model,
+                                 const std::string& version) const {
   auto* client = this->impl_->getClient();
 
   Json::Value json;
-  auto req = createPostRequest(
-    json, "/v2/repository/models/" + model + "/unload", impl_->getHeaders());
+  drogon::HttpRequestPtr req;
+  if (version.empty()) {
+    req = createPostRequest(json, "/v2/repository/models/" + model + "/unload",
+                            impl_->getHeaders());
+  } else {
+    req = createPostRequest(
+      json,
+      "/v2/repository/models/" + model + "/versions/" + version + "/unload",
+      impl_->getHeaders());
+  }
 
   auto [result, response] = client->sendRequest(req);
   checkError(result);
@@ -277,18 +309,28 @@ void HttpClient::workerUnload(const std::string& worker) const {
 
 auto createInferenceRequest(const std::string& model,
                             const InferenceRequest& request,
+                            const std::string& version,
                             const StringMap& headers) {
   if (request.getInputs().empty()) {
     throw invalid_argument("The request's inputs cannot be empty");
   }
 
   auto json = mapRequestToJson(request);
-  return createPostRequest(json, "/v2/models/" + model + "/infer", headers);
+  drogon::HttpRequestPtr req;
+  if (version.empty()) {
+    req = createPostRequest(json, "/v2/models/" + model + "/infer", headers);
+  } else {
+    req = createPostRequest(
+      json, "/v2/models/" + model + "/versions/" + version + "/infer", headers);
+  }
+  return req;
 }
 
-InferenceResponseFuture HttpClient::modelInferAsync(
-  const std::string& model, const InferenceRequest& request) const {
-  auto req = createInferenceRequest(model, request, impl_->getHeaders());
+InferenceResponseFuture HttpClient::modelInferAsyncImpl(
+  const std::string& model, const InferenceRequest& request,
+  const std::string& version) const {
+  auto req =
+    createInferenceRequest(model, request, version, impl_->getHeaders());
   auto prom = std::make_shared<std::promise<amdinfer::InferenceResponse>>();
   auto fut = prom->get_future();
 
@@ -319,9 +361,11 @@ InferenceResponseFuture HttpClient::modelInferAsync(
   return fut;
 }
 
-InferenceResponse HttpClient::modelInfer(
-  const std::string& model, const InferenceRequest& request) const {
-  auto req = createInferenceRequest(model, request, impl_->getHeaders());
+InferenceResponse HttpClient::modelInferImpl(const std::string& model,
+                                             const InferenceRequest& request,
+                                             const std::string& version) const {
+  auto req =
+    createInferenceRequest(model, request, version, impl_->getHeaders());
 
   auto* client = this->impl_->getClient();
   auto [result, response] = client->sendRequest(req);

@@ -41,7 +41,7 @@ class UpdateListener : public efsw::FileWatchListener {
 };
 
 ModelConfig parseModel(const std::filesystem::path& repository,
-                       const std::string& model);
+                       const std::string& model, const std::string& version);
 
 class ModelRepository {
  public:

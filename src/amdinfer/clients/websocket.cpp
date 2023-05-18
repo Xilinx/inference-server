@@ -177,25 +177,29 @@ bool WebSocketClient::serverReady() const {
   return client->serverReady();
 }
 
-bool WebSocketClient::modelReady(const std::string& model) const {
+bool WebSocketClient::modelReadyImpl(const std::string& model,
+                                     const std::string& version) const {
   const auto* client = this->impl_->getHttpClient();
-  return client->modelReady(model);
+  return client->modelReady(model, version);
 }
 
-ModelMetadata WebSocketClient::modelMetadata(const std::string& model) const {
+ModelMetadata WebSocketClient::modelMetadataImpl(
+  const std::string& model, const std::string& version) const {
   const auto* client = this->impl_->getHttpClient();
-  return client->modelMetadata(model);
+  return client->modelMetadata(model, version);
 }
 
-void WebSocketClient::modelLoad(const std::string& model,
-                                const ParameterMap& parameters) const {
+void WebSocketClient::modelLoadImpl(const std::string& model,
+                                    const ParameterMap& parameters,
+                                    const std::string& version) const {
   const auto* client = this->impl_->getHttpClient();
-  client->modelLoad(model, parameters);
+  client->modelLoad(model, parameters, version);
 }
 
-void WebSocketClient::modelUnload(const std::string& model) const {
+void WebSocketClient::modelUnloadImpl(const std::string& model,
+                                      const std::string& version) const {
   const auto* client = this->impl_->getHttpClient();
-  client->modelUnload(model);
+  client->modelUnload(model, version);
 }
 
 std::string WebSocketClient::workerLoad(const std::string& worker,
@@ -209,16 +213,18 @@ void WebSocketClient::workerUnload(const std::string& worker) const {
   client->workerUnload(worker);
 }
 
-InferenceResponseFuture WebSocketClient::modelInferAsync(
-  const std::string& model, const InferenceRequest& request) const {
+InferenceResponseFuture WebSocketClient::modelInferAsyncImpl(
+  const std::string& model, const InferenceRequest& request,
+  const std::string& version) const {
   const auto* client = this->impl_->getHttpClient();
-  return client->modelInferAsync(model, request);
+  return client->modelInferAsync(model, request, version);
 }
 
-InferenceResponse WebSocketClient::modelInfer(
-  const std::string& model, const InferenceRequest& request) const {
+InferenceResponse WebSocketClient::modelInferImpl(
+  const std::string& model, const InferenceRequest& request,
+  const std::string& version) const {
   const auto* client = this->impl_->getHttpClient();
-  return client->modelInfer(model, request);
+  return client->modelInfer(model, request, version);
 }
 
 std::vector<std::string> WebSocketClient::modelList() const {

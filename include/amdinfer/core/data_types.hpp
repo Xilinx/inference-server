@@ -76,7 +76,7 @@ class DataType {
     FP32 = Fp32,
     Fp64,
     FP64 = Fp64,
-    String,
+    Bytes,
     Unknown,
   };
 
@@ -141,8 +141,8 @@ class DataType {
         return sizeof(float);
       case DataType::Fp64:
         return sizeof(double);
-      case DataType::String:
-        return sizeof(char);
+      case DataType::Bytes:
+        return sizeof(std::byte);
       default:
         throw invalid_argument("Unknown datatype passed");
     }
@@ -182,8 +182,8 @@ class DataType {
         return "FP32";
       case DataType::Fp64:
         return "FP64";
-      case DataType::String:
-        return "STRING";
+      case DataType::Bytes:
+        return "BYTES";
       default:
         throw invalid_argument("Unknown datatype passed");
     }
@@ -228,9 +228,9 @@ class DataType {
       case detail::hash("FP64"):
       case detail::hash("Fp64"):
         return DataType::Fp64;
-      case detail::hash("STRING"):
-      case detail::hash("String"):
-        return DataType::String;
+      case detail::hash("BYTES"):
+      case detail::hash("Bytes"):
+        return DataType::Bytes;
       default:
         throw invalid_argument("Unknown datatype passed");
     }
@@ -289,7 +289,7 @@ auto switchOverTypes(F f, DataType type, [[maybe_unused]] const Args&... args) {
     case DataType::Fp64: {
       return f.template operator()<double>(args...);
     }
-    case DataType::String: {
+    case DataType::Bytes: {
       return f.template operator()<char>(args...);
     }
     default:

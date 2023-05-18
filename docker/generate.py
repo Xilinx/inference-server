@@ -763,20 +763,38 @@ def install_python_packages():
 
 
 def vcpkg_build(manager):
-    return textwrap.dedent(
-        f"""\
-        RUN {manager.update} \\
-            && {manager.install} \\
-                curl \\
-                zip \\
-                unzip \\
-                tar \\
-                nasm \\
-                pkg-config \\
-                python3-dev \\
-            # clean up
-            {code_indent(manager.clean, 12)}"""
-    )
+    if manager.name == "apt":
+        return textwrap.dedent(
+            f"""\
+            RUN {manager.update} \\
+                && {manager.install} \\
+                    curl \\
+                    zip \\
+                    unzip \\
+                    tar \\
+                    nasm \\
+                    pkg-config \\
+                    python3-dev \\
+                # clean up
+                {code_indent(manager.clean, 16)}"""
+        )
+    elif manager.name == "yum":
+        return textwrap.dedent(
+            f"""\
+            RUN {manager.update} \\
+                && {manager.install} \\
+                    curl \\
+                    zip \\
+                    unzip \\
+                    tar \\
+                    nasm \\
+                    pkgconfig \\
+                    python3-devel \\
+                # clean up
+                {code_indent(manager.clean, 16)}"""
+        )
+    else:
+        raise ValueError(f"Unknown base image type: {manager.name}")
 
 
 def generate(args: argparse.Namespace):

@@ -74,6 +74,7 @@ You can install these wheels in a virtual environment, Conda environment, a cont
 
     pip install <path/to/wheel>
 
+.. _python_api:
 
 API
 ---

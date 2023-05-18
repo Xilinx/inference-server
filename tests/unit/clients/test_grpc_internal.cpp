@@ -144,7 +144,7 @@ TEST_P(Fixture, TestRequestToProto) {  // NOLINT
   switchOverTypes(CheckData(), datatype, &tensor);
 }
 
-// we exclude STRING as it doesn't have a defined size we can pre-allocate
+// we exclude BYTES as it doesn't have a defined size we can pre-allocate
 // NOLINTNEXTLINE(cert-err58-cpp)
 const std::array<DataType, 12> kDataTypes{
   DataType::Bool,   DataType::Uint8, DataType::Uint16, DataType::Uint32,

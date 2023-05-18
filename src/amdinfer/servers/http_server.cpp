@@ -175,17 +175,14 @@ drogon::HttpResponsePtr errorHttpResponse(const std::string &error,
   return resp;
 }
 
-using DrogonCallback = std::function<void(const drogon::HttpResponsePtr &)>;
-
 HttpServer::HttpServer(SharedState *state) : state_(state) {
   AMDINFER_LOG_DEBUG(logger_, "Constructed HttpServer");
 }
 
 #ifdef AMDINFER_ENABLE_HTTP
 
-void HttpServer::getServerLive(
-  const HttpRequestPtr &req,
-  std::function<void(const HttpResponsePtr &)> &&callback) const {
+void HttpServer::getServerLive(const HttpRequestPtr &req,
+                               DrogonCallback &&callback) const {
   AMDINFER_LOG_INFO(logger_, "Received getServerLive request");
 #ifdef AMDINFER_ENABLE_METRICS
   Metrics::getInstance().incrementCounter(MetricCounterIDs::RestGet);
@@ -206,9 +203,8 @@ void HttpServer::getServerLive(
   callback(resp);
 }
 
-void HttpServer::getServerReady(
-  const HttpRequestPtr &req,
-  std::function<void(const HttpResponsePtr &)> &&callback) const {
+void HttpServer::getServerReady(const HttpRequestPtr &req,
+                                DrogonCallback &&callback) const {
   AMDINFER_LOG_INFO(logger_, "Received getServerReady request");
 #ifdef AMDINFER_ENABLE_METRICS
   Metrics::getInstance().incrementCounter(MetricCounterIDs::RestGet);
@@ -222,19 +218,16 @@ void HttpServer::getServerReady(
   callback(resp);
 }
 
-void HttpServer::getModelReady(
-  const HttpRequestPtr &req,
-  std::function<void(const HttpResponsePtr &)> &&callback,
-  std::string const &model) const {
-  AMDINFER_LOG_INFO(logger_, "Received getModelReady request");
+void getModelReady(DrogonCallback &&callback, SharedState *state,
+                   const std::string &endpoint, const std::string &version) {
+  AMDINFER_IF_LOGGING(Logger logger{Loggers::Server});
+  AMDINFER_LOG_INFO(logger, "Received getModelReady request");
 #ifdef AMDINFER_ENABLE_METRICS
   Metrics::getInstance().incrementCounter(MetricCounterIDs::RestGet);
 #endif
-  (void)req;  // suppress unused variable warning
-
   auto resp = HttpResponse::newHttpResponse();
   try {
-    if (!state_->modelReady(model)) {
+    if (!state->modelReady(endpoint, version)) {
       resp->setStatusCode(HttpStatusCode::k503ServiceUnavailable);
     }
   } catch (const invalid_argument &e) {
@@ -244,9 +237,20 @@ void HttpServer::getModelReady(
   callback(resp);
 }
 
-void HttpServer::getServerMetadata(
-  const HttpRequestPtr &req,
-  std::function<void(const HttpResponsePtr &)> &&callback) const {
+void HttpServer::getModelReady([[maybe_unused]] const HttpRequestPtr &req,
+                               DrogonCallback &&callback,
+                               std::string const &model) const {
+  amdinfer::getModelReady(std::move(callback), state_, model, "");
+}
+
+void HttpServer::getModelReadyVersion(
+  [[maybe_unused]] const HttpRequestPtr &req, DrogonCallback &&callback,
+  const std::string &model, const std::string &version) const {
+  amdinfer::getModelReady(std::move(callback), state_, model, version);
+}
+
+void HttpServer::getServerMetadata(const HttpRequestPtr &req,
+                                   DrogonCallback &&callback) const {
   AMDINFER_LOG_INFO(logger_, "Received getServerMetadata request");
 #ifdef AMDINFER_ENABLE_METRICS
   Metrics::getInstance().incrementCounter(MetricCounterIDs::RestGet);
@@ -266,20 +270,18 @@ void HttpServer::getServerMetadata(
   callback(resp);
 }
 
-void HttpServer::getModelMetadata(
-  const HttpRequestPtr &req,
-  std::function<void(const HttpResponsePtr &)> &&callback,
-  const std::string &model) const {
-  AMDINFER_LOG_INFO(logger_, "Received getModelMetadata request");
+void getModelMetadata(DrogonCallback &&callback, SharedState *state,
+                      const std::string &endpoint, const std::string &version) {
+  AMDINFER_IF_LOGGING(Logger logger{Loggers::Server});
+  AMDINFER_LOG_INFO(logger, "Received getModelMetadata request");
 #ifdef AMDINFER_ENABLE_METRICS
   Metrics::getInstance().incrementCounter(MetricCounterIDs::RestGet);
 #endif
-  (void)req;  // suppress unused variable warning
 
   Json::Value ret;
   bool error = false;
   try {
-    auto metadata = state_->modelMetadata(model);
+    auto metadata = state->modelMetadata(endpoint, version);
     ret = modelMetadataToJson(metadata);
   } catch (const runtime_error &e) {
     ret["error"] = e.what();
@@ -293,9 +295,20 @@ void HttpServer::getModelMetadata(
   callback(resp);
 }
 
-void HttpServer::modelList(
-  const drogon::HttpRequestPtr &req,
-  std::function<void(const drogon::HttpResponsePtr &)> &&callback) const {
+void HttpServer::getModelMetadata([[maybe_unused]] const HttpRequestPtr &req,
+                                  DrogonCallback &&callback,
+                                  const std::string &model) const {
+  amdinfer::getModelMetadata(std::move(callback), state_, model, "");
+}
+
+void HttpServer::getModelMetadataVersion(
+  [[maybe_unused]] const HttpRequestPtr &req, DrogonCallback &&callback,
+  const std::string &model, const std::string &version) const {
+  amdinfer::getModelMetadata(std::move(callback), state_, model, version);
+}
+
+void HttpServer::modelList(const drogon::HttpRequestPtr &req,
+                           DrogonCallback &&callback) const {
   AMDINFER_LOG_INFO(logger_, "Received modelList request");
   (void)req;  // suppress unused variable warning
   const auto models = state_->modelList();
@@ -310,9 +323,8 @@ void HttpServer::modelList(
   callback(resp);
 }
 
-void HttpServer::hasHardware(
-  const HttpRequestPtr &req,
-  std::function<void(const HttpResponsePtr &)> &&callback) const {
+void HttpServer::hasHardware(const HttpRequestPtr &req,
+                             DrogonCallback &&callback) const {
   AMDINFER_LOG_INFO(logger_, "Received hasHardware request");
 #ifdef AMDINFER_ENABLE_METRICS
   Metrics::getInstance().incrementCounter(MetricCounterIDs::RestGet);
@@ -350,7 +362,7 @@ InferenceRequestInput getInput(const Json::Value &json,
     throw invalid_argument("No 'shape' key present in request input");
   }
   auto shape = json.get("shape", Json::arrayValue);
-  std::vector<uint64_t> shape_vector;
+  std::vector<int64_t> shape_vector;
   shape_vector.reserve(shape.size());
   for (auto const &i : shape) {
     if (!i.isUInt64()) {
@@ -471,10 +483,9 @@ InferenceRequestPtr getRequest(const std::shared_ptr<Json::Value> &json,
   return request;
 }
 
-void HttpServer::modelInfer(
-  const HttpRequestPtr &req,
-  std::function<void(const HttpResponsePtr &)> &&callback,
-  std::string const &model) const {
+void modelInfer(const HttpRequestPtr &req, DrogonCallback &&callback,
+                SharedState *state, const std::string &endpoint,
+                const std::string &version) {
 #ifdef AMDINFER_ENABLE_TRACING
   const auto &drogon_headers = req->getHeaders();
   StringMap headers{drogon_headers.begin(), drogon_headers.end()};
@@ -482,7 +493,8 @@ void HttpServer::modelInfer(
   trace->setAttribute("model", model);
 #endif
 
-  AMDINFER_LOG_INFO(logger_, "Received modelInfer request for " + model);
+  AMDINFER_IF_LOGGING(Logger logger{Loggers::Server});
+  AMDINFER_LOG_INFO(logger, "Received modelInfer request for " + endpoint);
 #ifdef AMDINFER_ENABLE_METRICS
   auto now = std::chrono::high_resolution_clock::now();
   Metrics::getInstance().incrementCounter(MetricCounterIDs::RestPost);
@@ -494,7 +506,7 @@ void HttpServer::modelInfer(
 
   auto json = req->getJsonObject();
   try {
-    auto request = getRequest(json, state_->getPool());
+    auto request = getRequest(json, state->getPool());
     setCallback(request.get(), std::move(callback));
     auto request_container = std::make_unique<RequestContainer>();
     request_container->request = request;
@@ -505,9 +517,9 @@ void HttpServer::modelInfer(
     trace->endSpan();
     request_container->trace = std::move(trace);
 #endif
-    state_->modelInfer(model, std::move(request_container));
+    state->modelInfer(endpoint, std::move(request_container), version);
   } catch (const invalid_argument &e) {
-    AMDINFER_LOG_INFO(logger_, e.what());
+    AMDINFER_LOG_INFO(logger, e.what());
     auto resp = errorHttpResponse(e.what(), HttpStatusCode::k400BadRequest);
     // TODO(varunsh): could use after move here from the try block
     // #ifdef AMDINFER_ENABLE_TRACING
@@ -518,10 +530,22 @@ void HttpServer::modelInfer(
   }
 }
 
-void HttpServer::modelLoad(
-  const HttpRequestPtr &req,
-  std::function<void(const HttpResponsePtr &)> &&callback,
-  const std::string &model) const {
+void HttpServer::modelInfer(const HttpRequestPtr &req,
+                            DrogonCallback &&callback,
+                            const std::string &model) const {
+  amdinfer::modelInfer(req, std::move(callback), state_, model, "");
+}
+
+void HttpServer::modelInferVersion(const HttpRequestPtr &req,
+                                   DrogonCallback &&callback,
+                                   const std::string &model,
+                                   const std::string &version) const {
+  amdinfer::modelInfer(req, std::move(callback), state_, model, version);
+}
+
+void modelLoad(const HttpRequestPtr &req, DrogonCallback &&callback,
+               SharedState *state, const std::string &model,
+               const std::string &version) {
   auto model_lower = util::toLower(model);
 #ifdef AMDINFER_ENABLE_TRACING
   const auto &drogon_headers = req->getHeaders();
@@ -529,7 +553,8 @@ void HttpServer::modelLoad(
   auto trace = startTrace(&(__func__[0]), headers);
   trace->setAttribute("model", model_lower);
 #endif
-  AMDINFER_LOG_INFO(logger_, "Received modelLoad request for " + model_lower);
+  AMDINFER_IF_LOGGING(Logger logger{Loggers::Server});
+  AMDINFER_LOG_INFO(logger, "Received modelLoad request for " + model_lower);
 
   auto json = req->getJsonObject();
   ParameterMap parameters;
@@ -541,9 +566,9 @@ void HttpServer::modelLoad(
 #endif
 
   try {
-    state_->modelLoad(model_lower, parameters);
+    state->modelLoad(model_lower, version, parameters);
   } catch (const runtime_error &e) {
-    AMDINFER_LOG_ERROR(logger_, e.what());
+    AMDINFER_LOG_ERROR(logger, e.what());
     auto resp = errorHttpResponse(e.what(), HttpStatusCode::k400BadRequest);
 #ifdef AMDINFER_ENABLE_TRACING
     auto context = trace->propagate();
@@ -560,24 +585,36 @@ void HttpServer::modelLoad(
   callback(resp);
 }
 
-void HttpServer::modelUnload(
-  [[maybe_unused]] const HttpRequestPtr &req,
-  std::function<void(const HttpResponsePtr &)> &&callback,
-  const std::string &model) const {
-  AMDINFER_LOG_INFO(logger_, "Received modelUnload request");
+void HttpServer::modelLoad(const HttpRequestPtr &req, DrogonCallback &&callback,
+                           const std::string &model) const {
+  amdinfer::modelLoad(req, std::move(callback), state_, model, "");
+}
+
+void HttpServer::modelLoadVersion(const HttpRequestPtr &req,
+                                  DrogonCallback &&callback,
+                                  const std::string &model,
+                                  const std::string &version) const {
+  amdinfer::modelLoad(req, std::move(callback), state_, model, version);
+}
+
+void modelUnload([[maybe_unused]] const HttpRequestPtr &req,
+                 DrogonCallback &&callback, SharedState *state,
+                 const std::string &endpoint, const std::string &version) {
+  AMDINFER_IF_LOGGING(Logger logger{Loggers::Server});
+  AMDINFER_LOG_INFO(logger, "Received modelUnload request");
 #ifdef AMDINFER_ENABLE_TRACING
   const auto &drogon_headers = req->getHeaders();
   StringMap headers{drogon_headers.begin(), drogon_headers.end()};
   auto trace = startTrace(&(__func__[0]), headers);
 #endif
 
-  auto model_lower = util::toLower(model);
+  auto endpoint_lower = util::toLower(endpoint);
 
 #ifdef AMDINFER_ENABLE_TRACING
-  trace->setAttribute("model", model_lower);
+  trace->setAttribute("model", endpoint_lower);
 #endif
 
-  state_->modelUnload(model_lower);
+  state->modelUnload(endpoint_lower, version);
 
   auto resp = HttpResponse::newHttpResponse();
 #ifdef AMDINFER_ENABLE_TRACING
@@ -587,10 +624,22 @@ void HttpServer::modelUnload(
   callback(resp);
 }
 
-void HttpServer::workerLoad(
-  const HttpRequestPtr &req,
-  std::function<void(const HttpResponsePtr &)> &&callback,
-  const std::string &worker) const {
+void HttpServer::modelUnload(const HttpRequestPtr &req,
+                             DrogonCallback &&callback,
+                             const std::string &model) const {
+  amdinfer::modelUnload(req, std::move(callback), state_, model, "");
+}
+
+void HttpServer::modelUnloadVersion(const HttpRequestPtr &req,
+                                    DrogonCallback &&callback,
+                                    const std::string &model,
+                                    const std::string &version) const {
+  amdinfer::modelUnload(req, std::move(callback), state_, model, version);
+}
+
+void HttpServer::workerLoad(const HttpRequestPtr &req,
+                            DrogonCallback &&callback,
+                            const std::string &worker) const {
   AMDINFER_LOG_INFO(logger_, "Received load request");
 #ifdef AMDINFER_ENABLE_TRACING
   const auto &drogon_headers = req->getHeaders();
@@ -631,10 +680,9 @@ void HttpServer::workerLoad(
   callback(resp);
 }
 
-void HttpServer::workerUnload(
-  [[maybe_unused]] const HttpRequestPtr &req,
-  std::function<void(const HttpResponsePtr &)> &&callback,
-  const std::string &worker) const {
+void HttpServer::workerUnload([[maybe_unused]] const HttpRequestPtr &req,
+                              DrogonCallback &&callback,
+                              const std::string &worker) const {
 #ifdef AMDINFER_ENABLE_TRACING
   const auto &drogon_headers = req->getHeaders();
   StringMap headers{drogon_headers.begin(), drogon_headers.end()};
@@ -662,9 +710,8 @@ void HttpServer::workerUnload(
 #endif  // AMDINFER_ENABLE_HTTP
 
 #ifdef AMDINFER_ENABLE_METRICS
-void HttpServer::metrics(
-  const HttpRequestPtr &req,
-  std::function<void(const HttpResponsePtr &)> &&callback) const {
+void HttpServer::metrics(const HttpRequestPtr &req,
+                         DrogonCallback &&callback) const {
   (void)req;  // suppress unused variable warning
   AMDINFER_LOG_INFO(logger_, "Received metrics request");
   std::string body = Metrics::getInstance().getMetrics();

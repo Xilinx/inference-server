@@ -48,7 +48,7 @@ class InferenceRequestInput : public InferenceTensor {
    * @param data_type type of the data
    * @param name name to assign
    */
-  InferenceRequestInput(void *data, std::vector<uint64_t> shape,
+  InferenceRequestInput(void *data, std::vector<int64_t> shape,
                         DataType data_type, std::string name = "");
 
   /// Set the request's data
@@ -179,7 +179,7 @@ class InferenceRequest {
    * @param data_type the datatype of the data
    * @param name the name of the input tensor
    */
-  void addInputTensor(void *data, const std::vector<uint64_t> &shape,
+  void addInputTensor(void *data, const std::vector<int64_t> &shape,
                       DataType data_type, const std::string &name = "");
 
   /**

@@ -66,7 +66,7 @@ void wrapDataType(py::module_& m) {
     .def_property_readonly_static(
       "FLOAT64", [](const py::object& /*self*/) { return DataType("FP64"); })
     .def_property_readonly_static(
-      "STRING", [](const py::object& /*self*/) { return DataType("STRING"); })
+      "BYTES", [](const py::object& /*self*/) { return DataType("BYTES"); })
     .def("size", &DataType::size)
     .def("str", &DataType::str)
     // defines the __eq__ operator for the class
@@ -95,7 +95,7 @@ void wrapDataType(py::module_& m) {
     .value("FLOAT32", DataType::Fp32)
     .value("FP64", DataType::Fp64)
     .value("FLOAT64", DataType::Fp64)
-    .value("STRING", DataType::String);
+    .value("BYTES", DataType::Bytes);
 
   py::implicitly_convertible<DataType::Value, DataType>();
 }

@@ -23,7 +23,7 @@
 
 namespace amdinfer {
 
-InferenceTensor::InferenceTensor(std::string name, std::vector<uint64_t> shape,
+InferenceTensor::InferenceTensor(std::string name, std::vector<int64_t> shape,
                                  DataType data_type)
   : Tensor(std::move(name), std::move(shape), data_type) {}
 

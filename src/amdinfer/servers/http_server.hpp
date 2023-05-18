@@ -46,6 +46,8 @@ class MemoryPool;
 InferenceRequestPtr getRequest(const std::shared_ptr<Json::Value> &json,
                                const MemoryPool *pool);
 
+using DrogonCallback = std::function<void(const drogon::HttpResponsePtr &)>;
+
 /**
  * @brief The HTTP server for handling REST requests extends the base
  * HttpController in Drogon and adds the endpoints of interest.
@@ -58,44 +60,46 @@ class HttpServer : public drogon::HttpController<HttpServer, false> {
 
   METHOD_LIST_BEGIN
 
-  /// Register the getServerLive endpoint
   ADD_METHOD_TO(HttpServer::getServerLive, "v2/health/live", drogon::Get,
                 drogon::Options);
-  /// Register the getServerReady endpoint
   ADD_METHOD_TO(HttpServer::getServerReady, "v2/health/ready", drogon::Get,
                 drogon::Options);
-  /// Register the getModelReady endpoint
   ADD_METHOD_TO(HttpServer::getModelReady, "v2/models/{model}/ready",
                 drogon::Get, drogon::Options);
-  /// Register the getServerMetadata endpoint
+  ADD_METHOD_TO(HttpServer::getModelReadyVersion,
+                "v2/models/{model}/versions/{version}/ready", drogon::Get,
+                drogon::Options);
   ADD_METHOD_TO(HttpServer::getServerMetadata, "v2", drogon::Get,
                 drogon::Options);
-  /// Register the getModelMetadata endpoint
   ADD_METHOD_TO(HttpServer::getModelMetadata, "v2/models/{model}", drogon::Get,
                 drogon::Options);
-  /// Register the getHardware endpoint
+  ADD_METHOD_TO(HttpServer::getModelMetadataVersion,
+                "v2/models/{model}/versions/{version}", drogon::Get,
+                drogon::Options);
   ADD_METHOD_TO(HttpServer::hasHardware, "v2/hardware", drogon::Post,
                 drogon::Options);
-  /// Register the modelList endpoint
   ADD_METHOD_TO(HttpServer::modelList, "v2/models", drogon::Get,
                 drogon::Options);
-  /// Register the modelInfer endpoint
   ADD_METHOD_TO(HttpServer::modelInfer, "v2/models/{model}/infer", drogon::Post,
                 drogon::Options);
-  /// Register the load endpoint
+  ADD_METHOD_TO(HttpServer::modelInferVersion,
+                "v2/models/{model}/versions/{version}/infer", drogon::Post,
+                drogon::Options);
   ADD_METHOD_TO(HttpServer::modelLoad, "v2/repository/models/{model}/load",
                 drogon::Post, drogon::Options);
-  /// Register the unload endpoint
+  ADD_METHOD_TO(HttpServer::modelLoadVersion,
+                "v2/repository/models/{model}/versions/{version}/load",
+                drogon::Post, drogon::Options);
   ADD_METHOD_TO(HttpServer::modelUnload, "v2/repository/models/{model}/unload",
                 drogon::Post, drogon::Options);
-  /// Register the workerLoad endpoint
+  ADD_METHOD_TO(HttpServer::modelUnloadVersion,
+                "v2/repository/models/{model}/versions/{version}/unload",
+                drogon::Post, drogon::Options);
   ADD_METHOD_TO(HttpServer::workerLoad, "v2/workers/{worker}/load",
                 drogon::Post, drogon::Options);
-  /// Register the workerUnload endpoint
   ADD_METHOD_TO(HttpServer::workerUnload, "v2/workers/{worker}/unload",
                 drogon::Post, drogon::Options);
 #ifdef AMDINFER_ENABLE_METRICS
-  /// Register the metrics endpoint
   ADD_METHOD_TO(HttpServer::metrics, "metrics", drogon::Get);
 #endif
   METHOD_LIST_END
@@ -107,9 +111,8 @@ class HttpServer : public drogon::HttpController<HttpServer, false> {
    * @param req the REST request object
    * @param callback the callback function to respond to the client
    */
-  void getServerLive(
-    const drogon::HttpRequestPtr &req,
-    std::function<void(const drogon::HttpResponsePtr &)> &&callback) const;
+  void getServerLive(const drogon::HttpRequestPtr &req,
+                     DrogonCallback &&callback) const;
 
   /**
    * @brief Returns 200 if all models are ready for inferencing
@@ -117,9 +120,8 @@ class HttpServer : public drogon::HttpController<HttpServer, false> {
    * @param req the REST request object
    * @param callback the callback function to respond to the client
    */
-  void getServerReady(
-    const drogon::HttpRequestPtr &req,
-    std::function<void(const drogon::HttpResponsePtr &)> &&callback) const;
+  void getServerReady(const drogon::HttpRequestPtr &req,
+                      DrogonCallback &&callback) const;
 
   /**
    * @brief Returns 200 if a specific model is ready for inferencing
@@ -128,10 +130,20 @@ class HttpServer : public drogon::HttpController<HttpServer, false> {
    * @param callback the callback function to respond to the client
    * @param model name of the model to serve the request
    */
-  void getModelReady(
-    const drogon::HttpRequestPtr &req,
-    std::function<void(const drogon::HttpResponsePtr &)> &&callback,
-    std::string const &model) const;
+  void getModelReady(const drogon::HttpRequestPtr &req,
+                     DrogonCallback &&callback, const std::string &model) const;
+
+  /**
+   * @brief Returns 200 if a specific model is ready for inferencing
+   *
+   * @param req the REST request object
+   * @param callback the callback function to respond to the client
+   * @param model name of the model to check
+   * @param version version of the model to check
+   */
+  void getModelReadyVersion(const drogon::HttpRequestPtr &req,
+                            DrogonCallback &&callback, const std::string &model,
+                            const std::string &version) const;
 
   /**
    * @brief Returns metadata associated with the server
@@ -139,9 +151,8 @@ class HttpServer : public drogon::HttpController<HttpServer, false> {
    * @param req the REST request object
    * @param callback the callback function to respond to the client
    */
-  void getServerMetadata(
-    const drogon::HttpRequestPtr &req,
-    std::function<void(const drogon::HttpResponsePtr &)> &&callback) const;
+  void getServerMetadata(const drogon::HttpRequestPtr &req,
+                         DrogonCallback &&callback) const;
 
   /**
    * @brief Returns metadata associated with a model
@@ -150,10 +161,21 @@ class HttpServer : public drogon::HttpController<HttpServer, false> {
    * @param callback the callback function to respond to the client
    * @param model name of the model to serve the request
    */
-  void getModelMetadata(
-    const drogon::HttpRequestPtr &req,
-    std::function<void(const drogon::HttpResponsePtr &)> &&callback,
-    std::string const &model) const;
+  void getModelMetadata(const drogon::HttpRequestPtr &req,
+                        DrogonCallback &&callback,
+                        const std::string &model) const;
+
+  /**
+   * @brief Returns metadata associated with a model
+   *
+   * @param req the REST request object
+   * @param callback the callback function to respond to the client
+   * @param model name of the model to serve the request
+   */
+  void getModelMetadataVersion(const drogon::HttpRequestPtr &req,
+                               DrogonCallback &&callback,
+                               const std::string &model,
+                               const std::string &version) const;
 
   /**
    * @brief Returns the available hardware on the server
@@ -161,9 +183,8 @@ class HttpServer : public drogon::HttpController<HttpServer, false> {
    * @param req the REST request object
    * @param callback the callback function to respond to the client
    */
-  void hasHardware(
-    const drogon::HttpRequestPtr &req,
-    std::function<void(const drogon::HttpResponsePtr &)> &&callback) const;
+  void hasHardware(const drogon::HttpRequestPtr &req,
+                   DrogonCallback &&callback) const;
 
   /**
    * @brief Returns the active models on the server
@@ -171,9 +192,8 @@ class HttpServer : public drogon::HttpController<HttpServer, false> {
    * @param req the REST request object
    * @param callback the callback function to respond to the client
    */
-  void modelList(
-    const drogon::HttpRequestPtr &req,
-    std::function<void(const drogon::HttpResponsePtr &)> &&callback) const;
+  void modelList(const drogon::HttpRequestPtr &req,
+                 DrogonCallback &&callback) const;
 
   /**
    * @brief Handles inference requests for named models
@@ -182,10 +202,20 @@ class HttpServer : public drogon::HttpController<HttpServer, false> {
    * @param callback the callback function to respond to the client
    * @param model name of the model to serve the request
    */
-  void modelInfer(
-    const drogon::HttpRequestPtr &req,
-    std::function<void(const drogon::HttpResponsePtr &)> &&callback,
-    std::string const &model) const;
+  void modelInfer(const drogon::HttpRequestPtr &req, DrogonCallback &&callback,
+                  const std::string &model) const;
+
+  /**
+   * @brief Handles inference requests for named models
+   *
+   * @param req the REST request object
+   * @param callback the callback function to respond to the client
+   * @param model name of the model to serve the request
+   * @param version version of the model to serve the request
+   */
+  void modelInferVersion(const drogon::HttpRequestPtr &req,
+                         DrogonCallback &&callback, const std::string &model,
+                         const std::string &version) const;
 
   /**
    * @brief Loads and starts a model
@@ -194,10 +224,20 @@ class HttpServer : public drogon::HttpController<HttpServer, false> {
    * @param callback the callback function to respond to the client
    * @param model name of the model to load
    */
-  void modelLoad(
-    const drogon::HttpRequestPtr &req,
-    std::function<void(const drogon::HttpResponsePtr &)> &&callback,
-    std::string const &model) const;
+  void modelLoad(const drogon::HttpRequestPtr &req, DrogonCallback &&callback,
+                 const std::string &model) const;
+
+  /**
+   * @brief Loads and starts a model
+   *
+   * @param req the REST request object
+   * @param callback the callback function to respond to the client
+   * @param model name of the model to load
+   * @param version version of the model to load
+   */
+  void modelLoadVersion(const drogon::HttpRequestPtr &req,
+                        DrogonCallback &&callback, const std::string &model,
+                        const std::string &version) const;
 
   /**
    * @brief Unloads a model
@@ -206,10 +246,20 @@ class HttpServer : public drogon::HttpController<HttpServer, false> {
    * @param callback the callback function to respond to the client
    * @param model name of the model to unload
    */
-  void modelUnload(
-    const drogon::HttpRequestPtr &req,
-    std::function<void(const drogon::HttpResponsePtr &)> &&callback,
-    std::string const &model) const;
+  void modelUnload(const drogon::HttpRequestPtr &req, DrogonCallback &&callback,
+                   const std::string &model) const;
+
+  /**
+   * @brief Unloads a model
+   *
+   * @param req the REST request object
+   * @param callback the callback function to respond to the client
+   * @param model name of the model to unload
+   * @param version version of the model to unload
+   */
+  void modelUnloadVersion(const drogon::HttpRequestPtr &req,
+                          DrogonCallback &&callback, const std::string &model,
+                          const std::string &version) const;
 
   /**
    * @brief Loads and starts a worker
@@ -218,10 +268,8 @@ class HttpServer : public drogon::HttpController<HttpServer, false> {
    * @param callback the callback function to respond to the client
    * @param worker name of the worker to load
    */
-  void workerLoad(
-    const drogon::HttpRequestPtr &req,
-    std::function<void(const drogon::HttpResponsePtr &)> &&callback,
-    std::string const &worker) const;
+  void workerLoad(const drogon::HttpRequestPtr &req, DrogonCallback &&callback,
+                  std::string const &worker) const;
 
   /**
    * @brief Unloads a worker
@@ -230,10 +278,8 @@ class HttpServer : public drogon::HttpController<HttpServer, false> {
    * @param callback the callback function to respond to the client
    * @param worker name of the worker to unload
    */
-  void workerUnload(
-    const drogon::HttpRequestPtr &req,
-    std::function<void(const drogon::HttpResponsePtr &)> &&callback,
-    std::string const &worker) const;
+  void workerUnload(const drogon::HttpRequestPtr &req,
+                    DrogonCallback &&callback, std::string const &worker) const;
 
 #ifdef AMDINFER_ENABLE_METRICS
   /**
@@ -242,9 +288,8 @@ class HttpServer : public drogon::HttpController<HttpServer, false> {
    * @param req the REST request object
    * @param callback the callback function to respond to the client
    */
-  void metrics(
-    const drogon::HttpRequestPtr &req,
-    std::function<void(const drogon::HttpResponsePtr &)> &&callback) const;
+  void metrics(const drogon::HttpRequestPtr &req,
+               DrogonCallback &&callback) const;
 #endif
  private:
   SharedState *state_;

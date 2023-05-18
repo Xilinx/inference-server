@@ -30,7 +30,7 @@
 #include <algorithm>    // for fill
 #include <cassert>      // for assert
 #include <cstddef>      // for size_t, byte
-#include <cstdint>      // for uint64_t, int32_t
+#include <cstdint>      // for int64_t, int32_t
 #include <cstring>      // for memcpy
 #include <string_view>  // for basic_string_view
 #include <utility>      // for move
@@ -131,7 +131,7 @@ InferenceResponse mapJsonToResponse(Json::Value *json) {
     output.setDatatype(DataType(json_output["datatype"].asCString()));
 
     auto json_shape = json_output["shape"];
-    std::vector<uint64_t> shape;
+    std::vector<int64_t> shape;
     shape.reserve(json_shape.size());
     for (const auto &index : json_shape) {
       shape.push_back(index.asUInt());

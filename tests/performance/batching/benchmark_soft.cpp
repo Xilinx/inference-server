@@ -68,7 +68,7 @@ class PerfSoftBatcherFixture : public ::benchmark::Fixture {
   void SetUp(const ::benchmark::State& state) override {
     auto batch_size = static_cast<int>(state.range(0));
 
-    const auto data_shape = {1UL, 2UL, 50UL};
+    const auto data_shape = {1L, 2L, 50L};
     const auto data_size = 100;
 
     ParameterMap parameters;

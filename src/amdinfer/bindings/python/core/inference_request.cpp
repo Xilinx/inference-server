@@ -59,7 +59,7 @@ void wrapInferenceRequestInput(py::module_ &m) {
     .def(py::init<const Tensor &>(),
          DOCS(InferenceRequestInput, InferenceRequestInput, 2),
          py::arg("tensor"))
-    .def(py::init<void *, std::vector<uint64_t>, DataType, std::string>(),
+    .def(py::init<void *, std::vector<int64_t>, DataType, std::string>(),
          DOCS(InferenceRequestInput, InferenceRequestInput, 3), py::arg("data"),
          py::arg("shape"), py::arg("data_type"), py::arg("data") = "")
     .def("setUint8Data", &setData<uint8_t>, KeepAliveAssign())

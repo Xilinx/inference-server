@@ -32,10 +32,30 @@ class TestModelLoad:
         models = self.rest_client.modelList()
         assert len(models) == 0
 
-        self.rest_client.modelLoad(model)  # this loads the model
+        self.rest_client.modelLoad(model)
         assert self.rest_client.modelReady(model)
 
         self.rest_client.modelUnload(model)
 
-        while self.rest_client.modelList():
-            time.sleep(1)
+        amdinfer.waitUntilModelNotReady(self.rest_client, model)
+
+
+@pytest.mark.extensions(["tfzendnn"])
+@pytest.mark.usefixtures("server", "assign_client")
+class TestModelLoadVersioned:
+    def test_model_load(self):
+        """
+        Test loading multiple times
+        """
+
+        model = "mnist"
+        models = self.rest_client.modelList()
+        assert len(models) == 0
+
+        version = "1"
+        self.rest_client.modelLoad(model, amdinfer.ParameterMap(), version)
+        assert self.rest_client.modelReady(model, version)
+
+        self.rest_client.modelUnload(model, version)
+
+        amdinfer.waitUntilModelNotReady(self.rest_client, model, version)

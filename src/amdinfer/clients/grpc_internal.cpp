@@ -215,7 +215,7 @@ void mapProtoToResponse(const inference::ModelInferResponse& reply,
     InferenceResponseOutput output;
     output.setName(tensor.name());
     output.setDatatype(DataType(tensor.datatype().c_str()));
-    std::vector<uint64_t> shape;
+    std::vector<int64_t> shape;
     shape.reserve(tensor.shape_size());
     auto size = 1U;
     for (const auto& index : tensor.shape()) {

@@ -26,8 +26,7 @@
 
 namespace amdinfer {
 
-Tensor::Tensor(std::string name, std::vector<uint64_t> shape,
-               DataType data_type)
+Tensor::Tensor(std::string name, std::vector<int64_t> shape, DataType data_type)
   : name_(std::move(name)), shape_(std::move(shape)), data_type_(data_type) {}
 
 const std::string &Tensor::getName() const & { return this->name_; }
@@ -36,13 +35,11 @@ std::string Tensor::getName() && { return std::move(this->name_); }
 
 void Tensor::setName(std::string name) { name_ = std::move(name); }
 
-const std::vector<uint64_t> &Tensor::getShape() const & { return shape_; }
+const std::vector<int64_t> &Tensor::getShape() const & { return shape_; }
 
-std::vector<uint64_t> Tensor::getShape() && { return std::move(shape_); }
+std::vector<int64_t> Tensor::getShape() && { return std::move(shape_); }
 
-void Tensor::setShape(std::vector<uint64_t> shape) {
-  shape_ = std::move(shape);
-}
+void Tensor::setShape(std::vector<int64_t> shape) { shape_ = std::move(shape); }
 
 [[nodiscard]] DataType Tensor::getDatatype() const { return this->data_type_; }
 
@@ -59,14 +56,14 @@ struct TensorSizes {
 size_t Tensor::serializeSize() const {
   auto size = sizeof(TensorSizes);
   size += name_.length();
-  size += shape_.size() * sizeof(uint64_t);
+  size += shape_.size() * sizeof(int64_t);
   size += sizeof(uint8_t);
   return size;
 }
 
 std::byte *Tensor::serialize(std::byte *data_out) const {
   auto *data = data_out;
-  TensorSizes metadata{name_.length(), shape_.size() * sizeof(uint64_t),
+  TensorSizes metadata{name_.length(), shape_.size() * sizeof(int64_t),
                        sizeof(uint8_t)};
   data = util::copy(metadata, data, sizeof(TensorSizes));
   data = util::copy(name_.c_str(), data, metadata.name);
@@ -84,7 +81,7 @@ const std::byte *Tensor::deserialize(const std::byte *data_in) {
   std::memcpy(name_.data(), data_in, metadata.name);
   data_in += metadata.name;
 
-  shape_.resize(metadata.shape / sizeof(uint64_t));
+  shape_.resize(metadata.shape / sizeof(int64_t));
   std::memcpy(shape_.data(), data_in, metadata.shape);
   data_in += metadata.shape;
 

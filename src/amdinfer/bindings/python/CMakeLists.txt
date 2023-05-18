@@ -31,8 +31,10 @@ if(${Pybind11Mkdoc_FOUND})
 
   add_custom_command(
     OUTPUT ${docstrings_filepath}
-    COMMAND pybind11-mkdoc -o ${docstrings_filepath} ${ALL_PUBLIC_HEADER_FILES}
-            ${CXX_STANDARD_FLAG} -I${AMDINFER_PUBLIC_INCLUDE_DIRS}
+    COMMAND
+      pybind11-mkdoc -o ${docstrings_filepath} ${ALL_PUBLIC_HEADER_FILES}
+      ${CXX_STANDARD_FLAG} -I${AMDINFER_PUBLIC_INCLUDE_DIRS}
+      -I${HALF_INCLUDE_DIRS}
     DEPENDS ${ALL_PUBLIC_HEADER_FILES}
   )
 else()

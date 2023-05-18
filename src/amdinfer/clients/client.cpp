@@ -30,6 +30,38 @@
 
 namespace amdinfer {
 
+bool Client::modelReady(const std::string& model,
+                        const std::string& version) const {
+  return modelReadyImpl(model, version);
+}
+
+ModelMetadata Client::modelMetadata(const std::string& model,
+                                    const std::string& version) const {
+  return modelMetadataImpl(model, version);
+}
+
+void Client::modelLoad(const std::string& model, const ParameterMap& parameters,
+                       const std::string& version) const {
+  modelLoadImpl(model, parameters, version);
+}
+
+void Client::modelUnload(const std::string& model,
+                         const std::string& version) const {
+  modelUnloadImpl(model, version);
+}
+
+InferenceResponse Client::modelInfer(const std::string& model,
+                                     const InferenceRequest& request,
+                                     const std::string& version) const {
+  return modelInferImpl(model, request, version);
+}
+
+InferenceResponseFuture Client::modelInferAsync(
+  const std::string& model, const InferenceRequest& request,
+  const std::string& version) const {
+  return modelInferAsyncImpl(model, request, version);
+}
+
 void initializeClientLogging() {
 #ifdef AMDINFER_ENABLE_LOGGING
   LogOptions options{
@@ -72,10 +104,10 @@ std::vector<std::string> loadEnsemble(const Client* client,
   return endpoints;
 }
 
-void unloadModels(const Client* client,
-                  const std::vector<std::string>& models) {
+void unloadModels(const Client* client, const std::vector<std::string>& models,
+                  const std::string& version) {
   for (const auto& model : models) {
-    client->modelUnload(model);
+    client->modelUnload(model, version);
   }
 }
 
@@ -98,32 +130,34 @@ void waitUntilServerReady(const Client* client) {
   }
 }
 
-void waitUntilModelReady(const Client* client, const std::string& model) {
+void waitUntilModelReady(const Client* client, const std::string& model,
+                         const std::string& version) {
   bool ready = false;
   // arbitrarily set to 1ms
   const auto sleep_time = std::chrono::milliseconds(1);
   while (!ready) {
-    ready = client->modelReady(model);
+    ready = client->modelReady(model, version);
     std::this_thread::sleep_for(sleep_time);
   }
 }
 
-void waitUntilModelNotReady(const Client* client, const std::string& model) {
+void waitUntilModelNotReady(const Client* client, const std::string& model,
+                            const std::string& version) {
   bool ready = true;
   // arbitrarily set to 1ms
   const auto sleep_time = std::chrono::milliseconds(1);
   while (ready) {
-    ready = client->modelReady(model);
+    ready = client->modelReady(model, version);
     std::this_thread::sleep_for(sleep_time);
   }
 }
 
 std::vector<InferenceResponse> inferAsyncOrdered(
   const Client* client, const std::string& model,
-  const std::vector<InferenceRequest>& requests) {
+  const std::vector<InferenceRequest>& requests, const std::string& version) {
   std::queue<InferenceResponseFuture> q;
   for (const auto& request : requests) {
-    q.push(client->modelInferAsync(model, request));
+    q.push(client->modelInferAsync(model, request, version));
   }
 
   const auto num_requests = requests.size();
@@ -139,7 +173,8 @@ std::vector<InferenceResponse> inferAsyncOrdered(
 
 std::vector<InferenceResponse> inferAsyncOrderedBatched(
   const Client* client, const std::string& model,
-  const std::vector<InferenceRequest>& requests, size_t batch_size) {
+  const std::vector<InferenceRequest>& requests, size_t batch_size,
+  const std::string& version) {
   auto num_requests = requests.size();
   std::vector<InferenceResponse> responses;
   responses.reserve(num_requests);
@@ -148,7 +183,7 @@ std::vector<InferenceResponse> inferAsyncOrderedBatched(
 
   while (start_index + batch_size < num_requests) {
     for (auto i = start_index; i < batch_size; ++i) {
-      q.push(client->modelInferAsync(model, requests[i]));
+      q.push(client->modelInferAsync(model, requests[i], version));
     }
 
     for (auto i = 0U; i < batch_size; ++i) {

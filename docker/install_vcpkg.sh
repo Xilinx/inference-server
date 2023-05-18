@@ -24,7 +24,7 @@ do
 done
 
 # for some reason, vcpkg doesn't like passing an empty string as an argument
-# so set it to a real value when VITIS is "no" omitted
+# so set it to a real value when VITIS is "no"
 if [[ "$VITIS" == "yes" ]]; then
   FEATURES="--x-feature=testing --x-feature=vitis"
 else

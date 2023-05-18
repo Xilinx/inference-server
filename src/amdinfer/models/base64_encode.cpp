@@ -43,12 +43,6 @@ std::vector<amdinfer::Tensor> getInputs() {
 
 std::vector<amdinfer::Tensor> getOutputs() { return {}; }
 
-// Support up to Full HD
-const auto kMaxImageHeight = 1080;
-const auto kMaxImageWidth = 1920;
-const auto kMaxImageChannels = 3;
-const auto kMaxImageSize = kMaxImageHeight * kMaxImageWidth * kMaxImageChannels;
-
 amdinfer::BatchPtr run(amdinfer::Batch* batch) {
   AMDINFER_IF_LOGGING(amdinfer::Logger logger{amdinfer::Loggers::Server});
 
@@ -85,8 +79,8 @@ amdinfer::BatchPtr run(amdinfer::Batch* batch) {
       max_encoded_size = encoded_size;
     }
 
-    new_request->addInputTensor(nullptr, {encoded_size},
-                                amdinfer::DataType::String, "output");
+    new_request->addInputTensor(nullptr, {static_cast<int64_t>(encoded_size)},
+                                amdinfer::DataType::Bytes, "output");
     encoded_images.emplace_back(std::move(encoded));
 
     new_batch->addRequest(new_request);

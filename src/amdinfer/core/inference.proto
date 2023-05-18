@@ -296,8 +296,12 @@ message ModelLoadRequest{
   // Model name.
   string name = 1;
 
+  // The version of the model to load. If not given the
+  // server will choose a version based on the model and internal policy.
+  string version = 2;
+
   // Optional load-time parameters.
-  map<string, InferParameter> parameters = 2;
+  map<string, InferParameter> parameters = 3;
 }
 
 message ModelLoadResponse{}
@@ -305,6 +309,10 @@ message ModelLoadResponse{}
 message ModelUnloadRequest{
   // Model name.
   string name = 1;
+
+  // The version of the model to unload. If not given the
+  // server will choose a version based on the model and internal policy.
+  string version = 2;
 }
 
 message ModelUnloadResponse{}

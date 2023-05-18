@@ -33,7 +33,7 @@ TEST_F(HttpFixture, Ordered) {
   EXPECT_EQ(endpoint, "cplusplus");
 
   std::vector<uint32_t> img_data;
-  const auto shape = {1UL};
+  const auto shape = {1L};
   const auto size = 1;
   img_data.reserve(size);
   img_data.push_back(1);

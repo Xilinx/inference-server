@@ -93,7 +93,7 @@ void wrapInferenceResponseOutput(py::module_ &m) {
   // need to use function pointer to disambiguate overloaded function
   // NOLINTNEXTLINE(readability-identifier-naming)
   auto setShape =
-    static_cast<void (InferenceResponseOutput::*)(std::vector<uint64_t>)>(
+    static_cast<void (InferenceResponseOutput::*)(std::vector<int64_t>)>(
       &InferenceResponseOutput::setShape);
 
   py::class_<InferenceResponseOutput, InferenceTensor>(
