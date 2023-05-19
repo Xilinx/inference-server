@@ -436,6 +436,9 @@ class Build:
 
         shared_libs = glob.glob(f"{str(build_dir)}/src/amdinfer/workers/*.so")
         shared_libs.extend(glob.glob(f"{str(build_dir)}/src/amdinfer/models/*.so"))
+        shared_libs.extend(
+            glob.glob(f"{str(build_dir)}/tests/src/amdinfer/workers/*.so")
+        )
         if not shared_libs:
             print("No compiled workers/models found!")
             sys.exit(1)
