@@ -125,6 +125,11 @@ skbuild.setup(
     package_dir={"": str(package)},
     include_package_data=True,
     cmake_install_dir=str(package / "amdinfer"),
+    cmake_args=[
+        "-DCMAKE_TOOLCHAIN_FILE=/opt/vcpkg/vcpkg/scripts/buildsystems/vcpkg.cmake",
+        "-DVCPKG_TARGET_TRIPLET=x64-linux-dynamic",
+        "-DVCPKG_INSTALLED_DIR=/opt/vcpkg",
+    ],
     package_data={
         "": [
             "*.pyi",

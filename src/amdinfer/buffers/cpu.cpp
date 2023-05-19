@@ -33,7 +33,7 @@ CpuBuffer::CpuBuffer(void* data, MemoryAllocators allocator)
 void* CpuBuffer::data(size_t offset) { return data_ + offset; }
 
 void CpuBuffer::free() {
-  auto* pool = getPool();
+  const auto* pool = getPool();
   if (pool != nullptr) {
     pool->put(getAllocator(), data_);
   }

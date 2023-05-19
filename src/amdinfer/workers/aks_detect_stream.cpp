@@ -330,6 +330,7 @@ BatchPtr AksDetectStream::doRun(Batch* batch,
           output.setName("image");
           output.setDatatype(DataType::Bytes);
           auto message = constructMessage(key, frames.front(), labels[j]);
+          std::vector<std::byte> buffer;
           buffer.resize(message.size());
           memcpy(buffer.data(), message.data(), message.size());
           output.setData(std::move(buffer));

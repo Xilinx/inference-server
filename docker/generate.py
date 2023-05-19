@@ -790,6 +790,7 @@ def vcpkg_build(manager):
                     nasm \\
                     pkgconfig \\
                     python3-devel \\
+                    perl-IPC-Cmd \\
                 # clean up
                 {code_indent(manager.clean, 16)}"""
         )

@@ -172,8 +172,6 @@ Json::Value mapRequestToJson(const InferenceRequest &request) {
   return json;
 }
 
-using drogon::HttpStatusCode;
-
 #ifdef AMDINFER_ENABLE_TRACING
 void propagate(drogon::HttpResponse *resp, const StringMap &context) {
   for (const auto &[key, value] : context) {

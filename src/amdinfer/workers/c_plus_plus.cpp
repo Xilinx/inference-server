@@ -50,11 +50,6 @@
 
 namespace amdinfer {
 
-const int kInputTensors = 2;
-const std::array<int, kInputTensors> kInputLengths = {1, 2};
-const int kOutputTensors = 3;
-const std::array<int, kOutputTensors> kOutputLengths = {1, 4, 3};
-
 // TODO(varunsh): delete with duplicate in worker_info.cpp
 void* openModel(const std::string& so_path) {
   if (so_path.empty()) {
@@ -116,7 +111,7 @@ class CPlusPlus : public SingleThreadedWorker {
   void doRelease() override;
   void doDestroy() override;
 
-  void* handle_;
+  void* handle_ = nullptr;
   std::vector<Tensor> input_tensors_;
   std::vector<Tensor> output_tensors_;
 

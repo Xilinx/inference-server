@@ -153,9 +153,9 @@ void MIGraphXWorker::compile(const std::string& onnx_path,
   // Load the onnx file
   // Using parse_onnx() instead of load() because there's a bug at the
   // time of writing
-  AMDINFER_LOG_INFO(logger,
-                    std::string("migraphx worker loading ONNX model file ") +
-                      onnx_path.c_str());
+  AMDINFER_LOG_INFO(
+    logger,
+    std::string("migraphx worker loading ONNX model file ") + onnx_path);
 
   migraphx::onnx_options onnx_opts;
   onnx_opts.set_default_dim_value(static_cast<unsigned int>(batch_size_));
@@ -164,9 +164,8 @@ void MIGraphXWorker::compile(const std::string& onnx_path,
   auto param_shapes =
     prog_.get_parameter_shapes();  // program_parameter_shapes struct
 
-  AMDINFER_LOG_INFO(
-    logger,
-    std::string("migraphx worker loaded ONNX model file ") + onnx_path.c_str());
+  AMDINFER_LOG_INFO(logger,
+                    "migraphx worker loaded ONNX model file " + onnx_path);
 
   // Compile the model.  Hard-coded choices of offload_copy and gpu target
   migraphx::compile_options comp_opts;
@@ -197,8 +196,7 @@ void MIGraphXWorker::compile(const std::string& onnx_path,
     options.set_file_format("msgpack");
 
     migraphx::save(this->prog_, compiled_path.c_str(), options);
-    AMDINFER_LOG_INFO(logger, std::string(" Saved compiled model file ") +
-                                compiled_path.c_str());
+    AMDINFER_LOG_INFO(logger, " Saved compiled model file " + compiled_path);
   }
 }
 

@@ -247,7 +247,7 @@ void mapResponseToProto(InferenceResponse response,
     tensor->set_datatype(output.getDatatype().str());
     const auto& shape = output.getShape();
     auto size = 1U;
-    for (const size_t& index : shape) {
+    for (const auto& index : shape) {
       tensor->add_shape(index);
       size *= index;
     }

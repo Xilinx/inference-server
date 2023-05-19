@@ -168,6 +168,7 @@ BatchPtr InvertVideo::doRun(Batch* batch,
         output.setName("image");
         output.setDatatype(DataType::Bytes);
         message = constructMessage(key, encoded);
+        std::vector<std::byte> buffer;
         buffer.resize(message.size());
         memcpy(buffer.data(), message.data(), message.size());
         output.setData(std::move(buffer));

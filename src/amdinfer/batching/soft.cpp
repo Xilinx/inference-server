@@ -109,7 +109,7 @@ void SoftBatcher::doRun(const std::vector<MemoryAllocators>& allocators) {
       }
 
       auto request = req->request;
-      auto& inputs = request->getInputs();
+      const auto& inputs = request->getInputs();
       auto input_size = inputs.size();
       if (input_size == 0) {
         request->runCallbackError("Input size is zero");

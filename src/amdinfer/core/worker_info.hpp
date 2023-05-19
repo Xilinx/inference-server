@@ -54,7 +54,7 @@ class WorkerInfo {
   /// Construct a new WorkerInfo object
   WorkerInfo(const std::string& name, ParameterMap* parameters,
              MemoryPool* pool, BatchPtrQueue* next,
-             const std::vector<MemoryAllocators>& next_allocators);
+             std::vector<MemoryAllocators> next_allocators);
   ~WorkerInfo();                           ///> Destroy a WorkerInfo object
   WorkerInfo(WorkerInfo const&) = delete;  ///< Copy constructor
   /// Copy assignment constructor
@@ -106,7 +106,7 @@ class WorkerInfo {
 
  private:
   std::map<std::thread::id, std::thread> worker_threads_;
-  void* handle_;
+  void* handle_ = nullptr;
   std::map<std::thread::id, workers::Worker*> workers_;
   std::vector<std::unique_ptr<Batcher>> batchers_;
   size_t batch_size_ = 1;

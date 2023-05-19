@@ -141,19 +141,18 @@ const std::byte *InferenceRequestInput::deserialize(const std::byte *data_in) {
   return util::copy(data_in, static_cast<std::byte *>(data_), metadata.data);
 }
 
-std::ostream &operator<<(std::ostream &os,
-                         InferenceRequestInput const &my_class) {
+std::ostream &operator<<(std::ostream &os, InferenceRequestInput const &self) {
   os << "InferenceRequestInput:\n";
-  os << "  Name: " << my_class.getName() << "\n";
+  os << "  Name: " << self.getName() << "\n";
   os << "  Shape: ";
-  for (const auto &index : my_class.getShape()) {
+  for (const auto &index : self.getShape()) {
     os << index << ",";
   }
   os << "\n";
-  os << "  Datatype: " << my_class.getDatatype().str() << "\n";
+  os << "  Datatype: " << self.getDatatype().str() << "\n";
   os << "  Parameters:\n";
-  os << my_class.getParameters() << "\n";
-  os << "  Data: " << my_class.getData() << "\n";
+  os << self.getParameters() << "\n";
+  os << "  Data: " << self.getData() << "\n";
   return os;
 }
 

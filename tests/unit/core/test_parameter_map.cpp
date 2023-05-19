@@ -82,6 +82,7 @@ TEST(UnitParameterMap, InitializingConstructorConstChar) {
   // string if both types are present. This has been fixed in C++20
   // (https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p0608r3.html)
   std::string model;
+  // NOLINTNEXTLINE(cppcoreguidelines-avoid-goto, hicpp-avoid-goto)
   EXPECT_THROW_CHECK(model = parameters.get<std::string>("model");
                      , EXPECT_STREQ(e.what(), "Unexpected index"),
                      std::bad_variant_access);

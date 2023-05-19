@@ -58,7 +58,7 @@ void* VartTensorBuffer::data(size_t offset) {
 vart::TensorBuffer* VartTensorBuffer::getTensorBuffer() { return data_; }
 
 void VartTensorBuffer::free() {
-  auto* pool = getPool();
+  const auto* pool = getPool();
   if (pool != nullptr) {
     pool->put(getAllocator(), data_);
   }

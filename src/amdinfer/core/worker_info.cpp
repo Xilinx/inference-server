@@ -109,8 +109,8 @@ workers::Worker* getWorker(void* handle) {
 
 WorkerInfo::WorkerInfo(const std::string& name, ParameterMap* parameters,
                        MemoryPool* pool, BatchPtrQueue* next,
-                       const std::vector<MemoryAllocators>& next_allocators)
-  : next_(next), next_allocators_(next_allocators) {
+                       std::vector<MemoryAllocators> next_allocators)
+  : next_(next), next_allocators_(std::move(next_allocators)) {
   handle_ = getHandle(name);
   this->addAndStartWorker(name, parameters, pool);
 }

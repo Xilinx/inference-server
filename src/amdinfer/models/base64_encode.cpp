@@ -62,7 +62,7 @@ amdinfer::BatchPtr run(amdinfer::Batch* batch) {
       req->runCallbackError("Only one input tensor should be present");
       continue;
     }
-    auto& input = inputs.at(0);
+    const auto& input = inputs.at(0);
     auto input_shape = input.getShape();
 
     auto new_request = req->propagate();
