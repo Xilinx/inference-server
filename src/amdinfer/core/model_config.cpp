@@ -28,8 +28,6 @@
 #include "amdinfer/util/filesystem.hpp"
 #include "model_config.pb.h"  // for Config, InferP...
 
-namespace fs = std::filesystem;
-
 namespace amdinfer {
 
 std::string extractString(const toml::table& table, const std::string& key,
@@ -37,9 +35,8 @@ std::string extractString(const toml::table& table, const std::string& key,
   if (!table.contains(key)) {
     if (is_required) {
       throw invalid_argument("The configuration must have a " + key);
-    } else {
-      return "";
     }
+    return "";
   }
 
   const auto& node = table.at(key);
@@ -56,7 +53,7 @@ ModelConfigData extractConfig(const toml::table& table, bool is_ensemble);
 // if we're not explicitly handling the types, use this to catch the failure at
 // compile time
 template <class...>
-constexpr std::false_type templated_false{};
+constexpr std::false_type kTemplatedFalse{};
 
 template <typename T>
 std::vector<T> extractArray(const toml::table& table, const std::string& key) {
@@ -98,7 +95,7 @@ std::vector<T> extractArray(const toml::table& table, const std::string& key) {
       const auto& tbl = *element.as_table();
       vector.push_back(extractConfig(tbl, true));
     } else {
-      static_assert(templated_false<T>);
+      static_assert(kTemplatedFalse<T>);
     }
   }
 
@@ -167,9 +164,8 @@ void ModelConfig::createModels() {
       parameters.put("worker", "tfzendnn");
     } else if (config.platform == "pytorch_torchscript") {
       parameters.put("worker", "ptzendnn");
-    } else if (config.platform == "onnx_onnxv1") {
-      parameters.put("worker", "migraphx");
-    } else if (config.platform == "migraphx_mxr") {
+    } else if (config.platform == "onnx_onnxv1" ||
+               config.platform == "migraphx_mxr") {
       parameters.put("worker", "migraphx");
     } else if (config.platform == "vitis_xmodel") {
       parameters.put("worker", "xmodel");

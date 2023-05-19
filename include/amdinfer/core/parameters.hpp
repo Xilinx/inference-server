@@ -68,7 +68,7 @@ class ParameterMap : public Serializable {
    * @param key key used to store and retrieve the value
    * @param value value to store
    */
-  void put(const std::string &key, Parameter value);
+  void put(const std::string &key, const Parameter &value);
   /**
    * @brief Put in a key-value pair
    *

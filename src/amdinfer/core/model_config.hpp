@@ -77,7 +77,7 @@ class ModelConfig {
   using ConstReverseIterator = Container::const_reverse_iterator;
 
  public:
-  ModelConfig(const toml::v3::table& config, const std::string& version);
+  ModelConfig(const toml::v3::table& toml, const std::string& version);
   ModelConfig(const inference::Config& config, const std::string& version);
 
   std::pair<std::string, ParameterMap> get(size_t index);

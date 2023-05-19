@@ -32,7 +32,7 @@ namespace amdinfer {
 template <typename T>
 using Images = std::vector<std::vector<T>>;
 
-Images<float> preprocess_fp32(const std::vector<std::string>& paths) {
+Images<float> preprocessFp32(const std::vector<std::string>& paths) {
   const std::array<float, 3> mean{0.485F, 0.456F, 0.406F};
   const std::array<float, 3> std{4.367F, 4.464F, 4.444F};
   const auto image_size = 224;
@@ -53,7 +53,7 @@ Images<float> preprocess_fp32(const std::vector<std::string>& paths) {
   return amdinfer::pre_post::imagePreprocess(paths, options);
 }
 
-Images<fp16> preprocess_fp16(const std::vector<std::string>& paths) {
+Images<fp16> preprocessFp16(const std::vector<std::string>& paths) {
   const std::array<fp16, 3> mean{static_cast<fp16>(0.485F),
                                  static_cast<fp16>(0.456F),
                                  static_cast<fp16>(0.406F)};
@@ -112,9 +112,9 @@ std::vector<InferenceRequest> constructRequests(const Images<T>& images) {
   return requests;
 }
 
-template <typename T, int K>
+template <typename T, int kLength>
 void validate(const std::vector<InferenceResponse>& responses,
-              const std::array<int, K>& golden) {
+              const std::array<int, kLength>& golden) {
   const auto k = golden.size();
 
   for (const auto& response : responses) {
@@ -129,15 +129,15 @@ void validate(const std::vector<InferenceResponse>& responses,
 
 void validateFp16(const std::vector<InferenceResponse>& responses) {
   const std::array golden{259, 261, 260, 154, 157};
-  validate<fp16, 5>(responses, golden);
+  validate<fp16, golden.size()>(responses, golden);
 }
 
 void validateFp32(const std::vector<InferenceResponse>& responses) {
   const std::array golden{259, 261, 157, 260, 154};
-  validate<float, 5>(responses, golden);
+  validate<float, golden.size()>(responses, golden);
 }
 
-void test_fp16(Client* client) {
+void testFp16(Client* client) {
   if (!serverHasExtension(client, "migraphx")) {
     GTEST_SKIP() << "MIGraphX support required from the server but not found";
   }
@@ -148,7 +148,7 @@ void test_fp16(Client* client) {
   amdinfer::ParameterMap parameters;
   parameters.put("model", model);
 
-  auto images = preprocess_fp16({test_asset});
+  auto images = preprocessFp16({test_asset});
   auto endpoint = workerLoad(client, parameters);
   auto requests = constructRequests(images);
   auto responses = inferAsyncOrdered(client, endpoint, requests);
@@ -158,7 +158,7 @@ void test_fp16(Client* client) {
   waitUntilModelNotReady(client, endpoint);
 }
 
-void test_fp32(Client* client) {
+void testFp32(Client* client) {
   if (!serverHasExtension(client, "migraphx")) {
     GTEST_SKIP() << "MIGraphX support required from the server but not found";
   }
@@ -169,7 +169,7 @@ void test_fp32(Client* client) {
   amdinfer::ParameterMap parameters;
   parameters.put("model", model);
 
-  auto images = preprocess_fp32({test_asset});
+  auto images = preprocessFp32({test_asset});
   auto endpoint = workerLoad(client, parameters);
   auto requests = constructRequests(images);
   auto responses = inferAsyncOrdered(client, endpoint, requests);
@@ -182,35 +182,35 @@ void test_fp32(Client* client) {
 #ifdef AMDINFER_ENABLE_GRPC
 // @pytest.mark.extensions(["migraphx"])
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
-TEST_F(GrpcFixture, WorkersMigraphxResnet50Fp16) { test_fp16(client_.get()); }
+TEST_F(GrpcFixture, WorkersMigraphxResnet50Fp16) { testFp16(client_.get()); }
 
 // @pytest.mark.extensions(["migraphx"])
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
-TEST_F(GrpcFixture, WorkersMigraphxResnet50Fp32) { test_fp32(client_.get()); }
+TEST_F(GrpcFixture, WorkersMigraphxResnet50Fp32) { testFp32(client_.get()); }
 #endif
 
 // @pytest.mark.extensions(["migraphx"])
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST_F(BaseFixture, WorkersMigraphxResnet50Fp16) {
   NativeClient client(&server_);
-  test_fp16(&client);
+  testFp16(&client);
 }
 
 // @pytest.mark.extensions(["migraphx"])
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST_F(BaseFixture, WorkersMigraphxResnet50Fp32) {
   NativeClient client(&server_);
-  test_fp32(&client);
+  testFp32(&client);
 }
 
 #ifdef AMDINFER_ENABLE_HTTP
 // @pytest.mark.extensions(["migraphx"])
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
-TEST_F(HttpFixture, WorkersMigraphxResnet50Fp16) { test_fp16(client_.get()); }
+TEST_F(HttpFixture, WorkersMigraphxResnet50Fp16) { testFp16(client_.get()); }
 
 // @pytest.mark.extensions(["migraphx"])
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
-TEST_F(HttpFixture, WorkersMigraphxResnet50Fp32) { test_fp32(client_.get()); }
+TEST_F(HttpFixture, WorkersMigraphxResnet50Fp32) { testFp32(client_.get()); }
 #endif
 
 }  // namespace amdinfer

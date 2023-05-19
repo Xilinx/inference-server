@@ -26,7 +26,7 @@ namespace amdinfer {
 
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST(UnitModelConfig, Basic) {
-  constexpr std::string_view toml_str = R"(
+  constexpr std::string_view kTomlStr = R"(
     name = "mnist"
     platform = "tensorflow_graphdef"
 
@@ -41,7 +41,7 @@ TEST(UnitModelConfig, Basic) {
     shape = [10]
   )"sv;
 
-  const auto toml = toml::parse(toml_str);
+  const auto toml = toml::parse(kTomlStr);
   ModelConfig config{toml, ""};
 
   ASSERT_EQ(config.size(), 1);
@@ -53,7 +53,7 @@ TEST(UnitModelConfig, Basic) {
 
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST(UnitModelConfig, SingleEnsemble) {
-  constexpr std::string_view toml_str = R"(
+  constexpr std::string_view kTomlStr = R"(
     [[models]]
     name = "mnist"
     platform = "tensorflow_graphdef"
@@ -72,7 +72,7 @@ TEST(UnitModelConfig, SingleEnsemble) {
     id = "classes"
   )"sv;
 
-  const auto toml = toml::parse(toml_str);
+  const auto toml = toml::parse(kTomlStr);
   ModelConfig config{toml, ""};
 
   ASSERT_EQ(config.size(), 1);
@@ -84,7 +84,7 @@ TEST(UnitModelConfig, SingleEnsemble) {
 
 // NOLINTNEXTLINE(cert-err58-cpp, cppcoreguidelines-owning-memory)
 TEST(UnitModelConfig, Chain) {
-  constexpr std::string_view toml_str = R"(
+  constexpr std::string_view kTomlStr = R"(
     [[models]]
     name = "invert_image"
     platform = "amdinfer_cpp"
@@ -137,7 +137,7 @@ TEST(UnitModelConfig, Chain) {
     id = "postprocessed_image"
   )"sv;
 
-  const auto toml = toml::parse(toml_str);
+  const auto toml = toml::parse(kTomlStr);
   const std::string version{"1"};
   ModelConfig config{toml, version};
 

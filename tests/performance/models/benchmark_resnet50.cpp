@@ -42,8 +42,6 @@
 #include "amdinfer/pre_post/image_preprocess.hpp"  // for ImagePreprocessOpt...
 #include "amdinfer/testing/get_path_to_asset.hpp"  // for getPathToAsset
 
-namespace fs = std::filesystem;
-
 using InferenceRequest = amdinfer::InferenceRequest;
 using ParameterMap = amdinfer::ParameterMap;
 
@@ -59,12 +57,12 @@ class Config {
       requests_(requests),
       workers_(workers) {}
 
-  int requests() const { return requests_; }
-  int batchSize() const { return batch_size_.first; }
+  [[nodiscard]] int requests() const { return requests_; }
+  [[nodiscard]] int batchSize() const { return batch_size_.first; }
   void batchSize(int batch_size) { batch_size_.second = batch_size; }
-  int workers() const { return workers_; }
+  [[nodiscard]] int workers() const { return workers_; }
 
-  std::string toString() const {
+  [[nodiscard]] std::string toString() const {
     return "batch_size:" + std::to_string(batch_size_.second) + "(" +
            std::to_string(batch_size_.first) +
            ")/requests:" + std::to_string(requests_) +
@@ -91,14 +89,14 @@ class Backend {
 
   virtual void preprocess(const std::string& input_path) = 0;
 
-  virtual std::string extension() const = 0;
-  virtual std::string name() const = 0;
+  [[nodiscard]] virtual std::string extension() const = 0;
+  [[nodiscard]] virtual std::string name() const = 0;
   virtual void updateConfig(Config& config) = 0;
 
   void request(InferenceRequest request) { request_ = std::move(request); }
-  const InferenceRequest& request() const { return request_; }
+  [[nodiscard]] const InferenceRequest& request() const { return request_; }
 
-  const auto& parameters() const { return parameters_; }
+  [[nodiscard]] const auto& parameters() const { return parameters_; }
   void put(const std::string& key, const amdinfer::Parameter& value) {
     parameters_.put(key, value);
   }
@@ -123,8 +121,8 @@ class Ptzendnn : public Backend {
     this->put("model", model);
   }
 
-  std::string name() const override { return "ptzendnn"; }
-  std::string extension() const override { return "ptzendnn"; }
+  [[nodiscard]] std::string name() const override { return "ptzendnn"; }
+  [[nodiscard]] std::string extension() const override { return "ptzendnn"; }
   void updateConfig([[maybe_unused]] Config& config) override {
     // no update necessary
   }
@@ -177,8 +175,8 @@ class Tfzendnn : public Backend {
     put("intra_op", 1);
   }
 
-  std::string name() const override { return "tfzendnn"; }
-  std::string extension() const override { return "tfzendnn"; }
+  [[nodiscard]] std::string name() const override { return "tfzendnn"; }
+  [[nodiscard]] std::string extension() const override { return "tfzendnn"; }
   void updateConfig([[maybe_unused]] Config& config) override {
     // no update necessary
   }
@@ -211,8 +209,8 @@ class Vitis : public Backend {
     put("model", model);
   }
 
-  std::string name() const override { return "xmodel"; }
-  std::string extension() const override { return "vitis"; }
+  [[nodiscard]] std::string name() const override { return "xmodel"; }
+  [[nodiscard]] std::string extension() const override { return "vitis"; }
   void updateConfig(Config& config) override {
     const int batch_size = 4;
     config.batchSize(batch_size);
@@ -249,8 +247,8 @@ class Migraphx : public Backend {
     put("model", model);
   }
 
-  std::string name() const override { return "migraphx"; }
-  std::string extension() const override { return "migraphx"; }
+  [[nodiscard]] std::string name() const override { return "migraphx"; }
+  [[nodiscard]] std::string extension() const override { return "migraphx"; }
   void updateConfig([[maybe_unused]] Config& config) override {
     // no update necessary
   }
@@ -372,7 +370,7 @@ void resnet50(benchmark::State& st, const amdinfer::Client* client,
   const std::vector<amdinfer::InferenceRequest> requests{
     static_cast<size_t>(config.requests()), request};
 
-  for (auto _ : st) {
+  for ([[maybe_unused]] auto _ : st) {
     std::ignore = amdinfer::inferAsyncOrdered(client, endpoint, requests);
   }
   for (auto i = 0; i < workers; ++i) {

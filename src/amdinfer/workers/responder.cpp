@@ -45,14 +45,7 @@
 #include "amdinfer/util/timer.hpp"           // for Timer
 #include "amdinfer/workers/worker.hpp"       // for Worker
 
-namespace amdinfer {
-
-const int kInputTensors = 2;
-const std::array<int, kInputTensors> kInputLengths = {1, 2};
-const int kOutputTensors = 3;
-const std::array<int, kOutputTensors> kOutputLengths = {1, 4, 3};
-
-namespace workers {
+namespace amdinfer::workers {
 
 /**
  * @brief The Responder worker can run a compiled C++ "model".
@@ -162,9 +155,7 @@ BatchPtr Responder::doRun(Batch* batch,
 void Responder::doRelease() {}
 void Responder::doDestroy() {}
 
-}  // namespace workers
-
-}  // namespace amdinfer
+}  // namespace amdinfer::workers
 
 extern "C" {
 // using smart pointer here may cause problems inside shared object so managing

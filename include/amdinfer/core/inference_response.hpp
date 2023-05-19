@@ -76,7 +76,7 @@ class InferenceResponseOutput : public InferenceTensor {
 
   /// Provides an implementation to print the class with std::cout to an ostream
   friend std::ostream &operator<<(std::ostream &os,
-                                  InferenceResponseOutput const &my_class);
+                                  InferenceResponseOutput const &self);
 
  private:
   std::vector<std::byte> data_;
@@ -133,7 +133,7 @@ class InferenceResponse {
 
   /// Provides an implementation to print the class with std::cout to an ostream
   friend std::ostream &operator<<(std::ostream &os,
-                                  InferenceResponse const &my_class);
+                                  InferenceResponse const &self);
 
  private:
   std::string model_;

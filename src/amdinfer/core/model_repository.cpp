@@ -114,7 +114,8 @@ ModelConfig openConfigFile(const fs::path& config_path,
     }
 
     return ModelConfig{proto_config, version};
-  } else if (config_path.extension() == ".toml") {
+  }
+  if (config_path.extension() == ".toml") {
     auto toml = toml::parse_file(config_path.string());
 
     return ModelConfig{toml, version};

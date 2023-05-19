@@ -143,7 +143,7 @@ Json::Value parseResponse(InferenceResponse response) {
     json_output["shape"] = Json::arrayValue;
     json_output["datatype"] = output.getDatatype().str();
     const auto &shape = output.getShape();
-    for (const size_t &index : shape) {
+    for (const auto &index : shape) {
       json_output["shape"].append(static_cast<Json::UInt>(index));
     }
 

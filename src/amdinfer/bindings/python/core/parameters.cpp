@@ -52,7 +52,8 @@ void wrapParameterMap(py::module_ &m) {
       py::overload_cast<const std::string &, const char *>(&ParameterMap::put),
       DOCS(ParameterMap, put))
     .def("put",
-         py::overload_cast<const std::string &, Parameter>(&ParameterMap::put),
+         py::overload_cast<const std::string &, const Parameter &>(
+           &ParameterMap::put),
          DOCS(ParameterMap, put))
     .def("getBool", &ParameterMap::get<bool>, DOCS(ParameterMap, get))
     .def("getFloat", &ParameterMap::get<double>, DOCS(ParameterMap, get))

@@ -81,7 +81,7 @@ class InferenceRequestInput : public InferenceTensor {
 
   /// Provides an implementation to print the class with std::cout to an ostream
   friend std::ostream &operator<<(std::ostream &os,
-                                  InferenceRequestInput const &my_class);
+                                  InferenceRequestInput const &self);
 
  private:
   void *data_ = nullptr;
