@@ -319,6 +319,7 @@ COPY docker/.env /home/${UNAME}/
 # run any final commands before finishing the dev image
 RUN git lfs install \
     && npm install -g gh-pages \
+    && echo "/opt/vcpkg/x64-linux-dynamic/lib" > /etc/ld.so.conf.d/vcpkg.conf \
     && ldconfig
 
 $[ENTRYPOINT_DEV]
