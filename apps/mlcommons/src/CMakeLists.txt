@@ -23,7 +23,7 @@ target_link_libraries(
 # LOADGEN_INCLUDE_DIR is set by the parent CMakeLists.txt if the loadgen headers
 # are found in a custom location
 if(LOADGEN_INCLUDE_DIR)
-  target_include_directories(mlperf PRIVATE SYSTEM ${LOADGEN_INCLUDE_DIR})
+  target_include_directories(mlperf SYSTEM PRIVATE ${LOADGEN_INCLUDE_DIR})
 endif()
 if(NOT PROJECT_IS_TOP_LEVEL)
   set_target_options(mlperf)

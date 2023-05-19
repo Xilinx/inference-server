@@ -32,8 +32,8 @@
 
 namespace fs = std::filesystem;
 
-amdinfer::InferenceRequest preprocessResnet50(
-  const std::filesystem::path& path) {
+amdinfer::InferenceRequest preprocessResnet50(const std::filesystem::path& path,
+                                              std::vector<std::byte>* data) {
   const auto height = 224;
   const auto width = 224;
   const auto channels = 3;
@@ -44,14 +44,13 @@ amdinfer::InferenceRequest preprocessResnet50(
   img = img.isContinuous() ? img : img.clone();
   auto size = img.size[0] * img.size[1] * channels;
 
-  std::vector<std::byte> data;
-  data.resize(size * sizeof(int8_t));
+  data->resize(size * sizeof(int8_t));
 
   for (int i = 0; i < height; i++) {
     for (int j = 0; j < width; j++) {
       for (int k = 0; k < channels; k++) {
         auto output_index = (i * width * channels) + (j * channels) + k;
-        auto* addr = reinterpret_cast<int8_t*>(data.data() + output_index);
+        auto* addr = reinterpret_cast<int8_t*>(data->data() + output_index);
         *addr = static_cast<int8_t>(
           (img.at<cv::Vec<int8_t, channels>>(i, j)[k] - mean.at(k)) *
           std.at(k));
@@ -62,7 +61,7 @@ amdinfer::InferenceRequest preprocessResnet50(
   amdinfer::InferenceRequest request;
   amdinfer::InferenceRequestInput tensor;
   tensor.setShape({height, width, channels});
-  tensor.setData(std::move(data));
+  tensor.setData(data->data());
   tensor.setDatatype(amdinfer::DataType::Int8);
 
   request.addInputTensor(tensor);
@@ -266,11 +265,11 @@ int main(int argc, char* argv[]) {
     parameters.put("share", false);
     amdinfer::waitUntilServerReady(client.get());
 
-    endpoint = client->workerLoad(worker, &parameters);
+    endpoint = client->workerLoad(worker, parameters);
     if (test_config.has(model, scenario, "workers")) {
       auto workers = test_config.get<int>(model, scenario, "workers");
       for (auto i = 0; i < workers - 1; ++i) {
-        client->workerLoad(worker, &parameters);
+        client->workerLoad(worker, parameters);
       }
     }
   }

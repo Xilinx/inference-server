@@ -49,7 +49,7 @@ void QuerySampleLibrary::LoadSamplesToRam(
   const std::vector<mlperf::QuerySampleIndex>& indices) {
   for (const auto& index : indices) {
     auto& sample = samples_[index];
-    sample.request = pre_process_(sample.filepath);
+    sample.request = pre_process_(sample.filepath, &sample.data);
   }
 }
 
