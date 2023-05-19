@@ -157,6 +157,10 @@
     {
       "name": "trantor",
       "version": "1.5.11#2"
+    },
+    {
+      "name": "vcpkg-tool-meson",
+      "version": "0.60.2"
     }
   ],
   "vcpkg-configuration": {
