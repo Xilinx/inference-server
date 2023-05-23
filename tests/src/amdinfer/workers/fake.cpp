@@ -100,7 +100,7 @@ void Fake::doAcquire([[maybe_unused]] ParameterMap* parameters) {
 
 BatchPtr Fake::doRun([[maybe_unused]] Batch* batch,
                      [[maybe_unused]] const MemoryPool* pool) {
-  auto new_batch = std::make_unique<Batch>();
+  auto new_batch = batch->propagate();
   new_batch->addModel("fake");
 
   std::this_thread::sleep_for(std::chrono::milliseconds(delay_));
