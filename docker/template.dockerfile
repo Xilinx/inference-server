@@ -299,9 +299,7 @@ RUN mkdir /opt/vcpkg \
     && ./bootstrap-vcpkg.sh -disableMetrics \
     && rm /opt/vcpkg/2023.04.15.tar.gz \
     && cd /tmp \
-    && export GIT_USER="$GIT_USER" \
-    && export GIT_TOKEN="$GIT_TOKEN" \
-    && ./docker/install_vcpkg.sh --vitis ${ENABLE_VITIS}
+    && GIT_USER="${GIT_USER}" GIT_TOKEN="${GIT_TOKEN}" ./docker/install_vcpkg.sh --vitis ${ENABLE_VITIS}
 
 FROM migraphx_installer_${ENABLE_MIGRAPHX} AS dev
 
