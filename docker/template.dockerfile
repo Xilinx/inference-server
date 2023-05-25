@@ -45,6 +45,9 @@ ARG ENABLE_PTZENDNN=${ENABLE_PTZENDNN:-no}
 ARG PTZENDNN_PATH
 ARG ENABLE_MIGRAPHX=${ENABLE_MIGRAPHX:-no}
 
+ARG GIT_USER
+ARG GIT_TOKEN
+
 # this stage adds development tools such as compilers to the base image. It's
 # used as an ancestor for all development-related stages
 FROM ${BASE_IMAGE} AS dev_base
@@ -275,6 +278,8 @@ FROM migraphx_installer_${ENABLE_MIGRAPHX} AS vcpkg_builder
 
 ARG ENABLE_VITIS
 ARG COPY_DIR
+ARG GIT_USER
+ARG GIT_TOKEN
 WORKDIR /tmp
 
 $[VCPKG_BUILD]
@@ -294,7 +299,7 @@ RUN mkdir /opt/vcpkg \
     && ./bootstrap-vcpkg.sh -disableMetrics \
     && rm /opt/vcpkg/2023.04.15.tar.gz \
     && cd /tmp \
-    && ./docker/install_vcpkg.sh --vitis ${ENABLE_VITIS}
+    && GIT_USER="${GIT_USER}" GIT_TOKEN="${GIT_TOKEN}" ./docker/install_vcpkg.sh --vitis ${ENABLE_VITIS}
 
 FROM migraphx_installer_${ENABLE_MIGRAPHX} AS dev
 
