@@ -147,13 +147,15 @@ void ModelRepository::setRepository(const fs::path& repository_path,
     AMDINFER_IF_LOGGING(Logger logger{Loggers::Server};)
     for (const auto& path : fs::directory_iterator(repository_)) {
       if (path.is_directory()) {
-        auto model = path.path().filename();
+        auto model_name = path.path().filename();
         try {
-          ParameterMap params;
-          endpoints_->load(model, "", params);
+          auto config = parseModel(repository_, model_name, "");
+          for (const auto& [model, parameters] : config) {
+            endpoints_->load(model, "", parameters);
+          }
         } catch (const amdinfer::runtime_error& e) {
           AMDINFER_LOG_INFO(
-            logger, "Error loading " + model.string() + ": " + e.what());
+            logger, "Error loading " + model_name.string() + ": " + e.what());
         }
       }
     }
