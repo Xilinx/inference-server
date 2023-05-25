@@ -140,6 +140,14 @@ ModelConfig parseModel(const fs::path& repository, const std::string& model,
   return config;
 }
 
+void loadModel(const fs::path& repository, const fs::path& model_name,
+               Endpoints* endpoints) {
+  auto config = parseModel(repository, model_name, "");
+  for (const auto& [model, parameters] : config) {
+    endpoints->load(model, "", parameters);
+  }
+}
+
 void ModelRepository::setRepository(const fs::path& repository_path,
                                     bool load_existing) {
   repository_ = repository_path;
@@ -149,10 +157,7 @@ void ModelRepository::setRepository(const fs::path& repository_path,
       if (path.is_directory()) {
         auto model_name = path.path().filename();
         try {
-          auto config = parseModel(repository_, model_name, "");
-          for (const auto& [model, parameters] : config) {
-            endpoints_->load(model, "", parameters);
-          }
+          loadModel(repository_, model_name, endpoints_);
         } catch (const amdinfer::runtime_error& e) {
           AMDINFER_LOG_INFO(
             logger, "Error loading " + model_name.string() + ": " + e.what());
@@ -187,10 +192,7 @@ void UpdateListener::handleFileAction(
       std::this_thread::sleep_for(delay);
       auto model_name = fs::path(dir).parent_path().filename();
       try {
-        auto config = parseModel(repository_, model_name, "");
-        for (const auto& [model, parameters] : config) {
-          endpoints_->load(model, "", parameters);
-        }
+        loadModel(repository_, model_name, endpoints_);
       } catch (const runtime_error&) {
         AMDINFER_LOG_INFO(logger, "Error loading " + model_name.string());
       }
