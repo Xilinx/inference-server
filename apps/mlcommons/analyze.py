@@ -12,8 +12,24 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-mlcommons_inference
-mlperf.conf
-mlperf_filtered.conf
-mlperf_log_*
-mlcommons.bin
+import argparse
+import pickle
+
+
+def run(args: argparse.Namespace):
+    with open(args.data, "rb") as f:
+        logs = pickle.load(f)
+    print(logs)
+
+
+if __name__ == "__main__":
+
+    parser = argparse.ArgumentParser(description="Run mlcommons benchmarks")
+    parser.add_argument(
+        "--data",
+        default="mlcommons.bin",
+        help="Path to file to analyze. Defaults to mlcommons.bin",
+    )
+    args = parser.parse_args()
+
+    run(args)
