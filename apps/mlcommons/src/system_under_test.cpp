@@ -67,12 +67,10 @@ void SystemUnderTest::FinishQuery() {
   }
 }
 
-void SystemUnderTest::FlushQueries() { std::cout << "FlushQueries\n"; }
+void SystemUnderTest::FlushQueries() {}
 
 void SystemUnderTest::ReportLatencyResults(
   [[maybe_unused]] const std::vector<mlperf::QuerySampleLatency>&
-    latencies_ns) {
-  std::cout << "ReportLatencyResults\n";
-}
+    latencies_ns) {}
 
 }  // namespace amdinfer
