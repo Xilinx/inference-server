@@ -37,7 +37,7 @@ class Config {
 
   template <typename T>
   T get(const std::string& model, const std::string& scenario,
-        const std::string& key) {
+        const std::string& key) const {
     if (config_.has(model + "." + scenario + "." + key)) {
       return config_.get<T>(model + "." + scenario + "." + key);
     }
@@ -54,7 +54,7 @@ class Config {
   }
 
   bool has(const std::string& model, const std::string& scenario,
-           const std::string& key) {
+           const std::string& key) const {
     if (config_.has(model + "." + scenario + "." + key)) {
       return true;
     }
@@ -71,7 +71,7 @@ class Config {
   }
 
   ParameterMap getParameters(const std::string& model,
-                             const std::string& scenario);
+                             const std::string& scenario) const;
 
  private:
   ParameterMap config_;

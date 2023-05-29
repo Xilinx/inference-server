@@ -113,9 +113,6 @@ amdinfer.*.*.worker.string = <name>
 amdinfer.*.*.performance_samples.int = 1000
 # path to the directory containing input data
 amdinfer.*.*.input_directory.string = <path>
-
-# these custom arguments must be defined here
-
 # number of workers to load if using local server
 amdinfer.*.*.workers.int = 3
 # type of client to make: must be one of native, HTTP, or gRPC
@@ -124,6 +121,9 @@ amdinfer.*.*.client_id.string = native
 amdinfer.*.*.address.string = <address>
 # set to true to use a remote server
 amdinfer.*.*.remote_server.bool = 1
+
+# these custom arguments must be defined here
+
 # endpoint of the worker to use for inference if using a remote server
 amdinfer.*.*.endpoint.string = <endpoint>
 

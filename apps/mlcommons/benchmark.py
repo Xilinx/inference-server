@@ -19,10 +19,29 @@ import subprocess
 import textwrap
 
 
+def indent(text: str, indent_length: int, indent_char=" "):
+    """
+    Indent the text to the specified length
+
+    Args:
+        text (str): Text to indent
+        indent_length (int): Number of characters to indent
+        indent_char (str, optional): Character to use for indent. Defaults to ' '.
+    """
+
+    def indented_lines():
+        for i, line in enumerate(text.splitlines(True)):
+            if i:
+                yield indent_char * indent_length + line if line.strip() else line
+            else:
+                yield line
+
+    return "".join(indented_lines())
+
+
 class MlcommonsLog:
-    def __init__(self, path, model):
+    def __init__(self, path):
         self.valid = False
-        self.model = model
         self.scenario = ""
         self.test_mode = ""
 
@@ -67,24 +86,24 @@ class MlcommonsLog:
 
     def __str__(self):
         return textwrap.dedent(
-            f"""
-            MLCommons log({self.model}, {self.scenario}, {self.test_mode}):
-                Valid: {str(self.valid)}
-                Min latency (ns): {self.min_latency}
-                Max latency (ns): {self.max_latency}
-                Mean latency (ns): {self.mean_latency}
-                50.0% latency (ns): {self.latency_50_0}
-                90.0% latency (ns): {self.latency_90_0}
-                95.0% latency (ns): {self.latency_95_0}
-                97.0% latency (ns): {self.latency_97_0}
-                99.0% latency (ns): {self.latency_99_0}
-                99.9% latency (ns): {self.latency_99_9}"""
+            f"""\
+            Valid: {str(self.valid)}
+            Test mode: {self.test_mode}
+            Min latency (ns): {self.min_latency}
+            Max latency (ns): {self.max_latency}
+            Mean latency (ns): {self.mean_latency}
+            50.0% latency (ns): {self.latency_50_0}
+            90.0% latency (ns): {self.latency_90_0}
+            95.0% latency (ns): {self.latency_95_0}
+            97.0% latency (ns): {self.latency_97_0}
+            99.0% latency (ns): {self.latency_99_0}
+            99.9% latency (ns): {self.latency_99_9}"""
         )
 
 
 class SingleStream(MlcommonsLog):
-    def __init__(self, path, model):
-        super().__init__(path, model)
+    def __init__(self, path):
+        super().__init__(path)
 
         self.qps = 0
 
@@ -93,15 +112,15 @@ class SingleStream(MlcommonsLog):
 
     def __str__(self):
         return textwrap.dedent(
-            f"""
-        {super().__str__()}
-        QPS w/o loadgen overhead: {str(self.qps)}"""
+            f"""\
+            {indent(super().__str__(), 12)}
+            QPS w/o loadgen overhead: {str(self.qps)}"""
         )
 
 
 class MultiStream(MlcommonsLog):
-    def __init__(self, path, model):
-        super().__init__(path, model)
+    def __init__(self, path):
+        super().__init__(path)
 
         self.query_min_latency = 0
         self.query_max_latency = 0
@@ -138,23 +157,23 @@ class MultiStream(MlcommonsLog):
 
     def __str__(self):
         return textwrap.dedent(
-            f"""
-        {super().__str__()}
-        Min latency per query (ns): {self.query_min_latency}
-        Max latency per query (ns): {self.query_max_latency}
-        Mean latency per query (ns): {self.query_mean_latency}
-        50.0% latency per query (ns): {self.query_latency_50_0}
-        90.0% latency per query (ns): {self.query_latency_90_0}
-        95.0% latency per query (ns): {self.query_latency_95_0}
-        97.0% latency per query (ns): {self.query_latency_97_0}
-        99.0% latency per query (ns): {self.query_latency_99_0}
-        99.9% latency per query (ns): {self.query_latency_99_9}"""
+            f"""\
+            {indent(super().__str__(), 12)}
+            Min latency per query (ns): {self.query_min_latency}
+            Max latency per query (ns): {self.query_max_latency}
+            Mean latency per query (ns): {self.query_mean_latency}
+            50.0% latency per query (ns): {self.query_latency_50_0}
+            90.0% latency per query (ns): {self.query_latency_90_0}
+            95.0% latency per query (ns): {self.query_latency_95_0}
+            97.0% latency per query (ns): {self.query_latency_97_0}
+            99.0% latency per query (ns): {self.query_latency_99_0}
+            99.9% latency per query (ns): {self.query_latency_99_9}"""
         )
 
 
 class Server(MlcommonsLog):
-    def __init__(self, path, model):
-        super().__init__(path, model)
+    def __init__(self, path):
+        super().__init__(path)
 
         self.completed_samples_per_sec = 0
         self.overlatency_query_count = 0
@@ -167,16 +186,16 @@ class Server(MlcommonsLog):
 
     def __str__(self):
         return textwrap.dedent(
-            f"""
-        {super().__str__()}
-        Completed samples per sec: {self.completed_samples_per_sec}
-        Samples over target latency: {self.overlatency_query_count}"""
+            f"""\
+            {indent(super().__str__(), 12)}
+            Completed samples per sec: {self.completed_samples_per_sec}
+            Samples over target latency: {self.overlatency_query_count}"""
         )
 
 
 class Offline(MlcommonsLog):
-    def __init__(self, path, model):
-        super().__init__(path, model)
+    def __init__(self, path):
+        super().__init__(path)
 
         self.samples_per_second = 0
 
@@ -185,9 +204,9 @@ class Offline(MlcommonsLog):
 
     def __str__(self):
         return textwrap.dedent(
-            f"""
-        {super().__str__()}
-        Samples per second: {self.samples_per_second}"""
+            f"""\
+            {indent(super().__str__(), 12)}
+            Samples per second: {self.samples_per_second}"""
         )
 
 
@@ -195,21 +214,26 @@ class MlcommonsLogs:
     def __init__(self) -> None:
         self.logs = {}
 
-    def add_log(self, model, scenario, log):
+    def add_log(self, model, scenario, protocol, log):
         if model not in self.logs:
             self.logs[model] = {}
-        self.logs[model][scenario] = log
+        if scenario not in self.logs[model]:
+            self.logs[model][scenario] = {}
+        self.logs[model][scenario][protocol] = log
 
     def __str__(self) -> str:
         logs = ""
-        for _, scenarios in self.logs.items():
-            for _, log in scenarios.items():
-                logs += str(log)
-        return logs
+        for model, scenarios in self.logs.items():
+            for scenario, protocols in scenarios.items():
+                for protocol, log in protocols.items():
+                    logs += f"MLCommons log({model}, {scenario}, {protocol})\n"
+                    logs += (" " * 4) + indent(str(log), 4) + "\n"
+        return logs.strip()
 
 
-def run_mlcommons(model: str, scenario: str, executable: str):
-    cmd = f"{executable} --scenario {scenario} --model {model}"
+def run_mlcommons(model: str, scenario: str, protocol: str, executable: str):
+    cmd = f"{executable} --scenario {scenario} --model {model} --client {protocol}"
+    print(f"Running {cmd}")
     try:
         subprocess.check_call(shlex.split(cmd))
     except subprocess.CalledProcessError as e:
@@ -219,12 +243,12 @@ def run_mlcommons(model: str, scenario: str, executable: str):
 
     log_name = "mlperf_log_detail.txt"
     if scenario == "SingleStream":
-        return SingleStream(log_name, model)
+        return SingleStream(log_name)
     if scenario == "MultiStream":
-        return MultiStream(log_name, model)
+        return MultiStream(log_name)
     if scenario == "Server":
-        return Server(log_name, model)
-    return Offline(log_name, model)
+        return Server(log_name)
+    return Offline(log_name)
 
 
 def run(args: argparse.Namespace):
@@ -234,9 +258,10 @@ def run(args: argparse.Namespace):
     logs = MlcommonsLogs()
     for model in args.models:
         for scenario in args.scenarios:
-            log = run_mlcommons(model, scenario, args.executable)
-            if log is not None:
-                logs.add_log(model, scenario, log)
+            for protocol in args.protocols:
+                log = run_mlcommons(model, scenario, protocol, args.executable)
+                if log is not None:
+                    logs.add_log(model, scenario, protocol, log)
 
     print(logs)
 
@@ -261,6 +286,13 @@ if __name__ == "__main__":
         nargs="+",
         help="Models to run",
         choices={"resnet50", "retinanet", "3d-unet", "rnnt", "bert", "dlrm", "fake"},
+        required=True,
+    )
+    parser.add_argument(
+        "--protocols",
+        nargs="+",
+        help="Protocols to run",
+        choices={"http", "grpc", "native"},
         required=True,
     )
     args = parser.parse_args()

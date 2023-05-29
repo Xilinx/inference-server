@@ -58,7 +58,7 @@ enum class Priority {
 };
 
 ParameterMap Config::getParameters(const std::string& model,
-                                   const std::string& scenario) {
+                                   const std::string& scenario) const {
   ParameterMap parameters = config_;
   std::unordered_map<std::string, Priority> priority;
 

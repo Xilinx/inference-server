@@ -20,6 +20,7 @@
 #include <loadgen.h>
 #include <test_settings.h>
 
+#include <algorithm>
 #include <cxxopts.hpp>
 #include <filesystem>
 #include <opencv2/core.hpp>       // for Mat, Vec3b, MatSize, Vec, CV_8SC3
@@ -68,12 +69,24 @@ amdinfer::InferenceRequest preprocessResnet50(const std::filesystem::path& path,
   return request;
 }
 
+template <typename T>
+void setFromConfig(const cxxopts::ParseResult& result,
+                   const amdinfer::Config& config, const std::string& model,
+                   const std::string& scenario, const std::string& key,
+                   T& value) {
+  std::string flag = key;
+  std::replace(flag.begin(), flag.end(), '_', '-');
+  if (result.count(flag) == 0U && config.has(model, scenario, key)) {
+    value = config.get<T>(model, scenario, key);
+  }
+}
+
 int main(int argc, char* argv[]) {
-  const size_t default_performance_samples = 1000;
+  const int default_performance_samples = 1000;
 
   // these defaults are overridden first by the config file and then by command
   // line, if they exist
-  size_t performance_samples = default_performance_samples;
+  int performance_samples = default_performance_samples;
   fs::path input_directory = fs::current_path() / "data";
   fs::path model_path;
   std::string worker;
@@ -107,14 +120,14 @@ int main(int argc, char* argv[]) {
   ("input-directory",
     "Path to the directory containing input data. Defaults to ./data",
     cxxopts::value(input_directory))
-  // ("client", "Must be one of 'native', 'HTTP' or 'gRPC'",
-  //   cxxopts::value(client_id))
-  // ("address", "Address to the server if using HTTP or gRPC client",
-  //   cxxopts::value(address))
-  // ("remote-server", "Set to use remote server",
-  //   cxxopts::value(remote_server))
-  // ("endpoint", "The endpoint for inference if using a remote server",
-  //   cxxopts::value(endpoint))
+  ("client", "Must be one of 'native', 'http' or 'grpc'",
+    cxxopts::value(client_id))
+  ("address", "Address to the server if using HTTP or gRPC client",
+    cxxopts::value(address))
+  ("remote-server", "Set to use remote server",
+    cxxopts::value(remote_server))
+  ("endpoint", "The endpoint for inference if using a remote server",
+    cxxopts::value(endpoint))
   ("model-path", "Path to the model file if using a local server",
     cxxopts::value(model_path))
   ("worker", "Name of the worker to use if using a local server",
@@ -148,42 +161,34 @@ int main(int argc, char* argv[]) {
     mlperf_config_path = config_path.parent_path() / "mlperf_filtered.conf";
     test_config = amdinfer::parseConfig(config_path, mlperf_config_path);
 
+    // no templated lambdas until C++20
+    auto setIntFromConfig = [&](const std::string& key, int& value) {
+      setFromConfig(result, test_config, model, scenario, key, value);
+    };
+
+    auto setStringFromConfig = [&](const std::string& key, std::string& value) {
+      setFromConfig(result, test_config, model, scenario, key, value);
+    };
+
+    auto setBoolFromConfig = [&](const std::string& key, bool value) {
+      setFromConfig(result, test_config, model, scenario, key, value);
+    };
+
     // if these arguments aren't specified on the command-line, override them
     // with values from the config file, if they exist
-    if (result.count("performance-samples") == 0U &&
-        test_config.has(model, scenario, "performance_samples")) {
-      performance_samples =
-        test_config.get<int>(model, scenario, "performance_samples");
-    }
-    if (result.count("worker") == 0U &&
-        test_config.has(model, scenario, "worker")) {
-      worker = test_config.get<std::string>(model, scenario, "worker");
-    }
-    if (result.count("input-directory") == 0U &&
-        test_config.has(model, scenario, "input_directory")) {
-      input_directory =
-        test_config.get<std::string>(model, scenario, "input_directory");
-    }
+    setIntFromConfig("performance_samples", performance_samples);
+    setStringFromConfig("worker", worker);
+    std::string input_directory_str{input_directory};
+    setStringFromConfig("input_directory", input_directory_str);
+    input_directory = input_directory_str;
+    setStringFromConfig("client_id", client_id);
+    setStringFromConfig("address", address);
+    setBoolFromConfig("remote_server", remote_server);
+    setStringFromConfig("endpoint", endpoint);
 
   } catch (const cxxopts::OptionException& e) {
     std::cout << "Error parsing options: " << e.what() << "\n";
     exit(1);
-  }
-
-  if (test_config.has(model, scenario, "client_id")) {
-    client_id = test_config.get<std::string>(model, scenario, "client_id");
-  }
-
-  if (test_config.has(model, scenario, "address")) {
-    address = test_config.get<std::string>(model, scenario, "address");
-  }
-
-  if (test_config.has(model, scenario, "remote_server")) {
-    remote_server = test_config.get<bool>(model, scenario, "remote_server");
-  }
-
-  if (test_config.has(model, scenario, "endpoint")) {
-    endpoint = test_config.get<std::string>(model, scenario, "endpoint");
   }
 
   if (scenario == "SingleStream") {
@@ -241,14 +246,14 @@ int main(int argc, char* argv[]) {
     }
     client = std::make_unique<amdinfer::NativeClient>(&(server.value()));
 #ifdef AMDINFER_ENABLE_HTTP
-  } else if (client_id == "HTTP") {
+  } else if (client_id == "http") {
     client = std::make_unique<amdinfer::HttpClient>(address);
     if (!remote_server) {
       server.value().startHttp(http_port);
     }
 #endif
 #ifdef AMDINFER_ENABLE_GRPC
-  } else if (client_id == "gRPC") {
+  } else if (client_id == "grpc") {
     client = std::make_unique<amdinfer::GrpcClient>(address);
     if (!remote_server) {
       server.value().startGrpc(grpc_port);
