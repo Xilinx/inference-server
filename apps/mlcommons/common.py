@@ -81,6 +81,19 @@ class MlcommonsLog:
                 )
                 yield content, set_attribute
 
+    def get_latencies(self):
+        return (
+            self.min_latency,
+            self.max_latency,
+            self.mean_latency,
+            self.latency_50_0,
+            self.latency_90_0,
+            self.latency_95_0,
+            self.latency_97_0,
+            self.latency_99_0,
+            self.latency_99_9,
+        )
+
     def __str__(self):
         return textwrap.dedent(
             f"""\
@@ -102,15 +115,18 @@ class SingleStream(MlcommonsLog):
     def __init__(self, path):
         super().__init__(path)
 
+        self.qps_with_loadgen = 0
         self.qps = 0
 
         for _, set_attribute in self.parse_log(path):
+            set_attribute("result_qps_with_loadgen_overhead", "qps_with_loadgen")
             set_attribute("result_qps_without_loadgen_overhead", "qps")
 
     def __str__(self):
         return textwrap.dedent(
             f"""\
             {indent(super().__str__(), 12)}
+            QPS w/ loadgen overhead: {str(self.qps_with_loadgen)}
             QPS w/o loadgen overhead: {str(self.qps)}"""
         )
 
@@ -218,11 +234,17 @@ class MlcommonsLogs:
             self.logs[model][scenario] = {}
         self.logs[model][scenario][protocol] = log
 
-    def __str__(self) -> str:
-        logs = ""
+    def __iter__(self):
         for model, scenarios in self.logs.items():
             for scenario, protocols in scenarios.items():
                 for protocol, log in protocols.items():
-                    logs += f"MLCommons log({model}, {scenario}, {protocol})\n"
-                    logs += (" " * 4) + indent(str(log), 4) + "\n"
+                    yield (model, scenario, protocol, log)
+
+    def __str__(self) -> str:
+        logs = ""
+
+        for key in self:
+            model, scenario, protocol, log = key
+            logs += f"MLCommons log({model}, {scenario}, {protocol})\n"
+            logs += (" " * 4) + indent(str(log), 4) + "\n"
         return logs.strip()

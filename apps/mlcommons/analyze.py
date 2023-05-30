@@ -15,11 +15,23 @@
 import argparse
 import pickle
 
+import common
+import plotly.express as px
 
-def run(args: argparse.Namespace):
+
+def graph_protocols(logs: common.MlcommonsLogs):
+    for key in logs:
+        model, scenario, protocol, log = key
+
+
+def main(args: argparse.Namespace):
     with open(args.data, "rb") as f:
         logs = pickle.load(f)
-    print(logs)
+
+    if args.print:
+        print(logs)
+
+    graph_protocols(logs)
 
 
 if __name__ == "__main__":
@@ -30,6 +42,11 @@ if __name__ == "__main__":
         default="mlcommons.bin",
         help="Path to file to analyze. Defaults to mlcommons.bin",
     )
+    parser.add_argument(
+        "--print",
+        action="store_true",
+        help="Print the raw data",
+    )
     args = parser.parse_args()
 
-    run(args)
+    main(args)

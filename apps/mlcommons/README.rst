@@ -65,6 +65,31 @@ Run the app
 
 Use ``--help`` to see the options.
 
+Benchmark
+---------
+
+You can use the ``benchmark.py`` script to sweep the app across a set of configurations.
+After setting up ``mlperf.conf`` as required, run the script from this directory with:
+
+.. code-block:: console
+
+    $ python benchmark.py /path/to/app --scenarios ... --models ... --protocols ...
+
+You can specify multiple scenarios, models and protocols (see ``--help`` for more information)
+The results are saved by default to ``mlcommons.bin``.
+You can view and analyze these results with ``analyze.py``.
+To use this script, you need to install the dependencies first:
+
+.. code-block:: console
+
+    $ pip install pandas kaleido
+
+Then, run the script:
+
+.. code-block:: console
+
+    $ python analyze.py <flags>
+
 Notes
 -----
 
