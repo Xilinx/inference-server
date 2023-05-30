@@ -112,7 +112,7 @@ if(PROJECT_IS_TOP_LEVEL)
   # because for manylinux builds, the Python extension is intentionally not
   # linked against Python at compile time so we need to allow undefined symbols.
   # The workers are also not fully linked either.
-  set(CMAKE_CONFIGURATION_TYPES "Debug;Release;Coverage"
+  set(CMAKE_CONFIGURATION_TYPES "Debug;Release;Coverage;RelWithDebInfo"
       CACHE STRING "Available build-types: Debug, Release and Coverage"
   )
 endif()
