@@ -22,7 +22,7 @@ import common
 
 
 def run_mlcommons(model: str, scenario: str, protocol: str, executable: str):
-    cmd = f"{executable} --scenario {scenario} --model {model} --client {protocol}"
+    cmd = f"{executable} --scenario {scenario} --model {model} --protocol {protocol}"
     print(f"Running {cmd}")
     try:
         subprocess.check_call(shlex.split(cmd))

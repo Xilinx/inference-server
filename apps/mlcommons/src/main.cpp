@@ -90,7 +90,7 @@ int main(int argc, char* argv[]) {
   fs::path input_directory = fs::current_path() / "data";
   fs::path model_path;
   std::string worker;
-  std::string client_id{"native"};
+  std::string protocol{"native"};
   std::string address;
   std::string endpoint;
   bool remote_server = false;
@@ -108,7 +108,7 @@ int main(int argc, char* argv[]) {
     "mlperf", "Run the mlperf benchmark with the AMD Inference Server");
   // clang-format off
   options.add_options()
-  ("config", "Path to the config file. Defaults to ./mlperf.conf",
+  ("config-path", "Path to the config file. Defaults to ./mlperf.conf",
     cxxopts::value(config_path))
   ("model", "Must be one of the mlperf model names", cxxopts::value(model))
   ("scenario",
@@ -120,8 +120,8 @@ int main(int argc, char* argv[]) {
   ("input-directory",
     "Path to the directory containing input data. Defaults to ./data",
     cxxopts::value(input_directory))
-  ("client", "Must be one of 'native', 'http' or 'grpc'",
-    cxxopts::value(client_id))
+  ("protocol", "Must be one of 'native', 'http' or 'grpc'",
+    cxxopts::value(protocol))
   ("address", "Address to the server if using HTTP or gRPC client",
     cxxopts::value(address))
   ("remote-server", "Set to use remote server",
@@ -170,7 +170,7 @@ int main(int argc, char* argv[]) {
       setFromConfig(result, test_config, model, scenario, key, value);
     };
 
-    auto setBoolFromConfig = [&](const std::string& key, bool value) {
+    auto setBoolFromConfig = [&](const std::string& key, bool& value) {
       setFromConfig(result, test_config, model, scenario, key, value);
     };
 
@@ -181,7 +181,7 @@ int main(int argc, char* argv[]) {
     std::string input_directory_str{input_directory};
     setStringFromConfig("input_directory", input_directory_str);
     input_directory = input_directory_str;
-    setStringFromConfig("client_id", client_id);
+    setStringFromConfig("protocol", protocol);
     setStringFromConfig("address", address);
     setBoolFromConfig("remote_server", remote_server);
     setStringFromConfig("endpoint", endpoint);
@@ -232,6 +232,7 @@ int main(int argc, char* argv[]) {
   std::optional<amdinfer::Server> server;
   std::unique_ptr<amdinfer::Client> client;
   if (!remote_server) {
+    std::cout << "No remote server set. Starting locally\n";
     server.emplace();
   }
 
@@ -239,28 +240,28 @@ int main(int argc, char* argv[]) {
   [[maybe_unused]] const uint16_t http_port = 8998;
   [[maybe_unused]] const uint16_t grpc_port = 50'051;
 
-  if (client_id == "native") {
+  if (protocol == "native") {
     if (remote_server) {
       std::cerr << "Server must be started locally if using native client\n";
       return 1;
     }
     client = std::make_unique<amdinfer::NativeClient>(&(server.value()));
 #ifdef AMDINFER_ENABLE_HTTP
-  } else if (client_id == "http") {
+  } else if (protocol == "http") {
     client = std::make_unique<amdinfer::HttpClient>(address);
     if (!remote_server) {
       server.value().startHttp(http_port);
     }
 #endif
 #ifdef AMDINFER_ENABLE_GRPC
-  } else if (client_id == "grpc") {
+  } else if (protocol == "grpc") {
     client = std::make_unique<amdinfer::GrpcClient>(address);
     if (!remote_server) {
       server.value().startGrpc(grpc_port);
     }
 #endif
   } else {
-    std::cerr << "Client must be one of 'native', 'HTTP', or 'gRPC'\n";
+    std::cerr << "Protocol must be one of 'native', 'http', or 'grpc'\n";
     return 1;
   }
 
