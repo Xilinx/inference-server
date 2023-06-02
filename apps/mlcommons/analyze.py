@@ -62,7 +62,6 @@ def graph_protocols(logs: common.MlcommonsLogs):
                     x=graph_data[protocol],
                     y=graph_data["percentile"],
                     marker={"symbol": symbols[index]},
-                    hoverinfo="text",
                 )
             )
 
@@ -73,6 +72,7 @@ def graph_protocols(logs: common.MlcommonsLogs):
             title_text=f"{scenario} ({model})",
         )
         fig.write_image(f"{model}_{scenario}_protocols.jpg")
+        fig.write_json(f"{model}_{scenario}_protocols.json")
 
 
 def main(args: argparse.Namespace):

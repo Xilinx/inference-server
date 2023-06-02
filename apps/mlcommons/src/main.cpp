@@ -259,8 +259,17 @@ int main(int argc, char* argv[]) {
   }
 
   std::cout << "Using input directory " << input_directory << "\n";
-  amdinfer::QuerySampleLibrary qsl(performance_samples, input_directory,
-                                   preprocessFake);
+  std::unique_ptr<amdinfer::QuerySampleLibrary> qsl;
+  if (model == "fake") {
+    qsl = std::make_unique<amdinfer::QuerySampleLibrary>(
+      performance_samples, input_directory, preprocessFake);
+  } else if (model == "resnet50") {
+    qsl = std::make_unique<amdinfer::QuerySampleLibrary>(
+      performance_samples, input_directory, preprocessResnet50);
+  } else {
+    std::cerr << "Unsupported preprocessing function for " << model << "\n";
+    return 1;
+  }
 
   std::optional<amdinfer::Server> server;
   std::unique_ptr<amdinfer::Client> client;
@@ -314,9 +323,9 @@ int main(int argc, char* argv[]) {
     }
   }
 
-  amdinfer::SystemUnderTest sut(&qsl, client.get(), endpoint);
+  amdinfer::SystemUnderTest sut(qsl.get(), client.get(), endpoint);
 
-  mlperf::StartTest(&sut, &qsl, test_settings, log_settings);
+  mlperf::StartTest(&sut, qsl.get(), test_settings, log_settings);
 
   return 0;
 }
