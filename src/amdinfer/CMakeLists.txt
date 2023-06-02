@@ -51,6 +51,11 @@ foreach(lib ${output_libraries})
   set_target_properties(
     ${lib} PROPERTIES BUILD_RPATH ${PROJECT_BINARY_DIR}/src/amdinfer/workers
   )
+
+  target_include_directories(
+    ${lib} INTERFACE $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+                     $<INSTALL_INTERFACE:amdinfer/include>
+  )
 endforeach()
 
 # the compiled server binary

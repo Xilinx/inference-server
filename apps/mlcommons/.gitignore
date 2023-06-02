@@ -16,3 +16,6 @@ mlcommons_inference
 mlperf.conf
 mlperf_filtered.conf
 mlperf_log_*
+*.bin
+*.jpg
+*.json

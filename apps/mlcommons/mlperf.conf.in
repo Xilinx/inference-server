@@ -32,48 +32,73 @@
 #   - 3: FindPeakPerformance
 *.*.mode = 2
 
-# test duration
-*.*.min_duration = 10000
-*.*.max_duration = 0
-*.*.min_query_count = 100
-*.*.max_query_count = 0
-
 # random number generation
 *.*.qsl_rng_seed = 0
 *.*.sample_index_rng_seed = 0
 *.*.schedule_rng_seed = 0
-*.*.accuracy_log_rng_seed = 0
-*.*.accuracy_log_probability = 0.0
-*.*.accuracy_log_sampling_target = 0
+# *.*.accuracy_log_rng_seed = 0
+# *.*.accuracy_log_probability = 0.0
+# *.*.accuracy_log_sampling_target = 0
 
 # performance sample modifiers
-*.*.print_timestamps = 0
-*.*.performance_issue_unique = 0
-*.*.performance_issue_same = 0
-*.*.performance_issue_same_index = 0
-*.*.performance_sample_count_override = 0
-*.*.sample_concatenate_permutation = 0
+# *.*.print_timestamps = 0
+# *.*.performance_issue_unique = 0
+# *.*.performance_issue_same = 0
+# *.*.performance_issue_same_index = 0
+# *.*.sample_concatenate_permutation = 0
+# 3D-UNet uses equal issue mode
+3d-unet.*.sample_concatenate_permutation = 1
+# set the QSL size per the benchmark rules
+resnet50.*.performance_sample_count_override = 1024
+retinanet.*.performance_sample_count_override = 64
+3d-unet.*.performance_sample_count_override = 16
+rnnt.*.performance_sample_count_override = 2513
+bert.*.performance_sample_count_override = 10833
+dlrm.*.performance_sample_count_override = 204800
 
 # SingleStream options
-*.SingleStream.target_latency_percentile = 0.9
+*.SingleStream.target_latency_percentile = 90
+*.SingleStream.min_duration = 600000
+*.SingleStream.min_query_count = 1024
+# must be set by the user
 *.SingleStream.target_latency = 1
 
 # MultiStream options
-*.MultiStream.target_latency_percentile = 0.9
-*.MultiStream.target_latency = 8
+*.MultiStream.target_latency_percentile = 99
 *.MultiStream.samples_per_query = 8
+*.MultiStream.min_duration = 600000
+*.MultiStream.min_query_count = 270336
+retinanet.MultiStream.target_latency = 528
+# must be set by the user
+*.MultiStream.target_latency = 1
 
 # Server options
-*.Server.target_latency_percentile = 0.9
-*.Server.target_latency = 100
-*.Server.target_qps = 1
+*.Server.target_latency_percentile = 99
+*.Server.target_latency = 10
 *.Server.coalesce_queries = 0
 *.Server.max_async_queries = 0
+*.Server.target_duration = 0
+*.Server.min_duration = 600000
+*.Server.min_query_count = 270336
+resnet50.Server.target_latency = 15
+retinanet.Server.target_latency = 100
+bert.Server.target_latency = 130
+dlrm.Server.target_latency = 30
+rnnt.Server.target_latency = 1000
+# must be set by the user
+*.Server.target_qps = 1
 # these values cannot be set from the config file due to loadgen limitations:
 #  - server_find_peak_qps_decimals_of_precision
 #  - server_num_issue_query_threads
 
 # Offline options
+*.Offline.target_latency_percentile = 90
+*.Offline.min_duration = 600000
+# In Offline scenario, we always have one query. But LoadGen maps this to
+# min_sample_count internally in Offline scenario, so set this to 24576 since
+# the rule requires that Offline scenario run for at least 24576 samples.
+*.Offline.min_query_count = 24576
+# must be set by the user
 *.Offline.target_qps = 1
 
 ################################################################################
@@ -88,9 +113,6 @@ amdinfer.*.*.worker.string = <name>
 amdinfer.*.*.performance_samples.int = 1000
 # path to the directory containing input data
 amdinfer.*.*.input_directory.string = <path>
-
-# these custom arguments must be defined here
-
 # number of workers to load if using local server
 amdinfer.*.*.workers.int = 3
 # type of client to make: must be one of native, HTTP, or gRPC
@@ -99,6 +121,9 @@ amdinfer.*.*.client_id.string = native
 amdinfer.*.*.address.string = <address>
 # set to true to use a remote server
 amdinfer.*.*.remote_server.bool = 1
+
+# these custom arguments must be defined here
+
 # endpoint of the worker to use for inference if using a remote server
 amdinfer.*.*.endpoint.string = <endpoint>
 

@@ -31,7 +31,7 @@
 #include <utility>  // for move
 #include <vector>   // for vector
 
-#include "amdinfer/batching/hard.hpp"    // for HardBatcher
+#include "amdinfer/batching/soft.hpp"    // for SoftBatcher
 #include "amdinfer/build_options.hpp"    // for AMDINFER_ENABLE_TRACING
 #include "amdinfer/core/data_types.hpp"  // for DataType, DataType::Uint32
 #include "amdinfer/core/inference_request.hpp"  // for InferenceRequest, Infe...
@@ -121,7 +121,7 @@ class CPlusPlus : public SingleThreadedWorker {
   std::vector<std::unique_ptr<Batcher>> makeBatcher(int num,
                                                     ParameterMap* parameters,
                                                     MemoryPool* pool) override {
-    return this->makeBatcher<HardBatcher>(num, parameters, pool);
+    return this->makeBatcher<SoftBatcher>(num, parameters, pool);
   };
 };
 

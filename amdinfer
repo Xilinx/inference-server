@@ -436,6 +436,9 @@ class Build:
 
         shared_libs = glob.glob(f"{str(build_dir)}/src/amdinfer/workers/*.so")
         shared_libs.extend(glob.glob(f"{str(build_dir)}/src/amdinfer/models/*.so"))
+        shared_libs.extend(
+            glob.glob(f"{str(build_dir)}/tests/src/amdinfer/workers/*.so")
+        )
         if not shared_libs:
             print("No compiled workers/models found!")
             sys.exit(1)
@@ -468,21 +471,28 @@ class Build:
             dest="config",
             action="store_const",
             const="Coverage",
-            help="build the coverage configuration",
+            help="build the Coverage configuration",
         )
         command_group.add_argument(
             "--debug",
             dest="config",
             action="store_const",
             const="Debug",
-            help="build the debug configuration",
+            help="build the Debug configuration",
         )
         command_group.add_argument(
             "--release",
             dest="config",
             action="store_const",
             const="Release",
-            help="build the release configuration",
+            help="build the Release configuration",
+        )
+        command_group.add_argument(
+            "--release-with-deb",
+            dest="config",
+            action="store_const",
+            const="RelWithDebInfo",
+            help="build the RelWithDebInfo configuration",
         )
 
         command_group = subparser.add_argument_group("Options")

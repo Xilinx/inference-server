@@ -50,43 +50,54 @@ inline bool startsWith(std::string_view str, std::string_view prefix) {
          0 == str.compare(0, prefix.size(), prefix);
 }
 
-ParameterMap Config::getParameters(const std::string& model,
-                                   const std::string& scenario) {
-  ParameterMap parameters = config_;
-  std::unordered_map<std::string, int> priority;
+enum class Priority {
+  Wildcard = 1,
+  Model = 2,
+  Scenario = 3,
+  Exact = 4,
+};
 
-  for (const auto& [key, value] : config_) {
-    auto split_key = split(key, ".");
-    if (split_key[2] != "parameters") {
-      parameters.erase(key);
+ParameterMap Config::getParameters(const std::string& model,
+                                   const std::string& scenario) const {
+  ParameterMap parameters = config_;
+  std::unordered_map<std::string, Priority> priority;
+
+  for (const auto& [full_key, value] : config_) {
+    auto split_key = split(full_key, ".");
+    const auto& model_key = split_key[0];
+    const auto& scenario_key = split_key[1];
+    const auto& key = split_key[2];
+    const auto& parameters_key = split_key[3];
+    if (key != "parameters") {
+      parameters.erase(full_key);
       continue;
     }
 
-    if (split_key[0] == model && split_key[1] == scenario) {
+    if (model_key == model && scenario_key == scenario) {
       // highest priority so always overwrite to the latest
-      priority[split_key[2]] = 4;
-      parameters.erase(split_key[3]);
-      parameters.rename(key, split_key[3]);
-    } else if (split_key[0] == "*" && split_key[1] == scenario) {
-      if (priority[split_key[2]] <= 3) {
-        priority[split_key[2]] = 3;
-        parameters.erase(split_key[3]);
-        parameters.rename(key, split_key[3]);
+      priority[key] = Priority::Exact;
+      parameters.erase(parameters_key);
+      parameters.rename(full_key, parameters_key);
+    } else if (model_key == "*" && scenario_key == scenario) {
+      if (priority[key] <= Priority::Scenario) {
+        priority[key] = Priority::Scenario;
+        parameters.erase(parameters_key);
+        parameters.rename(full_key, parameters_key);
       }
-    } else if (split_key[0] == model && split_key[1] == "*") {
-      if (priority[split_key[2]] <= 2) {
-        priority[split_key[2]] = 2;
-        parameters.erase(split_key[3]);
-        parameters.rename(key, split_key[3]);
+    } else if (model_key == model && scenario_key == "*") {
+      if (priority[key] <= Priority::Model) {
+        priority[key] = Priority::Model;
+        parameters.erase(parameters_key);
+        parameters.rename(full_key, parameters_key);
       }
-    } else if (split_key[0] == "*" && split_key[1] == "*") {
-      if (priority[split_key[2]] <= 1) {
-        priority[split_key[2]] = 1;
-        parameters.erase(split_key[3]);
-        parameters.rename(key, split_key[3]);
+    } else if (model_key == "*" && scenario_key == "*") {
+      if (priority[key] <= Priority::Wildcard) {
+        priority[key] = Priority::Wildcard;
+        parameters.erase(parameters_key);
+        parameters.rename(full_key, parameters_key);
       }
     } else {
-      throw invalid_argument("bad key value stored");
+      parameters.erase(full_key);
     }
   }
 

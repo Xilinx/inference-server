@@ -34,11 +34,12 @@ struct Sample {
   explicit Sample(const std::filesystem::path& path) : filepath(path){};
 
   std::filesystem::path filepath;
+  std::vector<std::byte> data;
   InferenceRequest request;
 };
 
-using PreprocessFunc =
-  std::function<InferenceRequest(const std::filesystem::path&)>;
+using PreprocessFunc = std::function<InferenceRequest(
+  const std::filesystem::path&, std::vector<std::byte>*)>;
 
 class QuerySampleLibrary : public mlperf::QuerySampleLibrary {
  public:
