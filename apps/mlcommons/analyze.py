@@ -13,15 +13,66 @@
 # limitations under the License.
 
 import argparse
+import itertools
 import pickle
 
 import common
+import pandas as pd
 import plotly.express as px
+import plotly.graph_objects as go
 
 
 def graph_protocols(logs: common.MlcommonsLogs):
-    for key in logs:
-        model, scenario, protocol, log = key
+    df: pd.DataFrame = logs.df
+    models = df["model"].unique()
+    scenarios = df["scenario"].unique()
+
+    for model, scenario in itertools.product(models, scenarios):
+        filtered_df = df[(df["model"] == model) & (df["scenario"] == scenario)]
+
+        protocols = filtered_df["protocol"].unique()
+
+        graph_data = (
+            filtered_df[
+                [
+                    "protocol",
+                    "min_latency",
+                    "latency_50_0",
+                    "latency_90_0",
+                    "latency_95_0",
+                    "latency_97_0",
+                    "latency_99_0",
+                    "latency_99_9",
+                ]
+            ]
+            .set_index("protocol")
+            .transpose()
+        )
+        graph_data["percentile"] = [0, 50, 90, 95, 97, 99, 99]
+
+        # fig = px.line(bar, x=protocols, y="percentile", markers=True, symbol="protocol")
+
+        symbols = ["circle", "square", "diamond"]
+        fig = go.Figure()
+        for index, protocol in enumerate(protocols):
+            fig.add_trace(
+                go.Scatter(
+                    name=protocol,
+                    mode="markers+lines",
+                    x=graph_data[protocol],
+                    y=graph_data["percentile"],
+                    marker={"symbol": symbols[index]},
+                    hoverinfo="text",
+                )
+            )
+
+        fig.update_layout(
+            xaxis_title="Time (ns)",
+            yaxis_title="Percentile",
+            legend_title_text="Protocol",
+            title_text=f"{scenario} ({model})",
+        )
+        fig.write_image(f"{model}_{scenario}_protocols.jpg")
 
 
 def main(args: argparse.Namespace):

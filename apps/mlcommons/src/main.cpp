@@ -69,6 +69,38 @@ amdinfer::InferenceRequest preprocessResnet50(const std::filesystem::path& path,
   return request;
 }
 
+amdinfer::InferenceRequest preprocessFake(const std::filesystem::path& path,
+                                          std::vector<std::byte>* data) {
+  const auto height = 1;
+  const auto width = 1;
+  const auto channels = 3;
+
+  auto img = cv::imread(path.string());
+  img = img.isContinuous() ? img : img.clone();
+  auto size = img.size[0] * img.size[1] * channels;
+
+  data->resize(size * sizeof(int8_t));
+
+  for (int i = 0; i < height; i++) {
+    for (int j = 0; j < width; j++) {
+      for (int k = 0; k < channels; k++) {
+        auto output_index = (i * width * channels) + (j * channels) + k;
+        auto* addr = reinterpret_cast<int8_t*>(data->data() + output_index);
+        *addr = img.at<cv::Vec<int8_t, channels>>(i, j)[k];
+      }
+    }
+  }
+
+  amdinfer::InferenceRequest request;
+  amdinfer::InferenceRequestInput tensor;
+  tensor.setShape({height, width, channels});
+  tensor.setData(data->data());
+  tensor.setDatatype(amdinfer::DataType::Int8);
+
+  request.addInputTensor(tensor);
+  return request;
+}
+
 template <typename T>
 void setFromConfig(const cxxopts::ParseResult& result,
                    const amdinfer::Config& config, const std::string& model,
@@ -226,8 +258,9 @@ int main(int argc, char* argv[]) {
     return 1;
   }
 
+  std::cout << "Using input directory " << input_directory << "\n";
   amdinfer::QuerySampleLibrary qsl(performance_samples, input_directory,
-                                   preprocessResnet50);
+                                   preprocessFake);
 
   std::optional<amdinfer::Server> server;
   std::unique_ptr<amdinfer::Client> client;
@@ -240,6 +273,7 @@ int main(int argc, char* argv[]) {
   [[maybe_unused]] const uint16_t http_port = 8998;
   [[maybe_unused]] const uint16_t grpc_port = 50'051;
 
+  std::cout << "Using protocol " << protocol << "\n";
   if (protocol == "native") {
     if (remote_server) {
       std::cerr << "Server must be started locally if using native client\n";

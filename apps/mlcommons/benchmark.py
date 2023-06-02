@@ -22,7 +22,13 @@ import common
 
 
 def run_mlcommons(model: str, scenario: str, protocol: str, executable: str):
-    cmd = f"{executable} --scenario {scenario} --model {model} --protocol {protocol}"
+    if protocol == "http":
+        address = "http://127.0.0.1:8998"
+    elif protocol == "grpc":
+        address = "127.0.0.1:50051"
+    else:
+        address = "n/a"
+    cmd = f"{executable} --scenario {scenario} --model {model} --protocol {protocol} --address '{address}'"
     print(f"Running {cmd}")
     try:
         subprocess.check_call(shlex.split(cmd))

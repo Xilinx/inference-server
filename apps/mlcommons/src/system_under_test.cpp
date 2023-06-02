@@ -35,6 +35,7 @@ SystemUnderTest::SystemUnderTest(QuerySampleLibrary* qsl, Client* client,
   waitUntilServerReady(client_);
   waitUntilModelReady(client_, endpoint_);
   std::thread{&SystemUnderTest::FinishQuery, this}.detach();
+  // std::thread{&SystemUnderTest::FinishQuery, this}.detach();
 }
 
 void SystemUnderTest::IssueQuery(
@@ -43,26 +44,38 @@ void SystemUnderTest::IssueQuery(
     auto& request = qsl_->getSample(sample.index);
     request.setID(std::to_string(sample.id));
     auto response = client_->modelInferAsync(endpoint_, request);
+    // std::cout << ": " << sample.id << ": " <<
+    // std::chrono::high_resolution_clock::now().time_since_epoch().count() <<
+    // ": " << std::endl;
     queue_.enqueue(std::move(response));
   }
 }
 
 // NOLINTNEXTLINE(readability-identifier-naming)
-void SystemUnderTest::FinishQuery() {
+[[noreturn]] void SystemUnderTest::FinishQuery() {
+  const int max = 16;  // arbitrary
   while (true) {
-    InferenceResponseFuture future;
-    queue_.wait_dequeue(future);
-    auto response = future.get();
-    if (response.isError()) {
-      std::cout << "Error encountered in response. App may hang\n";
-    } else {
-      const auto& outputs = response.getOutputs();
-      assert(outputs.size() == 1);
-      const auto& output = outputs[0];
-      auto data = reinterpret_cast<uintptr_t>(output.getData());
-      mlperf::ResponseId id = std::stoul(response.getID());
-      mlperf::QuerySampleResponse result{id, data, output.getSize()};
-      mlperf::QuerySamplesComplete(&result, 1);
+    std::vector<InferenceResponseFuture> futures;
+    futures.reserve(max);
+    auto returned = queue_.wait_dequeue_bulk(futures.begin(), max);
+    for (auto i = 0U; i < returned; ++i) {
+      auto& future = futures[i];
+
+      auto response = future.get();
+      if (response.isError()) {
+        std::cout << "Error encountered in response. App may hang\n";
+      } else {
+        const auto& outputs = response.getOutputs();
+        assert(outputs.size() == 1);
+        const auto& output = outputs[0];
+        auto data = reinterpret_cast<uintptr_t>(output.getData());
+        mlperf::ResponseId id = std::stoul(response.getID());
+        mlperf::QuerySampleResponse result{id, data, output.getSize()};
+        // std::cout << "::" << id << "::" <<
+        // std::chrono::high_resolution_clock::now().time_since_epoch().count()
+        // << "::" << std::endl;
+        mlperf::QuerySamplesComplete(&result, 1);
+      }
     }
   }
 }

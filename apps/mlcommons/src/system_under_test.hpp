@@ -42,7 +42,7 @@ class SystemUnderTest : public mlperf::SystemUnderTest {
 
   void IssueQuery(const std::vector<mlperf::QuerySample>& samples) override;
 
-  void FinishQuery();
+  [[noreturn]] void FinishQuery();
 
   void FlushQueries() override;
 
