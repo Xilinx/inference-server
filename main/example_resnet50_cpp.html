@@ -40,9 +40,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <script src="_static/copybutton.js"></script>
         <script src="https://twemoji.maxcdn.com/v/latest/twemoji.min.js"></script>
         <script src="_static/twemoji.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-svg.js"></script>
         <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
         <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
-        <script defer="defer" src="_static/tippy/example_resnet50_cpp.8cb9d8a3-1496-4697-a8a5-b4edbbb457d1.js"></script>
+        <script defer="defer" src="_static/tippy/example_resnet50_cpp.366a355b-c0a3-4993-88b6-9a7f1514c87c.js"></script>
         <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
         <script src="_static/dataTables.js"></script>
     <script src="_static/js/theme.js"></script>
@@ -216,6 +217,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
 <li class="toctree-l2"><a class="reference internal" href="kserve.html#making-requests">Making Requests</a></li>
 <li class="toctree-l2"><a class="reference internal" href="kserve.html#debugging">Debugging</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="performance.html">Performance</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="performance.html#mlcommons">MLCommons</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="performance.html#singlestream">SingleStream</a></li>
+<li class="toctree-l3"><a class="reference internal" href="performance.html#server">Server</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="performance_factors.html">Performance Factors</a><ul>
@@ -671,7 +680,7 @@ In this example, you create a vector of such requests.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">amdinfer</span><span class="o">::</span><span class="n">InferenceRequest</span><span class="o">&gt;</span><span class="w"> </span><span class="n">requests</span><span class="p">;</span>
 <span class="n">requests</span><span class="p">.</span><span class="n">reserve</span><span class="p">(</span><span class="n">images</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
 
-<span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">initializer_list</span><span class="o">&lt;</span><span class="kt">uint64_t</span><span class="o">&gt;</span><span class="w"> </span><span class="n">shape</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">input_size</span><span class="p">,</span><span class="w"> </span><span class="n">input_size</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">};</span>
+<span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">initializer_list</span><span class="o">&lt;</span><span class="kt">int64_t</span><span class="o">&gt;</span><span class="w"> </span><span class="n">shape</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">input_size</span><span class="p">,</span><span class="w"> </span><span class="n">input_size</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">};</span>
 
 <span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">image</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">images</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="n">requests</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">();</span>
@@ -765,7 +774,7 @@ If there are multiple requests sent in this way, they may be batched together by
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on May 15, 2023.
+      <span class="lastupdated">Last updated on June 05, 2023.
       </span></p>
   </div>
 

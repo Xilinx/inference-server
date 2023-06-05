@@ -40,16 +40,17 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <script src="_static/copybutton.js"></script>
         <script src="https://twemoji.maxcdn.com/v/latest/twemoji.min.js"></script>
         <script src="_static/twemoji.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-svg.js"></script>
         <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
         <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
-        <script defer="defer" src="_static/tippy/performance_factors.71c23051-e6d3-48fa-a2d8-43fd5e110eda.js"></script>
+        <script defer="defer" src="_static/tippy/performance_factors.505382d0-bef0-498a-9247-e1b11cefb80b.js"></script>
         <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
         <script src="_static/dataTables.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Troubleshooting" href="troubleshooting.html" />
-    <link rel="prev" title="KServe" href="kserve.html" /> 
+    <link rel="prev" title="Performance" href="performance.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -216,6 +217,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
 <li class="toctree-l2"><a class="reference internal" href="kserve.html#making-requests">Making Requests</a></li>
 <li class="toctree-l2"><a class="reference internal" href="kserve.html#debugging">Debugging</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="performance.html">Performance</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="performance.html#mlcommons">MLCommons</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="performance.html#singlestream">SingleStream</a></li>
+<li class="toctree-l3"><a class="reference internal" href="performance.html#server">Server</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Performance Factors</a><ul>
@@ -527,7 +536,7 @@ Depending on your hardware and demand, you may get better performance by changin
 There are a few ways to do this.
 For benchmarking, use <code class="docutils literal notranslate"><span class="pre">wrk</span></code> or other HTTP benchmarking executables that ensure maximum throughput.
 If making requests from Python, use <code class="docutils literal notranslate"><span class="pre">aiohttp</span></code> or similar packages to make asynchronous requests instead of the <code class="docutils literal notranslate"><span class="pre">requests</span></code> package.
-AMD Inference Server’s Python API provides <a class="reference internal" href="python.html#amdinfer.HttpClient.modelInfer" title="amdinfer.HttpClient.modelInfer"><code class="xref py py-meth docutils literal notranslate"><span class="pre">modelInfer()</span></code></a> for synchronous requests with the <a class="reference internal" href="python.html#amdinfer.HttpClient" title="amdinfer.HttpClient"><code class="xref py py-class docutils literal notranslate"><span class="pre">HttpClient</span></code></a> class.</p>
+AMD Inference Server’s Python API provides <code class="xref py py-meth docutils literal notranslate"><span class="pre">modelInfer()</span></code> for synchronous requests with the <a class="reference internal" href="python.html#amdinfer.HttpClient" title="amdinfer.HttpClient"><code class="xref py py-class docutils literal notranslate"><span class="pre">HttpClient</span></code></a> class.</p>
 <p>For C++ applications, the same principle holds.
 Using multiple threads to enqueue and dequeue requests to AMD Inference Server allows for higher throughput.
 One example of how to do this is in the following snippet:</p>
@@ -642,7 +651,7 @@ Thus, you may need to load multiple Xmodel workers to allocate sufficient hardwa
                   </style>
 				  
 				  <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="kserve.html" class="btn btn-neutral float-left" title="KServe" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="performance.html" class="btn btn-neutral float-left" title="Performance" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="troubleshooting.html" class="btn btn-neutral float-right" title="Troubleshooting" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
@@ -650,7 +659,7 @@ Thus, you may need to load multiple Xmodel workers to allocate sufficient hardwa
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on May 15, 2023.
+      <span class="lastupdated">Last updated on June 05, 2023.
       </span></p>
   </div>
 

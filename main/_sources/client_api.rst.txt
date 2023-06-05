@@ -59,7 +59,7 @@ The inference server supports the following protocols which you can use independ
         # native - the server must be started in the same script
         server = amdinfer.Server()
         client = amdinfer.NativeClient(server)
-        
+
         # HTTP/REST
         client = amdinfer.HttpClient("http://127.0.0.1:8998")
 
@@ -137,7 +137,7 @@ Once you have a request, you can use the client's ``modelInfer()`` method:
         auto response = client.modelInfer(endpoint, request);
 
     .. code-tab:: python Python
-        
+
         # endpoint is a string from loading a backend or provided to you
         response = client.modelInfer(endpoint, request)
 
@@ -160,10 +160,10 @@ The basic response from the inference server consists of an array of output tens
                 // you can use methods to get the shape, datatype and name and data
             }
         }
-        
+
 
     .. code-tab:: python Python
-        
+
         response = client.modelInfer(endpoint, request)
         if not response.isError():
             output_tensors = response.getOutputs()

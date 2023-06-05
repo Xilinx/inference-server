@@ -23,6 +23,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
       <link rel="stylesheet" href="_static/twemoji.css" type="text/css" />
+      <link rel="stylesheet" href="_static/sphinx_charts/charts.css" type="text/css" />
       <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
       <link rel="stylesheet" href="_static/custom.css" type="text/css" />
       <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" type="text/css" />
@@ -39,6 +40,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <script src="_static/copybutton.js"></script>
         <script src="https://twemoji.maxcdn.com/v/latest/twemoji.min.js"></script>
         <script src="_static/twemoji.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-svg.js"></script>
+        <script src="_static/sphinx_charts/plotly/plotly-2.11.1.min.js"></script>
+        <script src="_static/sphinx_charts/charts.js"></script>
         <script src="_static/tabs.js"></script>
         <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
         <script src="_static/dataTables.js"></script>
@@ -211,6 +215,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
 <li class="toctree-l2"><a class="reference internal" href="kserve.html#making-requests">Making Requests</a></li>
 <li class="toctree-l2"><a class="reference internal" href="kserve.html#debugging">Debugging</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="performance.html">Performance</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="performance.html#mlcommons">MLCommons</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="performance.html#singlestream">SingleStream</a></li>
+<li class="toctree-l3"><a class="reference internal" href="performance.html#server">Server</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="performance_factors.html">Performance Factors</a><ul>
@@ -621,19 +633,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
       <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer10GrpcClient11hasHardwareERKNSt6stringEi">amdinfer::GrpcClient::hasHardware (C++ function)</a>
 </li>
-      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer10GrpcClient10modelInferERKNSt6stringERK16InferenceRequest">amdinfer::GrpcClient::modelInfer (C++ function)</a>
-</li>
-      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer10GrpcClient15modelInferAsyncERKNSt6stringERK16InferenceRequest">amdinfer::GrpcClient::modelInferAsync (C++ function)</a>
-</li>
       <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer10GrpcClient9modelListEv">amdinfer::GrpcClient::modelList (C++ function)</a>
-</li>
-      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer10GrpcClient9modelLoadERKNSt6stringERK12ParameterMap">amdinfer::GrpcClient::modelLoad (C++ function)</a>
-</li>
-      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer10GrpcClient13modelMetadataERKNSt6stringE">amdinfer::GrpcClient::modelMetadata (C++ function)</a>
-</li>
-      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer10GrpcClient10modelReadyERKNSt6stringE">amdinfer::GrpcClient::modelReady (C++ function)</a>
-</li>
-      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer10GrpcClient11modelUnloadERKNSt6stringE">amdinfer::GrpcClient::modelUnload (C++ function)</a>
 </li>
       <li><a href="cpp_user_api.html#_CPPv4N8amdinfer10GrpcClientaSERK10GrpcClient">amdinfer::GrpcClient::operator= (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer10GrpcClientaSERR10GrpcClient">[1]</a>
 </li>
@@ -657,19 +657,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
       <li><a href="cpp_user_api.html#_CPPv4N8amdinfer10HttpClient14HttpClientImplE">amdinfer::HttpClient::HttpClientImpl (C++ class)</a>
 </li>
-      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer10HttpClient10modelInferERKNSt6stringERK16InferenceRequest">amdinfer::HttpClient::modelInfer (C++ function)</a>
-</li>
-      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer10HttpClient15modelInferAsyncERKNSt6stringERK16InferenceRequest">amdinfer::HttpClient::modelInferAsync (C++ function)</a>
-</li>
       <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer10HttpClient9modelListEv">amdinfer::HttpClient::modelList (C++ function)</a>
-</li>
-      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer10HttpClient9modelLoadERKNSt6stringERK12ParameterMap">amdinfer::HttpClient::modelLoad (C++ function)</a>
-</li>
-      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer10HttpClient13modelMetadataERKNSt6stringE">amdinfer::HttpClient::modelMetadata (C++ function)</a>
-</li>
-      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer10HttpClient10modelReadyERKNSt6stringE">amdinfer::HttpClient::modelReady (C++ function)</a>
-</li>
-      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer10HttpClient11modelUnloadERKNSt6stringE">amdinfer::HttpClient::modelUnload (C++ function)</a>
 </li>
       <li><a href="cpp_user_api.html#_CPPv4N8amdinfer10HttpClientaSERK10HttpClient">amdinfer::HttpClient::operator= (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer10HttpClientaSERR10HttpClient">[1]</a>
 </li>
@@ -685,13 +673,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
       <li><a href="cpp_user_api.html#_CPPv4N8amdinfer10HttpClientD0Ev">amdinfer::HttpClient::~HttpClient (C++ function)</a>
 </li>
-      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer17inferAsyncOrderedEPK6ClientRKNSt6stringERKNSt6vectorI16InferenceRequestEE">amdinfer::inferAsyncOrdered (C++ function)</a>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer17inferAsyncOrderedEPK6ClientRKNSt6stringERKNSt6vectorI16InferenceRequestEERKNSt6stringE">amdinfer::inferAsyncOrdered (C++ function)</a>
 </li>
-      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer24inferAsyncOrderedBatchedEPK6ClientRKNSt6stringERKNSt6vectorI16InferenceRequestEE6size_t">amdinfer::inferAsyncOrderedBatched (C++ function)</a>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer24inferAsyncOrderedBatchedEPK6ClientRKNSt6stringERKNSt6vectorI16InferenceRequestEE6size_tRKNSt6stringE">amdinfer::inferAsyncOrderedBatched (C++ function)</a>
 </li>
       <li><a href="cpp_user_api.html#_CPPv4N8amdinfer16InferenceRequestE">amdinfer::InferenceRequest (C++ class)</a>
 </li>
-      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer16InferenceRequest14addInputTensorE21InferenceRequestInput">amdinfer::InferenceRequest::addInputTensor (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer16InferenceRequest14addInputTensorEPvRKNSt6vectorI8uint64_tEE8DataTypeRKNSt6stringE">[1]</a>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer16InferenceRequest14addInputTensorE21InferenceRequestInput">amdinfer::InferenceRequest::addInputTensor (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer16InferenceRequest14addInputTensorEPvRKNSt6vectorI7int64_tEE8DataTypeRKNSt6stringE">[1]</a>
 </li>
       <li><a href="cpp_user_api.html#_CPPv4N8amdinfer16InferenceRequest15addOutputTensorERK22InferenceRequestOutput">amdinfer::InferenceRequest::addOutputTensor (C++ function)</a>
 </li>
@@ -727,7 +715,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
       <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer21InferenceRequestInput7getDataEv">amdinfer::InferenceRequestInput::getData (C++ function)</a>
 </li>
-      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer21InferenceRequestInput21InferenceRequestInputEPvNSt6vectorI8uint64_tEE8DataTypeNSt6stringE">amdinfer::InferenceRequestInput::InferenceRequestInput (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer21InferenceRequestInput21InferenceRequestInputERK6Tensor">[1]</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer21InferenceRequestInput21InferenceRequestInputEv">[2]</a>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer21InferenceRequestInput21InferenceRequestInputEPvNSt6vectorI7int64_tEE8DataTypeNSt6stringE">amdinfer::InferenceRequestInput::InferenceRequestInput (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer21InferenceRequestInput21InferenceRequestInputERK6Tensor">[1]</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer21InferenceRequestInput21InferenceRequestInputEv">[2]</a>
 </li>
       <li><a href="cpp_user_api.html#_CPPv4N8amdinfer21InferenceRequestInputlsERNSt7ostreamERK21InferenceRequestInput">amdinfer::InferenceRequestInput::operator&lt;&lt; (C++ function)</a>
 </li>
@@ -785,9 +773,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
       <li><a href="cpp_user_api.html#_CPPv4N8amdinfer13ModelMetadataE">amdinfer::ModelMetadata (C++ class)</a>
 </li>
-      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer13ModelMetadata14addInputTensorERK6Tensor">amdinfer::ModelMetadata::addInputTensor (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer13ModelMetadata14addInputTensorERKNSt6stringENSt16initializer_listI8uint64_tEE8DataType">[1]</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer13ModelMetadata14addInputTensorERKNSt6stringENSt6vectorIiEE8DataType">[2]</a>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer13ModelMetadata14addInputTensorERK6Tensor">amdinfer::ModelMetadata::addInputTensor (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer13ModelMetadata14addInputTensorERKNSt6stringENSt16initializer_listI7int64_tEE8DataType">[1]</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer13ModelMetadata14addInputTensorERKNSt6stringENSt6vectorIiEE8DataType">[2]</a>
 </li>
-      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer13ModelMetadata15addOutputTensorERK6Tensor">amdinfer::ModelMetadata::addOutputTensor (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer13ModelMetadata15addOutputTensorERKNSt6stringENSt16initializer_listI8uint64_tEE8DataType">[1]</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer13ModelMetadata15addOutputTensorERKNSt6stringENSt6vectorIiEE8DataType">[2]</a>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer13ModelMetadata15addOutputTensorERK6Tensor">amdinfer::ModelMetadata::addOutputTensor (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer13ModelMetadata15addOutputTensorERKNSt6stringENSt16initializer_listI7int64_tEE8DataType">[1]</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer13ModelMetadata15addOutputTensorERKNSt6stringENSt6vectorIiEE8DataType">[2]</a>
 </li>
       <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer13ModelMetadata9getInputsEv">amdinfer::ModelMetadata::getInputs (C++ function)</a>
 </li>
@@ -807,19 +795,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
       <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer12NativeClient11hasHardwareERKNSt6stringEi">amdinfer::NativeClient::hasHardware (C++ function)</a>
 </li>
-      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer12NativeClient10modelInferERKNSt6stringERK16InferenceRequest">amdinfer::NativeClient::modelInfer (C++ function)</a>
-</li>
-      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer12NativeClient15modelInferAsyncERKNSt6stringERK16InferenceRequest">amdinfer::NativeClient::modelInferAsync (C++ function)</a>
-</li>
       <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer12NativeClient9modelListEv">amdinfer::NativeClient::modelList (C++ function)</a>
-</li>
-      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer12NativeClient9modelLoadERKNSt6stringERK12ParameterMap">amdinfer::NativeClient::modelLoad (C++ function)</a>
-</li>
-      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer12NativeClient13modelMetadataERKNSt6stringE">amdinfer::NativeClient::modelMetadata (C++ function)</a>
-</li>
-      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer12NativeClient10modelReadyERKNSt6stringE">amdinfer::NativeClient::modelReady (C++ function)</a>
-</li>
-      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer12NativeClient11modelUnloadERKNSt6stringE">amdinfer::NativeClient::modelUnload (C++ function)</a>
 </li>
       <li><a href="cpp_user_api.html#_CPPv4N8amdinfer12NativeClient12NativeClientEPK6Server">amdinfer::NativeClient::NativeClient (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer12NativeClient12NativeClientERK12NativeClient">[1]</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer12NativeClient12NativeClientERR12NativeClient">[2]</a>
 </li>
@@ -865,7 +841,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
       <li><a href="cpp_user_api.html#_CPPv4N8amdinfer12ParameterMap12ParameterMapERKNSt6vectorINSt6stringEEERKNSt6vectorI9ParameterEE">amdinfer::ParameterMap::ParameterMap (C++ function)</a>
 </li>
-      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer12ParameterMap3putERKNSt6stringE9Parameter">amdinfer::ParameterMap::put (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer12ParameterMap3putERKNSt6stringEPKc">[1]</a>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer12ParameterMap3putERKNSt6stringEPKc">amdinfer::ParameterMap::put (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer12ParameterMap3putERKNSt6stringERK9Parameter">[1]</a>
 </li>
       <li><a href="cpp_user_api.html#_CPPv4N8amdinfer12ParameterMap6renameERKNSt6stringERKNSt6stringE">amdinfer::ParameterMap::rename (C++ function)</a>
 </li>
@@ -909,11 +885,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
       <li><a href="cpp_user_api.html#_CPPv4N8amdinfer14ServerMetadata7versionE">amdinfer::ServerMetadata::version (C++ member)</a>
 </li>
-      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer12unloadModelsEPK6ClientRKNSt6vectorINSt6stringEEE">amdinfer::unloadModels (C++ function)</a>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer12unloadModelsEPK6ClientRKNSt6vectorINSt6stringEEERKNSt6stringE">amdinfer::unloadModels (C++ function)</a>
 </li>
-      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer22waitUntilModelNotReadyEPK6ClientRKNSt6stringE">amdinfer::waitUntilModelNotReady (C++ function)</a>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer22waitUntilModelNotReadyEPK6ClientRKNSt6stringERKNSt6stringE">amdinfer::waitUntilModelNotReady (C++ function)</a>
 </li>
-      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer19waitUntilModelReadyEPK6ClientRKNSt6stringE">amdinfer::waitUntilModelReady (C++ function)</a>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer19waitUntilModelReadyEPK6ClientRKNSt6stringERKNSt6stringE">amdinfer::waitUntilModelReady (C++ function)</a>
 </li>
       <li><a href="cpp_user_api.html#_CPPv4N8amdinfer20waitUntilServerReadyEPK6Client">amdinfer::waitUntilServerReady (C++ function)</a>
 </li>
@@ -923,23 +899,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
       <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer15WebSocketClient11hasHardwareERKNSt6stringEi">amdinfer::WebSocketClient::hasHardware (C++ function)</a>
 </li>
-      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer15WebSocketClient10modelInferERKNSt6stringERK16InferenceRequest">amdinfer::WebSocketClient::modelInfer (C++ function)</a>
-</li>
-      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer15WebSocketClient15modelInferAsyncERKNSt6stringERK16InferenceRequest">amdinfer::WebSocketClient::modelInferAsync (C++ function)</a>
-</li>
       <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer15WebSocketClient12modelInferWsERKNSt6stringERK16InferenceRequest">amdinfer::WebSocketClient::modelInferWs (C++ function)</a>
 </li>
       <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer15WebSocketClient9modelListEv">amdinfer::WebSocketClient::modelList (C++ function)</a>
 </li>
-      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer15WebSocketClient9modelLoadERKNSt6stringERK12ParameterMap">amdinfer::WebSocketClient::modelLoad (C++ function)</a>
-</li>
-      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer15WebSocketClient13modelMetadataERKNSt6stringE">amdinfer::WebSocketClient::modelMetadata (C++ function)</a>
-</li>
-      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer15WebSocketClient10modelReadyERKNSt6stringE">amdinfer::WebSocketClient::modelReady (C++ function)</a>
-</li>
       <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer15WebSocketClient9modelRecvEv">amdinfer::WebSocketClient::modelRecv (C++ function)</a>
-</li>
-      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer15WebSocketClient11modelUnloadERKNSt6stringE">amdinfer::WebSocketClient::modelUnload (C++ function)</a>
 </li>
       <li><a href="cpp_user_api.html#_CPPv4N8amdinfer15WebSocketClientaSERK15WebSocketClient">amdinfer::WebSocketClient::operator= (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer15WebSocketClientaSERR15WebSocketClient">[1]</a>
 </li>
@@ -1313,16 +1277,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
       <li><a href="glossary.html#term-Model-repository"><strong>Model repository</strong></a>
 </li>
-      <li><a href="python.html#amdinfer.GrpcClient.modelInfer">modelInfer() (amdinfer.GrpcClient method)</a>
-
-      <ul>
-        <li><a href="python.html#amdinfer.HttpClient.modelInfer">(amdinfer.HttpClient method)</a>
+      <li><a href="python.html#amdinfer.Client.modelInfer">modelInfer() (amdinfer.Client method)</a>
 </li>
-        <li><a href="python.html#amdinfer.NativeClient.modelInfer">(amdinfer.NativeClient method)</a>
-</li>
-        <li><a href="python.html#amdinfer.WebSocketClient.modelInfer">(amdinfer.WebSocketClient method)</a>
-</li>
-      </ul></li>
       <li><a href="python.html#amdinfer.WebSocketClient.modelInferWs">modelInferWs() (amdinfer.WebSocketClient method)</a>
 </li>
       <li><a href="python.html#amdinfer.GrpcClient.modelList">modelList() (amdinfer.GrpcClient method)</a>
@@ -1335,52 +1291,20 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <li><a href="python.html#amdinfer.WebSocketClient.modelList">(amdinfer.WebSocketClient method)</a>
 </li>
       </ul></li>
-      <li><a href="python.html#amdinfer.GrpcClient.modelLoad">modelLoad() (amdinfer.GrpcClient method)</a>
-
-      <ul>
-        <li><a href="python.html#amdinfer.HttpClient.modelLoad">(amdinfer.HttpClient method)</a>
-</li>
-        <li><a href="python.html#amdinfer.NativeClient.modelLoad">(amdinfer.NativeClient method)</a>
-</li>
-        <li><a href="python.html#amdinfer.WebSocketClient.modelLoad">(amdinfer.WebSocketClient method)</a>
-</li>
-      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python.html#amdinfer.Client.modelLoad">modelLoad() (amdinfer.Client method)</a>
+</li>
       <li><a href="python.html#amdinfer.ModelMetadata">ModelMetadata (class in amdinfer)</a>
 </li>
-      <li><a href="python.html#amdinfer.GrpcClient.modelMetadata">modelMetadata() (amdinfer.GrpcClient method)</a>
-
-      <ul>
-        <li><a href="python.html#amdinfer.HttpClient.modelMetadata">(amdinfer.HttpClient method)</a>
+      <li><a href="python.html#amdinfer.Client.modelMetadata">modelMetadata() (amdinfer.Client method)</a>
 </li>
-        <li><a href="python.html#amdinfer.NativeClient.modelMetadata">(amdinfer.NativeClient method)</a>
+      <li><a href="python.html#amdinfer.Client.modelReady">modelReady() (amdinfer.Client method)</a>
 </li>
-        <li><a href="python.html#amdinfer.WebSocketClient.modelMetadata">(amdinfer.WebSocketClient method)</a>
-</li>
-      </ul></li>
-      <li><a href="python.html#amdinfer.GrpcClient.modelReady">modelReady() (amdinfer.GrpcClient method)</a>
-
-      <ul>
-        <li><a href="python.html#amdinfer.HttpClient.modelReady">(amdinfer.HttpClient method)</a>
-</li>
-        <li><a href="python.html#amdinfer.NativeClient.modelReady">(amdinfer.NativeClient method)</a>
-</li>
-        <li><a href="python.html#amdinfer.WebSocketClient.modelReady">(amdinfer.WebSocketClient method)</a>
-</li>
-      </ul></li>
       <li><a href="python.html#amdinfer.WebSocketClient.modelRecv">modelRecv() (amdinfer.WebSocketClient method)</a>
 </li>
-      <li><a href="python.html#amdinfer.GrpcClient.modelUnload">modelUnload() (amdinfer.GrpcClient method)</a>
-
-      <ul>
-        <li><a href="python.html#amdinfer.HttpClient.modelUnload">(amdinfer.HttpClient method)</a>
+      <li><a href="python.html#amdinfer.Client.modelUnload">modelUnload() (amdinfer.Client method)</a>
 </li>
-        <li><a href="python.html#amdinfer.NativeClient.modelUnload">(amdinfer.NativeClient method)</a>
-</li>
-        <li><a href="python.html#amdinfer.WebSocketClient.modelUnload">(amdinfer.WebSocketClient method)</a>
-</li>
-      </ul></li>
       <li>
     module
 
@@ -1717,7 +1641,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on May 15, 2023.
+      <span class="lastupdated">Last updated on June 05, 2023.
       </span></p>
   </div>
 

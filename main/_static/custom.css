@@ -12,7 +12,7 @@
 @media screen and (max-width: 950px){
     .wy-body-for-nav{background:#000000}
     .wy-nav-top{display:block}
-    .wy-nav-side{left:300px}
+    .wy-nav-side{left:-300px}
     .wy-nav-side.shift{width:85%;left:0}
     .wy-side-scroll{width:auto}
     .wy-side-nav-search{width:auto}
@@ -21,6 +21,7 @@
     .wy-nav-content-wrap
     .wy-nav-content{padding:1.618em}
     .wy-nav-content-wrap.shift{position:fixed;min-width:100%;left:85%;top:0;height:100%;overflow:hidden}
+    .rst-versions{left:-300px}
 }
 
 .sphinx-tabs .sphinx-tabs-panel *:last-child {

@@ -24,6 +24,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
       <link rel="stylesheet" href="_static/twemoji.css" type="text/css" />
+      <link rel="stylesheet" href="_static/sphinx_charts/charts.css" type="text/css" />
       <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
       <link rel="stylesheet" href="_static/custom.css" type="text/css" />
       <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" type="text/css" />
@@ -40,14 +41,20 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <script src="_static/copybutton.js"></script>
         <script src="https://twemoji.maxcdn.com/v/latest/twemoji.min.js"></script>
         <script src="_static/twemoji.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-svg.js"></script>
+        <script src="_static/sphinx_charts/plotly/plotly-2.11.1.min.js"></script>
+        <script src="_static/sphinx_charts/charts.js"></script>
+        <script src="_static/tabs.js"></script>
         <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
         <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
-        <script defer="defer" src="_static/tippy/performance.fa19efaa-30a9-4ff4-8a07-62f30d755a37.js"></script>
+        <script defer="defer" src="_static/tippy/performance.b9072664-086b-403e-ba40-353b47d0cf5b.js"></script>
         <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
         <script src="_static/dataTables.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" /> 
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Performance Factors" href="performance_factors.html" />
+    <link rel="prev" title="KServe" href="kserve.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -109,7 +116,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">User guide</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="backends.html">Backends</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="backends/cplusplus.html">CPlusPlus</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="backends/cplusplus.html#model-support">Model support</a></li>
@@ -214,6 +221,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
 <li class="toctree-l2"><a class="reference internal" href="kserve.html#making-requests">Making Requests</a></li>
 <li class="toctree-l2"><a class="reference internal" href="kserve.html#debugging">Debugging</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Performance</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#mlcommons">MLCommons</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#singlestream">SingleStream</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#server">Server</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="performance_factors.html">Performance Factors</a><ul>
@@ -496,75 +511,78 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
              
   <section id="performance">
 <h1>Performance<a class="headerlink" href="#performance" title="Permalink to this headline">¶</a></h1>
-<section id="wrk-benchmarks">
-<h2>wrk Benchmarks<a class="headerlink" href="#wrk-benchmarks" title="Permalink to this headline">¶</a></h2>
-<p>These tests are run on an unloaded machine with the following specs:</p>
-<ul class="simple">
-<li><p>CPU: 2x Intel(R) Xeon(R) Gold 6252 CPU &#64; 2.10GHz</p></li>
-<li><p>RAM: 12x 8 GB 2666 MHz DDR4</p></li>
-</ul>
-<p>Running GET requests on the v2 endpoint:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./build/bin/wrk<span class="w"> </span>-t32<span class="w"> </span>-c400<span class="w"> </span>-d10s<span class="w"> </span>http://127.0.0.1:8501/v2
-<span class="go">Running 10s test @ http://127.0.0.1:8501/v2</span>
-<span class="go">    32 threads and 400 connections</span>
-<span class="go">    Thread Stats   Avg      Stdev     Max   +/- Stdev</span>
-<span class="go">        Latency     1.13ms  321.66us  13.19ms   80.47%</span>
-<span class="go">        Req/Sec    10.64k     1.41k   23.01k    82.76%</span>
-<span class="go">    3417779 requests in 10.10s, 655.15MB read</span>
-<span class="go">Requests/sec: 338412.42</span>
-<span class="go">Transfer/sec:     64.87MB</span>
-</pre></div>
+<section id="mlcommons">
+<h2>MLCommons<a class="headerlink" href="#mlcommons" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="https://github.com/mlcommons/inference">MLPerf</a> is a standard benchmark suite for machine learning inference from <a class="reference external" href="https://mlcommons.org/en/">MLCommons</a>.
+The <a class="reference external" href="https://github.com/Xilinx/inference-server/tree/main/apps/mlcommons">MLCommons application</a> uses the <code class="docutils literal notranslate"><span class="pre">loadgen</span></code> component of MLPerf to send requests to the inference server for a variety of scenarios and models.</p>
+<section id="singlestream">
+<h3>SingleStream<a class="headerlink" href="#singlestream" title="Permalink to this headline">¶</a></h3>
+<p>This scenario sends one inference request after the previous one completes and so measures end-to-end latency.
+Note that these tests are not run with same duration/query count as specified in the official MLPerf test rules.</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-0-RmFrZQ==" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-0-RmFrZQ==" name="RmFrZQ==" role="tab" tabindex="0">Fake</button><button aria-controls="panel-0-UmVzTmV0NTA=" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-0-UmVzTmV0NTA=" name="UmVzTmV0NTA=" role="tab" tabindex="-1">ResNet50</button></div><div aria-labelledby="tab-0-RmFrZQ==" class="sphinx-tabs-panel group-tab" id="panel-0-RmFrZQ==" name="RmFrZQ==" role="tabpanel" tabindex="0"><div class="sphinx-charts docutils container" id="id1">
+<div class="sphinx-charts-chart sphinx-charts-chart-id-0 sphinx-charts-chart-uri-_charts/charts/fake_SingleStream_protocols.json sphinx-charts-chart-dn-chart docutils container" id="sphinx-charts-chart-id-0">
 </div>
-<p>Running POST requests on v2/models/echo/infer:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cat<span class="w"> </span>tmp.lua
-<span class="go">wrk.method = &quot;POST&quot;</span>
-<span class="go">wrk.body = &#39;{&quot;id&quot;: &quot;hello_world&quot;, &quot;parameters&quot;: {&quot;key3&quot;: &quot;value3&quot;}, &quot;inputs&quot;: [{&quot;name&quot;: &quot;echo&quot;, &quot;shape&quot;: [1], &quot;datatype&quot;: [1], &quot;parameters&quot;: {&quot;key&quot;: &quot;value&quot;}, &quot;data&quot;: [2]}], &quot;outputs&quot;: [{&quot;name&quot;: &quot;echo&quot;, &quot;parameters&quot;: {&quot;key2&quot;: &quot;value2&quot;}}]}&#39;</span>
-<span class="go">wrk.headers[&quot;Content-Type&quot;] = &quot;application/json&quot;</span>
-<span class="gp">$ </span>./build/bin/wrk<span class="w"> </span>-t32<span class="w"> </span>-c400<span class="w"> </span>-d10s<span class="w"> </span>-s<span class="w"> </span>tmp.lua<span class="w"> </span>http://127.0.0.1:8501/v2/models/echo/infer
-<span class="go">Running 10s test @ http://127.0.0.1:8501/v2/models/echo/infer</span>
-<span class="go">32 threads and 400 connections</span>
-<span class="go">Thread Stats   Avg      Stdev     Max   +/- Stdev</span>
-<span class="go">    Latency    12.56ms    8.09ms 198.78ms   90.32%</span>
-<span class="go">    Req/Sec     1.01k   196.68     5.22k    88.09%</span>
-<span class="go">323168 requests in 10.10s, 53.63MB read</span>
-<span class="go">Requests/sec:  32002.39</span>
-<span class="go">Transfer/sec:      5.31MB</span>
-</pre></div>
+<p class="sphinx-charts-hidden"></p>
+<div class="sphinx-charts-placeholder sphinx-charts-placeholder-0 docutils container" id="id2">
+<p><span class="caption-number">Listing 2 </span><span class="caption-text">Loading…</span></p>
 </div>
-<p>These are the results of running AKS resnet50 worker in various configurations.
-Note that these tests were run on a relatively weak machine with debug versions
-of libraries so these numbers are not absolute.
-However, there are some trends that we can see.
-With one runner, we seem to top out at around 120 req/s.
-We didn’t stress four runners all the way but it’s likely it would scale linearly.
-What’s also missing here is context about what AKS by itself can deliver for this graph.</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>AMDinfer_Threads wrk_threads wrk_connections wrk_time(s) runners Req/s
-1                4           32              10          1       38.00
-1                8           64              10          1       36.64
-4                4           32              1           1       94.10
-4                4           32              10          1       114.61
-4                4           32              20          1       116.03
-8                4           32              10          1       117.47
-8                8           64              10          1       117.85
-12               4           64              10          1       118.03
-12               4           96              10          1       118.39
-12               8           64              10          1       118.63
-12               8           96              10          1       118.66
-1                4           32              20          4       37.60
-1                8           64              10          4       37.83
-2                4           32              10          4       45.77
-2                8           64              10          4       46.09
-4                4           32              10          4       86.96
-4                8           64              10          4       142.28
-4                8           96              10          4       142.03
-4                12          96              10          4       140.17
-8                4           64              10          4       239.12
-8                4           96              10          4       236.76
-8                8           64              10          4       220.47
-</pre></div>
+<p><span class="caption-number">Listing 1 </span><span class="caption-text">The Fake model does no work and it shows the latency of the system excluding serialization and inference delays</span></p>
 </div>
-<p>In the resnet50 stream case, we observe ~50 FPS per video (i.e. per thread) when collecting from Python.
-We have not measured the browser performance.</p>
+<div class="sphinx-charts docutils container" id="id3">
+<div class="sphinx-charts-chart sphinx-charts-chart-id-1 sphinx-charts-chart-uri-_charts/charts/fake_SingleStream_protocols_qps.json sphinx-charts-chart-dn-chart docutils container" id="sphinx-charts-chart-id-1">
+</div>
+<p class="sphinx-charts-hidden"></p>
+<div class="sphinx-charts-placeholder sphinx-charts-placeholder-1 docutils container" id="id4">
+<p><span class="caption-number">Listing 4 </span><span class="caption-text">Loading…</span></p>
+</div>
+<p><span class="caption-number">Listing 3 </span><span class="caption-text">The Fake model does no work and it shows the latency of the system excluding serialization and inference delays</span></p>
+</div>
+</div><div aria-labelledby="tab-0-UmVzTmV0NTA=" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-0-UmVzTmV0NTA=" name="UmVzTmV0NTA=" role="tabpanel" tabindex="0"><div class="sphinx-charts docutils container" id="id5">
+<div class="sphinx-charts-chart sphinx-charts-chart-id-2 sphinx-charts-chart-uri-_charts/charts/resnet50_SingleStream_protocols.json sphinx-charts-chart-dn-chart docutils container" id="sphinx-charts-chart-id-2">
+</div>
+<p class="sphinx-charts-hidden"></p>
+<div class="sphinx-charts-placeholder sphinx-charts-placeholder-2 docutils container" id="id6">
+<p><span class="caption-number">Listing 6 </span><span class="caption-text">Loading…</span></p>
+</div>
+<p><span class="caption-number">Listing 5 </span><span class="caption-text">Using Vitis AI and U250</span></p>
+</div>
+<div class="sphinx-charts docutils container" id="id7">
+<div class="sphinx-charts-chart sphinx-charts-chart-id-3 sphinx-charts-chart-uri-_charts/charts/resnet50_SingleStream_protocols_qps.json sphinx-charts-chart-dn-chart docutils container" id="sphinx-charts-chart-id-3">
+</div>
+<p class="sphinx-charts-hidden"></p>
+<div class="sphinx-charts-placeholder sphinx-charts-placeholder-3 docutils container" id="id8">
+<p><span class="caption-number">Listing 8 </span><span class="caption-text">Loading…</span></p>
+</div>
+<p><span class="caption-number">Listing 7 </span><span class="caption-text">Using Vitis AI and U250</span></p>
+</div>
+</div></div>
+</section>
+<section id="server">
+<h3>Server<a class="headerlink" href="#server" title="Permalink to this headline">¶</a></h3>
+<p>This scenario sends inference requests in a Poisson distribution with a configurable number of outstanding requests.
+Note that these tests are not run with same duration/query count as specified in the official MLPerf test rules.</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-1-RmFrZQ==" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-1-RmFrZQ==" name="RmFrZQ==" role="tab" tabindex="0">Fake</button></div><div aria-labelledby="tab-1-RmFrZQ==" class="sphinx-tabs-panel group-tab" id="panel-1-RmFrZQ==" name="RmFrZQ==" role="tabpanel" tabindex="0"><div class="sphinx-charts docutils container" id="id9">
+<div class="sphinx-charts-chart sphinx-charts-chart-id-4 sphinx-charts-chart-uri-_charts/charts/fake_Server_protocols.json sphinx-charts-chart-dn-chart docutils container" id="sphinx-charts-chart-id-4">
+</div>
+<p class="sphinx-charts-hidden"></p>
+<div class="sphinx-charts-placeholder sphinx-charts-placeholder-4 docutils container" id="id10">
+<p><span class="caption-number">Listing 10 </span><span class="caption-text">Loading…</span></p>
+</div>
+<p><span class="caption-number">Listing 9 </span><span class="caption-text">The Fake model does no work and it shows the latency of the system excluding serialization and inference delays</span></p>
+</div>
+<div class="sphinx-charts docutils container" id="id11">
+<div class="sphinx-charts-chart sphinx-charts-chart-id-5 sphinx-charts-chart-uri-_charts/charts/fake_Server_protocols_qps.json sphinx-charts-chart-dn-chart docutils container" id="sphinx-charts-chart-id-5">
+</div>
+<p class="sphinx-charts-hidden"></p>
+<div class="sphinx-charts-placeholder sphinx-charts-placeholder-5 docutils container" id="id12">
+<p><span class="caption-number">Listing 12 </span><span class="caption-text">Loading…</span></p>
+</div>
+<p><span class="caption-number">Listing 11 </span><span class="caption-text">The Fake model does no work and it shows the latency of the system excluding serialization and inference delays</span></p>
+</div>
+</div></div>
+</section>
 </section>
 </section>
 
@@ -581,13 +599,16 @@ We have not measured the browser performance.</p>
                         }
                   </style>
 				  
-				  <footer>
+				  <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="kserve.html" class="btn btn-neutral float-left" title="KServe" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="performance_factors.html" class="btn btn-neutral float-right" title="Performance Factors" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
 
   <hr/>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on May 15, 2023.
+      <span class="lastupdated">Last updated on June 05, 2023.
       </span></p>
   </div>
 
