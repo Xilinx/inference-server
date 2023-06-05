@@ -37,8 +37,34 @@ Note that these tests are not run with same duration/query count as specified in
 
             The Fake model does no work and it shows the latency of the system excluding serialization and inference delays
 
+        .. chart:: charts/fake_SingleStream_protocols_qps.json
+
+            The Fake model does no work and it shows the latency of the system excluding serialization and inference delays
+
     .. group-tab:: ResNet50
 
         .. chart:: charts/resnet50_SingleStream_protocols.json
 
             Using Vitis AI and U250
+
+        .. chart:: charts/resnet50_SingleStream_protocols_qps.json
+
+            Using Vitis AI and U250
+
+Server
+^^^^^^
+
+This scenario sends inference requests in a Poisson distribution with a configurable number of outstanding requests.
+Note that these tests are not run with same duration/query count as specified in the official MLPerf test rules.
+
+.. tabs::
+
+    .. group-tab:: Fake
+
+        .. chart:: charts/fake_Server_protocols.json
+
+            The Fake model does no work and it shows the latency of the system excluding serialization and inference delays
+
+        .. chart:: charts/fake_Server_protocols_qps.json
+
+            The Fake model does no work and it shows the latency of the system excluding serialization and inference delays

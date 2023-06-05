@@ -16,9 +16,36 @@ import argparse
 import itertools
 import pickle
 
+import numpy as np
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
+
+
+def graph_qps(df: pd.DataFrame, model, scenario, protocol):
+
+    if scenario == "SingleStream":
+        qps_column = "qps"
+    elif scenario == "Server":
+        qps_column = "completed_samples_per_sec"
+    else:
+        return
+
+    fig = go.Figure()
+    fig.add_trace(
+        go.Bar(
+            name=protocol,
+            x=df["protocol"],
+            y=df[qps_column],
+        )
+    )
+    fig.update_layout(
+        xaxis={"title": "Protocol"},
+        yaxis_title="Queries per Second",
+        title_text=f"{scenario} ({model})",
+    )
+    fig.write_image(f"{model}_{scenario}_protocols_qps.jpg")
+    fig.write_json(f"{model}_{scenario}_protocols_qps.json")
 
 
 def graph_protocols(df: pd.DataFrame):
@@ -26,7 +53,9 @@ def graph_protocols(df: pd.DataFrame):
     scenarios = df["scenario"].unique()
 
     for model, scenario in itertools.product(models, scenarios):
-        filtered_df = df[(df["model"] == model) & (df["scenario"] == scenario)]
+        filtered_df = df[
+            (df["model"] == model) & (df["scenario"] == scenario)
+        ].sort_values("protocol")
 
         protocols = filtered_df["protocol"].unique()
 
@@ -71,6 +100,8 @@ def graph_protocols(df: pd.DataFrame):
         )
         fig.write_image(f"{model}_{scenario}_protocols.jpg")
         fig.write_json(f"{model}_{scenario}_protocols.json")
+
+        graph_qps(filtered_df, model, scenario, protocol)
 
 
 def main(args: argparse.Namespace):

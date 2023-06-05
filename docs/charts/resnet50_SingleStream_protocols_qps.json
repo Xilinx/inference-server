@@ -1,82 +1,18 @@
 {
   "data": [
     {
-      "marker": {
-        "symbol": "circle"
-      },
-      "mode": "markers+lines",
-      "name": "grpc",
-      "x": [
-        0.006606961000000001,
-        0.008781857,
-        0.009612461000000001,
-        0.00991471,
-        0.010041057,
-        0.010431563000000001,
-        0.011937919
-      ],
-      "y": [
-        0,
-        50,
-        90,
-        95,
-        97,
-        99,
-        99
-      ],
-      "type": "scatter"
-    },
-    {
-      "marker": {
-        "symbol": "square"
-      },
-      "mode": "markers+lines",
-      "name": "http",
-      "x": [
-        0.386232734,
-        0.40023463000000004,
-        0.409599405,
-        0.413502735,
-        0.41635390400000005,
-        0.426560274,
-        0.44077466000000004
-      ],
-      "y": [
-        0,
-        50,
-        90,
-        95,
-        97,
-        99,
-        99
-      ],
-      "type": "scatter"
-    },
-    {
-      "marker": {
-        "symbol": "diamond"
-      },
-      "mode": "markers+lines",
       "name": "native",
       "x": [
-        0.000118183,
-        0.00016458,
-        0.000200638,
-        0.00020493600000000002,
-        0.000209143,
-        0.000216006,
-        0.000319241
+        "grpc",
+        "http",
+        "native"
       ],
       "y": [
-        0,
-        50,
-        90,
-        95,
-        97,
-        99,
-        99
+        113.921,
+        2.49131,
+        5701.74
       ],
-      "type": "scatter"
+      "type": "bar"
     }
   ],
   "layout": {
@@ -896,24 +832,17 @@
         }
       }
     },
-    "xaxis": {
-      "title": {
-        "text": "Time (s)"
-      },
-      "showexponent": "all",
-      "exponentformat": "B"
+    "title": {
+      "text": "SingleStream (resnet50)"
     },
-    "legend": {
+    "xaxis": {
       "title": {
         "text": "Protocol"
       }
     },
-    "title": {
-      "text": "SingleStream (resnet50)"
-    },
     "yaxis": {
       "title": {
-        "text": "Percentile"
+        "text": "Queries per Second"
       }
     }
   }
