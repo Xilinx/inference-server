@@ -35,7 +35,7 @@ Features
 
 The AMD Inference Server is integrated with the following libraries out of the gate:
 
-* TensorFlow and PyTorch models with `ZenDNN <https://developer.amd.com/zendnn/>`__ on AMD CPUs
+* TensorFlow and PyTorch models with `ZenDNN <https://developer.amd.com/zendnn/>`__ on CPUs (optimized for AMD CPUs)
 * ONNX models with `MIGraphX <https://github.com/ROCmSoftwarePlatform/AMDMIGraphX>`__ on AMD GPUs
 * XModel models with `Vitis AI <https://www.xilinx.com/products/design-tools/vitis/vitis-ai.html>`__ on AMD FPGAs
 * A graph of computation including as pre- and post-processing can be written using `AKS <https://github.com/Xilinx/Vitis-AI/tree/v3.0/src/AKS>`__ on AMD FPGAs for end-to-end inference

@@ -46,6 +46,7 @@ To see other versions, you can use "Read the Docs" panel on the bottom-left or e
     deployment
     client_api
     kserve
+    performance
     performance_factors
     troubleshooting
 

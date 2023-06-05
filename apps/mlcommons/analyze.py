@@ -16,19 +16,46 @@ import argparse
 import itertools
 import pickle
 
-import common
+import numpy as np
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 
 
-def graph_protocols(logs: common.MlcommonsLogs):
-    df: pd.DataFrame = logs.df
+def graph_qps(df: pd.DataFrame, model, scenario, protocol):
+
+    if scenario == "SingleStream":
+        qps_column = "qps"
+    elif scenario == "Server":
+        qps_column = "completed_samples_per_sec"
+    else:
+        return
+
+    fig = go.Figure()
+    fig.add_trace(
+        go.Bar(
+            name=protocol,
+            x=df["protocol"],
+            y=df[qps_column],
+        )
+    )
+    fig.update_layout(
+        xaxis={"title": "Protocol"},
+        yaxis_title="Queries per Second",
+        title_text=f"{scenario} ({model})",
+    )
+    fig.write_image(f"{model}_{scenario}_protocols_qps.jpg")
+    fig.write_json(f"{model}_{scenario}_protocols_qps.json")
+
+
+def graph_protocols(df: pd.DataFrame):
     models = df["model"].unique()
     scenarios = df["scenario"].unique()
 
     for model, scenario in itertools.product(models, scenarios):
-        filtered_df = df[(df["model"] == model) & (df["scenario"] == scenario)]
+        filtered_df = df[
+            (df["model"] == model) & (df["scenario"] == scenario)
+        ].sort_values("protocol")
 
         protocols = filtered_df["protocol"].unique()
 
@@ -66,7 +93,7 @@ def graph_protocols(logs: common.MlcommonsLogs):
             )
 
         fig.update_layout(
-            xaxis_title="Time (ns)",
+            xaxis={"title": "Time (s)", "showexponent": "all", "exponentformat": "B"},
             yaxis_title="Percentile",
             legend_title_text="Protocol",
             title_text=f"{scenario} ({model})",
@@ -74,15 +101,24 @@ def graph_protocols(logs: common.MlcommonsLogs):
         fig.write_image(f"{model}_{scenario}_protocols.jpg")
         fig.write_json(f"{model}_{scenario}_protocols.json")
 
+        graph_qps(filtered_df, model, scenario, protocol)
+
 
 def main(args: argparse.Namespace):
     with open(args.data, "rb") as f:
         logs = pickle.load(f)
 
-    if args.print:
-        print(logs)
+    if args.delete:
+        logs.df = logs.df.drop(args.delete)
+        with open(args.data, "wb") as f:
+            pickle.dump(logs, f)
 
-    graph_protocols(logs)
+    df: pd.DataFrame = logs.df
+
+    if args.print:
+        print(df)
+
+    graph_protocols(df)
 
 
 if __name__ == "__main__":
@@ -97,6 +133,12 @@ if __name__ == "__main__":
         "--print",
         action="store_true",
         help="Print the raw data",
+    )
+    parser.add_argument(
+        "--delete",
+        nargs="+",
+        type=int,
+        help="Delete these rows by index. THIS IS DESTRUCTIVE",
     )
     args = parser.parse_args()
 

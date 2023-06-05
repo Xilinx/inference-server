@@ -648,6 +648,7 @@ def install_python_packages():
     #         sphinx-tippy \
     #         sphinxcontrib-openapi \
     #         sphinxcontrib-jquery \
+    #         sphinx-charts \
     #         black \
     #         cpplint \
     #         cmakelang  \
@@ -735,6 +736,7 @@ def install_python_packages():
                 "soupsieve==2.4.1" \\
                 "Sphinx==4.5.0" \\
                 "sphinx-argparse==0.4.0" \\
+                "sphinx-charts==0.2.1" \\
                 "sphinx-copybutton==0.5.2" \\
                 "sphinx-issues==3.0.1" \\
                 "sphinx-tabs==3.4.0" \\

@@ -80,6 +80,7 @@ retinanet.MultiStream.target_latency = 528
 *.Server.target_duration = 0
 *.Server.min_duration = 600000
 *.Server.min_query_count = 270336
+fake.Server.target_latency = 1
 resnet50.Server.target_latency = 15
 retinanet.Server.target_latency = 100
 bert.Server.target_latency = 130
