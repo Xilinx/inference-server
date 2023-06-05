@@ -73,6 +73,7 @@ extensions = [
     # add emoji
     "sphinxemoji.sphinxemoji",
     "sphinxcontrib.openapi",
+    "sphinx_charts.charts",
 ]
 
 # Breathe configuration
