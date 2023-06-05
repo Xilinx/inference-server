@@ -16,14 +16,12 @@ import argparse
 import itertools
 import pickle
 
-import common
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 
 
-def graph_protocols(logs: common.MlcommonsLogs):
-    df: pd.DataFrame = logs.df
+def graph_protocols(df: pd.DataFrame):
     models = df["model"].unique()
     scenarios = df["scenario"].unique()
 
@@ -66,7 +64,7 @@ def graph_protocols(logs: common.MlcommonsLogs):
             )
 
         fig.update_layout(
-            xaxis_title="Time (ns)",
+            xaxis={"title": "Time (s)", "showexponent": "all", "exponentformat": "B"},
             yaxis_title="Percentile",
             legend_title_text="Protocol",
             title_text=f"{scenario} ({model})",
@@ -79,10 +77,17 @@ def main(args: argparse.Namespace):
     with open(args.data, "rb") as f:
         logs = pickle.load(f)
 
-    if args.print:
-        print(logs)
+    if args.delete:
+        logs.df = logs.df.drop(args.delete)
+        with open(args.data, "wb") as f:
+            pickle.dump(logs, f)
 
-    graph_protocols(logs)
+    df: pd.DataFrame = logs.df
+
+    if args.print:
+        print(df)
+
+    graph_protocols(df)
 
 
 if __name__ == "__main__":
@@ -97,6 +102,12 @@ if __name__ == "__main__":
         "--print",
         action="store_true",
         help="Print the raw data",
+    )
+    parser.add_argument(
+        "--delete",
+        nargs="+",
+        type=int,
+        help="Delete these rows by index. THIS IS DESTRUCTIVE",
     )
     args = parser.parse_args()
 

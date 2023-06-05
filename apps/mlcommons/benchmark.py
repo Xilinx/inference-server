@@ -14,6 +14,7 @@
 
 import argparse
 import itertools
+import os
 import pickle
 import shlex
 import subprocess
@@ -51,13 +52,17 @@ def run(args: argparse.Namespace):
     assert args.models
     assert args.scenarios
 
-    logs = common.MlcommonsLogs()
+    if os.path.exists(args.data) and args.append:
+        with open(args.data, "rb") as f:
+            logs = pickle.load(f)
+    else:
+        logs = common.MlcommonsLogs()
     for model, scenario, protocol in itertools.product(
         args.models, args.scenarios, args.protocols
     ):
         log = run_mlcommons(model, scenario, protocol, args.executable)
         if log is not None:
-            logs.add_log(model, scenario, protocol, log)
+            logs.add_log(model, protocol, log)
             with open(args.data, "wb") as f:
                 pickle.dump(logs, f)
 
@@ -94,6 +99,11 @@ if __name__ == "__main__":
         "--data",
         default="mlcommons.bin",
         help="Path to file to save data to while running. Defaults to mlcommons.bin",
+    )
+    parser.add_argument(
+        "--append",
+        action="store_true",
+        help="Append to the saved data, if it exists",
     )
     args = parser.parse_args()
 

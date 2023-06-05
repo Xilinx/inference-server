@@ -47,31 +47,34 @@ class MlcommonsLog:
             set_attribute("requested_scenario", "scenario")
             set_attribute("requested_test_mode", "test_mode")
 
-            set_attribute("result_min_latency_ns", "min_latency")
-            set_attribute("result_max_latency_ns", "max_latency")
-            set_attribute("result_mean_latency_ns", "mean_latency")
-            set_attribute("result_50.00_percentile_latency_ns", "latency_50_0")
-            set_attribute("result_90.00_percentile_latency_ns", "latency_90_0")
-            set_attribute("result_95.00_percentile_latency_ns", "latency_95_0")
-            set_attribute("result_97.00_percentile_latency_ns", "latency_97_0")
-            set_attribute("result_99.00_percentile_latency_ns", "latency_99_0")
-            set_attribute("result_99.90_percentile_latency_ns", "latency_99_9")
+            set_attribute("result_min_latency_ns", "min_latency", 1e-9)
+            set_attribute("result_max_latency_ns", "max_latency", 1e-9)
+            set_attribute("result_mean_latency_ns", "mean_latency", 1e-9)
+            set_attribute("result_50.00_percentile_latency_ns", "latency_50_0", 1e-9)
+            set_attribute("result_90.00_percentile_latency_ns", "latency_90_0", 1e-9)
+            set_attribute("result_95.00_percentile_latency_ns", "latency_95_0", 1e-9)
+            set_attribute("result_97.00_percentile_latency_ns", "latency_97_0", 1e-9)
+            set_attribute("result_99.00_percentile_latency_ns", "latency_99_0", 1e-9)
+            set_attribute("result_99.90_percentile_latency_ns", "latency_99_9", 1e-9)
 
         self._set_df()
 
     def _set_df(self):
         self.df = pd.DataFrame(self._data, index=[0])
 
-    def _set_attribute(self, content, key, attribute):
+    def _set_attribute(self, content, key, attribute, scale=1):
         if content["key"] == key:
-            self._data[attribute] = content["value"]
+            if scale == 1:
+                self._data[attribute] = content["value"]
+            else:
+                self._data[attribute] = float(content["value"]) * scale
 
     def parse_log(self, path):
         with open(path, "r") as f:
             for line in f:
                 content = json.loads(line.split(":::MLLOG")[1])
-                set_attribute = lambda key, attribute: self._set_attribute(
-                    content, key, attribute
+                set_attribute = lambda key, attribute, scale=1: self._set_attribute(
+                    content, key, attribute, scale
                 )
                 yield content, set_attribute
 
@@ -95,26 +98,38 @@ class MultiStream(MlcommonsLog):
         super().__init__(path)
 
         for _, set_attribute in self.parse_log(path):
-            set_attribute("result_min_query_latency_ns", "query_min_latency")
-            set_attribute("result_max_query_latency_ns", "query_max_latency")
-            set_attribute("result_mean_query_latency_ns", "query_mean_latency")
+            set_attribute("result_min_query_latency_ns", "query_min_latency", 1e-9)
+            set_attribute("result_max_query_latency_ns", "query_max_latency", 1e-9)
+            set_attribute("result_mean_query_latency_ns", "query_mean_latency", 1e-9)
             set_attribute(
-                "result_50.00_percentile_per_query_latency_ns", "query_latency_50_0"
+                "result_50.00_percentile_per_query_latency_ns",
+                "query_latency_50_0",
+                1e-9,
             )
             set_attribute(
-                "result_90.00_percentile_per_query_latency_ns", "query_latency_90_0"
+                "result_90.00_percentile_per_query_latency_ns",
+                "query_latency_90_0",
+                1e-9,
             )
             set_attribute(
-                "result_95.00_percentile_per_query_latency_ns", "query_latency_95_0"
+                "result_95.00_percentile_per_query_latency_ns",
+                "query_latency_95_0",
+                1e-9,
             )
             set_attribute(
-                "result_97.00_percentile_per_query_latency_ns", "query_latency_97_0"
+                "result_97.00_percentile_per_query_latency_ns",
+                "query_latency_97_0",
+                1e-9,
             )
             set_attribute(
-                "result_99.00_percentile_per_query_latency_ns", "query_latency_99_0"
+                "result_99.00_percentile_per_query_latency_ns",
+                "query_latency_99_0",
+                1e-9,
             )
             set_attribute(
-                "result_99.90_percentile_per_query_latency_ns", "query_latency_99_9"
+                "result_99.90_percentile_per_query_latency_ns",
+                "query_latency_99_9",
+                1e-9,
             )
 
         self._set_df()
@@ -145,32 +160,10 @@ class MlcommonsLogs:
     def __init__(self) -> None:
         self.df = pd.DataFrame()
 
-    def add_log(self, model, scenario, protocol, log):
+    def add_log(self, model, protocol, log):
         log.df["model"] = model
         log.df["protocol"] = protocol
         self.df = pd.concat([self.df, log.df], ignore_index=True)
-        # pd.concat([self.data, log.data.to_frame().T])
-        # self.data.concat(log.data, index=self.data.columns, name="7")
-        # self.data[str(columns)] = log.data
-        # self.data = self.data.assign(e=log.data.values)
-        # if model not in self.logs:
-        #     self.logs[model] = {}
-        # if scenario not in self.logs[model]:
-        #     self.logs[model][scenario] = {}
-        # self.logs[model][scenario][protocol] = log
-
-    # def __iter__(self):
-    #     for model, scenarios in self.logs.items():
-    #         for scenario, protocols in scenarios.items():
-    #             for protocol, log in protocols.items():
-    #                 yield (model, scenario, protocol, log)
 
     def __str__(self) -> str:
         return str(self.df)
-        # logs = ""
-
-        # for key in self:
-        #     model, scenario, protocol, log = key
-        #     logs += f"MLCommons log({model}, {scenario}, {protocol})\n"
-        #     logs += (" " * 4) + indent(str(log), 4) + "\n"
-        # return logs.strip()
