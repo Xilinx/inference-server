@@ -644,6 +644,7 @@ def install_python_packages():
     #         sphinxemoji \
     #         sphinx-issues \
     #         exhale \
+    #         sphinx-favicon \
     #         sphinx-tabs \
     #         sphinx-tippy \
     #         sphinxcontrib-openapi \
@@ -738,6 +739,7 @@ def install_python_packages():
                 "sphinx-argparse==0.4.0" \\
                 "sphinx-charts==0.2.1" \\
                 "sphinx-copybutton==0.5.2" \\
+                "sphinx-favicon==1.0.1" \\
                 "sphinx-issues==3.0.1" \\
                 "sphinx-tabs==3.4.0" \\
                 "sphinx_mdinclude==0.5.3" \\
