@@ -173,15 +173,15 @@ The flags used in this sample command are:
 
     .. code-tab:: console CPU
 
-        $ docker run -d --volume $(pwd)/model_repository:/mnt/models:rw --net=host amdih/serve:uif1.1_zendnn_amdinfer_0.3.0
+        $ docker run -d --volume $(pwd)/model_repository:/mnt/models:rw --net=host amdih/serve:uif1.1_zendnn_amdinfer_0.4.0
 
     .. code-tab:: console GPU
 
-        $ docker run -d --device /dev/kfd --device /dev/dri --volume $(pwd)/model_repository:/mnt/models:rw --publish 127.0.0.1::8998 --publish 127.0.0.1::50051 amdih/serve:uif1.1_migraphx_amdinfer_0.3.0
+        $ docker run -d --device /dev/kfd --device /dev/dri --volume $(pwd)/model_repository:/mnt/models:rw --publish 127.0.0.1::8998 --publish 127.0.0.1::50051 amdih/serve:uif1.1_migraphx_amdinfer_0.4.0
 
     .. code-tab:: console FPGA
 
-        $ docker run -d --device /dev/dri --device /dev/xclmgmt<id> --volume $(pwd)/model_repository:/mnt/models:rw --publish 127.0.0.1::8998 --publish 127.0.0.1::50051 <image>
+        $ docker run -d --device /dev/dri --device /dev/xclmgmt<id> --volume $(pwd)/model_repository:/mnt/models:rw --publish 127.0.0.1::8998 --publish 127.0.0.1::50051 amdih/serve:uif1.1_vai_amdinfer_0.4.0
 
 The endpoints for each model will be the name of the model in the ``config.toml``, which should match the name of the parent directory in the model repository.
 In this example, it would be "resnet50".

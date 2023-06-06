@@ -61,13 +61,16 @@ In this case, the endpoint is defined in the model's configuration file in the r
 
     .. code-tab:: console CPU
 
-        $ docker pull amdih/serve:uif1.1_zendnn_amdinfer_0.3.0
+        # this image is not available on Dockerhub yet but you can build it yourself from the repository
+        $ docker pull amdih/serve:uif1.1_zendnn_amdinfer_0.4.0
 
     .. code-tab:: text GPU
 
-        $ docker pull amdih/serve:uif1.1_migraphx_amdinfer_0.3.0
+        # this image is not available on Dockerhub yet but you can build it yourself from the repository
+        $ docker pull amdih/serve:uif1.1_migraphx_amdinfer_0.4.0
 
     .. code-tab:: console FPGA
 
-        # this image is not currently pre-built but you can build it yourself
+        # this image is not available on Dockerhub yet but you can build it yourself from the repository
+        $ docker pull amdih/serve:uif1.1_vai_amdinfer_0.4.0
 -docker_pull_deployment_images
