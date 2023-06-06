@@ -2,7 +2,13 @@
 <html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-
+    <link rel="apple-touch-icon" sizes="180x180" href="_static/apple-touch-icon.png" type="image/png">
+    <link rel="icon" type="image/png" sizes="32x32" href="_static/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="_static/favicon-16x16.png">
+    <link rel="manifest" href="_static/site.webmanifest">
+    <link rel="mask-icon" href="_static/safari-pinned-tab.svg" color="#5bbad5" type="image/svg+xml">
+    <meta name="msapplication-TileColor" content="#ed1c24">
+    <meta name="theme-color" content="#ed1c24">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
 <!-- OneTrust Cookies Consent Notice start for xilinx.github.io -->
@@ -19,7 +25,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','GTM-5RHQV7');</script>
 <!-- End Google Tag Manager -->
-  <title>Deployment &mdash; AMD Inference Server main documentation</title>
+  <title>Deployment &mdash; AMD Inference Server</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
@@ -27,7 +33,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
       <link rel="stylesheet" href="_static/custom.css" type="text/css" />
       <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" type="text/css" />
-    <link rel="shortcut icon" href="_static/favicon.ico"/>
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -44,7 +49,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <script src="_static/tabs.js"></script>
         <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
         <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
-        <script defer="defer" src="_static/tippy/deployment.004b3490-742f-49e9-badc-e6e8758b2035.js"></script>
+        <script defer="defer" src="_static/tippy/deployment.582858aa-8705-485c-a981-ac73ab4a3cd8.js"></script>
         <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
         <script src="_static/dataTables.js"></script>
     <script src="_static/js/theme.js"></script>
@@ -64,6 +69,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search">
             <a href="index.html" class="icon icon-home"> AMD Inference Server
+            <img src="_static/xilinx-header-logo.svg" class="logo" alt="Logo"/>
           </a>
               <div class="version">
                 main
@@ -486,7 +492,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: black" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">AMD Inference Server</a>
       </nav>
@@ -519,13 +525,16 @@ If you do not need to frequently debug the server or compile the executable in a
 <h3>Get the image<a class="headerlink" href="#get-the-image" title="Permalink to this headline">¶</a></h3>
 <p>To use the pre-built images for the inference server, you can pull them from DockerHub:</p>
 <div class="sphinx-tabs docutils container">
-<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-0-Q1BV" aria-selected="true" class="sphinx-tabs-tab code-tab group-tab" id="tab-0-Q1BV" name="Q1BV" role="tab" tabindex="0">CPU</button><button aria-controls="panel-0-R1BV" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-0-R1BV" name="R1BV" role="tab" tabindex="-1">GPU</button><button aria-controls="panel-0-RlBHQQ==" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-0-RlBHQQ==" name="RlBHQQ==" role="tab" tabindex="-1">FPGA</button></div><div aria-labelledby="tab-0-Q1BV" class="sphinx-tabs-panel code-tab group-tab" id="panel-0-Q1BV" name="Q1BV" role="tabpanel" tabindex="0"><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>pull<span class="w"> </span>amdih/serve:uif1.1_zendnn_amdinfer_0.3.0
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-0-Q1BV" aria-selected="true" class="sphinx-tabs-tab code-tab group-tab" id="tab-0-Q1BV" name="Q1BV" role="tab" tabindex="0">CPU</button><button aria-controls="panel-0-R1BV" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-0-R1BV" name="R1BV" role="tab" tabindex="-1">GPU</button><button aria-controls="panel-0-RlBHQQ==" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-0-RlBHQQ==" name="RlBHQQ==" role="tab" tabindex="-1">FPGA</button></div><div aria-labelledby="tab-0-Q1BV" class="sphinx-tabs-panel code-tab group-tab" id="panel-0-Q1BV" name="Q1BV" role="tabpanel" tabindex="0"><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>this<span class="w"> </span>image<span class="w"> </span>is<span class="w"> </span>not<span class="w"> </span>available<span class="w"> </span>on<span class="w"> </span>Dockerhub<span class="w"> </span>yet<span class="w"> </span>but<span class="w"> </span>you<span class="w"> </span>can<span class="w"> </span>build<span class="w"> </span>it<span class="w"> </span>yourself<span class="w"> </span>from<span class="w"> </span>the<span class="w"> </span>repository
+<span class="gp">$ </span>docker<span class="w"> </span>pull<span class="w"> </span>amdih/serve:uif1.1_zendnn_amdinfer_0.4.0
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-0-R1BV" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-0-R1BV" name="R1BV" role="tabpanel" tabindex="0"><div class="highlight-text notranslate"><div class="highlight"><pre><span></span>$ docker pull amdih/serve:uif1.1_migraphx_amdinfer_0.3.0
+</div><div aria-labelledby="tab-0-R1BV" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-0-R1BV" name="R1BV" role="tabpanel" tabindex="0"><div class="highlight-text notranslate"><div class="highlight"><pre><span></span># this image is not available on Dockerhub yet but you can build it yourself from the repository
+$ docker pull amdih/serve:uif1.1_migraphx_amdinfer_0.4.0
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-0-RlBHQQ==" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-0-RlBHQQ==" name="RlBHQQ==" role="tabpanel" tabindex="0"><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>this<span class="w"> </span>image<span class="w"> </span>is<span class="w"> </span>not<span class="w"> </span>currently<span class="w"> </span>pre-built<span class="w"> </span>but<span class="w"> </span>you<span class="w"> </span>can<span class="w"> </span>build<span class="w"> </span>it<span class="w"> </span>yourself
+</div><div aria-labelledby="tab-0-RlBHQQ==" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-0-RlBHQQ==" name="RlBHQQ==" role="tabpanel" tabindex="0"><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>this<span class="w"> </span>image<span class="w"> </span>is<span class="w"> </span>not<span class="w"> </span>available<span class="w"> </span>on<span class="w"> </span>Dockerhub<span class="w"> </span>yet<span class="w"> </span>but<span class="w"> </span>you<span class="w"> </span>can<span class="w"> </span>build<span class="w"> </span>it<span class="w"> </span>yourself<span class="w"> </span>from<span class="w"> </span>the<span class="w"> </span>repository
+<span class="gp">$ </span>docker<span class="w"> </span>pull<span class="w"> </span>amdih/serve:uif1.1_vai_amdinfer_0.4.0
 </pre></div>
 </div>
 </div></div>
@@ -620,16 +629,7 @@ Use <code class="docutils literal notranslate"><span class="pre">docker</span> <
 
            </div>
           </div>
-          
-                  <style>
-                        .footer {
-                        position: fixed;
-                        left: 0;
-                        bottom: 0;
-                        width: 100%;
-                        }
-                  </style>
-				  
+          	  
 				  <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="ensembles.html" class="btn btn-neutral float-left" title="Ensembles" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="client_api.html" class="btn btn-neutral float-right" title="Client API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
@@ -639,7 +639,7 @@ Use <code class="docutils literal notranslate"><span class="pre">docker</span> <
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on June 05, 2023.
+      <span class="lastupdated">Last updated on June 06, 2023.
       </span></p>
   </div>
 
