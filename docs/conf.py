@@ -74,6 +74,7 @@ extensions = [
     "sphinxemoji.sphinxemoji",
     "sphinxcontrib.openapi",
     "sphinx_charts.charts",
+    "sphinx_favicon",
 ]
 
 # Breathe configuration
@@ -213,15 +214,28 @@ html_static_path = ["_static"]
 
 html_last_updated_fmt = "%B %d, %Y"
 
+favicons = [
+    {"rel": "apple-touch-icon", "sizes": "180x180", "href": "apple-touch-icon.png"},
+    {"rel": "icon", "type": "image/png", "sizes": "32x32", "href": "favicon-32x32.png"},
+    {"rel": "icon", "type": "image/png", "sizes": "16x16", "href": "favicon-16x16.png"},
+    {"rel": "manifest", "href": "site.webmanifest"},
+    {"rel": "mask-icon", "href": "safari-pinned-tab.svg", "color": "#5bbad5"},
+    {"name": "msapplication-TileColor", "content": "#ed1c24"},
+    {"name": "theme-color", "content": "#ed1c24"},
+]
+
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes. Attempts to use a custom Xilinx theme if it exists,
 # otherwise the default theme is used
 #
 if os.path.exists("./_themes/xilinx"):
+    html_title = "AMD Inference Server"
+    html_logo = "_static/xilinx-header-logo.svg"
     html_theme = "xilinx"
     html_theme_path = ["./_themes"]
-    html_favicon = "./_themes/xilinx/favicon.ico"
     html_theme_options = {
+        "logo_only": False,
+        "style_nav_header_background": "black",
         # set to true to hide the expand buttons on headings in the sidebar
         # until the heading is clicked on
         "collapse_navigation": False,
