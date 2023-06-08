@@ -20,6 +20,7 @@ vcpkg_from_github(
   SHA512 9263ed06938fe7eae91cfc25fea0de28596b3f15b5eabe2c9095ee7046123916ca38b7c7c7962eaf58851b22c90d14f12965497bc7ded9ec623f3a584d3a2f00
   HEAD_REF master
   PATCHES fix-cmake.patch
+  PATCHES fix-get_xclbins_in_dir.patch
 )
 
 vcpkg_cmake_configure(
