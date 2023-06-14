@@ -41,6 +41,8 @@
 #include <pybind11/numpy.h>
 #include <pybind11/pybind11.h>
 
+#include "amdinfer/core/data_types.hpp"
+
 namespace pybind11::detail {
 
 template <typename T>
