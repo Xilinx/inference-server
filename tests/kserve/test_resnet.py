@@ -50,7 +50,7 @@ def make_request_migraphx():
     options.convert_type = True
     options.type = cv2.CV_32FC3
     options.convert_scale = 1.0 / 255.0
-    images = pre_post.imagePreprocessFloat([image_path], options)
+    images = pre_post.imagePreprocessFp32([image_path], options)
 
     assert len(images) == 1
 

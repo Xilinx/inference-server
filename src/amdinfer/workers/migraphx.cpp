@@ -494,6 +494,10 @@ BatchPtr MIGraphXWorker::doRun(Batch* batch, const MemoryPool* pool) {
     }
   }
 
+  if (new_batch == nullptr) {
+    return new_batch;
+  }
+
   new_batch->setBuffers(std::move(input_buffers), {});
 
   timer.add("batch_stop");

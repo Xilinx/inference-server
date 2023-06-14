@@ -40,7 +40,7 @@ def preprocess(paths):
     options.convert_color = True
     options.color_code = cv2.COLOR_BGR2RGB
     options.assign = True
-    return pre_post.imagePreprocessFloat(paths, options)
+    return pre_post.imagePreprocessFp32(paths, options)
 
 
 def postprocess(output, k):
@@ -55,7 +55,7 @@ def postprocess(output, k):
     Returns:
         list[int]: indices for the top k categories
     """
-    return pre_post.resnet50PostprocessFloat(output, k)
+    return pre_post.resnet50PostprocessFp32(output, k)
 
 
 @pytest.mark.extensions(["tfzendnn"])

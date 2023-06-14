@@ -209,8 +209,7 @@ class SingleThreadedWorker : public Worker {
 
       auto new_batch = this->doRun(batch.get(), pool);
 
-      if (next_ != nullptr) {
-        assert(new_batch != nullptr);
+      if (next_ != nullptr && new_batch != nullptr) {
         assert(new_batch->size() == batch_size);
 #ifdef AMDINFER_ENABLE_TRACING
         for (auto i = 0U; i < batch_size; ++i) {

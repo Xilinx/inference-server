@@ -52,6 +52,8 @@ def _set_data(input_n, image):
         input_n.setInt32Data(image)
     elif input_n.datatype == DataType.INT64:
         input_n.setInt64Data(image)
+    elif input_n.datatype == DataType.FP16:
+        input_n.setFp16Data(image)
     elif input_n.datatype == DataType.FP32:
         input_n.setFp32Data(image)
     elif input_n.datatype == DataType.FP64:
