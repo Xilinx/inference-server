@@ -1,4 +1,4 @@
-// Copyright 2022 Advanced Micro Devices, Inc.
+// Copyright 2022-2023 Advanced Micro Devices, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -249,9 +249,7 @@ void MIGraphXWorker::doInit(ParameterMap* parameters) {
   // A *.mxr file should also have its baked-in batch size
   // tacked onto its name, eg. resnet50-v2-7_b64.mxr
   compiled_path.replace_extension();
-  compiled_path += (std::string("_b") + std::to_string(batch_size_));
-  compiled_path.replace_extension(".mxr");
-
+  compiled_path += (std::string("_b") + std::to_string(batch_size_) + ".mxr");
   onnx_path.replace_extension(".onnx");
 
   // Is there an mxr file?
