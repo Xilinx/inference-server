@@ -90,8 +90,19 @@ void wrapPrePost(py::module_& m) {
     },
     py::arg("output"), py::arg("k"));
   m.def(
+    "resnet50PostprocessFp32",
+    [](const InferenceResponseOutput& output, int k) {
+      return pre_post::resnet50Postprocess<float>(
+        static_cast<float*>(output.getData()), output.getSize(), k);
+    },
+    py::arg("output"), py::arg("k"));
+  m.def(
     "resnet50PostprocessFloat",
     [](const InferenceResponseOutput& output, int k) {
+      PyErr_WarnEx(PyExc_DeprecationWarning,
+                   "resnet50PostprocessFloat() is deprecated, use "
+                   "resnet50PostprocessFp32() instead",
+                   1);
       return pre_post::resnet50Postprocess<float>(
         static_cast<float*>(output.getData()), output.getSize(), k);
     },
@@ -107,7 +118,10 @@ void wrapPrePost(py::module_& m) {
 
   m.def("imagePreprocessInt8", &imagePreprocess<int8_t>, py::arg("paths"),
         py::arg("options"));
+  // deprecated
   m.def("imagePreprocessFloat", &imagePreprocess<float>, py::arg("paths"),
+        py::arg("options"));
+  m.def("imagePreprocessFp32", &imagePreprocess<float>, py::arg("paths"),
         py::arg("options"));
   m.def("imagePreprocessFp16", &imagePreprocess<fp16>, py::arg("paths"),
         py::arg("options"));

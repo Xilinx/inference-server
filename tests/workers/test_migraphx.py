@@ -49,7 +49,7 @@ def preprocess_fp32(paths):
     options.convert_type = True
     options.type = cv2.CV_32FC3
     options.convert_scale = 1.0 / 255.0
-    return pre_post.imagePreprocessFloat(paths, options)
+    return pre_post.imagePreprocessFp32(paths, options)
 
 
 def preprocess_fp16(paths):
@@ -139,7 +139,8 @@ class TestMigraphx:
             check_response(response, amdinfer.DataType.FP32)
             outputs = response.getOutputs()
             assert len(outputs) == 1
-            top_k_responses = pre_post.resnet50PostprocessFloat(outputs[0], 5)
+
+            top_k_responses = pre_post.resnet50PostprocessFp32(outputs[0], 5)
 
             assert top_k_responses == gold_responses[i % image_num]
 

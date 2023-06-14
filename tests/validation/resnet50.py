@@ -55,7 +55,7 @@ def preprocess(paths):
     options.convert_type = True
     options.type = cv2.CV_32FC3
     options.convert_scale = 1.0 / 255.0
-    return pre_post.imagePreprocessFloat(paths, options)
+    return pre_post.imagePreprocessFp32(paths, options)
 
 
 def main(args):

@@ -53,7 +53,7 @@ def preprocess(paths):
     options.convert_type = True
     options.type = cv2.CV_32FC3
     options.convert_scale = 1.0 / 255.0
-    return pre_post.imagePreprocessFloat(paths, options)
+    return pre_post.imagePreprocessFp32(paths, options)
 
 
 def postprocess(output, k):
@@ -68,7 +68,7 @@ def postprocess(output, k):
     Returns:
         list[int]: indices for the top k categories
     """
-    return pre_post.resnet50PostprocessFloat(output, k)
+    return pre_post.resnet50PostprocessFp32(output, k)
 
 
 def construct_requests(images):
