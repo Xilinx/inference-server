@@ -58,6 +58,8 @@ void wrapDataType(py::module_& m) {
     .def_property_readonly_static(
       "FP16", [](const py::object& /*self*/) { return DataType("FP16"); })
     .def_property_readonly_static(
+      "FLOAT16", [](const py::object& /*self*/) { return DataType("FP16"); })
+    .def_property_readonly_static(
       "FP32", [](const py::object& /*self*/) { return DataType("FP32"); })
     .def_property_readonly_static(
       "FLOAT32", [](const py::object& /*self*/) { return DataType("FP32"); })

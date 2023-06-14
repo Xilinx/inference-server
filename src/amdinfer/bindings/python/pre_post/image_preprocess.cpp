@@ -30,6 +30,7 @@
 #include <string>  // for string
 #include <vector>  // for vector
 
+#include "amdinfer/bindings/python/core/bind_fp16.hpp"
 #include "amdinfer/core/inference_request.hpp"
 #include "amdinfer/core/inference_response.hpp"
 #include "amdinfer/pre_post/resnet50_postprocess.hpp"  // for resnet50Postpr...
@@ -82,6 +83,13 @@ void wrapPrePost(py::module_& m) {
     ,
     py::arg("output"), py::arg("k"));
   m.def(
+    "resnet50PostprocessFp16",
+    [](const InferenceResponseOutput& output, int k) {
+      return pre_post::resnet50Postprocess<fp16>(
+        static_cast<fp16*>(output.getData()), output.getSize(), k);
+    },
+    py::arg("output"), py::arg("k"));
+  m.def(
     "resnet50PostprocessFloat",
     [](const InferenceResponseOutput& output, int k) {
       return pre_post::resnet50Postprocess<float>(
@@ -94,11 +102,14 @@ void wrapPrePost(py::module_& m) {
     .value("NCHW", pre_post::ImageOrder::NCHW);
 
   addPreprocessOptions<int8_t>(m, "ImagePreprocessOptionsInt8");
+  addPreprocessOptions<fp16>(m, "ImagePreprocessOptionsFp16");
   addPreprocessOptions<float>(m, "ImagePreprocessOptionsFloat");
 
   m.def("imagePreprocessInt8", &imagePreprocess<int8_t>, py::arg("paths"),
         py::arg("options"));
   m.def("imagePreprocessFloat", &imagePreprocess<float>, py::arg("paths"),
+        py::arg("options"));
+  m.def("imagePreprocessFp16", &imagePreprocess<fp16>, py::arg("paths"),
         py::arg("options"));
 }
 

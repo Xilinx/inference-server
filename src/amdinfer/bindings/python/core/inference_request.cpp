@@ -30,6 +30,7 @@
 #include <sstream>        // IWYU pragma: keep
 #include <unordered_map>  // for unordered_map
 
+#include "amdinfer/bindings/python/core/bind_fp16.hpp"
 #include "amdinfer/bindings/python/helpers/docstrings.hpp"  // for DOCS
 #include "amdinfer/bindings/python/helpers/keep_alive.hpp"  // for keep_alive
 #include "amdinfer/bindings/python/helpers/print.hpp"       // for toString

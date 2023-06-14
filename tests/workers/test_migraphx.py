@@ -26,7 +26,7 @@ import amdinfer.testing
 from helper import root_path, run_benchmark
 
 
-def preprocess(paths):
+def preprocess_fp32(paths):
     """
     Given a list of paths to images, preprocess the images and return them
 
@@ -52,19 +52,50 @@ def preprocess(paths):
     return pre_post.imagePreprocessFloat(paths, options)
 
 
-def postprocess(output, k):
+def preprocess_fp16(paths):
     """
-    Postprocess the output data. For ResNet50, this includes performing a softmax
-    to determine the most probable classifications
+    Given a list of paths to images, preprocess the images and return them
 
     Args:
-        output (amdinfer.InferenceResponseOutput): the output from the inference server
-        k (int): number of top categories to return
+        paths (list[str]): Paths to images
 
     Returns:
-        list[int]: indices for the top k categories
+        list[numpy.ndarray]: List of images
     """
-    return pre_post.resnet50PostprocessFloat(output, k)
+
+    options = pre_post.ImagePreprocessOptionsFp16()
+    options.order = pre_post.ImageOrder.NCHW
+    options.height = 224
+    options.width = 224
+    options.mean = np.array([0.485, 0.456, 0.406], np.float16)
+    options.std = np.array([4.367, 4.464, 4.444], np.float16)
+    options.normalize = True
+    options.convert_color = True
+    options.color_code = cv2.COLOR_BGR2RGB
+    options.convert_type = True
+    # in C++, CV_16F is defined to be 7. This constant doesn't exist in Python
+    options.type = 7
+    options.convert_scale = 1.0 / 255.0
+    return pre_post.imagePreprocessFp16(paths, options)
+
+
+def check_response(response, datatype):
+    """
+    Assert common checks on the response
+
+    Args:
+        response (InferenceResponse): response from the server
+    """
+
+    assert not response.isError(), response.getError()
+    assert response.id == ""
+    assert response.model == "migraphx"
+    outputs = response.getOutputs()
+    assert len(outputs) == 1
+    for index, output in enumerate(outputs):
+        assert output.name == ""
+        assert output.datatype == datatype
+        assert output.parameters.empty()
 
 
 @pytest.mark.extensions(["migraphx"])
@@ -82,40 +113,6 @@ class TestMigraphx:
         )
         return (model, parameters)
 
-    def send_request(self, request, check_asserts=True):
-        """
-        Sends the given request to the server and asserts common checks
-
-        Args:
-            request (InferenceRequest): request to send to the server
-            output (np.ndarray): Output to check against golden output
-            check_asserts (bool): Verify image against golden
-
-        Returns:
-            Response: Response as a dictionary
-        """
-
-        try:
-            response = self.rest_client.modelInfer(self.endpoint, request)
-        except ConnectionError:
-            pytest.fail(
-                "Connection to the amdinfer server ended without response!", False
-            )
-
-        num_inputs = len(request.getInputs())
-
-        if check_asserts:
-            assert not response.isError(), response.getError()
-            assert response.id == ""
-            assert response.model == "migraphx"
-            outputs = response.getOutputs()
-            assert len(outputs) == num_inputs
-            for index, output in enumerate(outputs):
-                assert output.name == ""
-                assert output.datatype == amdinfer.DataType.FP32
-                assert output.parameters.empty()
-        return response
-
     @pytest.mark.parametrize("num", [1])
     def test_migraphx(self, num):
         """
@@ -130,12 +127,64 @@ class TestMigraphx:
 
         request_num = num
         for i in range(request_num):
-            img = preprocess([image_paths[i % image_num]])[0]
+            img = preprocess_fp32([image_paths[i % image_num]])[0]
 
             request = amdinfer.ImageInferenceRequest(img, True)
-            response = self.send_request(request)
+            try:
+                response = self.rest_client.modelInfer(self.endpoint, request)
+            except ConnectionError:
+                pytest.fail(
+                    "Connection to the amdinfer server ended without response!", False
+                )
+            check_response(response, amdinfer.DataType.FP32)
             outputs = response.getOutputs()
             assert len(outputs) == 1
-            top_k_responses = postprocess(outputs[0], 5)
+            top_k_responses = pre_post.resnet50PostprocessFloat(outputs[0], 5)
+
+            assert top_k_responses == gold_responses[i % image_num]
+
+
+@pytest.mark.extensions(["migraphx"])
+@pytest.mark.usefixtures("load")
+class TestMigraphxFp16:
+    """
+    Test the Migraphx worker with fp16 model
+    """
+
+    @staticmethod
+    def get_config():
+        model = "Migraphx"
+        parameters = amdinfer.ParameterMap(
+            ["model"], [amdinfer.testing.getPathToAsset("onnx_resnet50_fp16")]
+        )
+        return (model, parameters)
+
+    @pytest.mark.parametrize("num", [1])
+    def test_migraphx_fp16(self, num):
+        """
+        Send a request to model as tensor data
+        """
+        image_paths = [
+            amdinfer.testing.getPathToAsset("asset_dog-3619020_640.jpg"),
+        ]
+        gold_responses = [[259, 261, 260, 154, 157]]
+        assert len(image_paths) == len(gold_responses)
+        image_num = len(image_paths)
+
+        request_num = num
+        for i in range(request_num):
+            img = preprocess_fp16([image_paths[i % image_num]])[0]
+
+            request = amdinfer.ImageInferenceRequest(img, True)
+            try:
+                response = self.rest_client.modelInfer(self.endpoint, request)
+            except ConnectionError:
+                pytest.fail(
+                    "Connection to the amdinfer server ended without response!", False
+                )
+            check_response(response, amdinfer.DataType.FP16)
+            outputs = response.getOutputs()
+            assert len(outputs) == 1
+            top_k_responses = pre_post.resnet50PostprocessFp16(outputs[0], 5)
 
             assert top_k_responses == gold_responses[i % image_num]
