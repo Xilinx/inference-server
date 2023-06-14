@@ -189,3 +189,29 @@ class TestMigraphxFp16:
             top_k_responses = pre_post.resnet50PostprocessFp16(outputs[0], 5)
 
             assert top_k_responses == gold_responses[i % image_num]
+
+    @pytest.mark.parametrize("num", [1])
+    def test_migraphx_fp16_fp32_data(self, num):
+        """
+        Sending FP32 data to a FP16 model should result in a graceful error
+
+        Args:
+            num (int): number of images
+        """
+        image_paths = [
+            amdinfer.testing.getPathToAsset("asset_dog-3619020_640.jpg"),
+        ]
+        gold_responses = [[259, 261, 260, 154, 157]]
+        assert len(image_paths) == len(gold_responses)
+        image_num = len(image_paths)
+
+        request_num = num
+        for i in range(request_num):
+            img = preprocess_fp32([image_paths[i % image_num]])[0]
+
+            request = amdinfer.ImageInferenceRequest(img, True)
+            with pytest.raises(
+                amdinfer.BadStatus,
+                match='{"error":"Migraphx inference error: Migraph worker model and input data types don\'t match:   FP16 vs FP32"}',
+            ):
+                self.rest_client.modelInfer(self.endpoint, request)
