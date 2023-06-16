@@ -27,8 +27,8 @@ def construct_request(asTensor, batches=1):
 
     # TODO(vishalk): AKS gives a segfault if batch != 4
     images = [image_path] * batches
-
-    return amdinfer.ImageInferenceRequest(images, asTensor)
+    modelMetadata = None
+    return amdinfer.ImageInferenceRequest(images, modelMetadata, asTensor)
 
 
 @pytest.mark.extensions(["aks", "vitis"])

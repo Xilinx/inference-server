@@ -124,7 +124,8 @@ class TestTfZendnn:
         image_paths = [image_path] * batch
         images = preprocess(image_paths)
         for image in images:
-            request = amdinfer.ImageInferenceRequest(image, True)
+            modelMetadata = None
+            request = amdinfer.ImageInferenceRequest(image, modelMetadata, True)
             response = self.send_request(request)
             outputs = response.getOutputs()
             top_k_responses = postprocess(outputs[0], 5)

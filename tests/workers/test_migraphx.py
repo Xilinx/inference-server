@@ -128,8 +128,8 @@ class TestMigraphx:
         request_num = num
         for i in range(request_num):
             img = preprocess_fp32([image_paths[i % image_num]])[0]
-
-            request = amdinfer.ImageInferenceRequest(img, True)
+            modelMetadata = None
+            request = amdinfer.ImageInferenceRequest(img, modelMetadata, True)
             try:
                 response = self.rest_client.modelInfer(self.endpoint, request)
             except ConnectionError:
@@ -176,7 +176,7 @@ class TestMigraphxFp16:
         for i in range(request_num):
             img = preprocess_fp16([image_paths[i % image_num]])[0]
 
-            request = amdinfer.ImageInferenceRequest(img, True)
+            request = amdinfer.ImageInferenceRequest(img, None, True)
             try:
                 response = self.rest_client.modelInfer(self.endpoint, request)
             except ConnectionError:
@@ -209,7 +209,7 @@ class TestMigraphxFp16:
         for i in range(request_num):
             img = preprocess_fp32([image_paths[i % image_num]])[0]
 
-            request = amdinfer.ImageInferenceRequest(img, True)
+            request = amdinfer.ImageInferenceRequest(img, None, True)
             with pytest.raises(
                 amdinfer.BadStatus,
                 match='{"error":"Migraphx inference error: Migraph worker model and input data types don\'t match:   FP16 vs FP32"}',

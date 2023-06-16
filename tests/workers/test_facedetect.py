@@ -102,7 +102,8 @@ class TestInferImageFacedetectDPUCADF8H:
         image_path = amdinfer.testing.getPathToAsset("asset_girl-1867092_640.jpg")
         batch = 1
         images = [image_path] * batch
-        request = amdinfer.ImageInferenceRequest(images, asTensor)
+        modelMetadata = None
+        request = amdinfer.ImageInferenceRequest(images, modelMetadata, asTensor)
 
         return request
 

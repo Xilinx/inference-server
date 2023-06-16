@@ -65,16 +65,19 @@ std::string workerLoad(Client* client, const ParameterMap& parameters) {
   return client->workerLoad("Xmodel", parameters);
 }
 
-std::vector<InferenceRequest> constructRequests(const Images& images) {
+std::vector<InferenceRequest> constructRequests(
+  const Images& images, const ModelMetadata& modelMetadata) {
   std::vector<InferenceRequest> requests;
   requests.reserve(images.size());
 
   const std::initializer_list<int64_t> shape = {416, 416, 3};
 
-  for (const auto& image : images) {
+  for (unsigned i = 0; i < images.size(); i++) {
+    const auto& image = images[i];
     requests.emplace_back();
     // NOLINTNEXTLINE(google-readability-casting)
-    requests.back().addInputTensor((void*)image.data(), shape, DataType::Int8);
+    requests.back().addInputTensor((void*)image.data(), shape, DataType::Int8,
+                                   modelMetadata.getInputs()[i].getName());
   }
 
   return requests;
@@ -105,7 +108,8 @@ void test0(Client* client) {
 
   auto images = preprocess({test_asset});
   auto endpoint = workerLoad(client, parameters);
-  auto requests = constructRequests(images);
+  auto modelMetadata = client->modelMetadata(endpoint);
+  auto requests = constructRequests(images, modelMetadata);
   auto responses = inferAsyncOrdered(client, endpoint, requests);
   validate(responses);
 }

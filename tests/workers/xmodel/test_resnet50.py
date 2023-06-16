@@ -75,7 +75,9 @@ class TestXmodel:
         image_path = amdinfer.testing.getPathToAsset("asset_dog-3619020_640.jpg")
 
         images = preprocess([image_path])
-        request = amdinfer.ImageInferenceRequest(images, True)
+        request = amdinfer.ImageInferenceRequest(
+            images, self.rest_client.modelMetadata(self.endpoint), True
+        )
         response = self.rest_client.modelInfer(self.endpoint, request)
         validate([response])
 
@@ -84,7 +86,9 @@ class TestXmodel:
         image_path = amdinfer.testing.getPathToAsset("asset_dog-3619020_640.jpg")
 
         images = preprocess([image_path])
-        request = amdinfer.ImageInferenceRequest(images, True)
+        request = amdinfer.ImageInferenceRequest(
+            images,  self.rest_client.modelMetadata(self.endpoint), True
+        )
 
         options = {
             "model": self.model,
