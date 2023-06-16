@@ -33,12 +33,18 @@ Added
 * Custom memory storage classes in the memory pool (:pr:`166`)
 * C++ worker for executing C++ "models" (:pr:`172`)
 * Model chaining (:pr:`176`) and loading chains from ``modelLoad`` (:pr:`178`)
+* vcpkg to resolve C++ dependencies (:pr:`188`)
+* Tests with FP16 (:pr:`189` and :pr:`203`)
+* Versioned models (:pr:`190`)
+* Expand benchmarking with MLPerf app (:pr:`197`) and add to data to docs (:pr:`198`)
+
 
 Changed
 ^^^^^^^
 
 * Refactor how global state is managed (:pr:`125`)
 * Require the server as an argument for creating the NativeClient (:pr:`125`)
+* Rename "RequestParameters" to "ParameterMap" (:pr:`125`)
 * Use a global memory pool to allocate memory for incoming requests (:pr:`149`)
 * Resolve the request at the incoming server rather than the batcher (:pr:`164`)
 * Add flags to run container-based tests in parallel (:pr:`168`)
@@ -50,6 +56,8 @@ Changed
 * Location of test model lists moved to ``tests`` directory (:pr:`180`)
 * Close dynamically opened libraries (:pr:`186`)
 * Replace Jaeger exporter with OTLP (:pr:`187`)
+* Change STRING type to BYTES and shape type from uint64 to int64 (:pr:`190`)
+* Rename ONNX file to MXR correctly (:pr:`202`)
 
 Deprecated
 ^^^^^^^^^^
@@ -68,6 +76,8 @@ Fixed
 * Don't call ``next`` and ``prev`` on end iterators (:pr:`166`)
 * Use the right package name for ``g++`` in CentOS (:pr:`168`)
 * Fix building with different CMake options (:pr:`170`)
+* Fix wheel generation with vcpkg (:pr:`191`)
+* Load models at startup correctly (:pr:`195`)
 
 Security
 ^^^^^^^^
