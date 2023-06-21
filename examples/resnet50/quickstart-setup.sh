@@ -22,25 +22,30 @@ wget -O tensorflow.zip https://www.xilinx.com/bin/public/openDownload?filename=t
 unzip -j "tensorflow.zip" "tf_resnetv1_50_imagenet_224_224_6.97G_2.5/float/resnet_v1_50_baseline_6.96B_922.pb" -d .
 mkdir -p model_repository/resnet50/1
 mv ./resnet_v1_50_baseline_6.96B_922.pb model_repository/resnet50/1/saved_model.pb
-cat << EOF > model_repository/resnet50/config.toml
-name = "resnet50"
-platform = "tensorflow_graphdef"
-
-[[inputs]]
-name = "input"
-datatype = "FP32"
-shape = [224, 224, 3]
-
-[[outputs]]
-name = "resnet_v1_50/predictions/Reshape_1"
-datatype = "FP32"
-shape = [1000]
+cat << EOF > model_repository/resnet50/config.pbtxt
+name: "resnet50"
+platform: "tensorflow_graphdef"
+inputs [
+    {
+        name: "input"
+        datatype: "FP32"
+        shape: [224,224,3]
+    }
+]
+outputs [
+    {
+        name: "resnet_v1_50/predictions/Reshape_1"
+        datatype: "FP32"
+        shape: [1000]
+    }
+]
 EOF
 
+version="v0.3.0"
 # Download the class labels for this model
-wget https://github.com/Xilinx/inference-server/raw/main/examples/resnet50/imagenet_classes.txt
+wget https://github.com/Xilinx/inference-server/raw/${version}/examples/resnet50/imagenet_classes.txt
 # Download a sample image
-wget https://github.com/Xilinx/inference-server/raw/main/tests/assets/dog-3619020_640.jpg
+wget https://github.com/Xilinx/inference-server/raw/${version}/tests/assets/dog-3619020_640.jpg
 # Download the example Python code
-wget https://github.com/Xilinx/inference-server/raw/main/examples/resnet50/resnet.py
-wget https://github.com/Xilinx/inference-server/raw/main/examples/resnet50/tfzendnn.py
+wget https://github.com/Xilinx/inference-server/raw/${version}/examples/resnet50/resnet.py
+wget https://github.com/Xilinx/inference-server/raw/${version}/examples/resnet50/tfzendnn.py
