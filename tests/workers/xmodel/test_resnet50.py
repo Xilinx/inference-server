@@ -87,7 +87,7 @@ class TestXmodel:
 
         images = preprocess([image_path])
         request = amdinfer.ImageInferenceRequest(
-            images,  self.rest_client.modelMetadata(self.endpoint), True
+            images, self.rest_client.modelMetadata(self.endpoint), True
         )
 
         options = {

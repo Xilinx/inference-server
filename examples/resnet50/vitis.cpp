@@ -41,10 +41,10 @@
 #include "amdinfer/amdinfer.hpp"
 // -include:
 
+#include "amdinfer/amdinfer.hpp"
 #include "amdinfer/pre_post/image_preprocess.hpp"
 #include "amdinfer/pre_post/resnet50_postprocess.hpp"
 #include "resnet50.hpp"
-#include "amdinfer/amdinfer.hpp"                    
 
 namespace fs = std::filesystem;
 
@@ -95,8 +95,9 @@ std::vector<int> postprocess(const amdinfer::InferenceResponseOutput& output,
  * @param input_size size of the square image in pixels
  * @return std::vector<amdinfer::InferenceRequest>
  */
-std::vector<amdinfer::InferenceRequest> constructRequests(const Images& images,
-                                                          int64_t input_size, const amdinfer::ModelMetadata& modelMetadata) {
+std::vector<amdinfer::InferenceRequest> constructRequests(
+  const Images& images, int64_t input_size,
+  const amdinfer::ModelMetadata& modelMetadata) {
   // +construct request:
   std::vector<amdinfer::InferenceRequest> requests;
   requests.reserve(images.size());
@@ -108,7 +109,8 @@ std::vector<amdinfer::InferenceRequest> constructRequests(const Images& images,
     requests.emplace_back();
     // NOLINTNEXTLINE(google-readability-casting)
     requests.back().addInputTensor((void*)image.data(), shape,
-                                   amdinfer::DataType::Int8, modelMetadata.getInputs()[i].getName());
+                                   amdinfer::DataType::Int8,
+                                   modelMetadata.getInputs()[i].getName());
   }
   // -construct request:
 
@@ -229,8 +231,8 @@ int main(int argc, char* argv[]) {
     Images images = preprocess(paths);
     // -prepare images:
 
-    std::vector<amdinfer::InferenceRequest> requests =
-      constructRequests(images, args.input_size, client.modelMetadata(endpoint));
+    std::vector<amdinfer::InferenceRequest> requests = constructRequests(
+      images, args.input_size, client.modelMetadata(endpoint));
 
     assert(paths.size() == requests.size());
     const auto num_requests = requests.size();

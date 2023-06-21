@@ -77,7 +77,7 @@ def ImageInferenceRequest(images, modelMetaData=None, asTensor=True):
     Args:
         images (image): Images may be numpy arrays or filepaths or a list of these
         modelMetaData(ModelMetadata): Pass the model metadata. Defaults to None.
-        asTensor (bool, optional): Send data as a tensor or as base64-encoded string. Defaults to True. 
+        asTensor (bool, optional): Send data as a tensor or as base64-encoded string. Defaults to True.
 
     Raises:
         TypeError: Raised if an unknown image format is passed

@@ -296,7 +296,7 @@ BatchPtr XModel::doRun(Batch* batch, const MemoryPool* pool) {
   if (new_batch == nullptr) {
     return new_batch;
   }
-  
+
   new_batch->setBuffers(std::move(new_input_buffers), {});
 
   return new_batch;
