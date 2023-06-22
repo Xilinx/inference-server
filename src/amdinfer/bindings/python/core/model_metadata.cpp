@@ -58,6 +58,7 @@ void wrapModelMetadata(py::module_ &m) {
     .def_property("name", &ModelMetadata::getName, &ModelMetadata::setName)
     .def("getPlatform", &ModelMetadata::getPlatform,
          DOCS(ModelMetadata, getPlatform))
+    .def("getInputs", &ModelMetadata::getInputs, DOCS(ModelMetadata, getInputs))
     .def("setReady", &ModelMetadata::setReady, DOCS(ModelMetadata, setReady))
     .def("isReady", &ModelMetadata::isReady, DOCS(ModelMetadata, isReady));
 }

@@ -52,8 +52,8 @@ def compare_jpgs(test_image, reference_image):
 
 def construct_request(asTensor):
     image_path = amdinfer.testing.getPathToAsset("asset_dog-3619020_640.jpg")
-
-    request = amdinfer.ImageInferenceRequest(image_path, asTensor)
+    modelMetadata = None
+    request = amdinfer.ImageInferenceRequest(image_path, modelMetadata, asTensor)
 
     image = cv2.imread(image_path)
     image = cv2.bitwise_not(image)

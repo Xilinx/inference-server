@@ -105,7 +105,8 @@ class TestInferImageYoloV3DPUCADF8H:
 
         batch = 1
         images = [image_path] * batch
-        request = amdinfer.ImageInferenceRequest(images, asTensor)
+        modelMetadata = None
+        request = amdinfer.ImageInferenceRequest(images, modelMetadata, asTensor)
 
         return request
 

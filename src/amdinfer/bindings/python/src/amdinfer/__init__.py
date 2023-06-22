@@ -70,12 +70,13 @@ def stringToArray(data):
     return array.view(np.uint8)
 
 
-def ImageInferenceRequest(images, asTensor=True):
+def ImageInferenceRequest(images, modelMetaData=None, asTensor=True):
     """
     Construct a request from an image or list of images
 
     Args:
         images (image): Images may be numpy arrays or filepaths or a list of these
+        modelMetaData(ModelMetadata): Pass the model metadata. Defaults to None.
         asTensor (bool, optional): Send data as a tensor or as base64-encoded string. Defaults to True.
 
     Raises:
@@ -94,7 +95,10 @@ def ImageInferenceRequest(images, asTensor=True):
     request = InferenceRequest()
     for index, image in enumerate(images):
         input_n = InferenceRequestInput()
-        input_n.name = f"input{index}"
+        if modelMetaData != None:
+            input_n.name = modelMetaData.getInputs()[index].name
+        else:
+            input_n.name = f"input{index}"
         if isinstance(image, str):
             if asTensor:
                 read_image = cv2.imread(image)

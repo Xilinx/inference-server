@@ -68,20 +68,21 @@ def postprocess(output, k):
 
 
 # +construct request
-def construct_requests(images):
+def construct_requests(images, modelMetaData):
     """
     Construct requests for the inference server from the input images. For ResNet50,
     a valid request includes a single input tensor containing a square image.
 
     Args:
         images (list[numpy.ndarray]): the input images
+        modelMetaData(ModelMetadata): the model metadata
 
     Returns:
         list[amdinfer.InferenceRequest]: the requests
     """
     requests = []
     for image in images:
-        requests.append(amdinfer.ImageInferenceRequest(image))
+        requests.append(amdinfer.ImageInferenceRequest(image, modelMetaData))
     return requests
 
 
@@ -200,7 +201,7 @@ def main(args):
     images = preprocess(paths)
     # -prepare images
 
-    requests = construct_requests(images)
+    requests = construct_requests(images, client.modelMetadata(endpoint))
 
     assert len(paths) == len(requests)
     print("Making inferences...")

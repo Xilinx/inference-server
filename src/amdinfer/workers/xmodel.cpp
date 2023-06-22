@@ -152,11 +152,13 @@ void XModel::doAcquire(ParameterMap* parameters) {
 
   runner_ = vart::Runner::create_runner(this->subgraph_, "run");
   auto input_tensors = runner_->get_input_tensors();
-  // assuming only one tensor as in doInit()
-  auto input_shape = input_tensors[0]->get_shape();
-  auto input_type = mapXirToType(input_tensors[0]->get_data_type());
-  this->batch_size_ = input_shape[0];
-  this->metadata_.addInputTensor("input", input_shape, input_type);
+  // populate the tensor metadata
+  for (const auto* tensor : input_tensors) {
+    auto input_shape = tensor->get_shape();
+    auto input_type = mapXirToType(tensor->get_data_type());
+    this->batch_size_ = input_shape[0];
+    this->metadata_.addInputTensor(tensor->get_name(), input_shape, input_type);
+  }
 
   auto output_tensors = runner_->get_output_tensors();
   for (const auto* tensor : output_tensors) {
@@ -166,7 +168,7 @@ void XModel::doAcquire(ParameterMap* parameters) {
     output_size_.emplace_back(
       util::containerProduct(output_shape.begin() + 1, output_shape.end()));
     // TODO(varunsh): what should we return here?
-    this->metadata_.addOutputTensor("output", output_shape,
+    this->metadata_.addOutputTensor(tensor->get_name(), output_shape,
                                     output_type_.back());
   }
 }
@@ -180,93 +182,121 @@ BatchPtr XModel::doRun(Batch* batch, const MemoryPool* pool) {
     logTraceBuffer(getLogger(), buffer->data(0));
   }
 #endif  // AMDINFER_ENABLE_LOGGING
-
-  std::vector<vart::TensorBuffer*> inputs_ptr;
-  for (const auto& buffer : input_buffers) {
-    auto* vart = dynamic_cast<VartTensorBuffer*>(buffer.get());
-    inputs_ptr.emplace_back(vart->getTensorBuffer());
-  }
-
+  BatchPtr new_batch = nullptr;
   BufferPtrs output_buffers;
   BufferPtrs new_input_buffers;
-  auto output_tensors = this->getRunner()->get_output_tensors();
-  for (const auto* tensor : output_tensors) {
-    auto xir_shape = tensor->get_shape();
-    std::vector<int64_t> shape{xir_shape.begin(), xir_shape.end()};
-    auto xir_type = tensor->get_data_type();
-    auto type = mapXirToType(xir_type);
-    InferenceRequestInput input(nullptr, shape, type, tensor->get_name());
-    // the shape includes the batch size so use external batch size 1
-    output_buffers.push_back(
-      pool->get({MemoryAllocators::VartTensor}, input, 1));
-    new_input_buffers.push_back(pool->get(next_allocators_, input, 1));
-  }
-
-  std::vector<vart::TensorBuffer*> outputs_ptr;
-  for (const auto& buffer : output_buffers) {
-    auto* vart = dynamic_cast<VartTensorBuffer*>(buffer.get());
-    outputs_ptr.emplace_back(vart->getTensorBuffer());
-  }
-
-  // auto outputs_ptr = this->getRunner()->get_outputs();
-
-  for (auto* input : inputs_ptr) {
-    const auto* tensor = input->get_tensor();
-    auto num = tensor->get_element_num();
-    auto batches = (tensor->get_shape())[0];
-    input->sync_for_write(0, num / batches);
-  }
-
-  std::queue<std::pair<uint32_t, int>> futures;
-  futures.push(getRunner()->execute_async(inputs_ptr, outputs_ptr));
-
-  while (!futures.empty()) {
-    auto job_id = futures.front();
-    futures.pop();
-    getRunner()->wait(job_id.first, -1);
-  }
-
-  for (auto* output : outputs_ptr) {
-    const auto* tensor = output->get_tensor();
-    output->sync_for_read(0,
-                          tensor->get_element_num() / (tensor->get_shape())[0]);
-  }
-
-  const auto num_batches = batch->size();
-  auto new_batch = batch->propagate();
-  for (unsigned int k = 0; k < num_batches; k++) {
-    const auto& req = batch->getRequest(k);
-
-    auto new_request = req->propagate();
-
-    const auto num_outputs = outputs_ptr.size();
-    for (unsigned int i = 0; i < num_outputs; i++) {
-      auto output_shape = output_tensors[i]->get_shape();
-      std::vector<int64_t> new_shape;
-      new_shape.reserve(output_shape.size() - 1);
-      for (auto j = 1U; j < output_shape.size(); j++) {
-        new_shape.push_back(output_shape[j]);
+  try {
+    std::vector<vart::TensorBuffer*> inputs_ptr;
+    for (unsigned i = 0; i < input_buffers.size(); i++) {
+      const auto& buffer = input_buffers[i];
+      auto* vart = dynamic_cast<VartTensorBuffer*>(buffer.get());
+      // Check if model tensor name equals input tensor name
+      const auto* runner_buffer = runner_->get_input_tensors()[i];
+      if (vart->getTensorBuffer()->get_tensor()->get_name() !=
+          runner_buffer->get_name()) {
+        throw std::runtime_error(
+          "input tensor name ('" +
+          vart->getTensorBuffer()->get_tensor()->get_name() +
+          "') does not equal model tensor name ('" + runner_buffer->get_name() +
+          "')!");
       }
-      auto* output_index =
-        reinterpret_cast<void*>(outputs_ptr.at(i)->data().first);
-
-      auto* data_ptr = new_input_buffers.at(i)->data(k * output_size_[i] *
-                                                     (output_type_[i]).size());
-      new_request->addInputTensor(
-        InferenceRequestInput{data_ptr, new_shape, output_type_[i], ""});
-      util::copy(
-        reinterpret_cast<int8_t*>(output_index) + (i * output_size_[i]),
-        static_cast<std::byte*>(data_ptr),
-        output_size_[i] * output_type_[i].size());
+      inputs_ptr.emplace_back(vart->getTensorBuffer());
     }
 
-    new_batch->addRequest(new_request);
+    auto output_tensors = this->getRunner()->get_output_tensors();
 
-    new_batch->setModel(k, "xmodel");
+    for (const auto* tensor : output_tensors) {
+      auto xir_shape = tensor->get_shape();
+      std::vector<int64_t> shape{xir_shape.begin(), xir_shape.end()};
+      auto xir_type = tensor->get_data_type();
+      auto type = mapXirToType(xir_type);
+      InferenceRequestInput input(nullptr, shape, type, tensor->get_name());
+      // the shape includes the batch size so use external batch size 1
+      output_buffers.push_back(
+        pool->get({MemoryAllocators::VartTensor}, input, 1));
+      new_input_buffers.push_back(pool->get(next_allocators_, input, 1));
+    }
+
+    std::vector<vart::TensorBuffer*> outputs_ptr;
+    for (const auto& buffer : output_buffers) {
+      auto* vart = dynamic_cast<VartTensorBuffer*>(buffer.get());
+      outputs_ptr.emplace_back(vart->getTensorBuffer());
+    }
+
+    // auto outputs_ptr = this->getRunner()->get_outputs();
+
+    for (auto* input : inputs_ptr) {
+      const auto* tensor = input->get_tensor();
+      auto num = tensor->get_element_num();
+      auto batches = (tensor->get_shape())[0];
+      input->sync_for_write(0, num / batches);
+    }
+
+    std::queue<std::pair<uint32_t, int>> futures;
+    futures.push(getRunner()->execute_async(inputs_ptr, outputs_ptr));
+
+    while (!futures.empty()) {
+      auto job_id = futures.front();
+      futures.pop();
+      getRunner()->wait(job_id.first, -1);
+    }
+
+    for (auto* output : outputs_ptr) {
+      const auto* tensor = output->get_tensor();
+      output->sync_for_read(
+        0, tensor->get_element_num() / (tensor->get_shape())[0]);
+    }
+
+    const auto num_batches = batch->size();
+    new_batch = batch->propagate();
+    for (unsigned int k = 0; k < num_batches; k++) {
+      const auto& req = batch->getRequest(k);
+
+      auto new_request = req->propagate();
+
+      const auto num_outputs = outputs_ptr.size();
+      for (unsigned int i = 0; i < num_outputs; i++) {
+        auto output_shape = output_tensors[i]->get_shape();
+        std::vector<int64_t> new_shape;
+        new_shape.reserve(output_shape.size() - 1);
+        for (auto j = 1U; j < output_shape.size(); j++) {
+          new_shape.push_back(output_shape[j]);
+        }
+        auto* output_index =
+          reinterpret_cast<void*>(outputs_ptr.at(i)->data().first);
+
+        auto* data_ptr = new_input_buffers.at(i)->data(
+          k * output_size_[i] * (output_type_[i]).size());
+        new_request->addInputTensor(
+          InferenceRequestInput{data_ptr, new_shape, output_type_[i], ""});
+        util::copy(
+          reinterpret_cast<int8_t*>(output_index) + (i * output_size_[i]),
+          static_cast<std::byte*>(data_ptr),
+          output_size_[i] * output_type_[i].size());
+      }
+
+      new_batch->addRequest(new_request);
+
+      new_batch->setModel(k, "xmodel");
+    }
+    for (const auto& buffer : output_buffers) {
+      buffer->free();
+    }
+  } catch (const std::exception& e) {
+    // This outer catch block catches exceptions in evaluation of the batch.
+    AMDINFER_LOG_ERROR(getLogger(), e.what());
+    // Pass error message back as reply for each request in the batch
+    const auto& requests = batch->getRequests();
+    for (const auto& req_e : requests) {
+      req_e->runCallbackError(std::string("Xmodel inference error: ") +
+                              e.what());
+    }
   }
-  for (const auto& buffer : output_buffers) {
-    buffer->free();
+
+  if (new_batch == nullptr) {
+    return new_batch;
   }
+
   new_batch->setBuffers(std::move(new_input_buffers), {});
 
   return new_batch;
