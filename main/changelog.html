@@ -48,7 +48,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-svg.js"></script>
         <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
         <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
-        <script defer="defer" src="_static/tippy/changelog.69cec61c-028c-4434-9ac9-cbfa3ca9a8ed.js"></script>
+        <script defer="defer" src="_static/tippy/changelog.78ae719b-d291-4d30-9155-9673b1df6db6.js"></script>
         <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
         <script src="_static/dataTables.js"></script>
     <script src="_static/js/theme.js"></script>
@@ -526,6 +526,10 @@ and this project adheres to <a class="reference external" href="https://semver.o
 <li><p>Custom memory storage classes in the memory pool (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/166">#166</a>)</p></li>
 <li><p>C++ worker for executing C++ “models” (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/172">#172</a>)</p></li>
 <li><p>Model chaining (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/176">#176</a>) and loading chains from <code class="docutils literal notranslate"><span class="pre">modelLoad</span></code> (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/178">#178</a>)</p></li>
+<li><p>vcpkg to resolve C++ dependencies (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/188">#188</a>)</p></li>
+<li><p>Tests with FP16 (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/189">#189</a> and <a class="reference external" href="https://github.com/Xilinx/inference-server/pull/203">#203</a>)</p></li>
+<li><p>Versioned models (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/190">#190</a>)</p></li>
+<li><p>Expand benchmarking with MLPerf app (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/197">#197</a>) and add to data to docs (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/198">#198</a>)</p></li>
 </ul>
 </section>
 <section id="changed">
@@ -533,6 +537,7 @@ and this project adheres to <a class="reference external" href="https://semver.o
 <ul class="simple">
 <li><p>Refactor how global state is managed (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/125">#125</a>)</p></li>
 <li><p>Require the server as an argument for creating the NativeClient (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/125">#125</a>)</p></li>
+<li><p>Rename “RequestParameters” to “ParameterMap” (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/125">#125</a>)</p></li>
 <li><p>Use a global memory pool to allocate memory for incoming requests (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/149">#149</a>)</p></li>
 <li><p>Resolve the request at the incoming server rather than the batcher (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/164">#164</a>)</p></li>
 <li><p>Add flags to run container-based tests in parallel (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/168">#168</a>)</p></li>
@@ -544,6 +549,8 @@ and this project adheres to <a class="reference external" href="https://semver.o
 <li><p>Location of test model lists moved to <code class="docutils literal notranslate"><span class="pre">tests</span></code> directory (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/180">#180</a>)</p></li>
 <li><p>Close dynamically opened libraries (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/186">#186</a>)</p></li>
 <li><p>Replace Jaeger exporter with OTLP (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/187">#187</a>)</p></li>
+<li><p>Change STRING type to BYTES and shape type from uint64 to int64 (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/190">#190</a>)</p></li>
+<li><p>Rename ONNX file to MXR correctly (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/202">#202</a>)</p></li>
 </ul>
 </section>
 <section id="deprecated">
@@ -565,6 +572,8 @@ and this project adheres to <a class="reference external" href="https://semver.o
 <li><p>Don’t call <code class="docutils literal notranslate"><span class="pre">next</span></code> and <code class="docutils literal notranslate"><span class="pre">prev</span></code> on end iterators (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/166">#166</a>)</p></li>
 <li><p>Use the right package name for <code class="docutils literal notranslate"><span class="pre">g++</span></code> in CentOS (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/168">#168</a>)</p></li>
 <li><p>Fix building with different CMake options (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/170">#170</a>)</p></li>
+<li><p>Fix wheel generation with vcpkg (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/191">#191</a>)</p></li>
+<li><p>Load models at startup correctly (<a class="reference external" href="https://github.com/Xilinx/inference-server/pull/195">#195</a>)</p></li>
 </ul>
 </section>
 <section id="security">
@@ -717,7 +726,7 @@ and this project adheres to <a class="reference external" href="https://semver.o
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on June 06, 2023.
+      <span class="lastupdated">Last updated on July 12, 2023.
       </span></p>
   </div>
 

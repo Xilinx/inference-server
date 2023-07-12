@@ -52,7 +52,7 @@ Other devices and DPUs may also work but are currently untested.
 Host setup
 ----------
 
-Follow the `ROCm installation instructions <https://docs.amd.com/category/Release%20Documentation>`__ to install ROCm on your host machine.
+Follow the `ROCm installation instructions <https://docs.amd.com/en/latest/deploy/linux/index.html`__ to install ROCm on your host machine.
 Your ROCm version should ideally match the version installed in the inference server container but mismatching versions may work as well in some cases.
 Ensure you can detect the GPUs on your host machine with ``/opt/rocm/bin/rocminfo``.
 

@@ -48,7 +48,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-svg.js"></script>
         <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
         <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
-        <script defer="defer" src="_static/tippy/python.7dd09207-d916-4e07-a75d-c93383d6fe51.js"></script>
+        <script defer="defer" src="_static/tippy/python.1cafd2b0-731f-4f51-8cff-4c0248c157bc.js"></script>
         <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
         <script src="_static/dataTables.js"></script>
     <script src="_static/js/theme.js"></script>
@@ -685,6 +685,11 @@ in functionality to workerUnload and is provided for symmetry.</p>
 <dd></dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="amdinfer.DataType.FLOAT16">
+<span class="sig-name descname"><span class="pre">FLOAT16</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">DataType(FP16)</span> </em><a class="headerlink" href="#amdinfer.DataType.FLOAT16" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="amdinfer.DataType.FLOAT32">
 <span class="sig-name descname"><span class="pre">FLOAT32</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">DataType(FP32)</span> </em><a class="headerlink" href="#amdinfer.DataType.FLOAT32" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -1243,7 +1248,7 @@ in functionality to modelUnload and is provided for symmetry.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.InferenceRequestInput.getFp16Data">
-<span class="sig-name descname"><span class="pre">getFp16Data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.InferenceRequestInput" title="amdinfer.InferenceRequestInput"><span class="pre">amdinfer.InferenceRequestInput</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray[half_float::half]</span></span></span><a class="headerlink" href="#amdinfer.InferenceRequestInput.getFp16Data" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">getFp16Data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.InferenceRequestInput" title="amdinfer.InferenceRequestInput"><span class="pre">amdinfer.InferenceRequestInput</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">float16</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#amdinfer.InferenceRequestInput.getFp16Data" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -1303,7 +1308,7 @@ in functionality to modelUnload and is provided for symmetry.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.InferenceRequestInput.setFp16Data">
-<span class="sig-name descname"><span class="pre">setFp16Data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">self:</span> <span class="pre">amdinfer.InferenceRequestInput,</span> <span class="pre">arg0:</span> <span class="pre">numpy.ndarray[half_float::half]</span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.InferenceRequestInput.setFp16Data" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">setFp16Data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.InferenceRequestInput" title="amdinfer.InferenceRequestInput"><span class="pre">amdinfer.InferenceRequestInput</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">float16</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.InferenceRequestInput.setFp16Data" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -1468,7 +1473,7 @@ in functionality to modelUnload and is provided for symmetry.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.InferenceResponseOutput.getFp16Data">
-<span class="sig-name descname"><span class="pre">getFp16Data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.InferenceResponseOutput" title="amdinfer.InferenceResponseOutput"><span class="pre">amdinfer.InferenceResponseOutput</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray[half_float::half]</span></span></span><a class="headerlink" href="#amdinfer.InferenceResponseOutput.getFp16Data" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">getFp16Data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.InferenceResponseOutput" title="amdinfer.InferenceResponseOutput"><span class="pre">amdinfer.InferenceResponseOutput</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">float16</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#amdinfer.InferenceResponseOutput.getFp16Data" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -1544,7 +1549,7 @@ in functionality to modelUnload and is provided for symmetry.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="amdinfer.InferenceResponseOutput.setFp16Data">
-<span class="sig-name descname"><span class="pre">setFp16Data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">self:</span> <span class="pre">amdinfer.InferenceResponseOutput,</span> <span class="pre">arg0:</span> <span class="pre">numpy.ndarray[half_float::half]</span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.InferenceResponseOutput.setFp16Data" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">setFp16Data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.InferenceResponseOutput" title="amdinfer.InferenceResponseOutput"><span class="pre">amdinfer.InferenceResponseOutput</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">float16</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#amdinfer.InferenceResponseOutput.setFp16Data" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -2336,7 +2341,7 @@ in functionality to modelUnload and is provided for symmetry.</p>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on June 06, 2023.
+      <span class="lastupdated">Last updated on July 12, 2023.
       </span></p>
   </div>
 

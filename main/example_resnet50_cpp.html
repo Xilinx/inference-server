@@ -48,7 +48,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-svg.js"></script>
         <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
         <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
-        <script defer="defer" src="_static/tippy/example_resnet50_cpp.f9417480-7929-443c-91a2-f090ae30c6f9.js"></script>
+        <script defer="defer" src="_static/tippy/example_resnet50_cpp.311fc78f-dac5-438d-978c-594b44ff64a7.js"></script>
         <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
         <script src="_static/dataTables.js"></script>
     <script src="_static/js/theme.js"></script>
@@ -688,11 +688,13 @@ In this example, you create a vector of such requests.</p>
 
 <span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">initializer_list</span><span class="o">&lt;</span><span class="kt">int64_t</span><span class="o">&gt;</span><span class="w"> </span><span class="n">shape</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">input_size</span><span class="p">,</span><span class="w"> </span><span class="n">input_size</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">};</span>
 
-<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">image</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">images</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">unsigned</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">images</span><span class="p">.</span><span class="n">size</span><span class="p">();</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">image</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">images</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
 <span class="w">  </span><span class="n">requests</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">();</span>
 <span class="w">  </span><span class="c1">// NOLINTNEXTLINE(google-readability-casting)</span>
 <span class="w">  </span><span class="n">requests</span><span class="p">.</span><span class="n">back</span><span class="p">().</span><span class="n">addInputTensor</span><span class="p">((</span><span class="kt">void</span><span class="o">*</span><span class="p">)</span><span class="n">image</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span><span class="w"> </span><span class="n">shape</span><span class="p">,</span>
-<span class="w">                                 </span><span class="n">amdinfer</span><span class="o">::</span><span class="n">DataType</span><span class="o">::</span><span class="n">Int8</span><span class="p">);</span>
+<span class="w">                                 </span><span class="n">amdinfer</span><span class="o">::</span><span class="n">DataType</span><span class="o">::</span><span class="n">Int8</span><span class="p">,</span>
+<span class="w">                                 </span><span class="n">modelMetadata</span><span class="p">.</span><span class="n">getInputs</span><span class="p">()[</span><span class="n">i</span><span class="p">].</span><span class="n">getName</span><span class="p">());</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -771,7 +773,7 @@ If there are multiple requests sent in this way, they may be batched together by
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on June 06, 2023.
+      <span class="lastupdated">Last updated on July 12, 2023.
       </span></p>
   </div>
 
