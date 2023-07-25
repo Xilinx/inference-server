@@ -33,6 +33,7 @@
 #include "amdinfer/bindings/python/core/bind_fp16.hpp"
 #include "amdinfer/core/inference_request.hpp"
 #include "amdinfer/core/inference_response.hpp"
+#include "amdinfer/pre_post/mnist_postprocess.hpp"     // for mnistPostpr...
 #include "amdinfer/pre_post/resnet50_postprocess.hpp"  // for resnet50Postpr...
 
 // InferenceResponseOutput needs the full definition, not a forward declare
@@ -108,6 +109,13 @@ void wrapPrePost(py::module_& m) {
         static_cast<float*>(output.getData()), output.getSize(), k);
     },
     py::arg("output"), py::arg("k"));
+  m.def(
+    "mnistPostprocess",
+    [](const InferenceResponseOutput& output) {
+      return pre_post::mnistPostprocess(static_cast<float*>(output.getData()),
+                                        output.getSize());
+    },
+    py::arg("output"));
 
   py::enum_<pre_post::ImageOrder>(m, "ImageOrder")
     .value("NHWC", pre_post::ImageOrder::NHWC)

@@ -615,6 +615,9 @@ class Dockerize:
         if args.migraphx:
             build_args += f" --build-arg ENABLE_MIGRAPHX=yes"
 
+        if args.pytorch:
+            build_args += f" --build-arg ENABLE_PYTORCH=yes"
+
         try:
             git_branch = (
                 subprocess.check_output(shlex.split("git rev-parse --abbrev-ref HEAD"))
@@ -708,6 +711,12 @@ class Dockerize:
             "--migraphx",
             action="store_true",
             help="If provided, will build with Migraphx enabled",
+        )
+
+        command_group.add_argument(
+            "--pytorch",
+            action="store_true",
+            help="If provided, will build with Pytorch enabled",
         )
 
         command_group.add_argument(

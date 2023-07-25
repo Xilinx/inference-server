@@ -65,7 +65,7 @@ def extract(filepath: Path, destination: Path, _source_path=None):
     if str(filename).endswith("tar.gz"):
         with tarfile.open(filepath, mode="r:gz") as tar_file:
             tar_file.extractall(destination)
-    elif str(filename).endswith("zip"):
+    elif str(filename).endswith("zip") or str(filename).endswith("mar"):
         with zipfile.ZipFile(filepath, "r") as zip_file:
             zip_file.extractall(destination)
     else:

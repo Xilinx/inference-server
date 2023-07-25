@@ -238,6 +238,9 @@ def get_parser(parser=None):
     backends.add_argument(
         "--migraphx", action="store_true", help="download all migraphx-related files"
     )
+    backends.add_argument(
+        "--pt", action="store_true", help="download all pytorch-related files"
+    )
 
     models = parser.add_argument_group("Models")
     models.add_argument(
@@ -266,6 +269,7 @@ def update_args(args):
         args.vitis = True
         args.zendnn = True
         args.migraphx = True
+        args.pt = True
 
     if args.zendnn:
         args.ptzendnn = True

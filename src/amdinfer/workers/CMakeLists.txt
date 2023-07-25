@@ -15,7 +15,7 @@
 
 include(GNUInstallDirs)
 
-set(workers InvertVideo CPlusPlus Responder)
+set(workers InvertVideo CPlusPlus Responder Pytorch)
 
 if(${AMDINFER_ENABLE_VITIS})
   list(APPEND workers Xmodel)
@@ -64,6 +64,11 @@ endforeach()
 target_link_libraries(
   workerInvertvideo PRIVATE base64 opencv_core opencv_imgcodecs opencv_videoio
 )
+
+target_link_libraries(workerPytorch PRIVATE torch torch_cpu c10)
+
+target_include_directories(workerPytorch SYSTEM PRIVATE /usr/include/torch)
+
 if(${AMDINFER_ENABLE_VITIS})
   target_link_libraries(
     workerXmodel PRIVATE vart::runner target-factory::target-factory xir::xir

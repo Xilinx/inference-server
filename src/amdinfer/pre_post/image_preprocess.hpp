@@ -123,7 +123,7 @@ std::vector<std::vector<T>> imagePreprocess(
   const auto& channels = options.channels;
 
   constexpr auto kChannels = 3;
-  assert(channels == kChannels);
+  // assert(channels == kChannels);
 
   auto index = 0;
   for (const auto& path : paths) {
