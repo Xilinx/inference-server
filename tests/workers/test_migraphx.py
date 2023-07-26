@@ -160,7 +160,7 @@ class TestMigraphxFp16:
         )
         return (model, parameters)
 
-    @pytest.mark.parametrize("num", [1])
+    @pytest.mark.parametrize("num", [1, 4])
     def test_migraphx_fp16(self, num):
         """
         Send a request to model as tensor data

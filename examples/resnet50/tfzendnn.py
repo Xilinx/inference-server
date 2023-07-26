@@ -33,7 +33,7 @@ import amdinfer.pre_post as pre_post
 from resnet import parse_args, print_label, resolve_image_paths
 
 
-def preprocess(paths):
+def preprocess(paths, input_size):
     """
     Given a list of paths to images, preprocess the images and return them
 
@@ -47,6 +47,9 @@ def preprocess(paths):
     options.convert_color = True
     options.color_code = cv2.COLOR_BGR2RGB
     options.assign = True
+    options.resize = True
+    options.height = input_size
+    options.width = input_size
     return pre_post.imagePreprocessFp32(paths, options)
 
 
@@ -192,7 +195,7 @@ def main(args):
 
     paths = resolve_image_paths(pathlib.Path(args.image))
 
-    images = preprocess(paths)
+    images = preprocess(paths, args.input_size)
 
     requests = construct_requests(images)
 

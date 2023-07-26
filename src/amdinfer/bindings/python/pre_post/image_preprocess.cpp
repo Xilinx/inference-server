@@ -61,6 +61,7 @@ void addPreprocessOptions(const py::module& m, const char* name) {
     .def_readwrite("normalize", &ImagePreprocessOptions<T>::normalize)
     .def_readwrite("order", &ImagePreprocessOptions<T>::order)
     .def_readwrite("mean", &ImagePreprocessOptions<T>::mean)
+    .def_readwrite("resize", &ImagePreprocessOptions<T>::resize)
     .def_readwrite("std", &ImagePreprocessOptions<T>::std);
 }
 
