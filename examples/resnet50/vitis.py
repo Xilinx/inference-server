@@ -34,7 +34,7 @@ import amdinfer.pre_post as pre_post
 from resnet import parse_args, print_label, resolve_image_paths
 
 
-def preprocess(paths):
+def preprocess(paths, input_size):
     """
     Given a list of paths to images, preprocess the images and return them
 
@@ -49,6 +49,9 @@ def preprocess(paths):
     options.mean = [123, 107, 104]
     options.std = [1, 1, 1]
     options.normalize = True
+    options.resize = True
+    options.height = input_size
+    options.width = input_size
     return pre_post.imagePreprocessInt8(paths, options)
 
 
@@ -198,7 +201,7 @@ def main(args):
 
     # +prepare images
     paths = resolve_image_paths(pathlib.Path(args.image))
-    images = preprocess(paths)
+    images = preprocess(paths, args.input_size)
     # -prepare images
 
     requests = construct_requests(images, client.modelMetadata(endpoint))

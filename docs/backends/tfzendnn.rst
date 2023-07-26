@@ -40,7 +40,7 @@ Build an image
 
 To build an image with the TfZenDNN backend enabled, you need to download the ZenDNN library and then build the image by pointing the build script to the location of this downloaded package.
 
-You can download the PT+ZenDNN package from the `ZenDNN developer downloads <ZenDNN_download>`_: ``TF_v2.10_ZenDNN_v4.0_C++_API.zip``.
+You can download the PT+ZenDNN package from the `ZenDNN developer downloads <LinkZenDNNdownload_>`_: ``TF_v2.10_ZenDNN_v4.0_C++_API.zip``.
 Before downloading this packages, you will be required to read and agree to the :term:`EULA`.
 
 After downloading the package, place it in the root of the repository.

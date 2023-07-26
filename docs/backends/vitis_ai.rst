@@ -50,7 +50,7 @@ Other devices and DPUs may also work but are currently untested.
 Host setup
 ----------
 
-The details for setting up your host are available online in the :vitisAItree:`Vitis AI <setup>` repository.
+The details for setting up your host are available online in the :vitisAItree:`Vitis AI <board_setup>` repository.
 These instructions will depend on the FPGAs you are targeting.
 In essence, you will need to install software, program the shell on the FPGA(s) and download its ``xclbin`` files.
 
