@@ -256,9 +256,9 @@ ENV AMDINFER_ENABLE_MIGRAPHX=ON
 
 $[INSTALL_MIGRAPHX]
 
-FROM migraphx_installer_${ENABLE_MIGRAHX} AS pytorch_installer_no
+FROM migraphx_installer_${ENABLE_MIGRAPHX} AS pytorch_installer_no
 
-FROM migraphx_installer_${ENABLE_MIGRAHX} AS pytorch_installer_yes
+FROM migraphx_installer_${ENABLE_MIGRAPHX} AS pytorch_installer_yes
 
 ARG COPY_DIR
 ENV AMDINFER_ENABLE_PYTORCH=ON
