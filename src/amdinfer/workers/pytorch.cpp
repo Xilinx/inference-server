@@ -87,6 +87,7 @@ class PyTorchWorker : public SingleThreadedWorker {
   std::vector<int32_t> output_shape;
   std::vector<int32_t> batched_output_shape;
   uint64_t output_dim = 1;
+  std::string device = "CPU";
 
   DataType input_dt_ = DataType::FP32;
 };
@@ -129,6 +130,13 @@ void PyTorchWorker::doInit(ParameterMap* parameters) {
     throw invalid_argument(
       "Num of dimensions of input tensors not provided in load-time "
       "parameters");
+  }
+
+  if (parameters->has("device")) {
+    this->device = parameters->get<std::string>("device");
+  } else {
+    throw invalid_argument(
+      "Target device [CPU ...] not provided in load-time parameters");
   }
 
   if (parameters->has("input_shape")) {
@@ -195,7 +203,13 @@ void PyTorchWorker::doAcquire(ParameterMap* parameters) {
   // Load the model
   torch::jit::Module torch_module;
   try {
-    torch_module = torch::jit::load(path, torch::kCPU);
+    c10::DeviceType deviceType;
+    if (this->device == "CPU") {
+      deviceType = torch::kCPU;
+    } else {
+      throw invalid_argument("Invalid target device: " + this->device);
+    }
+    torch_module = torch::jit::load(path, deviceType);
   } catch (const c10::Error& e) {
     AMDINFER_LOG_ERROR(logger, e.what());
     throw file_read_error("Could not load model with torch");
@@ -343,6 +357,7 @@ extern "C" {
 // using smart pointer here may cause problems inside shared object so managing
 // manually
 amdinfer::workers::Worker* getWorker() {
-  return new amdinfer::workers::PyTorchWorker("PyTorchWorker", "CPU", true);
+  return new amdinfer::workers::PyTorchWorker("PyTorchWorker", "Multiple",
+                                              true);
 }
 }  // extern C

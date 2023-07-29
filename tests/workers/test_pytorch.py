@@ -45,7 +45,7 @@ def preprocessMnist(paths):
     options.width = 28
     options.channels = 1
     options.assign = True
-    return pre_post.imagePreprocessFp32(paths, options)
+    return pre_post.imagePreprocessFp32Mnist(paths, options)
 
 
 def preprocessResnet(paths):
@@ -119,6 +119,7 @@ class TestPytorchWorkerOnMnistModel:
         parameters.put("output_shape", "10")
         parameters.put("batch_size", 1)
         parameters.put("input_dt", "FP32")
+        parameters.put("device", "CPU")
         return (model, parameters)
 
     def send_request(self, request, check_asserts=True):
@@ -193,6 +194,7 @@ class TestPytorchWorkerOnResnet50:
         parameters.put("output_shape", "1000")
         parameters.put("batch_size", 1)
         parameters.put("input_dt", "FP32")
+        parameters.put("device", "CPU")
         return (model, parameters)
 
     def send_request(self, request, check_asserts=True):

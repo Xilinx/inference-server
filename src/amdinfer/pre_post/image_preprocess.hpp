@@ -111,7 +111,7 @@ void normalize(const cv::Mat& img, ImageOrder order, T* output, const T* mean,
 
 }  // namespace detail
 
-template <typename T>
+template <typename T, int kChannels = 3>
 std::vector<std::vector<T>> imagePreprocess(
   const std::vector<std::string>& paths,
   const ImagePreprocessOptions<T, 3>& options) {
@@ -122,8 +122,7 @@ std::vector<std::vector<T>> imagePreprocess(
   const auto& width = options.width;
   const auto& channels = options.channels;
 
-  constexpr auto kChannels = 3;
-  // assert(channels == kChannels);
+  assert(channels == kChannels);
 
   auto index = 0;
   for (const auto& path : paths) {

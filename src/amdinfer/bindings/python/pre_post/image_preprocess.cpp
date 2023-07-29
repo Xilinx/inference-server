@@ -66,10 +66,10 @@ void addPreprocessOptions(const py::module& m, const char* name) {
     .def_readwrite("std", &ImagePreprocessOptions<T>::std);
 }
 
-template <typename T>
+template <typename T, int kChannels>
 auto imagePreprocess(const std::vector<std::string>& paths,
                      const ImagePreprocessOptions<T>& options) {
-  auto images = pre_post::imagePreprocess(paths, options);
+  auto images = pre_post::imagePreprocess<T, kChannels>(paths, options);
   py::array_t<T> ret = py::cast(images);
   return ret;
 }
@@ -125,14 +125,16 @@ void wrapPrePost(py::module_& m) {
   addPreprocessOptions<fp16>(m, "ImagePreprocessOptionsFp16");
   addPreprocessOptions<float>(m, "ImagePreprocessOptionsFloat");
 
-  m.def("imagePreprocessInt8", &imagePreprocess<int8_t>, py::arg("paths"),
+  m.def("imagePreprocessInt8", &imagePreprocess<int8_t, 3>, py::arg("paths"),
         py::arg("options"));
   // deprecated
-  m.def("imagePreprocessFloat", &imagePreprocess<float>, py::arg("paths"),
+  m.def("imagePreprocessFloat", &imagePreprocess<float, 3>, py::arg("paths"),
         py::arg("options"));
-  m.def("imagePreprocessFp32", &imagePreprocess<float>, py::arg("paths"),
+  m.def("imagePreprocessFp32", &imagePreprocess<float, 3>, py::arg("paths"),
         py::arg("options"));
-  m.def("imagePreprocessFp16", &imagePreprocess<fp16>, py::arg("paths"),
+  m.def("imagePreprocessFp32Mnist", &imagePreprocess<float, 1>,
+        py::arg("paths"), py::arg("options"));
+  m.def("imagePreprocessFp16", &imagePreprocess<fp16, 3>, py::arg("paths"),
         py::arg("options"));
 }
 

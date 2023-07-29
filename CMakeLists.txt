@@ -60,6 +60,7 @@ add_option("INSTALL" "Set when invoking installation" OFF)
 
 add_option_env("ENABLE_PTZENDNN" "Enable PT+ZenDNN backend" OFF)
 add_option_env("ENABLE_TFZENDNN" "Enable TF+ZenDNN backend" OFF)
+add_option_env("ENABLE_PYTORCH" "Enable PyTorch backend" OFF)
 add_option_env("ENABLE_MIGRAPHX" "Enable migraphx backend" OFF)
 add_option_env("ENABLE_AKS" "Enable AKS dependencies" OFF)
 add_option_env("ENABLE_VITIS" "Enable Vitis dependencies" OFF)

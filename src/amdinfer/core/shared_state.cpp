@@ -69,6 +69,9 @@ ServerMetadata SharedState::serverMetadata() {
 #ifdef AMDINFER_ENABLE_MIGRAPHX
   metadata.extensions.emplace("migraphx");
 #endif
+#ifdef AMDINFER_ENABLE_PYTORCH
+  metadata.extensions.emplace("pytorch");
+#endif
   return metadata;
 }
 

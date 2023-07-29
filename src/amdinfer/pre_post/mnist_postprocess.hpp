@@ -24,11 +24,10 @@
 namespace amdinfer::pre_post {
 
 /**
- * @brief Perform postprocessing of the data
+ * @brief Perform postprocessing of the output of mnist classifer
  *
- * @tparam T the expected type of the data
- * @param output output from the server
- * @param k number of top elements to return
+ * @param data output from the server
+ * @param size number of elements in the output data
  * @return std::vector<int>
  */
 
