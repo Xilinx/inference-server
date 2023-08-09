@@ -24,8 +24,8 @@ build-backend = "setuptools.build_meta"
 
 [tool.cibuildwheel]
 build = ["*-manylinux_x86_64"]
-# there's some issues with Python 11 and numpy
-skip = ["pp*", "cp311-manylinux_x86_64"]
+# there's some issues with Python 11+ and numpy
+skip = ["pp*", "cp311-*", "cp312-*"]
 environment = { AMDINFER_ROOT= "/project" }
 
 [tool.cibuildwheel.linux]
