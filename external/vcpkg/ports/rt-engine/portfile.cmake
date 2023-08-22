@@ -16,8 +16,8 @@
 vcpkg_from_github(
   OUT_SOURCE_PATH SOURCE_PATH
   REPO Xilinx/rt-engine
-  REF "v3.0"
-  SHA512 9263ed06938fe7eae91cfc25fea0de28596b3f15b5eabe2c9095ee7046123916ca38b7c7c7962eaf58851b22c90d14f12965497bc7ded9ec623f3a584d3a2f00
+  REF "v3.5"
+  SHA512 2827b0cbcf3bc56b7c6396ba54bfbb43eac73fc5b6ae65d3a0c77f84fc1dcbf7a1eff192555b250ff6f2bb90508c1b2bbb6feaad4f97842e3b52ddfea2b945af
   HEAD_REF master
   PATCHES fix-cmake.patch
 )
