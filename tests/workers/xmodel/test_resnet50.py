@@ -34,10 +34,8 @@ def postprocess(output, k):
     return pre_post.resnet50PostprocessInt8(output, k)
 
 
-def validate(responses):
-    golden = [259, 261, 260, 157, 230]
+def validate(responses, golden):
     k = len(golden)
-
     for response in responses:
         assert not response.isError(), response.getError()
         assert response.id == ""
@@ -55,9 +53,9 @@ def validate(responses):
 @pytest.mark.extensions(["vitis"])
 @pytest.mark.fpgas("DPUCADF8H", 1)
 @pytest.mark.usefixtures("load")
-class TestXmodel:
+class TestXmodelU250:
     """
-    Test the Xmodel worker
+    Test the Xmodel worker on u250 board
     """
 
     @staticmethod
@@ -79,7 +77,8 @@ class TestXmodel:
             images, self.rest_client.modelMetadata(self.endpoint), True
         )
         response = self.rest_client.modelInfer(self.endpoint, request)
-        validate([response])
+        golden = [259, 261, 260, 157, 230]
+        validate([response], golden)
 
     @pytest.mark.benchmark(group="xmodel")
     def test_benchmark_xmodel(self, benchmark):
@@ -99,3 +98,37 @@ class TestXmodel:
         run_benchmark(
             benchmark, "xmodel", self.rest_client.modelInfer, request, **options
         )
+
+
+@pytest.mark.extensions(["vitis"])
+@pytest.mark.fpgas("DPUCVDX8H", 1)
+@pytest.mark.usefixtures("load")
+@pytest.mark.parametrize(
+    "server_environment",
+    [{"XLNX_VART_FIRMWARE": "/opt/xilinx/overlaybins/DPUCVDX8H/4PE/"}],
+)
+class TestXmodelVck50004pe:
+    """
+    Test the Xmodel worker on vck5000-4pe board
+    """
+
+    @staticmethod
+    def get_config():
+        model = "Xmodel"
+        parameters = amdinfer.ParameterMap(
+            ["model"], [amdinfer.testing.getPathToAsset("vck5000-4pe_resnet50")]
+        )
+        return (model, parameters)
+
+    def test_xmodel_0(self):
+        """
+        Send a request to resnet50 as tensor data
+        """
+        image_path = amdinfer.testing.getPathToAsset("asset_dog-3619020_640.jpg")
+        images = preprocess([image_path])
+        request = amdinfer.ImageInferenceRequest(
+            images, self.rest_client.modelMetadata(self.endpoint), True
+        )
+        response = self.rest_client.modelInfer(self.endpoint, request)
+        golden = [259, 261, 260, 157, 154]
+        validate([response], golden)

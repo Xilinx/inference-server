@@ -25,7 +25,12 @@ def get(args: argparse.Namespace):
     if args.vitis:
         models["u250_resnet50"] = XModelOpenDownload(
             "resnet_v1_50_tf-u200-u250-r2.5.0.tar.gz",
-            directory,
+            directory / "u250",
+            "resnet_v1_50_tf/resnet_v1_50_tf.xmodel",
+        )
+        models["vck5000-4pe_resnet50"] = XModelOpenDownload(
+            "resnet_v1_50_tf-vck5000-DPUCVDX8H-4pe-r2.5.0.tar.gz",
+            directory / "vck5000",
             "resnet_v1_50_tf/resnet_v1_50_tf.xmodel",
         )
     if args.ptzendnn:
