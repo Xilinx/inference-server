@@ -35,6 +35,7 @@ def pytest_addoption(parser):
     parser.addoption("--hostname", action="store", default="127.0.0.1")
     parser.addoption("--http-port", action="store", default=kDefaultHttpPort)
     parser.addoption("--runtime-config", action="store", default="./tests/conf.yaml")
+    parser.addoption("--hw", action="store", default=None)
 
     # TODO(varunsh): this is currently not exposed via the test runner script
     parser.addoption("--skip-extensions", nargs="+", default=[])
@@ -131,8 +132,22 @@ def pytest_collection_modifyitems(config, items):
         while not client.serverLive():
             time.sleep(1)
 
-    fpgas_avail = {}
+    # if the --hw flag is specified, remove all tests that don't use the matching
+    # device. This allows you to consider skipped tests as failures to check
+    # if particular device tests are working
+    hw_filter = config.getoption("--hw")
+    if hw_filter:
+        # assuming hw_filter will be of the form "device:max_num"
+        device, num = hw_filter.split(":")
+        num = int(num)
+        new_items = []
+        for item in items:
+            mark = item.get_closest_marker("fpgas")
+            if mark and mark.args and mark.args[0] == device and mark.args[1] <= num:
+                new_items.append(item)
+        items[:] = new_items
 
+    fpgas_avail = {}
     client = amdinfer.HttpClient(http_server_addr)
     for item in items:
         for mark in item.iter_markers(name="fpgas"):
