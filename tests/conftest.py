@@ -166,8 +166,8 @@ def pytest_collection_modifyitems(config, items):
                 item.add_marker(skip_extension)
 
 
-@pytest.fixture(scope="class")
-def server(xprocess, request):
+@pytest.fixture(scope="function")
+def server(xprocess, request, server_environment):
     address = get_http_addr(request.config)
     client = amdinfer.HttpClient("http://" + address)
     try:
@@ -181,6 +181,12 @@ def server(xprocess, request):
             pattern = "HTTP server starting at port"
 
             terminate_on_interrupt = True
+
+            if server_environment is not None:
+                host_env = {key: value for key, value in os.environ.items()}
+                for key, value in server_environment.items():
+                    host_env[key] = value
+                env = host_env
 
             def startup_check(self):
                 amdinfer.waitUntilServerReady(client)
@@ -206,7 +212,16 @@ def server(xprocess, request):
         yield
 
 
-@pytest.fixture(scope="class")
+@pytest.fixture(scope="function")
+def server_environment():
+    """
+    This fixture can be parameterized by tests to provide a custom environment
+    for the test. Set it to a dictionary of key-value pairs.
+    """
+    return None
+
+
+@pytest.fixture(scope="function")
 def load(request, server):
     test_model, test_parameters = request.cls.get_config()
 

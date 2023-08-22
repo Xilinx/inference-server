@@ -103,6 +103,10 @@ class TestXmodelU250:
 @pytest.mark.extensions(["vitis"])
 @pytest.mark.fpgas("DPUCVDX8H", 1)
 @pytest.mark.usefixtures("load")
+@pytest.mark.parametrize(
+    "server_environment",
+    [{"XLNX_VART_FIRMWARE": "/opt/xilinx/overlaybins/DPUCVDX8H/4PE/"}],
+)
 class TestXmodelVck50004pe:
     """
     Test the Xmodel worker on vck5000-4pe board
