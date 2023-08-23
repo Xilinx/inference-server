@@ -1,4 +1,4 @@
-// Copyright 2022 Advanced Micro Devices, Inc.
+// Copyright 2023 Advanced Micro Devices, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -25,6 +25,7 @@
 #include <filesystem>  // for path, exists, filesystem
 #include <memory>      // for unique_ptr, allocator
 #include <ratio>       // for milli, micro
+#include <regex>       // for regex
 #include <string>      // for string, operator+, to_s...
 #include <thread>      // for thread
 #include <utility>     // for move
@@ -68,118 +69,85 @@ class PyTorchWorker : public SingleThreadedWorker {
   void doRelease() override;
   void doDestroy() override;
 
-  // workers define what batcher implementation should be used for them.
-  // if not explicitly defined here, a default value is used from worker.hpp.
-  // using Worker::makeBatcher;
-  // std::vector<std::unique_ptr<Batcher>> makeBatcher(
-  //   int num, ParameterMap* parameters) override {
-  //   return this->makeBatcher<HardBatcher>(num, parameters);
-  // };
-
-  // Load the model here
   torch::jit::script::Module model_;
 
   // Image properties
 
-  std::vector<int32_t> input_shape;
-  std::vector<int32_t> batched_input_shape;
-  uint64_t input_dim = 1;
-  std::vector<int32_t> output_shape;
-  std::vector<int32_t> batched_output_shape;
-  uint64_t output_dim = 1;
-  std::string device = "CPU";
-
-  DataType input_dt_ = DataType::FP32;
+  std::vector<std::vector<int64_t>> input_shapes_;
+  std::vector<std::vector<int64_t>> output_shapes_;
+  DataType input_datatype_ = DataType::FP32;
+  DataType output_datatype_ = DataType::FP32;
+  // std::vector<int32_t> input_shape;
+  // std::vector<int32_t> batched_input_shape;
+  // uint64_t input_dim = 1;
+  // std::vector<int32_t> output_shape;
+  // std::vector<int32_t> batched_output_shape;
+  // uint64_t output_dim = 1;
+  std::string device_ = "CPU";
 };
 
 std::vector<MemoryAllocators> PyTorchWorker::getAllocators() const {
   return {MemoryAllocators::Cpu};
 }
 
-std::vector<int32_t> parseShape(std::string shapeStr, uint64_t dim,
-                                std::string delimiter) {
-  size_t pos = 0;
-  std::string token;
-  std::vector<int32_t> shape;
-  while ((pos = shapeStr.find(delimiter)) != std::string::npos) {
-    token = shapeStr.substr(0, pos);
-    shape.push_back(std::stoi(token));
-    shapeStr.erase(0, pos + delimiter.length());
+std::vector<std::vector<int64_t>> parseShape(const std::string& shape_str,
+                                             size_t batch_size) {
+  std::vector<std::vector<int64_t>> shapes;
+  std::regex semicolon_regex(";");
+  std::regex comma_regex(",");
+  std::sregex_token_iterator tensor_iter{shape_str.begin(), shape_str.end(),
+                                         semicolon_regex, -1};
+  std::sregex_token_iterator tensor_end;
+  while (tensor_iter != tensor_end) {
+    auto match = *tensor_iter;
+    std::sregex_token_iterator dim_iter{match.first, match.second, comma_regex,
+                                        -1};
+    std::sregex_token_iterator dim_end;
+    std::vector<int64_t> tensor;
+    tensor.push_back(batch_size);
+    while (dim_iter != dim_end) {
+      tensor.push_back(std::stoi(*dim_iter));
+      dim_iter++;
+    }
+    shapes.push_back(tensor);
+    tensor_iter++;
   }
-  shape.push_back(std::stoi(shapeStr));
-  if (shape.size() != dim) {
-    throw invalid_argument("Shapes size does not equal the dim provided.");
-  }
-  return shape;
+  return shapes;
 }
 
 void PyTorchWorker::doInit(ParameterMap* parameters) {
-  constexpr auto kBatchSize = 1;
-
-  auto batch_size = kBatchSize;
   if (parameters->has("batch_size")) {
-    batch_size = parameters->get<int32_t>("batch_size");
-    this->batched_input_shape.push_back(batch_size);
-    this->batched_output_shape.push_back(batch_size);
-  }
-  this->batch_size_ = batch_size;
-
-  if (parameters->has("input_dim")) {
-    this->input_dim = parameters->get<int32_t>("input_dim");
-  } else {
-    throw invalid_argument(
-      "Num of dimensions of input tensors not provided in load-time "
-      "parameters");
+    batch_size_ = parameters->get<int32_t>("batch_size");
   }
 
   if (parameters->has("device")) {
-    this->device = parameters->get<std::string>("device");
-  } else {
-    throw invalid_argument(
-      "Target device [CPU ...] not provided in load-time parameters");
+    device_ = parameters->get<std::string>("device");
   }
 
-  if (parameters->has("input_shape")) {
-    std::string shape_str = parameters->get<std::string>("input_shape");
-    this->input_shape = parseShape(shape_str, this->input_dim, ",");
-    this->batched_input_shape.insert(this->batched_input_shape.end(),
-                                     this->input_shape.begin(),
-                                     this->input_shape.end());
+  if (parameters->has("input_shapes")) {
+    auto shape_str = parameters->get<std::string>("input_shapes");
+    input_shapes_ = parseShape(shape_str, batch_size_);
   } else {
     throw invalid_argument(
       "Shapes of input tensors not provided in load-time parameters");
   }
 
-  if (parameters->has("input_dt")) {
-    auto dt = parameters->get<std::string>("input_dt");
-    if (dt == "FP32") {
-      this->input_dt_ = DataType::FP32;
-    } else {
-      throw invalid_argument(
-        "Unsupported data type provided in load-time parameters");
-    }
-  } else {
-    throw invalid_argument(
-      "Data type of input tensors not provided in load-time parameters");
+  if (parameters->has("input_datatype")) {
+    auto datatype = parameters->get<std::string>("input_datatype");
+    input_datatype_ = DataType(datatype.c_str());
   }
 
-  if (parameters->has("output_dim")) {
-    this->output_dim = parameters->get<int32_t>("output_dim");
-  } else {
-    throw invalid_argument(
-      "Num of dimensions of input tensors not provided in load-time "
-      "parameters");
+  if (parameters->has("output_datatype")) {
+    auto datatype = parameters->get<std::string>("output_datatype");
+    output_datatype_ = DataType(datatype.c_str());
   }
 
-  if (parameters->has("output_shape")) {
-    std::string shape_str = parameters->get<std::string>("output_shape");
-    this->output_shape = parseShape(shape_str, this->output_dim, ",");
-    this->batched_output_shape.insert(this->batched_output_shape.end(),
-                                      this->output_shape.begin(),
-                                      this->output_shape.end());
+  if (parameters->has("output_shapes")) {
+    std::string shape_str = parameters->get<std::string>("output_shapes");
+    output_shapes_ = parseShape(shape_str, batch_size_);
   } else {
     throw invalid_argument(
-      "Shapes of input tensors not provided in load-time parameters");
+      "Shapes of output tensors not provided in load-time parameters");
   }
 }
 
@@ -204,10 +172,10 @@ void PyTorchWorker::doAcquire(ParameterMap* parameters) {
   torch::jit::Module torch_module;
   try {
     c10::DeviceType deviceType;
-    if (this->device == "CPU") {
+    if (device_ == "CPU") {
       deviceType = torch::kCPU;
     } else {
-      throw invalid_argument("Invalid target device: " + this->device);
+      throw invalid_argument("Invalid target device: " + device_);
     }
     torch_module = torch::jit::load(path, deviceType);
   } catch (const c10::Error& e) {
@@ -227,13 +195,17 @@ void PyTorchWorker::doAcquire(ParameterMap* parameters) {
   }
   AMDINFER_LOG_INFO(logger, "Model Optimized, Ready for prediction");
 
-  this->model_ = torch_module;
+  model_ = torch_module;
 
   // Adding metadata for input and output
-  this->metadata_.addInputTensor("input", this->batched_input_shape, input_dt_);
-  this->metadata_.addOutputTensor("output", this->batched_output_shape,
-                                  DataType::FP32);
-  this->metadata_.setName("PyTorchWorker");
+  for (const auto& tensor : input_shapes_) {
+    metadata_.addInputTensor("input", tensor, input_datatype_);
+  }
+  for (const auto& tensor : input_shapes_) {
+    metadata_.addOutputTensor("output", tensor, output_datatype_);
+  }
+
+  metadata_.setName("PyTorchWorker");
 }
 
 BatchPtr PyTorchWorker::doRun(Batch* batch, const MemoryPool* pool) {
@@ -245,45 +217,55 @@ BatchPtr PyTorchWorker::doRun(Batch* batch, const MemoryPool* pool) {
   torch::NoGradGuard no_grad;
   c10::InferenceMode guard;
 
-  size_t input_size = 0;
   std::vector<torch::jit::IValue> input_vec;
   auto tensors = static_cast<int64_t>(batch->size());
 
-  // Initialize a PT tensor with required shape
-  std::vector<int64_t> new_input_shape = {tensors};
-  std::copy(this->input_shape.begin(), this->input_shape.end(),
-            std::back_inserter(new_input_shape));
-  torch::Tensor input_tensor = torch::empty(new_input_shape, torch::kF32);
+  const auto& input_buffers = batch->getInputBuffers();
+
+  int i = 0;
+  util::Timer timer{true};
+  for (const auto& input_buffer : input_buffers) {
+    // Initialize a PT tensor with required shape
+    std::vector<int64_t> new_input_shape = {tensors};
+    auto input_shape = batch->getRequest(0)->getInputs()[i].getShape();
+    // auto input_shape = {3, 224, 224};
+    std::copy(input_shape.begin(), input_shape.end(),
+              std::back_inserter(new_input_shape));
+    torch::Tensor input_tensor = torch::empty(new_input_shape, torch::kF32);
 
 #ifdef AMDINFER_ENABLE_METRICS
-  Metrics::getInstance().incrementCounter(
-    MetricCounterIDs::PipelineIngressWorker);
+    Metrics::getInstance().incrementCounter(
+      MetricCounterIDs::PipelineIngressWorker);
 #endif
-  size_t vec_size = 0;
-  util::Timer timer{true};
-  for (unsigned int j = 0; j < batch->size(); j++) {
-    const auto& req = batch->getRequest(j);
+    auto* data = static_cast<float*>(input_buffer->data(0));
+    size_t input_size = util::containerProduct(new_input_shape);
+    std::copy(data, data + input_size, input_tensor.data_ptr<float>());
+    // size_t vec_size = 0;
 
-    auto inputs = req->getInputs();
-    auto outputs = req->getOutputs();
-    AMDINFER_LOG_DEBUG(logger,
-                       "Size of input: " + std::to_string(inputs.size()));
+    // for (unsigned int j = 0; j < batch->size(); j++) {
+    //   const auto& req = batch->getRequest(j);
 
-    // Get all the inputs from the requests and copy to the PT tensor
-    for (const auto& input : inputs) {
-      auto* input_buffer = input.getData();
-      const auto& input_shape = input.getShape();
-      input_size = util::containerProduct(input_shape);
+    //   auto inputs = req->getInputs();
+    //   auto outputs = req->getOutputs();
+    //   AMDINFER_LOG_DEBUG(logger,
+    //                     "Size of input: " + std::to_string(inputs.size()));
 
-      auto* float_buffer = static_cast<float*>(input_buffer);
-      std::copy(float_buffer, float_buffer + input_size,
-                input_tensor.data_ptr<float>() + vec_size);
-      vec_size = vec_size + input_size;
-    }
+    //   // Get all the inputs from the requests and copy to the PT tensor
+    //   for (const auto& input : inputs) {
+    //     auto* input_buffer = input.getData();
+    //     input_size = util::containerProduct(input.getShape());
+
+    //     auto* float_buffer = static_cast<float*>(input_buffer);
+    //     std::copy(float_buffer, float_buffer + input_size,
+    //               input_tensor.data_ptr<float>() + vec_size);
+    //     vec_size = vec_size + input_size;
+    //   }
+    // }
+
+    // Create the inputs and output tensor
+    input_vec.emplace_back(input_tensor);
+    i++;
   }
-
-  // Create the inputs and output tensor
-  input_vec.emplace_back(input_tensor);
   c10::IValue prediction;
 
   // Run through the model to get the predictions
@@ -304,46 +286,50 @@ BatchPtr PyTorchWorker::doRun(Batch* batch, const MemoryPool* pool) {
                                 std::to_string(batch->size()) +
                                 " images: " + std::to_string(duration));
   }
-  at::Tensor output_tensor;
-  if (!prediction.isTuple()) {
-    output_tensor = prediction.toTensor();
-  } else {
+  std::vector<at::Tensor> output_tensors;
+  if (prediction.isTensor()) {
+    output_tensors.push_back(prediction.toTensor());
+  } else if (prediction.isTuple()) {
     // For some models like InceptionV3 and GoogleNet which returns Tuple
-    output_tensor = prediction.toTuple()->elements()[0].toTensor();
+    output_tensors.push_back(prediction.toTuple()->elements()[0].toTensor());
+  } else if (prediction.isTensorList()) {
+    output_tensors = prediction.toTensorVector();
+  } else {
+    assert(false);
   }
 
   // Copy the output from the model to the response object
-  int64_t response_size = 1;
-  for (auto s : this->output_shape) {
-    int64_t size = static_cast<int64_t>(s);
-    response_size *= size;
-  }
-  std::vector<int64_t> new_shape = {response_size};
-
   auto new_batch = batch->propagate();
-  std::vector<BufferPtr> input_buffers;
-  input_buffers.push_back(pool->get(next_allocators_,
-                                    Tensor{"name", new_shape, DataType::Fp32},
-                                    batch->size()));
+  std::vector<BufferPtr> new_input_buffers;
 
-  for (unsigned int k = 0; k < batch->size(); k++) {
+  int k = 0;
+  for (const auto& output_tensor : output_tensors) {
+    auto response_shape = output_tensor.sizes();
+    std::vector<int64_t> new_shape{response_shape.begin() + 1,
+                                   response_shape.end()};
+    auto response_size = util::containerProduct(new_shape);
+    new_input_buffers.push_back(
+      pool->get(next_allocators_, Tensor{"name", new_shape, DataType::Fp32},
+                batch->size()));
+
     const auto& req = batch->getRequest(k);
 
     auto new_request = req->propagate();
-    auto* data_ptr =
-      input_buffers.at(0)->data(k * response_size * DataType("Fp32").size());
+    auto* data_ptr = new_input_buffers.at(k)->data(k * response_size *
+                                                   DataType("Fp32").size());
     new_request->addInputTensor(
       InferenceRequestInput{data_ptr, new_shape, DataType::Fp32, ""});
-    util::copy(output_tensor[0].data_ptr<float>() + (k * response_size),
+    util::copy(output_tensor[k].data_ptr<float>() + (k * response_size),
                static_cast<std::byte*>(data_ptr),
                response_size * sizeof(float));
 
     new_batch->addRequest(new_request);
 
     new_batch->setModel(k, "PTModel");
+    k++;
   }
 
-  new_batch->setBuffers(std::move(input_buffers), {});
+  new_batch->setBuffers(std::move(new_input_buffers), {});
 
   return new_batch;
 }

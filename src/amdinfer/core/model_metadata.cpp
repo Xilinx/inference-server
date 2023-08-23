@@ -37,6 +37,12 @@ void ModelMetadata::addInputTensor(const std::string &name,
 }
 
 void ModelMetadata::addInputTensor(const std::string &name,
+                                   std::vector<int64_t> shape,
+                                   DataType datatype) {
+  this->inputs_.emplace_back(name, shape, datatype);
+}
+
+void ModelMetadata::addInputTensor(const std::string &name,
                                    std::vector<int> shape, DataType datatype) {
   std::vector<int64_t> new_shape;
   std::copy(shape.begin(), shape.end(), std::back_inserter(new_shape));
@@ -50,6 +56,12 @@ void ModelMetadata::addInputTensor(const Tensor &tensor) {
 
 void ModelMetadata::addOutputTensor(const std::string &name,
                                     std::initializer_list<int64_t> shape,
+                                    DataType datatype) {
+  this->outputs_.emplace_back(name, shape, datatype);
+}
+
+void ModelMetadata::addOutputTensor(const std::string &name,
+                                    std::vector<int64_t> shape,
                                     DataType datatype) {
   this->outputs_.emplace_back(name, shape, datatype);
 }

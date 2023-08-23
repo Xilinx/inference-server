@@ -113,13 +113,8 @@ class TestPytorchWorkerOnMnistModel:
         model = "PyTorch"
         parameters = amdinfer.ParameterMap()
         parameters.put("model", amdinfer.testing.getPathToAsset("pt_mnist"))
-        parameters.put("input_dim", 3)
-        parameters.put("input_shape", "1,28,28")  # channel, height, weight
-        parameters.put("output_dim", 1)
-        parameters.put("output_shape", "10")
-        parameters.put("batch_size", 1)
-        parameters.put("input_dt", "FP32")
-        parameters.put("device", "CPU")
+        parameters.put("input_shapes", "1,28,28")  # channel, height, weight
+        parameters.put("output_shapes", "10")
         return (model, parameters)
 
     def send_request(self, request, check_asserts=True):
@@ -168,7 +163,9 @@ class TestPytorchWorkerOnMnistModel:
         images = preprocessMnist(image_paths)
         for image in images:
             modelMetadata = None
-            request = amdinfer.ImageInferenceRequest(image, modelMetadata, True)
+            request = amdinfer.ImageInferenceRequest(
+                image, modelMetadata, True, [1, 28, 28]
+            )
             response = self.send_request(request)
             outputs = response.getOutputs()
             response = postprocessMnist(outputs[0])
@@ -188,13 +185,8 @@ class TestPytorchWorkerOnResnet50:
         model = "PyTorch"
         parameters = amdinfer.ParameterMap()
         parameters.put("model", amdinfer.testing.getPathToAsset("pt_resnet50"))
-        parameters.put("input_dim", 3)
-        parameters.put("input_shape", "3,224,224")  # channel, height, weight
-        parameters.put("output_dim", 1)
-        parameters.put("output_shape", "1000")
-        parameters.put("batch_size", 1)
-        parameters.put("input_dt", "FP32")
-        parameters.put("device", "CPU")
+        parameters.put("input_shapes", "3,224,224")  # channel, height, weight
+        parameters.put("output_shapes", "1000")
         return (model, parameters)
 
     def send_request(self, request, check_asserts=True):
@@ -232,7 +224,7 @@ class TestPytorchWorkerOnResnet50:
         return response
 
     @pytest.mark.parametrize("num", [1])
-    def test_pytorch_worker_mnist(self, num):
+    def test_pytorch_worker_resnet50(self, num):
         """
         Send a request to pt model as tensor data
         """
@@ -243,7 +235,9 @@ class TestPytorchWorkerOnResnet50:
         images = preprocessResnet(image_paths)
         for image in images:
             modelMetadata = None
-            request = amdinfer.ImageInferenceRequest(image, modelMetadata, True)
+            request = amdinfer.ImageInferenceRequest(
+                image, modelMetadata, True, [3, 224, 224]
+            )
             response = self.send_request(request)
             outputs = response.getOutputs()
             top_k_responses = postprocessResnet(outputs[0], 5)

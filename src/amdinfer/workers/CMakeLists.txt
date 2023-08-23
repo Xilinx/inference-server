@@ -102,7 +102,9 @@ endif()
 
 if(${AMDINFER_ENABLE_PYTORCH})
   target_link_libraries(workerPytorch PRIVATE torch torch_cpu c10)
-  target_include_directories(workerPytorch SYSTEM PRIVATE /usr/include/torch)
+  # TODO(varunsh): temporary use ptzendnn for it to compile until it's added to
+  # the dockerfile
+  target_include_directories(workerPytorch SYSTEM PRIVATE /usr/include/ptzendnn)
 endif()
 
 if(${AMDINFER_ENABLE_AKS})
