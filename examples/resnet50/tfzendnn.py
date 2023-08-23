@@ -173,8 +173,11 @@ def main(args):
 
     server_addr = f"{args.ip}:{args.grpc_port}"
     client = amdinfer.GrpcClient(server_addr)
+    if args.wait:
+        # if wait is true, skip ahead to waiting for the server to become ready
+        pass
     # start it locally if it doesn't already up if the IP address is the localhost
-    if args.ip == "127.0.0.1" and not client.serverLive():
+    elif args.ip == "127.0.0.1" and not client.serverLive():
         print("No server detected. Starting locally...")
         server = amdinfer.Server()
         server.startGrpc(args.grpc_port)

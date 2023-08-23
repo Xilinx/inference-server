@@ -194,7 +194,9 @@ int main(int argc, char* argv[]) {
     std::optional<amdinfer::Server> server;
     // -initialize:
     // +start protocol:
-    if (args.ip == "127.0.0.1" && !client.serverLive()) {
+    if (args.wait) {
+      // if wait is true, skip ahead to waiting for the server to become ready
+    } else if (args.ip == "127.0.0.1" && !client.serverLive()) {
       std::cout << "No server detected. Starting locally...\n";
       server.emplace();
       server.value().startHttp(args.http_port);

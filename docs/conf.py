@@ -169,6 +169,9 @@ issues_default_group_project = "Xilinx/inference-server"
 
 # strip leading $ from bash code blocks
 copybutton_prompt_text = "$ "
+copybutton_here_doc_delimiter = "EOF"
+# selecting the literal block doesn't work to show the copy button correctly
+# copybutton_selector = ":is(div.highlight pre, pre.literal-block)"
 
 # raise a warning if a cross-reference cannot be found
 nitpicky = True

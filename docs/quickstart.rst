@@ -86,12 +86,13 @@ The CPU version has no special hardware requirements to run so you can always ru
         $ mkdir -p ./model_repository/resnet50/1
         $ mv ./resnet_v1_50_tf/resnet_v1_50_tf.xmodel ./model_repository/resnet50/1/
 
-For the models used here, their corresponding ``config.toml`` should be placed in the chosen model repository (``./model_repository/resnet50/``):
+For the models used here, you can save their corresponding ``config.toml`` to the correct path with:
 
 .. tabs::
 
-    .. code-tab:: toml CPU
+    .. code-tab:: shell CPU
 
+        cat <<EOF > "./model_repository/resnet50/config.toml"
         name = "resnet50"
         platform = "tensorflow_graphdef"
 
@@ -104,9 +105,11 @@ For the models used here, their corresponding ``config.toml`` should be placed i
         name = "resnet_v1_50/predictions/Reshape_1"
         datatype = "FP32"
         shape = [1000]
+        EOF
 
-    .. code-tab:: text GPU
+    .. code-tab:: shell GPU
 
+        cat <<EOF > "./model_repository/resnet50/config.toml"
         name = "resnet50"
         platform = "onnx_onnxv1"
 
@@ -119,9 +122,11 @@ For the models used here, their corresponding ``config.toml`` should be placed i
         name = "output"
         datatype = "FP32"
         shape = [1000]
+        EOF
 
-    .. code-tab:: console FPGA
+    .. code-tab:: shell FPGA
 
+        cat <<EOF > "./model_repository/resnet50/config.toml"
         name = "resnet50"
         platform = "vitis_xmodel"
 
@@ -134,6 +139,7 @@ For the models used here, their corresponding ``config.toml`` should be placed i
         name = "output"
         datatype = "INT8"
         shape = [1000]
+        EOF
 
 The name must match the name of the model directory: it defines the endpoint that will be used for inference.
 The platform identifies the type of the model and determines the file extension of the model file.
@@ -177,11 +183,11 @@ The flags used in this sample command are:
 
     .. code-tab:: console GPU
 
-        $ docker run -d --device /dev/kfd --device /dev/dri --volume $(pwd)/model_repository:/mnt/models:rw --publish 127.0.0.1::8998 --publish 127.0.0.1::50051 amdih/serve:uif1.1_migraphx_amdinfer_0.4.0
+        $ docker run -d --device /dev/kfd --device /dev/dri --volume $(pwd)/model_repository:/mnt/models:rw --net=host amdih/serve:uif1.1_migraphx_amdinfer_0.4.0
 
     .. code-tab:: console FPGA
 
-        $ docker run -d --device /dev/dri --device /dev/xclmgmt<id> --volume $(pwd)/model_repository:/mnt/models:rw --publish 127.0.0.1::8998 --publish 127.0.0.1::50051 amdih/serve:uif1.1_vai_amdinfer_0.4.0
+        $ docker run -d --device /dev/dri --device /dev/xclmgmt<id> --volume $(pwd)/model_repository:/mnt/models:rw --net=host amdih/serve:uif1.1_vai_amdinfer_0.4.0
 
 The endpoints for each model will be the name of the model in the ``config.toml``, which should match the name of the parent directory in the model repository.
 In this example, it would be "resnet50".
@@ -195,7 +201,7 @@ Server deployment summary
 After setting up the server as above, you have the following information:
 
 * IP address: 127.0.0.1 since the server is running on the same machine where you will run the inference
-* Ports: 8998 and 50051 for HTTP and gRPC, respectively. If you used ``--publish``, your port numbers may be different and you can see what they are using ``docker ps``.
+* Ports: 8998 and 50051 for HTTP and gRPC, respectively. If you used ``--publish`` in the ``docker run`` command to remap the ports, your port numbers may be different and you can see what they are using ``docker ps``.
 * Endpoint: "resnet50" since that is what the model name was used in the model repository and in the configuration file
 
 The rest of this example will use these values in the sample code so substitute your own values if they are different.
@@ -239,21 +245,22 @@ These results are post-processed and the top 5 labels for the image are printed.
         .. parsed-literal::
 
             $ wget :amdinferRawFull:`examples/resnet50/tfzendnn.py`
-            $ python3 tfzendnn.py --ip 127.0.0.1 --grpc-port 50051 --endpoint resnet50 --image ./dog-3619020_640.jpg --labels ./imagenet_classes.txt
+            $ python3 tfzendnn.py --ip 127.0.0.1 --grpc-port 50051 --endpoint resnet50 --image ./dog-3619020_640.jpg --labels ./imagenet_classes.txt --wait
 
     .. group-tab:: GPU
 
         .. parsed-literal::
 
             $ wget :amdinferRawFull:`examples/resnet50/migraphx.py`
-            $ python3 migraphx.py --ip 127.0.0.1 --http-port 8998 --endpoint resnet50 --image ./dog-3619020_640.jpg --labels ./imagenet_classes.txt
+            # This will take some time initially as MIGraphX will compile the ONNX model to MXR
+            $ python3 migraphx.py --ip 127.0.0.1 --http-port 8998 --endpoint resnet50 --image ./dog-3619020_640.jpg --labels ./imagenet_classes.txt --wait
 
     .. group-tab:: FPGA
 
         .. parsed-literal::
 
             $ wget :amdinferRawFull:`examples/resnet50/vitis.py`
-            $ python3 vitis.py --ip 127.0.0.1 --http-port 8998 --endpoint resnet50 --image ./dog-3619020_640.jpg --labels ./imagenet_classes.txt
+            $ python3 vitis.py --ip 127.0.0.1 --http-port 8998 --endpoint resnet50 --image ./dog-3619020_640.jpg --labels ./imagenet_classes.txt --wait
 
 After running the script, you should get output similar to the following.
 The exact output may be slightly different depending on whether you used CPU, GPU or FPGA versions of the example.

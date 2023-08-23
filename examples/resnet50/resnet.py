@@ -111,6 +111,12 @@ def parse_args():
         help="Name of the output node",
     )
 
+    parser.add_argument(
+        "--wait",
+        action="store_true",
+        help="Don't start the server automatically and wait for it indefinitely",
+    )
+
     args = parser.parse_args()
 
     if (not args.image) or (not args.labels):
