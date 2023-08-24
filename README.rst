@@ -38,14 +38,14 @@ The AMD Inference Server is integrated with the following libraries out of the g
 * TensorFlow and PyTorch models with `ZenDNN <https://developer.amd.com/zendnn/>`__ on CPUs (optimized for AMD CPUs)
 * ONNX models with `MIGraphX <https://github.com/ROCmSoftwarePlatform/AMDMIGraphX>`__ on AMD GPUs
 * XModel models with `Vitis AI <https://www.xilinx.com/products/design-tools/vitis/vitis-ai.html>`__ on AMD FPGAs
-* A graph of computation including as pre- and post-processing can be written using `AKS <https://github.com/Xilinx/Vitis-AI/tree/v3.0/src/AKS>`__ on AMD FPGAs for end-to-end inference
+* A graph of computation including as pre- and post-processing can be written using `AKS <https://github.com/Xilinx/Vitis-AI/tree/bbd45838d4a93f894cfc9f232140dc65af2398d1/src/AKS>`__ on AMD FPGAs for end-to-end inference
 
 Quick Start Deployment and Inference
 ------------------------------------
 
 The following example demonstrates how to deploy the server locally and run a sample inference.
 This example runs on the CPU and does not require any special hardware.
-You can see a more detailed version of this example in the `quickstart <https://xilinx.github.io/inference-server/main/quickstart_inference.html>`__.
+You can see a more detailed version of this example in the `quickstart <https://xilinx.github.io/inference-server/main/quickstart.html>`__.
 
 .. code-block:: bash
 
@@ -80,7 +80,7 @@ Learn more
 
 The documentation for the AMD Inference Server is available `online <https://xilinx.github.io/inference-server/>`__.
 
-Check out the quickstart guides online to help you get started based on your use case(s): `inference <https://xilinx.github.io/inference-server/main/quickstart_inference.html>`__, `deployment <https://xilinx.github.io/inference-server/main/quickstart_deployment.html>`__ and `development <https://xilinx.github.io/inference-server/main/quickstart_development.html>`__.
+Check out the `quickstart <https://xilinx.github.io/inference-server/main/quickstart.html>`__ online to help you get started.
 
 Support
 -------
