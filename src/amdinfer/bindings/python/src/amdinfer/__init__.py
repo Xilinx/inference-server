@@ -70,7 +70,7 @@ def stringToArray(data):
     return array.view(np.uint8)
 
 
-def ImageInferenceRequest(images, modelMetaData=None, asTensor=True):
+def ImageInferenceRequest(images, modelMetaData=None, asTensor=True, shape=None):
     """
     Construct a request from an image or list of images
 
@@ -78,6 +78,7 @@ def ImageInferenceRequest(images, modelMetaData=None, asTensor=True):
         images (image): Images may be numpy arrays or filepaths or a list of these
         modelMetaData(ModelMetadata): Pass the model metadata. Defaults to None.
         asTensor (bool, optional): Send data as a tensor or as base64-encoded string. Defaults to True.
+        shape (list, optional): Specify the shape explicitly if needed. Defaults to None.
 
     Raises:
         TypeError: Raised if an unknown image format is passed
@@ -113,7 +114,10 @@ def ImageInferenceRequest(images, modelMetaData=None, asTensor=True):
                     input_n.shape = [len(data)]
         elif isinstance(image, np.ndarray):
             input_n.datatype = getattr(DataType, str(image.dtype).upper())
-            input_n.shape = [*image.shape]  # Convert tuple to list
+            if shape is not None:
+                input_n.shape = shape
+            else:
+                input_n.shape = [*image.shape]  # Convert tuple to list
             _set_data(input_n, image.flatten())
         else:
             raise TypeError("Unknown type passed to ImageInferenceRequest")
