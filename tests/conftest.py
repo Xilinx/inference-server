@@ -35,6 +35,7 @@ def pytest_addoption(parser):
     parser.addoption("--hostname", action="store", default="127.0.0.1")
     parser.addoption("--http-port", action="store", default=kDefaultHttpPort)
     parser.addoption("--runtime-config", action="store", default="./tests/conf.yaml")
+    parser.addoption("--hw", action="store", default=None)
 
     # TODO(varunsh): this is currently not exposed via the test runner script
     parser.addoption("--skip-extensions", nargs="+", default=[])
@@ -131,8 +132,22 @@ def pytest_collection_modifyitems(config, items):
         while not client.serverLive():
             time.sleep(1)
 
-    fpgas_avail = {}
+    # if the --hw flag is specified, remove all tests that don't use the matching
+    # device. This allows you to consider skipped tests as failures to check
+    # if particular device tests are working
+    hw_filter = config.getoption("--hw")
+    if hw_filter:
+        # assuming hw_filter will be of the form "device:max_num"
+        device, num = hw_filter.split(":")
+        num = int(num)
+        new_items = []
+        for item in items:
+            mark = item.get_closest_marker("fpgas")
+            if mark and mark.args and mark.args[0] == device and mark.args[1] <= num:
+                new_items.append(item)
+        items[:] = new_items
 
+    fpgas_avail = {}
     client = amdinfer.HttpClient(http_server_addr)
     for item in items:
         for mark in item.iter_markers(name="fpgas"):
@@ -166,8 +181,8 @@ def pytest_collection_modifyitems(config, items):
                 item.add_marker(skip_extension)
 
 
-@pytest.fixture(scope="class")
-def server(xprocess, request):
+@pytest.fixture(scope="function")
+def server(xprocess, request, server_environment):
     address = get_http_addr(request.config)
     client = amdinfer.HttpClient("http://" + address)
     try:
@@ -181,6 +196,12 @@ def server(xprocess, request):
             pattern = "HTTP server starting at port"
 
             terminate_on_interrupt = True
+
+            if server_environment is not None:
+                host_env = {key: value for key, value in os.environ.items()}
+                for key, value in server_environment.items():
+                    host_env[key] = value
+                env = host_env
 
             def startup_check(self):
                 amdinfer.waitUntilServerReady(client)
@@ -206,7 +227,16 @@ def server(xprocess, request):
         yield
 
 
-@pytest.fixture(scope="class")
+@pytest.fixture(scope="function")
+def server_environment():
+    """
+    This fixture can be parameterized by tests to provide a custom environment
+    for the test. Set it to a dictionary of key-value pairs.
+    """
+    return None
+
+
+@pytest.fixture(scope="function")
 def load(request, server):
     test_model, test_parameters = request.cls.get_config()
 
