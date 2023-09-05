@@ -49,7 +49,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <script src="_static/tabs.js"></script>
         <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
         <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
-        <script defer="defer" src="_static/tippy/quickstart.ff39196d-16e0-443e-ac4a-b85e2c8f6db8.js"></script>
+        <script defer="defer" src="_static/tippy/quickstart.6ea3db52-ab3e-45b6-abe6-1cc14e86bf9f.js"></script>
         <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
         <script src="_static/dataTables.js"></script>
     <script src="_static/js/theme.js"></script>
@@ -567,55 +567,62 @@ The CPU version has no special hardware requirements to run so you can always ru
 <span class="gp">$ </span>mv<span class="w"> </span>./resnet50-v2-7.onnx<span class="w"> </span>./model_repository/resnet50/1/
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-0-RlBHQQ==" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-0-RlBHQQ==" name="RlBHQQ==" role="tabpanel" tabindex="0"><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>wget<span class="w"> </span>-O<span class="w"> </span>vitis.tar.gz<span class="w"> </span>https://www.xilinx.com/bin/public/openDownload?filename<span class="o">=</span>resnet_v1_50_tf-u200-u250-r2.5.0.tar.gz
-<span class="gp">$ </span>tar<span class="w"> </span>-xzf<span class="w"> </span>vitis.tar.gz<span class="w"> </span><span class="s2">&quot;resnet_v1_50_tf/resnet_v1_50_tf.xmodel&quot;</span>
-<span class="gp">$ </span>mkdir<span class="w"> </span>-p<span class="w"> </span>./model_repository/resnet50/1
-<span class="gp">$ </span>mv<span class="w"> </span>./resnet_v1_50_tf/resnet_v1_50_tf.xmodel<span class="w"> </span>./model_repository/resnet50/1/
+</div><div aria-labelledby="tab-0-RlBHQQ==" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-0-RlBHQQ==" name="RlBHQQ==" role="tabpanel" tabindex="0"><div class="highlight-console notranslate"><div class="highlight"><pre><span></span># this example assumes a U250. If you&#39;re using a different board, download the appropriate model for your board instead
+$ wget -O vitis.tar.gz https://www.xilinx.com/bin/public/openDownload?filename=resnet_v1_50_tf-u200-u250-r2.5.0.tar.gz
+$ tar -xzf vitis.tar.gz &quot;resnet_v1_50_tf/resnet_v1_50_tf.xmodel&quot;
+$ mkdir -p ./model_repository/resnet50/1
+$ mv ./resnet_v1_50_tf/resnet_v1_50_tf.xmodel ./model_repository/resnet50/1/
 </pre></div>
 </div>
 </div></div>
-<p>For the models used here, their corresponding <code class="docutils literal notranslate"><span class="pre">config.toml</span></code> should be placed in the chosen model repository (<code class="docutils literal notranslate"><span class="pre">./model_repository/resnet50/</span></code>):</p>
+<p>For the models used here, you can save their corresponding <code class="docutils literal notranslate"><span class="pre">config.toml</span></code> to the correct path with:</p>
 <div class="sphinx-tabs docutils container">
-<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-1-Q1BV" aria-selected="true" class="sphinx-tabs-tab code-tab group-tab" id="tab-1-Q1BV" name="Q1BV" role="tab" tabindex="0">CPU</button><button aria-controls="panel-1-R1BV" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-1-R1BV" name="R1BV" role="tab" tabindex="-1">GPU</button><button aria-controls="panel-1-RlBHQQ==" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-1-RlBHQQ==" name="RlBHQQ==" role="tab" tabindex="-1">FPGA</button></div><div aria-labelledby="tab-1-Q1BV" class="sphinx-tabs-panel code-tab group-tab" id="panel-1-Q1BV" name="Q1BV" role="tabpanel" tabindex="0"><div class="highlight-toml notranslate"><div class="highlight"><pre><span></span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;resnet50&quot;</span>
-<span class="n">platform</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;tensorflow_graphdef&quot;</span>
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-1-Q1BV" aria-selected="true" class="sphinx-tabs-tab code-tab group-tab" id="tab-1-Q1BV" name="Q1BV" role="tab" tabindex="0">CPU</button><button aria-controls="panel-1-R1BV" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-1-R1BV" name="R1BV" role="tab" tabindex="-1">GPU</button><button aria-controls="panel-1-RlBHQQ==" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-1-RlBHQQ==" name="RlBHQQ==" role="tab" tabindex="-1">FPGA</button></div><div aria-labelledby="tab-1-Q1BV" class="sphinx-tabs-panel code-tab group-tab" id="panel-1-Q1BV" name="Q1BV" role="tabpanel" tabindex="0"><div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span><span class="s">&lt;&lt;EOF &gt; &quot;./model_repository/resnet50/config.toml&quot;</span>
+<span class="s">name = &quot;resnet50&quot;</span>
+<span class="s">platform = &quot;tensorflow_graphdef&quot;</span>
 
-<span class="k">[[inputs]]</span>
-<span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;input&quot;</span>
-<span class="n">datatype</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;FP32&quot;</span>
-<span class="n">shape</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mi">224</span><span class="p">,</span><span class="w"> </span><span class="mi">224</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">]</span>
+<span class="s">[[inputs]]</span>
+<span class="s">name = &quot;input&quot;</span>
+<span class="s">datatype = &quot;FP32&quot;</span>
+<span class="s">shape = [224, 224, 3]</span>
 
-<span class="k">[[outputs]]</span>
-<span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;resnet_v1_50/predictions/Reshape_1&quot;</span>
-<span class="n">datatype</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;FP32&quot;</span>
-<span class="n">shape</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mi">1000</span><span class="p">]</span>
+<span class="s">[[outputs]]</span>
+<span class="s">name = &quot;resnet_v1_50/predictions/Reshape_1&quot;</span>
+<span class="s">datatype = &quot;FP32&quot;</span>
+<span class="s">shape = [1000]</span>
+<span class="s">EOF</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-1-R1BV" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-1-R1BV" name="R1BV" role="tabpanel" tabindex="0"><div class="highlight-text notranslate"><div class="highlight"><pre><span></span>name = &quot;resnet50&quot;
-platform = &quot;onnx_onnxv1&quot;
+</div><div aria-labelledby="tab-1-R1BV" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-1-R1BV" name="R1BV" role="tabpanel" tabindex="0"><div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span><span class="s">&lt;&lt;EOF &gt; &quot;./model_repository/resnet50/config.toml&quot;</span>
+<span class="s">name = &quot;resnet50&quot;</span>
+<span class="s">platform = &quot;onnx_onnxv1&quot;</span>
 
-[[inputs]]
-name = &quot;input&quot;
-datatype = &quot;FP32&quot;
-shape = [224, 224, 3]
+<span class="s">[[inputs]]</span>
+<span class="s">name = &quot;input&quot;</span>
+<span class="s">datatype = &quot;FP32&quot;</span>
+<span class="s">shape = [224, 224, 3]</span>
 
-[[outputs]]
-name = &quot;output&quot;
-datatype = &quot;FP32&quot;
-shape = [1000]
+<span class="s">[[outputs]]</span>
+<span class="s">name = &quot;output&quot;</span>
+<span class="s">datatype = &quot;FP32&quot;</span>
+<span class="s">shape = [1000]</span>
+<span class="s">EOF</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-1-RlBHQQ==" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-1-RlBHQQ==" name="RlBHQQ==" role="tabpanel" tabindex="0"><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">name = &quot;resnet50&quot;</span>
-<span class="go">platform = &quot;vitis_xmodel&quot;</span>
+</div><div aria-labelledby="tab-1-RlBHQQ==" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-1-RlBHQQ==" name="RlBHQQ==" role="tabpanel" tabindex="0"><div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span><span class="s">&lt;&lt;EOF &gt; &quot;./model_repository/resnet50/config.toml&quot;</span>
+<span class="s">name = &quot;resnet50&quot;</span>
+<span class="s">platform = &quot;vitis_xmodel&quot;</span>
 
-<span class="go">[[inputs]]</span>
-<span class="go">name = &quot;input&quot;</span>
-<span class="go">datatype = &quot;INT8&quot;</span>
-<span class="go">shape = [224, 224, 3]</span>
+<span class="s">[[inputs]]</span>
+<span class="s">name = &quot;input&quot;</span>
+<span class="s">datatype = &quot;INT8&quot;</span>
+<span class="s">shape = [224, 224, 3]</span>
 
-<span class="go">[[outputs]]</span>
-<span class="go">name = &quot;output&quot;</span>
-<span class="go">datatype = &quot;INT8&quot;</span>
-<span class="go">shape = [1000]</span>
+<span class="s">[[outputs]]</span>
+<span class="s">name = &quot;output&quot;</span>
+<span class="s">datatype = &quot;INT8&quot;</span>
+<span class="s">shape = [1000]</span>
+<span class="s">EOF</span>
 </pre></div>
 </div>
 </div></div>
@@ -661,13 +668,13 @@ In this case, you can omit this flag and use <code class="docutils literal notra
 Refer to the <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">run</span></code> documentation for more information.</p>
 </div>
 <div class="sphinx-tabs docutils container">
-<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-3-Q1BV" aria-selected="true" class="sphinx-tabs-tab code-tab group-tab" id="tab-3-Q1BV" name="Q1BV" role="tab" tabindex="0">CPU</button><button aria-controls="panel-3-R1BV" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-3-R1BV" name="R1BV" role="tab" tabindex="-1">GPU</button><button aria-controls="panel-3-RlBHQQ==" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-3-RlBHQQ==" name="RlBHQQ==" role="tab" tabindex="-1">FPGA</button></div><div aria-labelledby="tab-3-Q1BV" class="sphinx-tabs-panel code-tab group-tab" id="panel-3-Q1BV" name="Q1BV" role="tabpanel" tabindex="0"><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>run<span class="w"> </span>-d<span class="w"> </span>--volume<span class="w"> </span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/model_repository:/mnt/models:rw<span class="w"> </span>--net<span class="o">=</span>host<span class="w"> </span>amdih/serve:uif1.1_zendnn_amdinfer_0.4.0
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-3-Q1BV" aria-selected="true" class="sphinx-tabs-tab code-tab group-tab" id="tab-3-Q1BV" name="Q1BV" role="tab" tabindex="0">CPU</button><button aria-controls="panel-3-R1BV" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-3-R1BV" name="R1BV" role="tab" tabindex="-1">GPU</button><button aria-controls="panel-3-RlBHQQ==" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-3-RlBHQQ==" name="RlBHQQ==" role="tab" tabindex="-1">FPGA</button></div><div aria-labelledby="tab-3-Q1BV" class="sphinx-tabs-panel code-tab group-tab" id="panel-3-Q1BV" name="Q1BV" role="tabpanel" tabindex="0"><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>run<span class="w"> </span>-d<span class="w"> </span>--volume<span class="w"> </span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/model_repository:/mnt/models:rw<span class="w"> </span>--net<span class="o">=</span>host<span class="w"> </span>amdih/serve:uif1.2_zendnn_amdinfer_0.4.0
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-3-R1BV" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-3-R1BV" name="R1BV" role="tabpanel" tabindex="0"><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>run<span class="w"> </span>-d<span class="w"> </span>--device<span class="w"> </span>/dev/kfd<span class="w"> </span>--device<span class="w"> </span>/dev/dri<span class="w"> </span>--volume<span class="w"> </span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/model_repository:/mnt/models:rw<span class="w"> </span>--publish<span class="w"> </span><span class="m">127</span>.0.0.1::8998<span class="w"> </span>--publish<span class="w"> </span><span class="m">127</span>.0.0.1::50051<span class="w"> </span>amdih/serve:uif1.1_migraphx_amdinfer_0.4.0
+</div><div aria-labelledby="tab-3-R1BV" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-3-R1BV" name="R1BV" role="tabpanel" tabindex="0"><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>run<span class="w"> </span>-d<span class="w"> </span>--device<span class="w"> </span>/dev/kfd<span class="w"> </span>--device<span class="w"> </span>/dev/dri<span class="w"> </span>--volume<span class="w"> </span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/model_repository:/mnt/models:rw<span class="w"> </span>--net<span class="o">=</span>host<span class="w"> </span>amdih/serve:uif1.2_migraphx_amdinfer_0.4.0
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-3-RlBHQQ==" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-3-RlBHQQ==" name="RlBHQQ==" role="tabpanel" tabindex="0"><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>run<span class="w"> </span>-d<span class="w"> </span>--device<span class="w"> </span>/dev/dri<span class="w"> </span>--device<span class="w"> </span>/dev/xclmgmt&lt;id&gt;<span class="w"> </span>--volume<span class="w"> </span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/model_repository:/mnt/models:rw<span class="w"> </span>--publish<span class="w"> </span><span class="m">127</span>.0.0.1::8998<span class="w"> </span>--publish<span class="w"> </span><span class="m">127</span>.0.0.1::50051<span class="w"> </span>amdih/serve:uif1.1_vai_amdinfer_0.4.0
+</div><div aria-labelledby="tab-3-RlBHQQ==" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-3-RlBHQQ==" name="RlBHQQ==" role="tabpanel" tabindex="0"><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>run<span class="w"> </span>-d<span class="w"> </span>--device<span class="w"> </span>/dev/dri<span class="w"> </span>--device<span class="w"> </span>/dev/xclmgmt&lt;id&gt;<span class="w"> </span>--volume<span class="w"> </span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/model_repository:/mnt/models:rw<span class="w"> </span>--net<span class="o">=</span>host<span class="w"> </span>amdih/serve:uif1.2_vai_amdinfer_0.4.0
 </pre></div>
 </div>
 </div></div>
@@ -680,7 +687,7 @@ You are now ready to make requests to this server.</p>
 <p>After setting up the server as above, you have the following information:</p>
 <ul class="simple">
 <li><p>IP address: 127.0.0.1 since the server is running on the same machine where you will run the inference</p></li>
-<li><p>Ports: 8998 and 50051 for HTTP and gRPC, respectively. If you used <code class="docutils literal notranslate"><span class="pre">--publish</span></code>, your port numbers may be different and you can see what they are using <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">ps</span></code>.</p></li>
+<li><p>Ports: 8998 and 50051 for HTTP and gRPC, respectively. If you used <code class="docutils literal notranslate"><span class="pre">--publish</span></code> in the <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">run</span></code> command to remap the ports, your port numbers may be different and you can see what they are using <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">ps</span></code>.</p></li>
 <li><p>Endpoint: “resnet50” since that is what the model name was used in the model repository and in the configuration file</p></li>
 </ul>
 <p>The rest of this example will use these values in the sample code so substitute your own values if they are different.</p>
@@ -711,11 +718,12 @@ The server responds with the results of the inference.
 These results are post-processed and the top 5 labels for the image are printed.</p>
 <div class="sphinx-tabs docutils container">
 <div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-4-Q1BV" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-4-Q1BV" name="Q1BV" role="tab" tabindex="0">CPU</button><button aria-controls="panel-4-R1BV" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-4-R1BV" name="R1BV" role="tab" tabindex="-1">GPU</button><button aria-controls="panel-4-RlBHQQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-4-RlBHQQ==" name="RlBHQQ==" role="tab" tabindex="-1">FPGA</button></div><div aria-labelledby="tab-4-Q1BV" class="sphinx-tabs-panel group-tab" id="panel-4-Q1BV" name="Q1BV" role="tabpanel" tabindex="0"><pre class="literal-block">$ wget <a class="reference external" href="https://github.com/Xilinx/inference-server/raw/main/examples/resnet50/tfzendnn.py">https://github.com/Xilinx/inference-server/raw/main/examples/resnet50/tfzendnn.py</a>
-$ python3 tfzendnn.py --ip 127.0.0.1 --grpc-port 50051 --endpoint resnet50 --image ./dog-3619020_640.jpg --labels ./imagenet_classes.txt</pre>
+$ python3 tfzendnn.py --ip 127.0.0.1 --grpc-port 50051 --endpoint resnet50 --image ./dog-3619020_640.jpg --labels ./imagenet_classes.txt --wait</pre>
 </div><div aria-labelledby="tab-4-R1BV" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-4-R1BV" name="R1BV" role="tabpanel" tabindex="0"><pre class="literal-block">$ wget <a class="reference external" href="https://github.com/Xilinx/inference-server/raw/main/examples/resnet50/migraphx.py">https://github.com/Xilinx/inference-server/raw/main/examples/resnet50/migraphx.py</a>
-$ python3 migraphx.py --ip 127.0.0.1 --http-port 8998 --endpoint resnet50 --image ./dog-3619020_640.jpg --labels ./imagenet_classes.txt</pre>
+# This will take some time initially as MIGraphX will compile the ONNX model to MXR
+$ python3 migraphx.py --ip 127.0.0.1 --http-port 8998 --endpoint resnet50 --image ./dog-3619020_640.jpg --labels ./imagenet_classes.txt --wait</pre>
 </div><div aria-labelledby="tab-4-RlBHQQ==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-4-RlBHQQ==" name="RlBHQQ==" role="tabpanel" tabindex="0"><pre class="literal-block">$ wget <a class="reference external" href="https://github.com/Xilinx/inference-server/raw/main/examples/resnet50/vitis.py">https://github.com/Xilinx/inference-server/raw/main/examples/resnet50/vitis.py</a>
-$ python3 vitis.py --ip 127.0.0.1 --http-port 8998 --endpoint resnet50 --image ./dog-3619020_640.jpg --labels ./imagenet_classes.txt</pre>
+$ python3 vitis.py --ip 127.0.0.1 --http-port 8998 --endpoint resnet50 --image ./dog-3619020_640.jpg --labels ./imagenet_classes.txt --wait</pre>
 </div></div>
 <p>After running the script, you should get output similar to the following.
 The exact output may be slightly different depending on whether you used CPU, GPU or FPGA versions of the example.</p>
@@ -758,7 +766,7 @@ The server responds to the request and you can examine the results to take furth
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on July 12, 2023.
+      <span class="lastupdated">Last updated on September 05, 2023.
       </span></p>
   </div>
 
@@ -823,6 +831,10 @@ The server responds to the request and you can examine the results to take furth
         
           
           <dd><a href="/inference-server/0.3.0/">0.3.0</a></dd>
+          
+        
+          
+          <dd><a href="/inference-server/0.4.0/">0.4.0</a></dd>
           
         
            <strong> 

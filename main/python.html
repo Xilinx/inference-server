@@ -48,7 +48,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-svg.js"></script>
         <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
         <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
-        <script defer="defer" src="_static/tippy/python.1cafd2b0-731f-4f51-8cff-4c0248c157bc.js"></script>
+        <script defer="defer" src="_static/tippy/python.eb941828-978c-486f-85e5-5220aefe6fcf.js"></script>
         <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
         <script src="_static/dataTables.js"></script>
     <script src="_static/js/theme.js"></script>
@@ -1125,13 +1125,15 @@ in functionality to modelUnload and is provided for symmetry.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="amdinfer.ImageInferenceRequest">
-<span class="sig-prename descclassname"><span class="pre">amdinfer.</span></span><span class="sig-name descname"><span class="pre">ImageInferenceRequest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">images</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">asTensor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#amdinfer.ImageInferenceRequest" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">amdinfer.</span></span><span class="sig-name descname"><span class="pre">ImageInferenceRequest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">images</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">modelMetaData</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">asTensor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shape</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#amdinfer.ImageInferenceRequest" title="Permalink to this definition">¶</a></dt>
 <dd><p>Construct a request from an image or list of images</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>images</strong> (<em>image</em>) – Images may be numpy arrays or filepaths or a list of these</p></li>
+<li><p><strong>modelMetaData</strong> (<a class="reference internal" href="#amdinfer.ModelMetadata" title="amdinfer.ModelMetadata"><em>ModelMetadata</em></a>) – Pass the model metadata. Defaults to None.</p></li>
 <li><p><strong>asTensor</strong> (<em>bool</em><em>, </em><em>optional</em>) – Send data as a tensor or as base64-encoded string. Defaults to True.</p></li>
+<li><p><strong>shape</strong> (<em>list</em><em>, </em><em>optional</em>) – Specify the shape explicitly if needed. Defaults to None.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Raises</dt>
@@ -1682,6 +1684,17 @@ in functionality to modelUnload and is provided for symmetry.</p>
 <dt>Parameter <code class="docutils literal notranslate"><span class="pre">shape</span></code>:</dt><dd><p>shape of the tensor</p>
 </dd>
 <dt>Parameter <code class="docutils literal notranslate"><span class="pre">datatype</span></code>:</dt><dd><p>datatype of the tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="amdinfer.ModelMetadata.getInputs">
+<span class="sig-name descname"><span class="pre">getInputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#amdinfer.ModelMetadata" title="amdinfer.ModelMetadata"><span class="pre">amdinfer.ModelMetadata</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#amdinfer.Tensor" title="amdinfer.Tensor"><span class="pre">amdinfer.Tensor</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#amdinfer.ModelMetadata.getInputs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the input tensor’ metadata for this model</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>const std::vector&lt;ModelMetadataTensor&gt;&amp;</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2341,7 +2354,7 @@ in functionality to modelUnload and is provided for symmetry.</p>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on July 12, 2023.
+      <span class="lastupdated">Last updated on September 05, 2023.
       </span></p>
   </div>
 
@@ -2406,6 +2419,10 @@ in functionality to modelUnload and is provided for symmetry.</p>
         
           
           <dd><a href="/inference-server/0.3.0/">0.3.0</a></dd>
+          
+        
+          
+          <dd><a href="/inference-server/0.4.0/">0.4.0</a></dd>
           
         
            <strong> 

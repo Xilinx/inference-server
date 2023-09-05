@@ -48,7 +48,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-svg.js"></script>
         <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
         <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
-        <script defer="defer" src="_static/tippy/example_resnet50_cpp.311fc78f-dac5-438d-978c-594b44ff64a7.js"></script>
+        <script defer="defer" src="_static/tippy/example_resnet50_cpp.820b8519-d545-462c-a4a4-cc1a6899449a.js"></script>
         <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
         <script src="_static/dataTables.js"></script>
     <script src="_static/js/theme.js"></script>
@@ -540,7 +540,9 @@ Creating the <code class="docutils literal notranslate"><span class="pre">amdinf
 </div>
 <p>Depending on what protocol you want to use to communicate with the server, you may need to start it explicitly using one of the <code class="docutils literal notranslate"><span class="pre">amdinfer::Server</span></code> object’s methods.</p>
 <p>For example, if you were using HTTP/REST:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">args</span><span class="p">.</span><span class="n">ip</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">&quot;127.0.0.1&quot;</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">!</span><span class="n">client</span><span class="p">.</span><span class="n">serverLive</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">args</span><span class="p">.</span><span class="n">wait</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// if wait is true, skip ahead to waiting for the server to become ready</span>
+<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">args</span><span class="p">.</span><span class="n">ip</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">&quot;127.0.0.1&quot;</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">!</span><span class="n">client</span><span class="p">.</span><span class="n">serverLive</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;No server detected. Starting locally...</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
 <span class="w">    </span><span class="n">server</span><span class="p">.</span><span class="n">emplace</span><span class="p">();</span>
 <span class="w">    </span><span class="n">server</span><span class="p">.</span><span class="n">value</span><span class="p">().</span><span class="n">startHttp</span><span class="p">(</span><span class="n">args</span><span class="p">.</span><span class="n">http_port</span><span class="p">);</span>
@@ -553,7 +555,9 @@ Creating the <code class="docutils literal notranslate"><span class="pre">amdinf
 </pre></div>
 </div>
 <p>With gRPC:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">args</span><span class="p">.</span><span class="n">ip</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">&quot;127.0.0.1&quot;</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">!</span><span class="n">client</span><span class="p">.</span><span class="n">serverLive</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">args</span><span class="p">.</span><span class="n">wait</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// if wait is true, skip ahead to waiting for the server to become ready</span>
+<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">args</span><span class="p">.</span><span class="n">ip</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">&quot;127.0.0.1&quot;</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">!</span><span class="n">client</span><span class="p">.</span><span class="n">serverLive</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;No server detected. Starting locally...</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
 <span class="w">    </span><span class="n">server</span><span class="p">.</span><span class="n">emplace</span><span class="p">();</span>
 <span class="w">    </span><span class="n">server</span><span class="p">.</span><span class="n">value</span><span class="p">().</span><span class="n">startGrpc</span><span class="p">(</span><span class="n">args</span><span class="p">.</span><span class="n">grpc_port</span><span class="p">);</span>
@@ -587,7 +591,9 @@ Some examples of clients that you can create:</p>
 
 <span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">optional</span><span class="o">&lt;</span><span class="n">amdinfer</span><span class="o">::</span><span class="n">Server</span><span class="o">&gt;</span><span class="w"> </span><span class="n">server</span><span class="p">;</span>
 <span class="w">  </span><span class="c1">// +start protocol</span>
-<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">args</span><span class="p">.</span><span class="n">ip</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">&quot;127.0.0.1&quot;</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">!</span><span class="n">client</span><span class="p">.</span><span class="n">serverLive</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">args</span><span class="p">.</span><span class="n">wait</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// if wait is true, skip ahead to waiting for the server to become ready</span>
+<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">args</span><span class="p">.</span><span class="n">ip</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">&quot;127.0.0.1&quot;</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">!</span><span class="n">client</span><span class="p">.</span><span class="n">serverLive</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;No server detected. Starting locally...</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
 <span class="w">    </span><span class="n">server</span><span class="p">.</span><span class="n">emplace</span><span class="p">();</span>
 <span class="w">    </span><span class="n">server</span><span class="p">.</span><span class="n">value</span><span class="p">().</span><span class="n">startGrpc</span><span class="p">(</span><span class="n">args</span><span class="p">.</span><span class="n">grpc_port</span><span class="p">);</span>
@@ -773,7 +779,7 @@ If there are multiple requests sent in this way, they may be batched together by
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on July 12, 2023.
+      <span class="lastupdated">Last updated on September 05, 2023.
       </span></p>
   </div>
 
@@ -838,6 +844,10 @@ If there are multiple requests sent in this way, they may be batched together by
         
           
           <dd><a href="/inference-server/0.3.0/">0.3.0</a></dd>
+          
+        
+          
+          <dd><a href="/inference-server/0.4.0/">0.4.0</a></dd>
           
         
            <strong> 

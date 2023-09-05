@@ -48,7 +48,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-svg.js"></script>
         <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
         <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
-        <script defer="defer" src="_static/tippy/example_resnet50_python.ed364504-4e64-4d60-95be-7a23e6ac1839.js"></script>
+        <script defer="defer" src="_static/tippy/example_resnet50_python.48ffbbe5-d72a-4d24-8adc-fbcfa86a8c33.js"></script>
         <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
         <script src="_static/dataTables.js"></script>
     <script src="_static/js/theme.js"></script>
@@ -583,7 +583,7 @@ The implementations of the preprocessing functions can be seen in the examplesâ€
 This single path gets converted to a List of paths containing just the path you passed in or paths to all the files in the directory you passed in and its passed to the <code class="docutils literal notranslate"><span class="pre">preprocess</span></code> function.
 The file at each path is opened as a <code class="docutils literal notranslate"><span class="pre">numpy</span></code> array and stored in a List that the preprocess function returns.</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="n">paths</span> <span class="o">=</span> <span class="n">resolve_image_paths</span><span class="p">(</span><span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">image</span><span class="p">))</span>
-<span class="n">images</span> <span class="o">=</span> <span class="n">preprocess</span><span class="p">(</span><span class="n">paths</span><span class="p">)</span>
+<span class="n">images</span> <span class="o">=</span> <span class="n">preprocess</span><span class="p">(</span><span class="n">paths</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">input_size</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
@@ -594,21 +594,24 @@ Each image is constructed into an <code class="docutils literal notranslate"><sp
 This function accepts a single <code class="docutils literal notranslate"><span class="pre">numpy</span></code> array or a list of <code class="docutils literal notranslate"><span class="pre">numpy</span></code> arrays, where each array represents an input tensor.
 The ResNet50 model only accepts a single input tensor so a single image is enough.
 This function infers the shape and datatype of the image using the properties stored in the <code class="docutils literal notranslate"><span class="pre">numpy</span></code> array.</p>
-<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">construct_requests</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="n">modelMetaData</span><span class="p">):</span>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">construct_requests</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="n">model_metadata</span><span class="p">,</span> <span class="n">shape</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Construct requests for the inference server from the input images. For ResNet50,</span>
 <span class="sd">    a valid request includes a single input tensor containing a square image.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        images (list[numpy.ndarray]): the input images</span>
-<span class="sd">        modelMetaData(ModelMetadata): the model metadata</span>
+<span class="sd">        model_metadata(ModelMetadata): the model metadata</span>
+<span class="sd">        shape (list[int]): the shape of the images</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        list[amdinfer.InferenceRequest]: the requests</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">requests</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">image</span> <span class="ow">in</span> <span class="n">images</span><span class="p">:</span>
-        <span class="n">requests</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">amdinfer</span><span class="o">.</span><span class="n">ImageInferenceRequest</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">modelMetaData</span><span class="p">))</span>
+        <span class="n">requests</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">amdinfer</span><span class="o">.</span><span class="n">ImageInferenceRequest</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">model_metadata</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="n">shape</span><span class="p">)</span>
+        <span class="p">)</span>
     <span class="k">return</span> <span class="n">requests</span>
 
 
@@ -666,7 +669,7 @@ If there are multiple requests sent in this way, they may be batched together by
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on July 12, 2023.
+      <span class="lastupdated">Last updated on September 05, 2023.
       </span></p>
   </div>
 
@@ -731,6 +734,10 @@ If there are multiple requests sent in this way, they may be batched together by
         
           
           <dd><a href="/inference-server/0.3.0/">0.3.0</a></dd>
+          
+        
+          
+          <dd><a href="/inference-server/0.4.0/">0.4.0</a></dd>
           
         
            <strong> 
