@@ -64,7 +64,10 @@ BufferPtr VartTensorAllocator::get(const Tensor& tensor, size_t batch_size) {
   auto xir_type = mapTypeToXir(datatype);
   std::vector<int> xir_shape;
   xir_shape.reserve(shape.size() + 1);
-  xir_shape.push_back(static_cast<int>(batch_size));
+  // if batch size is zero, assume it's already part of the shape
+  if (batch_size != 0) {
+    xir_shape.push_back(static_cast<int>(batch_size));
+  }
   for (const auto& index : shape) {
     xir_shape.push_back(static_cast<int>(index));
   }

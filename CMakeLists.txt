@@ -91,6 +91,10 @@ endif()
 
 list(APPEND VCPKG_MANIFEST_FEATURES "testing")
 
+# In CMake 3.27+, find_package uses <PACKAGE_NAME>_ROOT variables. We're using
+# AKS_ROOT in the environment currently.
+cmake_policy(SET CMP0144 OLD)
+
 # set the project name
 project(
   amdinfer
