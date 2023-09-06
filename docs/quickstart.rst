@@ -81,6 +81,7 @@ The CPU version has no special hardware requirements to run so you can always ru
 
     .. code-tab:: console FPGA
 
+        # this example assumes a U250. If you're using a different board, download the appropriate model for your board instead
         $ wget -O vitis.tar.gz https://www.xilinx.com/bin/public/openDownload?filename=resnet_v1_50_tf-u200-u250-r2.5.0.tar.gz
         $ tar -xzf vitis.tar.gz "resnet_v1_50_tf/resnet_v1_50_tf.xmodel"
         $ mkdir -p ./model_repository/resnet50/1
@@ -179,15 +180,15 @@ The flags used in this sample command are:
 
     .. code-tab:: console CPU
 
-        $ docker run -d --volume $(pwd)/model_repository:/mnt/models:rw --net=host amdih/serve:uif1.1_zendnn_amdinfer_0.4.0
+        $ docker run -d --volume $(pwd)/model_repository:/mnt/models:rw --net=host amdih/serve:uif1.2_zendnn_amdinfer_0.4.0
 
     .. code-tab:: console GPU
 
-        $ docker run -d --device /dev/kfd --device /dev/dri --volume $(pwd)/model_repository:/mnt/models:rw --net=host amdih/serve:uif1.1_migraphx_amdinfer_0.4.0
+        $ docker run -d --device /dev/kfd --device /dev/dri --volume $(pwd)/model_repository:/mnt/models:rw --net=host amdih/serve:uif1.2_migraphx_amdinfer_0.4.0
 
     .. code-tab:: console FPGA
 
-        $ docker run -d --device /dev/dri --device /dev/xclmgmt<id> --volume $(pwd)/model_repository:/mnt/models:rw --net=host amdih/serve:uif1.1_vai_amdinfer_0.4.0
+        $ docker run -d --device /dev/dri --device /dev/xclmgmt<id> --volume $(pwd)/model_repository:/mnt/models:rw --net=host amdih/serve:uif1.2_vai_amdinfer_0.4.0
 
 The endpoints for each model will be the name of the model in the ``config.toml``, which should match the name of the parent directory in the model repository.
 In this example, it would be "resnet50".

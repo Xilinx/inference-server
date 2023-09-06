@@ -259,7 +259,7 @@ if os.path.exists("./_themes/xilinx"):
 
     html_context["languages"] = [("en", "/" + "inference-server/" + version + "/")]
 
-    versions = ["0.1.0", "0.2.0", "0.3.0"]
+    versions = ["0.1.0", "0.2.0", "0.3.0", "0.4.0"]
     versions.append("main")
     html_context["versions"] = []
     for version in versions:

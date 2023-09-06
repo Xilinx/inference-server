@@ -180,7 +180,7 @@ The following packages are installed from Github.
     :github:`protocolbuffers/protobuf`,3.19.4,BSD-3,Dynamically linked by amdinfer-server and Vitis libraries\ :superscript:`a 0`
     :github:`fpagliughi/sockpp`,e5c51b5,BSD-3,Dynamically linked by amdinfer-server :superscript:`a 0`
     :github:`gabime/spdlog`,1.8.2,MIT,Statically linked by amdinfer-server for logging\ :superscript:`a 0`
-    :github:`Xilinx/Vitis-AI`,3.0,Apache 2.0,VART is dynamically linked by amdinfer-server\ :superscript:`a 1`
+    :github:`Xilinx/Vitis-AI`,3.5,Apache 2.0,VART is dynamically linked by amdinfer-server\ :superscript:`a 1`
     :github:`wg/wrk`,4.1.0,modified Apache 2.0,Executable used for benchmarking amdinfer-server\ :superscript:`d 0`
 
 Others
@@ -203,8 +203,8 @@ The following packages are installed from Xilinx.
     :header: Name,Version,License,Usage
     :widths: auto
 
-    :xilinxDownload:`XRM <xrm_202120.1.3.29_18.04-x86_64.deb>`,1.3.29,Apache 2.0,Used for FPGA resource management\ :superscript:`a 1`
-    :xilinxDownload:`XRT <xrt_202120.2.12.427_18.04-amd64-xrt.deb>`,2.12.427,Apache 2.0,Used for communicating to the FPGA\ :superscript:`a 1`
+    :xilinxDownload:`XRM <xrm_202220.1.5.212_20.04-x86_64.deb>`,1.15.212,Apache 2.0,Used for FPGA resource management\ :superscript:`a 1`
+    :xilinxDownload:`XRT <xrt_202220.2.14.418_20.04-amd64-xrt.deb>`,2.14.418,Apache 2.0,Used for communicating to the FPGA\ :superscript:`a 1`
 
 AMD
 ^^^
