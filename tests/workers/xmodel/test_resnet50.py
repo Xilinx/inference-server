@@ -107,6 +107,7 @@ class TestXmodelU250:
     "server_environment",
     [{"XLNX_VART_FIRMWARE": "/opt/xilinx/overlaybins/DPUCVDX8H/4PE/"}],
 )
+@pytest.mark.skip("Running multiple FPGA tests in CI needs improvement")
 class TestXmodelVck50004pe:
     """
     Test the Xmodel worker on vck5000-4pe board
