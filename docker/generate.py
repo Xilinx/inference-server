@@ -316,13 +316,13 @@ def get_xrm_xrt_packages(package_manager):
     if package_manager == "apt":
         return textwrap.dedent(
             """\
-            && wget --quiet -O xrt.deb https://www.xilinx.com/bin/public/openDownload?filename=xrt_202220.2.14.354_20.04-amd64-xrt.deb \\
+            && wget --quiet -O xrt.deb https://www.xilinx.com/bin/public/openDownload?filename=xrt_202220.2.14.418_20.04-amd64-xrt.deb \\
             && wget --quiet -O xrm.deb https://www.xilinx.com/bin/public/openDownload?filename=xrm_202220.1.5.212_20.04-x86_64.deb \\"""
         )
     elif package_manager == "yum":
         return textwrap.dedent(
             """\
-            && wget --quiet -O xrt.rpm https://www.xilinx.com/bin/public/openDownload?filename=xrt_202220.2.14.354_7.8.2003-x86_64-xrt.rpm \\
+            && wget --quiet -O xrt.rpm https://www.xilinx.com/bin/public/openDownload?filename=xrt_202220.2.14.418_7.8.2003-x86_64-xrt.rpm \\
             && wget --quiet -O xrm.rpm https://www.xilinx.com/bin/public/openDownload?filename=xrm_202220.1.5.212_7.8.2003-x86_64.rpm \\"""
         )
     raise ValueError(f"Unknown base image type: {package_manager}")
@@ -576,8 +576,8 @@ def install_dev_packages(manager: PackageManager, core):
 
 
 def install_migraphx(manager: PackageManager, custom_backends):
-    migraphx_apt_repo = 'echo "deb [arch=amd64 trusted=yes] http://repo.radeon.com/rocm/apt/5.4.1/ ubuntu main" > /etc/apt/sources.list.d/rocm.list'
-    migraphx_yum_repo = '"[ROCm]\\nname=ROCm\\nbaseurl=https://repo.radeon.com/rocm/yum/5.4.1/\\nenabled=1\\ngpgcheck=1\\ngpgkey=https://repo.radeon.com/rocm/rocm.gpg.key" > /etc/yum.repos.d/rocm.repo'
+    migraphx_apt_repo = 'echo "deb [arch=amd64 trusted=yes] http://repo.radeon.com/rocm/apt/5.6.1/ ubuntu main" > /etc/apt/sources.list.d/rocm.list'
+    migraphx_yum_repo = '"[ROCm]\\nname=ROCm\\nbaseurl=https://repo.radeon.com/rocm/yum/5.6.1/\\nenabled=1\\ngpgcheck=1\\ngpgkey=https://repo.radeon.com/rocm/rocm.gpg.key" > /etc/yum.repos.d/rocm.repo'
 
     if manager.name == "apt":
         add_repo = (

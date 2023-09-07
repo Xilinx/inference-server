@@ -45,6 +45,7 @@ struct Args {
   int output_classes = kOutputClasses;
   std::string input_node;
   std::string output_node;
+  bool wait;
 };
 
 inline Args parseArgs(int argc, char** argv) {
@@ -80,6 +81,8 @@ inline Args parseArgs(int argc, char** argv) {
       cxxopts::value(args.top))
     ("output-classes", "Number of output classes for this model",
       cxxopts::value(args.output_classes))
+    ("wait", "Don't start the server automatically and wait for it indefinitely",
+      cxxopts::value(args.wait))
     ("help", "Print help");
     // clang-format on
 

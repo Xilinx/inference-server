@@ -27,7 +27,7 @@
       "node_name": "resnet50_fpga",
       "node_params": {
         "DPURunner": {
-          "model_file": "artifacts/resnet50/resnet_v1_50_tf.xmodel",
+          "model_file": "artifacts/resnet50/u250/resnet_v1_50_tf.xmodel",
           "num_runners": 1
         }
       }

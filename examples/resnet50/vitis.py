@@ -71,21 +71,24 @@ def postprocess(output, k):
 
 
 # +construct request
-def construct_requests(images, modelMetaData):
+def construct_requests(images, model_metadata, shape):
     """
     Construct requests for the inference server from the input images. For ResNet50,
     a valid request includes a single input tensor containing a square image.
 
     Args:
         images (list[numpy.ndarray]): the input images
-        modelMetaData(ModelMetadata): the model metadata
+        model_metadata(ModelMetadata): the model metadata
+        shape (list[int]): the shape of the images
 
     Returns:
         list[amdinfer.InferenceRequest]: the requests
     """
     requests = []
     for image in images:
-        requests.append(amdinfer.ImageInferenceRequest(image, modelMetaData))
+        requests.append(
+            amdinfer.ImageInferenceRequest(image, model_metadata, shape=shape)
+        )
     return requests
 
 
@@ -159,7 +162,7 @@ def get_args():
     if (not args.model) and (not args.endpoint):
         root = os.getenv("AMDINFER_ROOT")
         assert root is not None
-        args.model = root + "/external/artifacts/resnet50/resnet_v1_50_tf.xmodel"
+        args.model = root + "/external/artifacts/resnet50/u250/resnet_v1_50_tf.xmodel"
 
     return args
 
@@ -171,8 +174,11 @@ def main(args):
     server_addr = f"http://{args.ip}:{args.http_port}"
     client = amdinfer.HttpClient(server_addr)
     # -create client
+    if args.wait:
+        # if wait is true, skip ahead to waiting for the server to become ready
+        pass
     # start it locally if it doesn't already up if the IP address is the localhost
-    if args.ip == "127.0.0.1" and not client.serverLive():
+    elif args.ip == "127.0.0.1" and not client.serverLive():
         print("No server detected. Starting locally...")
         # +initialize
         server = amdinfer.Server()
@@ -204,7 +210,8 @@ def main(args):
     images = preprocess(paths, args.input_size)
     # -prepare images
 
-    requests = construct_requests(images, client.modelMetadata(endpoint))
+    shape = [args.input_size, args.input_size, 3]
+    requests = construct_requests(images, client.modelMetadata(endpoint), shape)
 
     assert len(paths) == len(requests)
     print("Making inferences...")

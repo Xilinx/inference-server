@@ -28,6 +28,39 @@ Unreleased
 Added
 ^^^^^
 
+* N/A
+
+Changed
+^^^^^^^
+
+* N/A
+
+Deprecated
+^^^^^^^^^^
+
+* N/A
+
+Removed
+^^^^^^^
+
+* N/A
+
+Fixed
+^^^^^
+
+* N/A
+
+Security
+^^^^^^^^
+
+* N/A
+
+:github:`0.4.0 <Xilinx/inference-server/releases/tag/v0.4.0>` - 2023-09-07
+--------------------------------------------------------------------------
+
+Added
+^^^^^
+
 * An example MLPerf app using the inference server API (:pr:`129`)
 * Google Benchmark for writing performance-tracking tests (:pr:`147`)
 * Custom memory storage classes in the memory pool (:pr:`166`)
@@ -37,7 +70,8 @@ Added
 * Tests with FP16 (:pr:`189` and :pr:`203`)
 * Versioned models (:pr:`190`)
 * Expand benchmarking with MLPerf app (:pr:`197`) and add to data to docs (:pr:`198`)
-
+* Custom environment configuration per test (:pr:`214`)
+* VCK5000 test (:pr:`214`)
 
 Changed
 ^^^^^^^
@@ -57,7 +91,7 @@ Changed
 * Close dynamically opened libraries (:pr:`186`)
 * Replace Jaeger exporter with OTLP (:pr:`187`)
 * Change STRING type to BYTES and shape type from uint64 to int64 (:pr:`190`)
-* Rename ONNX file to MXR correctly (:pr:`202`)
+* Include the correct tensor name in ModelMetadata in the XModel backend (:pr:`207`)
 
 Deprecated
 ^^^^^^^^^^
@@ -67,7 +101,7 @@ Deprecated
 Removed
 ^^^^^^^
 
-* N/A
+* Python 3.6 support (:pr:`215`)
 
 Fixed
 ^^^^^
@@ -78,6 +112,7 @@ Fixed
 * Fix building with different CMake options (:pr:`170`)
 * Fix wheel generation with vcpkg (:pr:`191`)
 * Load models at startup correctly (:pr:`195`)
+* Fix handling MIGraphX models with dots in the names (:pr:`202`)
 
 Security
 ^^^^^^^^

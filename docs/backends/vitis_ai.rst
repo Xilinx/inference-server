@@ -44,6 +44,7 @@ While not every model is tested on every FPGA, the Vitis AI backend has run at l
 
     Alveo,U250,DPUCADF8H
     Versal,VCK5000,DPUCVDX8H
+    Alveo,V70,DPUCV2DX8G
 
 Other devices and DPUs may also work but are currently untested.
 
