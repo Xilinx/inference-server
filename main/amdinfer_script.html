@@ -48,7 +48,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-svg.js"></script>
         <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
         <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
-        <script defer="defer" src="_static/tippy/amdinfer_script.8cf3d360-bbec-4e8e-9c7e-1b5ac73b56d5.js"></script>
+        <script defer="defer" src="_static/tippy/amdinfer_script.a681f225-c4db-44fb-b663-0171184bec19.js"></script>
         <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
         <script src="_static/dataTables.js"></script>
     <script src="_static/js/theme.js"></script>
@@ -398,22 +398,31 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l3"><a class="reference internal" href="changelog.html#security">Security</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#id2">0.3.0 - 2023-02-01</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id2">0.4.0 - 2023-09-07</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="changelog.html#id3">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="changelog.html#id4">Changed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="changelog.html#id5">Deprecated</a></li>
 <li class="toctree-l3"><a class="reference internal" href="changelog.html#id6">Removed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="changelog.html#id7">Fixed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id8">Security</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#id8">0.2.0 - 2022-08-05</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id9">Added</a></li>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id10">Changed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id11">Fixed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id9">0.3.0 - 2023-02-01</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id10">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id11">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id12">Deprecated</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id13">Removed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id14">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#id12">0.1.0 - 2022-02-08</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id13">Added</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id15">0.2.0 - 2022-08-05</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id16">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id17">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id18">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id19">0.1.0 - 2022-02-08</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id20">Added</a></li>
 </ul>
 </li>
 </ul>
@@ -682,8 +691,8 @@ The documentation for the options available in this Python script can be seen he
 <section id="get">
 <h3>get<a class="headerlink" href="#get" title="Permalink to this headline">¶</a></h3>
 <p>Get artifacts (images, videos and models) for examples and tests</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">amdinfer</span> <span class="n">get</span> <span class="p">[</span><span class="o">--</span><span class="n">destination</span> <span class="n">DESTINATION</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="nb">all</span><span class="o">-</span><span class="n">backends</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">vitis</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">ptzendnn</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">tfzendnn</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">zendnn</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">migraphx</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="nb">all</span><span class="o">-</span><span class="n">models</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">assets</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">bert</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">densebox</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">repository</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">resnet50</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">yolov3</span><span class="p">]</span>
-             <span class="p">[</span><span class="o">--</span><span class="n">yolov4</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">resnet101</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">amdinfer</span> <span class="n">get</span> <span class="p">[</span><span class="o">--</span><span class="n">destination</span> <span class="n">DESTINATION</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="nb">all</span><span class="o">-</span><span class="n">backends</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">vitis</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">ptzendnn</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">tfzendnn</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">zendnn</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">migraphx</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="nb">all</span><span class="o">-</span><span class="n">models</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">assets</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">bert</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">densebox</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">repository</span><span class="p">]</span>
+             <span class="p">[</span><span class="o">--</span><span class="n">resnet50</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">yolov3</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">yolov4</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">resnet101</span><span class="p">]</span>
 </pre></div>
 </div>
 <section id="options_repeat5">
@@ -897,14 +906,15 @@ The documentation for the options available in this Python script can be seen he
 <section id="test">
 <h3>test<a class="headerlink" href="#test" title="Permalink to this headline">¶</a></h3>
 <p>Run the test suite with pytest. All unknown arguments are passed to pytest</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">amdinfer</span> <span class="n">test</span> <span class="p">[</span><span class="o">--</span><span class="n">mode</span> <span class="p">{</span><span class="n">examples</span><span class="p">,</span><span class="n">tests</span><span class="p">,</span><span class="nb">all</span><span class="p">}]</span> <span class="p">[</span><span class="o">--</span><span class="n">hostname</span> <span class="n">HOSTNAME</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">http</span><span class="o">-</span><span class="n">port</span> <span class="n">HTTP_PORT</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">load</span><span class="o">-</span><span class="n">before</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">build</span> <span class="n">BUILD</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">benchmark</span> <span class="p">{</span><span class="n">only</span><span class="p">,</span><span class="n">skip</span><span class="p">,</span><span class="nb">all</span><span class="p">}]</span> <span class="p">[</span><span class="o">--</span><span class="n">perf</span> <span class="p">{</span><span class="n">only</span><span class="p">,</span><span class="n">skip</span><span class="p">,</span><span class="nb">all</span><span class="p">}]</span> <span class="p">[</span><span class="o">--</span><span class="n">cpp</span> <span class="p">{</span><span class="n">only</span><span class="p">,</span><span class="n">skip</span><span class="p">,</span><span class="nb">all</span><span class="p">}]</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">amdinfer</span> <span class="n">test</span> <span class="p">[</span><span class="o">--</span><span class="n">mode</span> <span class="p">{</span><span class="n">tests</span><span class="p">,</span><span class="nb">all</span><span class="p">,</span><span class="n">examples</span><span class="p">}]</span> <span class="p">[</span><span class="o">--</span><span class="n">hostname</span> <span class="n">HOSTNAME</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">http</span><span class="o">-</span><span class="n">port</span> <span class="n">HTTP_PORT</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">load</span><span class="o">-</span><span class="n">before</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">build</span> <span class="n">BUILD</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">benchmark</span> <span class="p">{</span><span class="n">only</span><span class="p">,</span><span class="n">skip</span><span class="p">,</span><span class="nb">all</span><span class="p">}]</span> <span class="p">[</span><span class="o">--</span><span class="n">perf</span> <span class="p">{</span><span class="n">only</span><span class="p">,</span><span class="n">skip</span><span class="p">,</span><span class="nb">all</span><span class="p">}]</span>
+              <span class="p">[</span><span class="o">--</span><span class="n">cpp</span> <span class="p">{</span><span class="n">only</span><span class="p">,</span><span class="n">skip</span><span class="p">,</span><span class="nb">all</span><span class="p">}]</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span>
 </pre></div>
 </div>
 <section id="options_repeat10">
 <h4>Options<a class="headerlink" href="#options_repeat10" title="Permalink to this headline">¶</a></h4>
 <dl class="option-list">
 <dt><kbd>--mode</kbd></dt>
-<dd><p>Possible choices: examples, tests, all</p>
+<dd><p>Possible choices: tests, all, examples</p>
 <p>Type of tests to run. Defaults to tests</p>
 <p>Default: “tests”</p>
 </dd>
@@ -994,7 +1004,7 @@ The documentation for the options available in this Python script can be seen he
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
-      <span class="lastupdated">Last updated on September 05, 2023.
+      <span class="lastupdated">Last updated on September 07, 2023.
       </span></p>
   </div>
 
