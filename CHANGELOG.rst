@@ -72,7 +72,6 @@ Added
 * Expand benchmarking with MLPerf app (:pr:`197`) and add to data to docs (:pr:`198`)
 * Custom environment configuration per test (:pr:`214`)
 * VCK5000 test (:pr:`214`)
-* Experimental V70 support (:pr:`215`)
 
 Changed
 ^^^^^^^

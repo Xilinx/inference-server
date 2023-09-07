@@ -211,10 +211,10 @@ BatchPtr XModel::doRun(Batch* batch, const MemoryPool* pool) {
       auto xir_type = tensor->get_data_type();
       auto type = mapXirToType(xir_type);
       InferenceRequestInput input(nullptr, shape, type, tensor->get_name());
-      // the shape includes the batch size so use external batch size 0
+      // the shape includes the batch size so use external batch size 1
       output_buffers.push_back(
-        pool->get({MemoryAllocators::VartTensor}, input, 0));
-      new_input_buffers.push_back(pool->get(next_allocators_, input, 0));
+        pool->get({MemoryAllocators::VartTensor}, input, 1));
+      new_input_buffers.push_back(pool->get(next_allocators_, input, 1));
     }
 
     std::vector<vart::TensorBuffer*> outputs_ptr;
