@@ -55,7 +55,7 @@ You can see a more detailed version of this example in the `quickstart <https://
   ./quickstart-setup.sh
 
   # Step 2: Launch the AMD Inference Server
-  docker run -d --net=host -v ${PWD}/model_repository:/mnt/models:rw amdih/serve:uif1.1_zendnn_amdinfer_0.3.0 amdinfer-server --enable-repository-watcher
+  docker run -d --net=host -v ${PWD}/model_repository:/mnt/models:rw amdih/serve:uif1.2_zendnn_amdinfer_0.4.0
 
   # Step 3: Install the Python client library
   pip install amdinfer
