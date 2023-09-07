@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <link rel="apple-touch-icon" sizes="180x180" href="../_static/apple-touch-icon.png" type="image/png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../_static/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../_static/favicon-16x16.png">
+    <link rel="manifest" href="../_static/site.webmanifest">
+    <link rel="mask-icon" href="../_static/safari-pinned-tab.svg" color="#5bbad5" type="image/svg+xml">
+    <meta name="msapplication-TileColor" content="#ed1c24">
+    <meta name="theme-color" content="#ed1c24">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+<!-- OneTrust Cookies Consent Notice start for xilinx.github.io -->
+
+<script src="https://cdn.cookielaw.org/scripttemplates/otSDKStub.js" data-document-language="true" type="text/javascript" charset="UTF-8" data-domain-script="03af8d57-0a04-47a6-8f10-322fa00d8fc7" ></script>
+<script type="text/javascript">
+function OptanonWrapper() { }
+</script>
+<!-- OneTrust Cookies Consent Notice end for xilinx.github.io -->
+<!-- Google Tag Manager -->
+<script type="text/plain" class="optanon-category-C0002">(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5RHQV7');</script>
+<!-- End Google Tag Manager -->
+  <title>MIGraphX &mdash; AMD Inference Server</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/twemoji.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/tabs.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+      <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/clipboard.min.js"></script>
+        <script src="../_static/copybutton.js"></script>
+        <script src="https://twemoji.maxcdn.com/v/latest/twemoji.min.js"></script>
+        <script src="../_static/twemoji.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-svg.js"></script>
+        <script src="../_static/tabs.js"></script>
+        <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
+        <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
+        <script defer="defer" src="../_static/tippy/backends/migraphx.c368984d-42cf-40d5-859d-e36eeafb3411.js"></script>
+        <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+        <script src="../_static/dataTables.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="PtZenDNN" href="ptzendnn.html" />
+    <link rel="prev" title="CPlusPlus" href="cplusplus.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5RHQV7" height="0" width="0" style="display:none;visibility:hidden" class="optanon-category-C0002"></iframe></noscript>
+<!-- End Google Tag Manager --> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+            <a href="../index.html" class="icon icon-home"> AMD Inference Server
+            <img src="../_static/xilinx-header-logo.svg" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                0.4.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../introduction.html#features">Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../introduction.html#documentation-overview">Documentation overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../introduction.html#support">Support</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../terminology.html">Terminology</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../terminology.html#amdinfer">amdinfer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../terminology.html#types-of-docker-images">Types of Docker images</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../terminology.html#development">Development</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../terminology.html#deployment">Deployment</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../terminology.html#types-of-users">Types of users</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../terminology.html#clients">Clients</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../terminology.html#administrators">Administrators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../terminology.html#developers">Developers</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart.html#prepare-the-model-repository">Prepare the model repository</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart.html#get-the-deployment-image">Get the deployment image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart.html#start-the-image">Start the image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart.html#server-deployment-summary">Server deployment summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart.html#get-the-python-library">Get the Python library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart.html#running-an-example">Running an example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart.html#inference-summary">Inference summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart.html#next-steps">Next steps</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User guide</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../backends.html">Backends</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="cplusplus.html">CPlusPlus</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cplusplus.html#model-support">Model support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cplusplus.html#hardware-support">Hardware support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cplusplus.html#host-setup">Host setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cplusplus.html#build-an-image">Build an image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cplusplus.html#start-a-container">Start a container</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cplusplus.html#get-test-assets">Get test assets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cplusplus.html#loading-the-backend">Loading the backend</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cplusplus.html#troubleshooting">Troubleshooting</a></li>
+</ul>
+</li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">MIGraphX</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#model-support">Model support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hardware-support">Hardware support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#host-setup">Host setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#build-an-image">Build an image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#start-a-container">Start a container</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#get-test-assets">Get test assets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#loading-the-backend">Loading the backend</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#troubleshooting">Troubleshooting</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="ptzendnn.html">PtZenDNN</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="ptzendnn.html#model-support">Model support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ptzendnn.html#hardware-support">Hardware support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ptzendnn.html#host-setup">Host setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ptzendnn.html#build-an-image">Build an image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ptzendnn.html#start-a-container">Start a container</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ptzendnn.html#get-test-assets">Get test assets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ptzendnn.html#loading-the-backend">Loading the backend</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ptzendnn.html#troubleshooting">Troubleshooting</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tfzendnn.html">TfZenDNN</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tfzendnn.html#model-support">Model support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tfzendnn.html#hardware-support">Hardware support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tfzendnn.html#host-setup">Host setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tfzendnn.html#build-an-image">Build an image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tfzendnn.html#start-a-container">Start a container</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tfzendnn.html#get-test-assets">Get test assets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tfzendnn.html#loading-the-backend">Loading the backend</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tfzendnn.html#troubleshooting">Troubleshooting</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="vitis_ai.html">Vitis AI</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="vitis_ai.html#model-support">Model support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vitis_ai.html#hardware-support">Hardware support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vitis_ai.html#host-setup">Host setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vitis_ai.html#build-an-image">Build an image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vitis_ai.html#start-a-container">Start a container</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vitis_ai.html#get-test-assets">Get test assets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vitis_ai.html#loading-the-backend">Loading the backend</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vitis_ai.html#troubleshooting">Troubleshooting</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../model_repository.html">Model Repository</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../model_repository.html#single-models">Single models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../model_repository.html#ensembles">Ensembles</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../ensembles.html">Ensembles</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ensembles.html#defining-ensembles">Defining ensembles</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../ensembles.html#model-repository">Model repository</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ensembles.html#api">API</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../deployment.html">Deployment</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../deployment.html#deployment-image">Deployment image</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../deployment.html#get-the-image">Get the image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../deployment.html#build-the-image">Build the image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../deployment.html#push-to-a-registry">Push to a registry</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../deployment.html#prepare-the-image">Prepare the image</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../deployment.html#start-a-container">Start a container</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../deployment.html#kserve">KServe</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../deployment.html#development-image">Development image</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../client_api.html">Client API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../client_api.html#include-the-api">Include the API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client_api.html#create-a-client-object">Create a client object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client_api.html#server-status">Server status</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client_api.html#loading-a-backend">Loading a backend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client_api.html#making-an-inference-request">Making an inference request</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client_api.html#parsing-the-response">Parsing the response</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client_api.html#next-steps">Next steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../kserve.html">KServe</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../kserve.html#set-up-kubernetes-and-kserve">Set up Kubernetes and KServe</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../kserve.html#get-or-build-the-amd-inference-server-image">Get or build the AMD Inference Server Image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../kserve.html#start-an-inference-service">Start an inference service</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../kserve.html#serving-runtime">Serving Runtime</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../kserve.html#custom-container">Custom container</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../kserve.html#making-requests">Making Requests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../kserve.html#debugging">Debugging</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../performance.html">Performance</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../performance.html#mlcommons">MLCommons</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../performance.html#singlestream">SingleStream</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../performance.html#server">Server</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../performance_factors.html">Performance Factors</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../performance_factors.html#hardware">Hardware</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../performance_factors.html#compile-the-right-version">Compile the right version</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../performance_factors.html#parallelism">Parallelism</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../performance_factors.html#rest-threads">REST threads</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../performance_factors.html#sending-requests">Sending requests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../performance_factors.html#duplicating-workers">Duplicating workers</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../troubleshooting.html">Troubleshooting</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../troubleshooting.html#use-the-latest-version">Use the latest version</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../troubleshooting.html#use-server-logs">Use server logs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../troubleshooting.html#build-errors">Build errors</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../hello_world_echo.html">Hello World - Python</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../hello_world_echo.html#import-the-library">Import the library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../hello_world_echo.html#create-our-client-and-server-objects">Create our client and server objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../hello_world_echo.html#is-amd-inference-server-already-running">Is AMD Inference Server already running?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../hello_world_echo.html#load-a-worker">Load a worker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../hello_world_echo.html#inference">Inference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../hello_world_echo.html#validate-the-response">Validate the response</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../hello_world_echo.html#clean-up">Clean up</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../hello_world_echo.html#next-steps">Next steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../example_resnet50_cpp.html">Running ResNet50 - C++</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../example_resnet50_cpp.html#include-the-header">Include the header</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example_resnet50_cpp.html#start-the-server">Start the server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example_resnet50_cpp.html#create-the-client-object">Create the client object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example_resnet50_cpp.html#load-a-worker">Load a worker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example_resnet50_cpp.html#prepare-images">Prepare images</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example_resnet50_cpp.html#construct-requests">Construct requests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example_resnet50_cpp.html#make-an-inference">Make an inference</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../example_resnet50_python.html">Running ResNet50 - Python</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../example_resnet50_python.html#include-the-module">Include the module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example_resnet50_python.html#start-the-server">Start the server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example_resnet50_python.html#create-the-client-object">Create the client object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example_resnet50_python.html#load-a-worker">Load a worker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example_resnet50_python.html#prepare-images">Prepare images</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example_resnet50_python.html#construct-requests">Construct requests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example_resnet50_python.html#make-an-inference">Make an inference</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developers</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart_development.html">Developer Quickstart</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#set-up-the-host">Set up the host</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#get-the-code">Get the code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#amdinfer-script">amdinfer script</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#build-or-get-the-docker-image">Build or get the Docker image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#compiling-the-amd-inference-server">Compiling the AMD Inference Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#get-test-artifacts">Get test artifacts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#run-the-amd-inference-server">Run the AMD Inference Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart_development.html#next-steps">Next steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../testing.html">Testing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../testing.html#add-a-new-test">Add a new test</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../testing.html#add-assets">Add assets</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture.html">Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../architecture.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture.html#ingestion">Ingestion</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../architecture.html#api">API</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../architecture.html#http-rest-and-websocket">HTTP/REST and WebSocket</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../architecture.html#grpc">gRPC</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../architecture.html#c-api">C++ API</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture.html#batching">Batching</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture.html#workers">Workers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../architecture.html#organization-and-lifecycle">Organization and Lifecycle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../architecture.html#improving-performance">Improving Performance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../architecture.html#external-processing">External Processing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../architecture.html#xmodel">XModel</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture.html#shared-state">Shared State</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture.html#observation">Observation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../architecture.html#logging">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../architecture.html#metrics">Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../architecture.html#tracing">Tracing</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../aks.html">AKS</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../aks.html#introduction-to-aks">Introduction to AKS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../aks.html#using-aks-in-amd-inference-server">Using AKS in AMD Inference Server</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../logging.html">Logs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../logging.html#amd-inference-server-logs">AMD Inference Server Logs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../logging.html#drogon-logs">Drogon Logs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../benchmarking.html">Benchmarking</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../benchmarking.html#xmodel-benchmarking">XModel Benchmarking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../benchmarking.html#kernel-simulation">Kernel Simulation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../metrics.html">Metrics</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../metrics.html#quickstart">Quickstart</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../tracing.html">Tracing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../tracing.html#quickstart">Quickstart</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">About</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../contributing.html#ways-to-contribute">Ways to contribute</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../contributing.html#idea-generation">Idea generation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../contributing.html#raise-issues">Raise issues</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../contributing.html#triage">Triage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../contributing.html#raise-pull-requests">Raise pull requests</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../contributing.html#style-guide">Style guide</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../contributing.html#documentation">Documentation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../dependencies.html">Dependencies</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../dependencies.html#docker-image">Docker Image</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../dependencies.html#base-image">Base Image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../dependencies.html#ubuntu-focal-repositories">Ubuntu Focal Repositories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../dependencies.html#ubuntu-ppas">Ubuntu PPAs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../dependencies.html#pypi">PyPI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../dependencies.html#github">Github</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../dependencies.html#others">Others</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../dependencies.html#xilinx">Xilinx</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../dependencies.html#amd">AMD</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../dependencies.html#included">Included</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dependencies.html#downloaded-files">Downloaded Files</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#unreleased">Unreleased</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#added">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#changed">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#deprecated">Deprecated</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#removed">Removed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#fixed">Fixed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#security">Security</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id2">0.4.0 - 2023-09-07</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id3">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id4">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id5">Deprecated</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id6">Removed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id7">Fixed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id8">Security</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id9">0.3.0 - 2023-02-01</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id10">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id11">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id12">Deprecated</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id13">Removed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id14">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id15">0.2.0 - 2022-08-05</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id16">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id17">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id18">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id19">0.1.0 - 2022-02-08</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id20">Added</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../roadmap.html">Roadmap</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../roadmap.html#id1">2022</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../roadmap.html#q1">2022 Q1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../roadmap.html#q2">2022 Q2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../roadmap.html#q3">2022 Q3</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../roadmap.html#id2">2023</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../roadmap.html#id3">2023 Q1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../roadmap.html#id4">2023 Q2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../roadmap.html#id5">2023 Q3</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../roadmap.html#q4">2023 Q4</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../roadmap.html#future">Future</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Libraries and API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../amdinfer_script.html">amdinfer Script</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../amdinfer_script.html#commands">Commands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../amdinfer_script.html#options">Options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../amdinfer_script.html#Sub-commands">Sub-commands</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../amdinfer_script.html#attach">attach</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../amdinfer_script.html#benchmark">benchmark</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../amdinfer_script.html#build">build</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../amdinfer_script.html#clean">clean</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../amdinfer_script.html#dockerize">dockerize</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../amdinfer_script.html#get">get</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../amdinfer_script.html#install">install</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../amdinfer_script.html#list">list</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../amdinfer_script.html#make">make</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../amdinfer_script.html#run">run</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../amdinfer_script.html#start">start</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../amdinfer_script.html#test">test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../amdinfer_script.html#up">up</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../cpp_user_api.html">C++</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_user_api.html#clients">Clients</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../cpp_user_api.html#grpc">gRPC</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../cpp_user_api.html#http">HTTP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../cpp_user_api.html#native">Native</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../cpp_user_api.html#websocket">WebSocket</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_user_api.html#core">Core</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../cpp_user_api.html#datatype">DataType</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../cpp_user_api.html#exceptions">Exceptions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../cpp_user_api.html#prediction">Prediction</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_user_api.html#servers">Servers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../python.html">Python</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../python.html#install-the-python-library">Install the Python library</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../python.html#build-wheels">Build wheels</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../python.html#module-amdinfer">API</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../rest.html">REST Endpoints</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: black" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">AMD Inference Server</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../backends.html">Backends</a> &raquo;</li>
+      <li>MIGraphX</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/backends/migraphx.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="migraphx">
+<h1>MIGraphX<a class="headerlink" href="#migraphx" title="Permalink to this headline">¶</a></h1>
+<p>The MIGraphX backend executes an ONNX or MXR model on an AMD GPU.</p>
+<section id="model-support">
+<h2>Model support<a class="headerlink" href="#model-support" title="Permalink to this headline">¶</a></h2>
+<p>The MIGraphX backend should support most ONNX files and it supports models with multiple input and output tensors.
+The tested models are listed below:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Model type</p></th>
+<th class="head"><p>Tested models</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Classification</p></td>
+<td><p>ResNet50</p></td>
+</tr>
+<tr class="row-odd"><td><p>Object detection</p></td>
+<td><p>YOLOv4</p></td>
+</tr>
+</tbody>
+</table>
+<p>Other models should also work but are currently untested.</p>
+<p>MXR is an MIGraphX-compiled format.
+When given an ONNX file, the MIGraphX backend will compile it to an MXR file.
+This MXR file will be different depending on the GPU as well as some load-time parameters such as batch size.
+If you move MXR files from one server to another, make sure they were compiled for the hardware on the new server.</p>
+</section>
+<section id="hardware-support">
+<h2>Hardware support<a class="headerlink" href="#hardware-support" title="Permalink to this headline">¶</a></h2>
+<p>While not every model is tested on every GPU, the MIGraphX backend has run at least one model on the following devices:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Classification</p></th>
+<th class="head"><p>Name</p></th>
+<th class="head"><p>ID</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>CDNA</p></td>
+<td><p>MI100</p></td>
+<td><p>gfx908</p></td>
+</tr>
+</tbody>
+</table>
+<p>Other devices and DPUs may also work but are currently untested.</p>
+</section>
+<section id="host-setup">
+<h2>Host setup<a class="headerlink" href="#host-setup" title="Permalink to this headline">¶</a></h2>
+<p>Follow the <a href="#id1"><span class="problematic" id="id2">`ROCm installation instructions &lt;https://docs.amd.com/en/latest/deploy/linux/index.html`__</span></a> to install ROCm on your host machine.
+Your ROCm version should ideally match the version installed in the inference server container but mismatching versions may work as well in some cases.
+Ensure you can detect the GPUs on your host machine with <code class="docutils literal notranslate"><span class="pre">/opt/rocm/bin/rocminfo</span></code>.</p>
+</section>
+<section id="build-an-image">
+<h2>Build an image<a class="headerlink" href="#build-an-image" title="Permalink to this headline">¶</a></h2>
+<p>To build an image with MIGraphX enabled, you need to add the <code class="docutils literal notranslate"><span class="pre">--migraphx</span></code> to the <code class="docutils literal notranslate"><span class="pre">amdinfer</span> <span class="pre">dockerize</span></code> command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># create the Dockerfile</span>
+python3<span class="w"> </span>docker/generate.py
+
+<span class="c1"># build the development image $(whoami)/amdinfer-dev:latest</span>
+./amdinfer<span class="w"> </span>dockerize<span class="w"> </span>--migraphx
+
+<span class="c1"># build the development image $(whoami)/amdinfer-dev-migraphx:latest</span>
+./amdinfer<span class="w"> </span>dockerize<span class="w"> </span>--migraphx<span class="w"> </span>--suffix<span class="o">=</span><span class="s2">&quot;-migraphx&quot;</span>
+
+<span class="c1"># build the deployment image $(whoami)/amdinfer-migraphx:latest</span>
+./amdinfer<span class="w"> </span>dockerize<span class="w"> </span>--migraphx<span class="w"> </span>--suffix<span class="o">=</span><span class="s2">&quot;-migraphx&quot;</span><span class="w"> </span>--production
+</pre></div>
+</div>
+</section>
+<section id="start-a-container">
+<h2>Start a container<a class="headerlink" href="#start-a-container" title="Permalink to this headline">¶</a></h2>
+<p>Depending on your use case and how you are using the server, you can start a container to use this backend in multiple ways.</p>
+<section id="deployment">
+<h3>Deployment<a class="headerlink" href="#deployment" title="Permalink to this headline">¶</a></h3>
+<p>You can start a deployment container with something like:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>run<span class="w"> </span>--device<span class="w"> </span>/dev/kfd<span class="w"> </span>--device<span class="w"> </span>/dev/dri<span class="w"> </span><span class="o">[</span>--volume<span class="w"> </span>...<span class="o">]</span>
+</pre></div>
+</div>
+<p>These <code class="docutils literal notranslate"><span class="pre">--device</span></code> flags pass the GPU to the container and you can mount other directories as needed to make models available.</p>
+<p>A development container can be started with:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./amdinfer<span class="w"> </span>run<span class="w"> </span>--dev
+</pre></div>
+</div>
+<p>This automatically adds the detected devices, publishes ports, and mounts some convenient directories, such as your SSH directory, and drops you into a terminal in the container.</p>
+</section>
+</section>
+<section id="get-test-assets">
+<h2>Get test assets<a class="headerlink" href="#get-test-assets" title="Permalink to this headline">¶</a></h2>
+<p>You can download the assets and models used with this backend for tests and examples with:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./amdinfer<span class="w"> </span>get<span class="w"> </span>--migraphx<span class="w"> </span>--all-models
+</pre></div>
+</div>
+</section>
+<section id="loading-the-backend">
+<h2>Loading the backend<a class="headerlink" href="#loading-the-backend" title="Permalink to this headline">¶</a></h2>
+<p>There are multiple ways to load this backend to make it available for inference requests from clients.
+If you are using a client’s <code class="docutils literal notranslate"><span class="pre">workerLoad()</span></code> method:</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-0-Qysr" aria-selected="true" class="sphinx-tabs-tab code-tab group-tab" id="tab-0-Qysr" name="Qysr" role="tab" tabindex="0">C++</button><button aria-controls="panel-0-UHl0aG9u" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-0-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="-1">Python</button></div><div aria-labelledby="tab-0-Qysr" class="sphinx-tabs-panel code-tab group-tab" id="panel-0-Qysr" name="Qysr" role="tabpanel" tabindex="0"><div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="c1">// amdinfer::Client* client;</span>
+<span class="c1">// amdinfer::ParameterMap parameters;</span>
+<span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">endpoint</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">client</span><span class="o">-&gt;</span><span class="n">workerLoad</span><span class="p">(</span><span class="s">&quot;migraphx&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">parameters</span><span class="p">)</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-0-UHl0aG9u" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-0-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># client = amdinfer.Client()</span>
+<span class="c1"># parameters = amdinfer.ParameterMap()</span>
+<span class="n">endpoint</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">workerLoad</span><span class="p">(</span><span class="s2">&quot;migraphx&quot;</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></div>
+<p>With a client’s <code class="docutils literal notranslate"><span class="pre">modelLoad()</span></code> method or using the repository approach, you need to create a <a class="reference internal" href="../model_repository.html#model-repository"><span class="std std-ref">model repository</span></a> and put a model in it.
+To use this backend with your model, use <code class="docutils literal notranslate"><span class="pre">onnx_onnxv1</span></code> or <code class="docutils literal notranslate"><span class="pre">migraphx_mxr</span></code> as the platform for your model.</p>
+<p>Then, you can load the model from the server after setting up the path to the model repository.
+The server may be set to automatically load all models from the configured model repository or you can load it manually using <code class="docutils literal notranslate"><span class="pre">modelLoad()</span></code>.
+In this case, the endpoint is defined in the model’s configuration file in the repository and it is used as the argument to <code class="docutils literal notranslate"><span class="pre">modelLoad()</span></code>.</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-1-Qysr" aria-selected="true" class="sphinx-tabs-tab code-tab group-tab" id="tab-1-Qysr" name="Qysr" role="tab" tabindex="0">C++</button><button aria-controls="panel-1-UHl0aG9u" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-1-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="-1">Python</button></div><div aria-labelledby="tab-1-Qysr" class="sphinx-tabs-panel code-tab group-tab" id="panel-1-Qysr" name="Qysr" role="tabpanel" tabindex="0"><div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="c1">// amdinfer::Client* client;</span>
+<span class="c1">// amdinfer::ParameterMap parameters;</span>
+<span class="n">client</span><span class="o">-&gt;</span><span class="n">modelLoad</span><span class="p">(</span><span class="o">&lt;</span><span class="n">model</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="n">parameters</span><span class="p">)</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-1-UHl0aG9u" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-1-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># client = amdinfer.Client()</span>
+<span class="c1"># parameters = amdinfer.ParameterMap()</span>
+<span class="n">client</span><span class="o">.</span><span class="n">modelLoad</span><span class="p">(</span><span class="o">&lt;</span><span class="n">model</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></div>
+<section id="parameters">
+<h3>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h3>
+<p>You can provide the following backend-specific parameters at load-time:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Usage</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">batch</span></code></p></td>
+<td><p>integer</p></td>
+<td><p>Requested batch size for incoming batches. Defaults to 64.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">model</span></code></p></td>
+<td><p>string</p></td>
+<td><p>Full path to the model file to load</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">pad_batch</span></code></p></td>
+<td><p>boolean</p></td>
+<td><p>Use the first request to pad out the incoming batch if it contains fewer requests than the batch size. Defaults to true.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="troubleshooting">
+<h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permalink to this headline">¶</a></h2>
+<p>If you run into problems, first check the <a class="reference internal" href="../troubleshooting.html#troubleshooting"><span class="std std-ref">general troubleshooting guide</span></a> guide.
+Then continue on to this XModel specific troubleshooting guide.
+You will need access to the machine where the inference server is running to debug.</p>
+<section id="gotchas">
+<h3>Gotchas<a class="headerlink" href="#gotchas" title="Permalink to this headline">¶</a></h3>
+<p>Some common easy-to-make errors are listed here:</p>
+<ul class="simple">
+<li><p>MXR file mismatch: MXR files are compiled by the backend using the given ONNX file for the GPU and load-time parameters. The backend will also prefer to use MXR files if they exist. If you move the MXR files to a different server or use a network storage where the MXR files get used by different servers with different GPUs, the MXR file will not work and you will get cryptic errors. The solution is to delete the MXR file and let the backend recompile from the ONNX file for your hardware.</p></li>
+</ul>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          	  
+				  <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="cplusplus.html" class="btn btn-neutral float-left" title="CPlusPlus" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ptzendnn.html" class="btn btn-neutral float-right" title="PtZenDNN" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
+      <span class="lastupdated">Last updated on September 07, 2023.
+      </span></p>
+  </div>
+
+
+
+										<div class="aem-Grid aem-Grid--16">
+											<div class="aem-GridColumn aem-GridColumn--xxxlarge--none aem-GridColumn--xsmall--16 aem-GridColumn--offset--xsmall--0 aem-GridColumn--xlarge--none aem-GridColumn--xxlarge--none aem-GridColumn--default--none aem-GridColumn--offset--large--1 aem-GridColumn--xlarge--12 aem-GridColumn--offset--default--0 aem-GridColumn--xxlarge--10 aem-GridColumn--offset--xlarge--2 aem-GridColumn--offset--xxlarge--3 aem-GridColumn--offset--xxxlarge--4 aem-GridColumn--xsmall--none aem-GridColumn--large--none aem-GridColumn aem-GridColumn--large--14 aem-GridColumn--xxxlarge--8 aem-GridColumn--default--16">
+												<div class="container-fluid sub-footer">
+
+													                    <div class="row">
+                        <div class="col-xs-24">
+                          <p><a target="_blank" href="https://www.amd.com/en/corporate/copyright">Terms and Conditions</a> | <a target="_blank" href="https://www.amd.com/en/corporate/privacy">Privacy</a> | <a target="_blank" href="https://www.amd.com/en/corporate/cookies">Cookie Policy</a> | <a target="_blank" href="https://www.amd.com/en/corporate/trademarks">Trademarks</a> | <a target="_blank" href="https://www.amd.com/system/files/documents/statement-human-trafficking-forced-labor.pdf">Statement on Forced Labor</a> | <a target="_blank" href="https://www.amd.com/en/corporate/competition">Fair and Open Competition</a> | <a target="_blank" href="https://www.amd.com/system/files/documents/amd-uk-tax-strategy.pdf">UK Tax Strategy</a> | <a target="_blank" href="https://docs.xilinx.com/v/u/9x6YvZKuWyhJId7y7RQQKA">Inclusive Terminology</a> | <a href="#cookiessettings" class="ot-sdk-show-settings">Cookies Settings</a></p>
+                        </div>
+                    </div>
+												</div>
+											</div>
+										</div>
+										
+</br>
+
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+
+  <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      <span class="fa fa-book"> Read the Docs</span>
+      v: 0.4.0
+      <span class="fa fa-caret-down"></span>
+    </span>
+    <div class="rst-other-versions">
+      
+      <dl>
+        <dt>Languages</dt>
+        
+           <strong> 
+          <dd><a href="/inference-server/0.4.0/">en</a></dd>
+           </strong> 
+        
+      </dl>
+      
+      
+      <dl>
+        <dt>Versions</dt>
+        
+          
+          <dd><a href="/inference-server/0.1.0/">0.1.0</a></dd>
+          
+        
+          
+          <dd><a href="/inference-server/0.2.0/">0.2.0</a></dd>
+          
+        
+          
+          <dd><a href="/inference-server/0.3.0/">0.3.0</a></dd>
+          
+        
+           <strong> 
+          <dd><a href="/inference-server/0.4.0/">0.4.0</a></dd>
+           </strong> 
+        
+          
+          <dd><a href="/inference-server/main/">main</a></dd>
+          
+        
+      </dl>
+      
+      
+       
+    </div>
+  </div>
+<script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(false);
+      });
+  </script>
+ <script type="text/javascript">
+    $(document).ready(function() {
+        $(".toggle > *").hide();
+        $(".toggle .header").show();
+        $(".toggle .header").click(function() {
+            $(this).parent().children().not(".header").toggle(400);
+            $(this).parent().children(".header").toggleClass("open");
+        })
+    });
+</script>
+
+
+</body>
+</html>

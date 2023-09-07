@@ -1,0 +1,1738 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+<!-- OneTrust Cookies Consent Notice start for xilinx.github.io -->
+
+<script src="https://cdn.cookielaw.org/scripttemplates/otSDKStub.js" data-document-language="true" type="text/javascript" charset="UTF-8" data-domain-script="03af8d57-0a04-47a6-8f10-322fa00d8fc7" ></script>
+<script type="text/javascript">
+function OptanonWrapper() { }
+</script>
+<!-- OneTrust Cookies Consent Notice end for xilinx.github.io -->
+<!-- Google Tag Manager -->
+<script type="text/plain" class="optanon-category-C0002">(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5RHQV7');</script>
+<!-- End Google Tag Manager -->
+  <title>Index &mdash; AMD Inference Server</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="_static/twemoji.css" type="text/css" />
+      <link rel="stylesheet" href="_static/sphinx_charts/charts.css" type="text/css" />
+      <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
+      <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+      <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/clipboard.min.js"></script>
+        <script src="_static/copybutton.js"></script>
+        <script src="https://twemoji.maxcdn.com/v/latest/twemoji.min.js"></script>
+        <script src="_static/twemoji.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-svg.js"></script>
+        <script src="_static/sphinx_charts/plotly/plotly-2.11.1.min.js"></script>
+        <script src="_static/sphinx_charts/charts.js"></script>
+        <script src="_static/tabs.js"></script>
+        <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+        <script src="_static/dataTables.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="#" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5RHQV7" height="0" width="0" style="display:none;visibility:hidden" class="optanon-category-C0002"></iframe></noscript>
+<!-- End Google Tag Manager --> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+            <a href="index.html" class="icon icon-home"> AMD Inference Server
+            <img src="_static/xilinx-header-logo.svg" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                0.4.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#features">Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#documentation-overview">Documentation overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#support">Support</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="terminology.html">Terminology</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="terminology.html#amdinfer">amdinfer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="terminology.html#types-of-docker-images">Types of Docker images</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="terminology.html#development">Development</a></li>
+<li class="toctree-l3"><a class="reference internal" href="terminology.html#deployment">Deployment</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="terminology.html#types-of-users">Types of users</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="terminology.html#clients">Clients</a></li>
+<li class="toctree-l3"><a class="reference internal" href="terminology.html#administrators">Administrators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="terminology.html#developers">Developers</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#prepare-the-model-repository">Prepare the model repository</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#get-the-deployment-image">Get the deployment image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#start-the-image">Start the image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#server-deployment-summary">Server deployment summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#get-the-python-library">Get the Python library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#running-an-example">Running an example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#inference-summary">Inference summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#next-steps">Next steps</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="backends.html">Backends</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="backends/cplusplus.html">CPlusPlus</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="backends/cplusplus.html#model-support">Model support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="backends/cplusplus.html#hardware-support">Hardware support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="backends/cplusplus.html#host-setup">Host setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="backends/cplusplus.html#build-an-image">Build an image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="backends/cplusplus.html#start-a-container">Start a container</a></li>
+<li class="toctree-l3"><a class="reference internal" href="backends/cplusplus.html#get-test-assets">Get test assets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="backends/cplusplus.html#loading-the-backend">Loading the backend</a></li>
+<li class="toctree-l3"><a class="reference internal" href="backends/cplusplus.html#troubleshooting">Troubleshooting</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="backends/migraphx.html">MIGraphX</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="backends/migraphx.html#model-support">Model support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="backends/migraphx.html#hardware-support">Hardware support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="backends/migraphx.html#host-setup">Host setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="backends/migraphx.html#build-an-image">Build an image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="backends/migraphx.html#start-a-container">Start a container</a></li>
+<li class="toctree-l3"><a class="reference internal" href="backends/migraphx.html#get-test-assets">Get test assets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="backends/migraphx.html#loading-the-backend">Loading the backend</a></li>
+<li class="toctree-l3"><a class="reference internal" href="backends/migraphx.html#troubleshooting">Troubleshooting</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="backends/ptzendnn.html">PtZenDNN</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="backends/ptzendnn.html#model-support">Model support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="backends/ptzendnn.html#hardware-support">Hardware support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="backends/ptzendnn.html#host-setup">Host setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="backends/ptzendnn.html#build-an-image">Build an image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="backends/ptzendnn.html#start-a-container">Start a container</a></li>
+<li class="toctree-l3"><a class="reference internal" href="backends/ptzendnn.html#get-test-assets">Get test assets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="backends/ptzendnn.html#loading-the-backend">Loading the backend</a></li>
+<li class="toctree-l3"><a class="reference internal" href="backends/ptzendnn.html#troubleshooting">Troubleshooting</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="backends/tfzendnn.html">TfZenDNN</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="backends/tfzendnn.html#model-support">Model support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="backends/tfzendnn.html#hardware-support">Hardware support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="backends/tfzendnn.html#host-setup">Host setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="backends/tfzendnn.html#build-an-image">Build an image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="backends/tfzendnn.html#start-a-container">Start a container</a></li>
+<li class="toctree-l3"><a class="reference internal" href="backends/tfzendnn.html#get-test-assets">Get test assets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="backends/tfzendnn.html#loading-the-backend">Loading the backend</a></li>
+<li class="toctree-l3"><a class="reference internal" href="backends/tfzendnn.html#troubleshooting">Troubleshooting</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="backends/vitis_ai.html">Vitis AI</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="backends/vitis_ai.html#model-support">Model support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="backends/vitis_ai.html#hardware-support">Hardware support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="backends/vitis_ai.html#host-setup">Host setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="backends/vitis_ai.html#build-an-image">Build an image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="backends/vitis_ai.html#start-a-container">Start a container</a></li>
+<li class="toctree-l3"><a class="reference internal" href="backends/vitis_ai.html#get-test-assets">Get test assets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="backends/vitis_ai.html#loading-the-backend">Loading the backend</a></li>
+<li class="toctree-l3"><a class="reference internal" href="backends/vitis_ai.html#troubleshooting">Troubleshooting</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="model_repository.html">Model Repository</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="model_repository.html#single-models">Single models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model_repository.html#ensembles">Ensembles</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ensembles.html">Ensembles</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ensembles.html#defining-ensembles">Defining ensembles</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="ensembles.html#model-repository">Model repository</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ensembles.html#api">API</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="deployment.html">Deployment</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="deployment.html#deployment-image">Deployment image</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="deployment.html#get-the-image">Get the image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deployment.html#build-the-image">Build the image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deployment.html#push-to-a-registry">Push to a registry</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deployment.html#prepare-the-image">Prepare the image</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="deployment.html#start-a-container">Start a container</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deployment.html#kserve">KServe</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deployment.html#development-image">Development image</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="client_api.html">Client API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="client_api.html#include-the-api">Include the API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_api.html#create-a-client-object">Create a client object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_api.html#server-status">Server status</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_api.html#loading-a-backend">Loading a backend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_api.html#making-an-inference-request">Making an inference request</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_api.html#parsing-the-response">Parsing the response</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_api.html#next-steps">Next steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="kserve.html">KServe</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="kserve.html#set-up-kubernetes-and-kserve">Set up Kubernetes and KServe</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kserve.html#get-or-build-the-amd-inference-server-image">Get or build the AMD Inference Server Image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kserve.html#start-an-inference-service">Start an inference service</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="kserve.html#serving-runtime">Serving Runtime</a></li>
+<li class="toctree-l3"><a class="reference internal" href="kserve.html#custom-container">Custom container</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="kserve.html#making-requests">Making Requests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kserve.html#debugging">Debugging</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="performance.html">Performance</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="performance.html#mlcommons">MLCommons</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="performance.html#singlestream">SingleStream</a></li>
+<li class="toctree-l3"><a class="reference internal" href="performance.html#server">Server</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="performance_factors.html">Performance Factors</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="performance_factors.html#hardware">Hardware</a></li>
+<li class="toctree-l2"><a class="reference internal" href="performance_factors.html#compile-the-right-version">Compile the right version</a></li>
+<li class="toctree-l2"><a class="reference internal" href="performance_factors.html#parallelism">Parallelism</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="performance_factors.html#rest-threads">REST threads</a></li>
+<li class="toctree-l3"><a class="reference internal" href="performance_factors.html#sending-requests">Sending requests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="performance_factors.html#duplicating-workers">Duplicating workers</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="troubleshooting.html#use-the-latest-version">Use the latest version</a></li>
+<li class="toctree-l2"><a class="reference internal" href="troubleshooting.html#use-server-logs">Use server logs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="troubleshooting.html#build-errors">Build errors</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="hello_world_echo.html">Hello World - Python</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_echo.html#import-the-library">Import the library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_echo.html#create-our-client-and-server-objects">Create our client and server objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_echo.html#is-amd-inference-server-already-running">Is AMD Inference Server already running?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_echo.html#load-a-worker">Load a worker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_echo.html#inference">Inference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_echo.html#validate-the-response">Validate the response</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_echo.html#clean-up">Clean up</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_echo.html#next-steps">Next steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="example_resnet50_cpp.html">Running ResNet50 - C++</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="example_resnet50_cpp.html#include-the-header">Include the header</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_resnet50_cpp.html#start-the-server">Start the server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_resnet50_cpp.html#create-the-client-object">Create the client object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_resnet50_cpp.html#load-a-worker">Load a worker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_resnet50_cpp.html#prepare-images">Prepare images</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_resnet50_cpp.html#construct-requests">Construct requests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_resnet50_cpp.html#make-an-inference">Make an inference</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="example_resnet50_python.html">Running ResNet50 - Python</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="example_resnet50_python.html#include-the-module">Include the module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_resnet50_python.html#start-the-server">Start the server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_resnet50_python.html#create-the-client-object">Create the client object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_resnet50_python.html#load-a-worker">Load a worker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_resnet50_python.html#prepare-images">Prepare images</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_resnet50_python.html#construct-requests">Construct requests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_resnet50_python.html#make-an-inference">Make an inference</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developers</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="quickstart_development.html">Developer Quickstart</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_development.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_development.html#set-up-the-host">Set up the host</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_development.html#get-the-code">Get the code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_development.html#amdinfer-script">amdinfer script</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_development.html#build-or-get-the-docker-image">Build or get the Docker image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_development.html#compiling-the-amd-inference-server">Compiling the AMD Inference Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_development.html#get-test-artifacts">Get test artifacts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_development.html#run-the-amd-inference-server">Run the AMD Inference Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart_development.html#next-steps">Next steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="testing.html#add-a-new-test">Add a new test</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="testing.html#add-assets">Add assets</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#ingestion">Ingestion</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="architecture.html#api">API</a></li>
+<li class="toctree-l3"><a class="reference internal" href="architecture.html#http-rest-and-websocket">HTTP/REST and WebSocket</a></li>
+<li class="toctree-l3"><a class="reference internal" href="architecture.html#grpc">gRPC</a></li>
+<li class="toctree-l3"><a class="reference internal" href="architecture.html#c-api">C++ API</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#batching">Batching</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#workers">Workers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="architecture.html#organization-and-lifecycle">Organization and Lifecycle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="architecture.html#improving-performance">Improving Performance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="architecture.html#external-processing">External Processing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="architecture.html#xmodel">XModel</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#shared-state">Shared State</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#observation">Observation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="architecture.html#logging">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="architecture.html#metrics">Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="architecture.html#tracing">Tracing</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="aks.html">AKS</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="aks.html#introduction-to-aks">Introduction to AKS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aks.html#using-aks-in-amd-inference-server">Using AKS in AMD Inference Server</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="logging.html">Logs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="logging.html#amd-inference-server-logs">AMD Inference Server Logs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logging.html#drogon-logs">Drogon Logs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="benchmarking.html">Benchmarking</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="benchmarking.html#xmodel-benchmarking">XModel Benchmarking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="benchmarking.html#kernel-simulation">Kernel Simulation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="metrics.html">Metrics</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="metrics.html#quickstart">Quickstart</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tracing.html">Tracing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tracing.html#quickstart">Quickstart</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">About</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#ways-to-contribute">Ways to contribute</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#idea-generation">Idea generation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#raise-issues">Raise issues</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#triage">Triage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#raise-pull-requests">Raise pull requests</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#style-guide">Style guide</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#documentation">Documentation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="dependencies.html">Dependencies</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dependencies.html#docker-image">Docker Image</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dependencies.html#base-image">Base Image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dependencies.html#ubuntu-focal-repositories">Ubuntu Focal Repositories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dependencies.html#ubuntu-ppas">Ubuntu PPAs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dependencies.html#pypi">PyPI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dependencies.html#github">Github</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dependencies.html#others">Others</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dependencies.html#xilinx">Xilinx</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dependencies.html#amd">AMD</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dependencies.html#included">Included</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dependencies.html#downloaded-files">Downloaded Files</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#unreleased">Unreleased</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#added">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#changed">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#deprecated">Deprecated</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#removed">Removed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#fixed">Fixed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#security">Security</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id2">0.4.0 - 2023-09-07</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id3">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id4">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id5">Deprecated</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id6">Removed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id7">Fixed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id8">Security</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id9">0.3.0 - 2023-02-01</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id10">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id11">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id12">Deprecated</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id13">Removed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id14">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id15">0.2.0 - 2022-08-05</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id16">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id17">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id18">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id19">0.1.0 - 2022-02-08</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id20">Added</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="roadmap.html">Roadmap</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="roadmap.html#id1">2022</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="roadmap.html#q1">2022 Q1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="roadmap.html#q2">2022 Q2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="roadmap.html#q3">2022 Q3</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="roadmap.html#id2">2023</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="roadmap.html#id3">2023 Q1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="roadmap.html#id4">2023 Q2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="roadmap.html#id5">2023 Q3</a></li>
+<li class="toctree-l3"><a class="reference internal" href="roadmap.html#q4">2023 Q4</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="roadmap.html#future">Future</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Libraries and API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="amdinfer_script.html">amdinfer Script</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="amdinfer_script.html#commands">Commands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="amdinfer_script.html#options">Options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="amdinfer_script.html#Sub-commands">Sub-commands</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="amdinfer_script.html#attach">attach</a></li>
+<li class="toctree-l3"><a class="reference internal" href="amdinfer_script.html#benchmark">benchmark</a></li>
+<li class="toctree-l3"><a class="reference internal" href="amdinfer_script.html#build">build</a></li>
+<li class="toctree-l3"><a class="reference internal" href="amdinfer_script.html#clean">clean</a></li>
+<li class="toctree-l3"><a class="reference internal" href="amdinfer_script.html#dockerize">dockerize</a></li>
+<li class="toctree-l3"><a class="reference internal" href="amdinfer_script.html#get">get</a></li>
+<li class="toctree-l3"><a class="reference internal" href="amdinfer_script.html#install">install</a></li>
+<li class="toctree-l3"><a class="reference internal" href="amdinfer_script.html#list">list</a></li>
+<li class="toctree-l3"><a class="reference internal" href="amdinfer_script.html#make">make</a></li>
+<li class="toctree-l3"><a class="reference internal" href="amdinfer_script.html#run">run</a></li>
+<li class="toctree-l3"><a class="reference internal" href="amdinfer_script.html#start">start</a></li>
+<li class="toctree-l3"><a class="reference internal" href="amdinfer_script.html#test">test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="amdinfer_script.html#up">up</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cpp_user_api.html">C++</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cpp_user_api.html#clients">Clients</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cpp_user_api.html#grpc">gRPC</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cpp_user_api.html#http">HTTP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cpp_user_api.html#native">Native</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cpp_user_api.html#websocket">WebSocket</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cpp_user_api.html#core">Core</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cpp_user_api.html#datatype">DataType</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cpp_user_api.html#exceptions">Exceptions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cpp_user_api.html#prediction">Prediction</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cpp_user_api.html#servers">Servers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="python.html">Python</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="python.html#install-the-python-library">Install the Python library</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="python.html#build-wheels">Build wheels</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="python.html#module-amdinfer">API</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="rest.html">REST Endpoints</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: black" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">AMD Inference Server</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Index</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+
+<h1 id="index">Index</h1>
+
+<div class="genindex-jumpbox">
+ <a href="#_"><strong>_</strong></a>
+ | <a href="#A"><strong>A</strong></a>
+ | <a href="#B"><strong>B</strong></a>
+ | <a href="#C"><strong>C</strong></a>
+ | <a href="#D"><strong>D</strong></a>
+ | <a href="#E"><strong>E</strong></a>
+ | <a href="#F"><strong>F</strong></a>
+ | <a href="#G"><strong>G</strong></a>
+ | <a href="#H"><strong>H</strong></a>
+ | <a href="#I"><strong>I</strong></a>
+ | <a href="#L"><strong>L</strong></a>
+ | <a href="#M"><strong>M</strong></a>
+ | <a href="#N"><strong>N</strong></a>
+ | <a href="#P"><strong>P</strong></a>
+ | <a href="#R"><strong>R</strong></a>
+ | <a href="#S"><strong>S</strong></a>
+ | <a href="#T"><strong>T</strong></a>
+ | <a href="#U"><strong>U</strong></a>
+ | <a href="#V"><strong>V</strong></a>
+ | <a href="#W"><strong>W</strong></a>
+ | <a href="#X"><strong>X</strong></a>
+ 
+</div>
+<h2 id="_">_</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python.html#amdinfer.Client.__init__">__init__() (amdinfer.Client method)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.DataType.__init__">(amdinfer.DataType method)</a>
+</li>
+        <li><a href="python.html#amdinfer.DataType.Value.__init__">(amdinfer.DataType.Value method)</a>
+</li>
+        <li><a href="python.html#amdinfer.GrpcClient.__init__">(amdinfer.GrpcClient method)</a>
+</li>
+        <li><a href="python.html#amdinfer.HttpClient.__init__">(amdinfer.HttpClient method)</a>
+</li>
+        <li><a href="python.html#amdinfer.InferenceRequest.__init__">(amdinfer.InferenceRequest method)</a>
+</li>
+        <li><a href="python.html#amdinfer.InferenceRequestInput.__init__">(amdinfer.InferenceRequestInput method)</a>
+</li>
+        <li><a href="python.html#amdinfer.InferenceRequestOutput.__init__">(amdinfer.InferenceRequestOutput method)</a>
+</li>
+        <li><a href="python.html#amdinfer.InferenceResponse.__init__">(amdinfer.InferenceResponse method)</a>
+</li>
+        <li><a href="python.html#amdinfer.InferenceResponseOutput.__init__">(amdinfer.InferenceResponseOutput method)</a>
+</li>
+        <li><a href="python.html#amdinfer.InferenceTensor.__init__">(amdinfer.InferenceTensor method)</a>
+</li>
+        <li><a href="python.html#amdinfer.ModelMetadata.__init__">(amdinfer.ModelMetadata method)</a>
+</li>
+        <li><a href="python.html#amdinfer.NativeClient.__init__">(amdinfer.NativeClient method)</a>
+</li>
+        <li><a href="python.html#amdinfer.ParameterMap.__init__">(amdinfer.ParameterMap method)</a>
+</li>
+        <li><a href="python.html#amdinfer.Server.__init__">(amdinfer.Server method)</a>
+</li>
+        <li><a href="python.html#amdinfer.ServerMetadata.__init__">(amdinfer.ServerMetadata method)</a>
+</li>
+        <li><a href="python.html#amdinfer.Tensor.__init__">(amdinfer.Tensor method)</a>
+</li>
+        <li><a href="python.html#amdinfer.WebSocketClient.__init__">(amdinfer.WebSocketClient method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="A">A</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python.html#amdinfer.InferenceRequest.addInputTensor">addInputTensor() (amdinfer.InferenceRequest method)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.ModelMetadata.addInputTensor">(amdinfer.ModelMetadata method)</a>
+</li>
+      </ul></li>
+      <li><a href="python.html#amdinfer.InferenceResponse.addOutput">addOutput() (amdinfer.InferenceResponse method)</a>
+</li>
+      <li><a href="python.html#amdinfer.InferenceRequest.addOutputTensor">addOutputTensor() (amdinfer.InferenceRequest method)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.ModelMetadata.addOutputTensor">(amdinfer.ModelMetadata method)</a>
+</li>
+      </ul></li>
+      <li><a href="glossary.html#term-Administrator-User"><strong>Administrator (User)</strong></a>
+</li>
+      <li>
+    amdinfer
+
+      <ul>
+        <li><a href="python.html#module-amdinfer">module</a>
+</li>
+      </ul></li>
+      <li><a href="cpp_user_api.html#_CPPv48amdinfer">amdinfer (C++ type)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer10bad_statusE">amdinfer::bad_status (C++ class)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer16connection_errorE">amdinfer::connection_error (C++ class)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer8DataTypeE">amdinfer::DataType (C++ class)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer8DataType8DataTypeEN8DataType5ValueE">amdinfer::DataType::DataType (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer8DataType8DataTypeEPKc">[1]</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer8DataType8DataTypeEv">[2]</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer8DataTypecv5ValueEv">amdinfer::DataType::operator Value (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer8DataTypelsERNSt7ostreamERK8DataType">amdinfer::DataType::operator&lt;&lt; (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer8DataType4sizeEv">amdinfer::DataType::size (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer8DataType3strEv">amdinfer::DataType::str (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer25environment_not_set_errorE">amdinfer::environment_not_set_error (C++ class)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer14external_errorE">amdinfer::external_error (C++ class)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer20file_not_found_errorE">amdinfer::file_not_found_error (C++ class)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer15file_read_errorE">amdinfer::file_read_error (C++ class)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer10GrpcClientE">amdinfer::GrpcClient (C++ class)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer10GrpcClient10GrpcClientERK10GrpcClient">amdinfer::GrpcClient::GrpcClient (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer10GrpcClient10GrpcClientERKNSt10shared_ptrIN4grpc7ChannelEEE">[1]</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer10GrpcClient10GrpcClientERKNSt6stringE">[2]</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer10GrpcClient10GrpcClientERR10GrpcClient">[3]</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer10GrpcClient14GrpcClientImplE">amdinfer::GrpcClient::GrpcClientImpl (C++ class)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer10GrpcClient11hasHardwareERKNSt6stringEi">amdinfer::GrpcClient::hasHardware (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer10GrpcClient9modelListEv">amdinfer::GrpcClient::modelList (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer10GrpcClientaSERK10GrpcClient">amdinfer::GrpcClient::operator= (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer10GrpcClientaSERR10GrpcClient">[1]</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer10GrpcClient10serverLiveEv">amdinfer::GrpcClient::serverLive (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer10GrpcClient14serverMetadataEv">amdinfer::GrpcClient::serverMetadata (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer10GrpcClient11serverReadyEv">amdinfer::GrpcClient::serverReady (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer10GrpcClient10workerLoadERKNSt6stringERK12ParameterMap">amdinfer::GrpcClient::workerLoad (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer10GrpcClient12workerUnloadERKNSt6stringE">amdinfer::GrpcClient::workerUnload (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer10GrpcClientD0Ev">amdinfer::GrpcClient::~GrpcClient (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer10HttpClientE">amdinfer::HttpClient (C++ class)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer10HttpClient11hasHardwareERKNSt6stringEi">amdinfer::HttpClient::hasHardware (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer10HttpClient10HttpClientERK10HttpClient">amdinfer::HttpClient::HttpClient (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer10HttpClient10HttpClientERKNSt6stringE">[1]</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer10HttpClient10HttpClientERKNSt6stringERK9StringMapi">[2]</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer10HttpClient10HttpClientERR10HttpClient">[3]</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer10HttpClient14HttpClientImplE">amdinfer::HttpClient::HttpClientImpl (C++ class)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer10HttpClient9modelListEv">amdinfer::HttpClient::modelList (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer10HttpClientaSERK10HttpClient">amdinfer::HttpClient::operator= (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer10HttpClientaSERR10HttpClient">[1]</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer10HttpClient10serverLiveEv">amdinfer::HttpClient::serverLive (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer10HttpClient14serverMetadataEv">amdinfer::HttpClient::serverMetadata (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer10HttpClient11serverReadyEv">amdinfer::HttpClient::serverReady (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer10HttpClient10workerLoadERKNSt6stringERK12ParameterMap">amdinfer::HttpClient::workerLoad (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer10HttpClient12workerUnloadERKNSt6stringE">amdinfer::HttpClient::workerUnload (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer10HttpClientD0Ev">amdinfer::HttpClient::~HttpClient (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer17inferAsyncOrderedEPK6ClientRKNSt6stringERKNSt6vectorI16InferenceRequestEERKNSt6stringE">amdinfer::inferAsyncOrdered (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer24inferAsyncOrderedBatchedEPK6ClientRKNSt6stringERKNSt6vectorI16InferenceRequestEE6size_tRKNSt6stringE">amdinfer::inferAsyncOrderedBatched (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer16InferenceRequestE">amdinfer::InferenceRequest (C++ class)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer16InferenceRequest14addInputTensorE21InferenceRequestInput">amdinfer::InferenceRequest::addInputTensor (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer16InferenceRequest14addInputTensorEPvRKNSt6vectorI7int64_tEE8DataTypeRKNSt6stringE">[1]</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer16InferenceRequest15addOutputTensorERK22InferenceRequestOutput">amdinfer::InferenceRequest::addOutputTensor (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer16InferenceRequest11getCallbackEv">amdinfer::InferenceRequest::getCallback (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer16InferenceRequest5getIDEv">amdinfer::InferenceRequest::getID (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer16InferenceRequest9getInputsEv">amdinfer::InferenceRequest::getInputs (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer16InferenceRequest12getInputSizeEv">amdinfer::InferenceRequest::getInputSize (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer16InferenceRequest10getOutputsEv">amdinfer::InferenceRequest::getOutputs (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4NKR8amdinfer16InferenceRequest13getParametersEv">amdinfer::InferenceRequest::getParameters (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4NO8amdinfer16InferenceRequest13getParametersEv">[1]</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer16InferenceRequest11runCallbackERK17InferenceResponse">amdinfer::InferenceRequest::runCallback (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer16InferenceRequest16runCallbackErrorENSt11string_viewE">amdinfer::InferenceRequest::runCallbackError (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer16InferenceRequest15runCallbackOnceERK17InferenceResponse">amdinfer::InferenceRequest::runCallbackOnce (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer16InferenceRequest11setCallbackERR8Callback">amdinfer::InferenceRequest::setCallback (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer16InferenceRequest5setIDENSt11string_viewE">amdinfer::InferenceRequest::setID (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer16InferenceRequest18setInputTensorDataE6size_tPv">amdinfer::InferenceRequest::setInputTensorData (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer16InferenceRequest13setParametersE12ParameterMap">amdinfer::InferenceRequest::setParameters (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer21InferenceRequestInputE">amdinfer::InferenceRequestInput (C++ class)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer21InferenceRequestInput11deserializeEPKNSt4byteE">amdinfer::InferenceRequestInput::deserialize (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer21InferenceRequestInput7getDataEv">amdinfer::InferenceRequestInput::getData (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer21InferenceRequestInput21InferenceRequestInputEPvNSt6vectorI7int64_tEE8DataTypeNSt6stringE">amdinfer::InferenceRequestInput::InferenceRequestInput (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer21InferenceRequestInput21InferenceRequestInputERK6Tensor">[1]</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer21InferenceRequestInput21InferenceRequestInputEv">[2]</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer21InferenceRequestInputlsERNSt7ostreamERK21InferenceRequestInput">amdinfer::InferenceRequestInput::operator&lt;&lt; (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer21InferenceRequestInput9serializeEPNSt4byteE">amdinfer::InferenceRequestInput::serialize (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer21InferenceRequestInput13serializeSizeEv">amdinfer::InferenceRequestInput::serializeSize (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer21InferenceRequestInput7setDataEPv">amdinfer::InferenceRequestInput::setData (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer22InferenceRequestOutputE">amdinfer::InferenceRequestOutput (C++ class)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer22InferenceRequestOutput7getDataEv">amdinfer::InferenceRequestOutput::getData (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer22InferenceRequestOutput7getNameEv">amdinfer::InferenceRequestOutput::getName (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4NKR8amdinfer22InferenceRequestOutput13getParametersEv">amdinfer::InferenceRequestOutput::getParameters (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4NO8amdinfer22InferenceRequestOutput13getParametersEv">[1]</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer22InferenceRequestOutput22InferenceRequestOutputEv">amdinfer::InferenceRequestOutput::InferenceRequestOutput (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer22InferenceRequestOutput7setDataEPv">amdinfer::InferenceRequestOutput::setData (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer22InferenceRequestOutput7setNameERKNSt6stringE">amdinfer::InferenceRequestOutput::setName (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer22InferenceRequestOutput13setParametersE12ParameterMap">amdinfer::InferenceRequestOutput::setParameters (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer17InferenceResponseE">amdinfer::InferenceResponse (C++ class)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer17InferenceResponse9addOutputERK23InferenceResponseOutput">amdinfer::InferenceResponse::addOutput (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer17InferenceResponse8getErrorEv">amdinfer::InferenceResponse::getError (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer17InferenceResponse5getIDEv">amdinfer::InferenceResponse::getID (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer17InferenceResponse8getModelEv">amdinfer::InferenceResponse::getModel (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer17InferenceResponse10getOutputsEv">amdinfer::InferenceResponse::getOutputs (C++ function)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer17InferenceResponse13getParametersEv">amdinfer::InferenceResponse::getParameters (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer17InferenceResponse17InferenceResponseERKNSt6stringE">amdinfer::InferenceResponse::InferenceResponse (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer17InferenceResponse17InferenceResponseEv">[1]</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer17InferenceResponse7isErrorEv">amdinfer::InferenceResponse::isError (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer17InferenceResponselsERNSt7ostreamERK17InferenceResponse">amdinfer::InferenceResponse::operator&lt;&lt; (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer17InferenceResponse5setIDERKNSt6stringE">amdinfer::InferenceResponse::setID (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer17InferenceResponse8setModelERKNSt6stringE">amdinfer::InferenceResponse::setModel (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer16invalid_argumentE">amdinfer::invalid_argument (C++ class)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer12loadEnsembleEPK6ClientNSt6vectorINSt6stringEEENSt6vectorI12ParameterMapEE">amdinfer::loadEnsemble (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer13ModelMetadataE">amdinfer::ModelMetadata (C++ class)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer13ModelMetadata14addInputTensorERK6Tensor">amdinfer::ModelMetadata::addInputTensor (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer13ModelMetadata14addInputTensorERKNSt6stringENSt16initializer_listI7int64_tEE8DataType">[1]</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer13ModelMetadata14addInputTensorERKNSt6stringENSt6vectorIiEE8DataType">[2]</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer13ModelMetadata15addOutputTensorERK6Tensor">amdinfer::ModelMetadata::addOutputTensor (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer13ModelMetadata15addOutputTensorERKNSt6stringENSt16initializer_listI7int64_tEE8DataType">[1]</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer13ModelMetadata15addOutputTensorERKNSt6stringENSt6vectorIiEE8DataType">[2]</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer13ModelMetadata9getInputsEv">amdinfer::ModelMetadata::getInputs (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer13ModelMetadata7getNameEv">amdinfer::ModelMetadata::getName (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer13ModelMetadata10getOutputsEv">amdinfer::ModelMetadata::getOutputs (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer13ModelMetadata7isReadyEv">amdinfer::ModelMetadata::isReady (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer13ModelMetadata13ModelMetadataERKNSt6stringERKNSt6stringE">amdinfer::ModelMetadata::ModelMetadata (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer13ModelMetadata7setNameERKNSt6stringE">amdinfer::ModelMetadata::setName (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer13ModelMetadata8setReadyEb">amdinfer::ModelMetadata::setReady (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer12NativeClientE">amdinfer::NativeClient (C++ class)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer12NativeClient11hasHardwareERKNSt6stringEi">amdinfer::NativeClient::hasHardware (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer12NativeClient9modelListEv">amdinfer::NativeClient::modelList (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer12NativeClient12NativeClientEPK6Server">amdinfer::NativeClient::NativeClient (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer12NativeClient12NativeClientERK12NativeClient">[1]</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer12NativeClient12NativeClientERR12NativeClient">[2]</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer12NativeClient16NativeClientImplE">amdinfer::NativeClient::NativeClientImpl (C++ struct)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer12NativeClientaSERK12NativeClient">amdinfer::NativeClient::operator= (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer12NativeClientaSERR12NativeClient">[1]</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer12NativeClient10serverLiveEv">amdinfer::NativeClient::serverLive (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer12NativeClient14serverMetadataEv">amdinfer::NativeClient::serverMetadata (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer12NativeClient11serverReadyEv">amdinfer::NativeClient::serverReady (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer12NativeClient10workerLoadERKNSt6stringERK12ParameterMap">amdinfer::NativeClient::workerLoad (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer12NativeClient12workerUnloadERKNSt6stringE">amdinfer::NativeClient::workerUnload (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer12NativeClientD0Ev">amdinfer::NativeClient::~NativeClient (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer12ParameterMapE">amdinfer::ParameterMap (C++ class)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer12ParameterMap5beginEv">amdinfer::ParameterMap::begin (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4NK8amdinfer12ParameterMap5beginEv">[1]</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer12ParameterMap6cbeginEv">amdinfer::ParameterMap::cbegin (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer12ParameterMap4cendEv">amdinfer::ParameterMap::cend (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer12ParameterMap4dataEv">amdinfer::ParameterMap::data (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer12ParameterMap11deserializeEPKNSt4byteE">amdinfer::ParameterMap::deserialize (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer12ParameterMap5emptyEv">amdinfer::ParameterMap::empty (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer12ParameterMap3endEv">amdinfer::ParameterMap::end (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4NK8amdinfer12ParameterMap3endEv">[1]</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer12ParameterMap5eraseERKNSt6stringE">amdinfer::ParameterMap::erase (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4I0ENK8amdinfer12ParameterMap3getE1TRKNSt6stringE">amdinfer::ParameterMap::get (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer12ParameterMap3hasERKNSt6stringE">amdinfer::ParameterMap::has (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer12ParameterMaplsERNSt7ostreamERK12ParameterMap">amdinfer::ParameterMap::operator&lt;&lt; (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer12ParameterMap12ParameterMapERKNSt6vectorINSt6stringEEERKNSt6vectorI9ParameterEE">amdinfer::ParameterMap::ParameterMap (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer12ParameterMap3putERKNSt6stringEPKc">amdinfer::ParameterMap::put (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer12ParameterMap3putERKNSt6stringERK9Parameter">[1]</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer12ParameterMap6renameERKNSt6stringERKNSt6stringE">amdinfer::ParameterMap::rename (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer12ParameterMap9serializeEPNSt4byteE">amdinfer::ParameterMap::serialize (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer12ParameterMap13serializeSizeEv">amdinfer::ParameterMap::serializeSize (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer12ParameterMap4sizeEv">amdinfer::ParameterMap::size (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer13runtime_errorE">amdinfer::runtime_error (C++ class)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer6ServerE">amdinfer::Server (C++ class)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer6Server26enableRepositoryMonitoringEb">amdinfer::Server::enableRepositoryMonitoring (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer6ServeraSERK6Server">amdinfer::Server::operator= (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer6ServeraSERR6Server">[1]</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer6Server6ServerERK6Server">amdinfer::Server::Server (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer6Server6ServerERR6Server">[1]</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer6Server6ServerEv">[2]</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer6Server10ServerImplE">amdinfer::Server::ServerImpl (C++ struct)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer6Server18setModelRepositoryERKNSt10filesystem4pathEb">amdinfer::Server::setModelRepository (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer6Server9startGrpcE8uint16_t">amdinfer::Server::startGrpc (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer6Server9startHttpE8uint16_t">amdinfer::Server::startHttp (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer6Server8stopGrpcEv">amdinfer::Server::stopGrpc (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer6Server8stopHttpEv">amdinfer::Server::stopHttp (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer6ServerD0Ev">amdinfer::Server::~Server (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer18serverHasExtensionEPK6ClientRKNSt6stringE">amdinfer::serverHasExtension (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer14ServerMetadataE">amdinfer::ServerMetadata (C++ struct)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer14ServerMetadata10extensionsE">amdinfer::ServerMetadata::extensions (C++ member)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer14ServerMetadata4nameE">amdinfer::ServerMetadata::name (C++ member)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer14ServerMetadata7versionE">amdinfer::ServerMetadata::version (C++ member)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer12unloadModelsEPK6ClientRKNSt6vectorINSt6stringEEERKNSt6stringE">amdinfer::unloadModels (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer22waitUntilModelNotReadyEPK6ClientRKNSt6stringERKNSt6stringE">amdinfer::waitUntilModelNotReady (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer19waitUntilModelReadyEPK6ClientRKNSt6stringERKNSt6stringE">amdinfer::waitUntilModelReady (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer20waitUntilServerReadyEPK6Client">amdinfer::waitUntilServerReady (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer15WebSocketClientE">amdinfer::WebSocketClient (C++ class)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer15WebSocketClient5closeEv">amdinfer::WebSocketClient::close (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer15WebSocketClient11hasHardwareERKNSt6stringEi">amdinfer::WebSocketClient::hasHardware (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer15WebSocketClient12modelInferWsERKNSt6stringERK16InferenceRequest">amdinfer::WebSocketClient::modelInferWs (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer15WebSocketClient9modelListEv">amdinfer::WebSocketClient::modelList (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer15WebSocketClient9modelRecvEv">amdinfer::WebSocketClient::modelRecv (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer15WebSocketClientaSERK15WebSocketClient">amdinfer::WebSocketClient::operator= (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer15WebSocketClientaSERR15WebSocketClient">[1]</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer15WebSocketClient10serverLiveEv">amdinfer::WebSocketClient::serverLive (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer15WebSocketClient14serverMetadataEv">amdinfer::WebSocketClient::serverMetadata (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer15WebSocketClient11serverReadyEv">amdinfer::WebSocketClient::serverReady (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer15WebSocketClient15WebSocketClientERK15WebSocketClient">amdinfer::WebSocketClient::WebSocketClient (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer15WebSocketClient15WebSocketClientERKNSt6stringERKNSt6stringE">[1]</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer15WebSocketClient15WebSocketClientERR15WebSocketClient">[2]</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer15WebSocketClient19WebSocketClientImplE">amdinfer::WebSocketClient::WebSocketClientImpl (C++ class)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer15WebSocketClient19WebSocketClientImplaSERK19WebSocketClientImpl">amdinfer::WebSocketClient::WebSocketClientImpl::operator= (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer15WebSocketClient19WebSocketClientImplaSERR19WebSocketClientImpl">[1]</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer15WebSocketClient19WebSocketClientImpl19WebSocketClientImplERK19WebSocketClientImpl">amdinfer::WebSocketClient::WebSocketClientImpl::WebSocketClientImpl (C++ function)</a>, <a href="cpp_user_api.html#_CPPv4N8amdinfer15WebSocketClient19WebSocketClientImpl19WebSocketClientImplERR19WebSocketClientImpl">[1]</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer15WebSocketClient10workerLoadERKNSt6stringERK12ParameterMap">amdinfer::WebSocketClient::workerLoad (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4NK8amdinfer15WebSocketClient12workerUnloadERKNSt6stringE">amdinfer::WebSocketClient::workerUnload (C++ function)</a>
+</li>
+      <li><a href="cpp_user_api.html#_CPPv4N8amdinfer15WebSocketClientD0Ev">amdinfer::WebSocketClient::~WebSocketClient (C++ function)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="B">B</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python.html#amdinfer.BadStatus">BadStatus</a>
+</li>
+      <li><a href="python.html#amdinfer.DataType.BOOL">BOOL (amdinfer.DataType attribute)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.DataType.Value.BOOL">(amdinfer.DataType.Value attribute)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python.html#amdinfer.DataType.BYTES">BYTES (amdinfer.DataType attribute)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.DataType.Value.BYTES">(amdinfer.DataType.Value attribute)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="C">C</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="glossary.html#term-Chain"><strong>Chain</strong></a>
+</li>
+      <li><a href="python.html#amdinfer.Client">Client (class in amdinfer)</a>
+
+      <ul>
+        <li><a href="glossary.html#term-Client-User"><strong>(User)</strong></a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python.html#amdinfer.WebSocketClient.close">close() (amdinfer.WebSocketClient method)</a>
+</li>
+      <li><a href="python.html#amdinfer.ConnectionError">ConnectionError</a>
+</li>
+      <li><a href="glossary.html#term-Container-Docker"><strong>Container (Docker)</strong></a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="D">D</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python.html#amdinfer.InferenceRequestOutput.data">data (amdinfer.InferenceRequestOutput property)</a>
+</li>
+      <li><a href="python.html#amdinfer.InferenceResponseOutput.datatype">datatype (amdinfer.InferenceResponseOutput property)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.Tensor.datatype">(amdinfer.Tensor property)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python.html#amdinfer.DataType">DataType (class in amdinfer)</a>
+</li>
+      <li><a href="python.html#amdinfer.DataType.Value">DataType.Value (class in amdinfer)</a>
+</li>
+      <li><a href="glossary.html#term-Developer-User"><strong>Developer (User)</strong></a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="E">E</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python.html#amdinfer.ParameterMap.empty">empty() (amdinfer.ParameterMap method)</a>
+</li>
+      <li><a href="python.html#amdinfer.Server.enableRepositoryMonitoring">enableRepositoryMonitoring() (amdinfer.Server method)</a>
+</li>
+      <li><a href="glossary.html#term-Ensemble"><strong>Ensemble</strong></a>
+</li>
+      <li><a href="python.html#amdinfer.EnvironmentNotSetError">EnvironmentNotSetError</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python.html#amdinfer.ParameterMap.erase">erase() (amdinfer.ParameterMap method)</a>
+</li>
+      <li><a href="glossary.html#term-EULA"><strong>EULA</strong></a>
+</li>
+      <li><a href="python.html#amdinfer.ServerMetadata.extensions">extensions (amdinfer.ServerMetadata property)</a>
+</li>
+      <li><a href="python.html#amdinfer.ExternalError">ExternalError</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="F">F</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python.html#amdinfer.FileNotFoundError">FileNotFoundError</a>
+</li>
+      <li><a href="python.html#amdinfer.FileReadError">FileReadError</a>
+</li>
+      <li><a href="python.html#amdinfer.DataType.FLOAT16">FLOAT16 (amdinfer.DataType attribute)</a>
+</li>
+      <li><a href="python.html#amdinfer.DataType.FLOAT32">FLOAT32 (amdinfer.DataType attribute)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.DataType.Value.FLOAT32">(amdinfer.DataType.Value attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="python.html#amdinfer.DataType.FLOAT64">FLOAT64 (amdinfer.DataType attribute)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.DataType.Value.FLOAT64">(amdinfer.DataType.Value attribute)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python.html#amdinfer.DataType.FP16">FP16 (amdinfer.DataType attribute)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.DataType.Value.FP16">(amdinfer.DataType.Value attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="python.html#amdinfer.DataType.FP32">FP32 (amdinfer.DataType attribute)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.DataType.Value.FP32">(amdinfer.DataType.Value attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="python.html#amdinfer.DataType.FP64">FP64 (amdinfer.DataType attribute)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.DataType.Value.FP64">(amdinfer.DataType.Value attribute)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="G">G</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python.html#amdinfer.ParameterMap.getBool">getBool() (amdinfer.ParameterMap method)</a>
+</li>
+      <li><a href="python.html#amdinfer.InferenceResponse.getError">getError() (amdinfer.InferenceResponse method)</a>
+</li>
+      <li><a href="python.html#amdinfer.ParameterMap.getFloat">getFloat() (amdinfer.ParameterMap method)</a>
+</li>
+      <li><a href="python.html#amdinfer.InferenceRequestInput.getFp16Data">getFp16Data() (amdinfer.InferenceRequestInput method)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.InferenceResponseOutput.getFp16Data">(amdinfer.InferenceResponseOutput method)</a>
+</li>
+      </ul></li>
+      <li><a href="python.html#amdinfer.InferenceRequestInput.getFp32Data">getFp32Data() (amdinfer.InferenceRequestInput method)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.InferenceResponseOutput.getFp32Data">(amdinfer.InferenceResponseOutput method)</a>
+</li>
+      </ul></li>
+      <li><a href="python.html#amdinfer.InferenceRequestInput.getFp64Data">getFp64Data() (amdinfer.InferenceRequestInput method)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.InferenceResponseOutput.getFp64Data">(amdinfer.InferenceResponseOutput method)</a>
+</li>
+      </ul></li>
+      <li><a href="python.html#amdinfer.InferenceRequest.getInputs">getInputs() (amdinfer.InferenceRequest method)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.ModelMetadata.getInputs">(amdinfer.ModelMetadata method)</a>
+</li>
+      </ul></li>
+      <li><a href="python.html#amdinfer.InferenceRequest.getInputSize">getInputSize() (amdinfer.InferenceRequest method)</a>
+</li>
+      <li><a href="python.html#amdinfer.ParameterMap.getInt">getInt() (amdinfer.ParameterMap method)</a>
+</li>
+      <li><a href="python.html#amdinfer.InferenceRequestInput.getInt16Data">getInt16Data() (amdinfer.InferenceRequestInput method)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.InferenceResponseOutput.getInt16Data">(amdinfer.InferenceResponseOutput method)</a>
+</li>
+      </ul></li>
+      <li><a href="python.html#amdinfer.InferenceRequestInput.getInt32Data">getInt32Data() (amdinfer.InferenceRequestInput method)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.InferenceResponseOutput.getInt32Data">(amdinfer.InferenceResponseOutput method)</a>
+</li>
+      </ul></li>
+      <li><a href="python.html#amdinfer.InferenceRequestInput.getInt64Data">getInt64Data() (amdinfer.InferenceRequestInput method)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.InferenceResponseOutput.getInt64Data">(amdinfer.InferenceResponseOutput method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python.html#amdinfer.InferenceRequestInput.getInt8Data">getInt8Data() (amdinfer.InferenceRequestInput method)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.InferenceResponseOutput.getInt8Data">(amdinfer.InferenceResponseOutput method)</a>
+</li>
+      </ul></li>
+      <li><a href="python.html#amdinfer.InferenceRequest.getOutputs">getOutputs() (amdinfer.InferenceRequest method)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.InferenceResponse.getOutputs">(amdinfer.InferenceResponse method)</a>
+</li>
+      </ul></li>
+      <li><a href="python.html#amdinfer.InferenceResponse.getParameters">getParameters() (amdinfer.InferenceResponse method)</a>
+</li>
+      <li><a href="python.html#amdinfer.ModelMetadata.getPlatform">getPlatform() (amdinfer.ModelMetadata method)</a>
+</li>
+      <li><a href="python.html#amdinfer.InferenceResponseOutput.getSize">getSize() (amdinfer.InferenceResponseOutput method)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.Tensor.getSize">(amdinfer.Tensor method)</a>
+</li>
+      </ul></li>
+      <li><a href="python.html#amdinfer.ParameterMap.getString">getString() (amdinfer.ParameterMap method)</a>
+</li>
+      <li><a href="python.html#amdinfer.InferenceRequestInput.getStringData">getStringData() (amdinfer.InferenceRequestInput method)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.InferenceResponseOutput.getStringData">(amdinfer.InferenceResponseOutput method)</a>
+</li>
+      </ul></li>
+      <li><a href="python.html#amdinfer.InferenceRequestInput.getUint16Data">getUint16Data() (amdinfer.InferenceRequestInput method)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.InferenceResponseOutput.getUint16Data">(amdinfer.InferenceResponseOutput method)</a>
+</li>
+      </ul></li>
+      <li><a href="python.html#amdinfer.InferenceRequestInput.getUint32Data">getUint32Data() (amdinfer.InferenceRequestInput method)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.InferenceResponseOutput.getUint32Data">(amdinfer.InferenceResponseOutput method)</a>
+</li>
+      </ul></li>
+      <li><a href="python.html#amdinfer.InferenceRequestInput.getUint64Data">getUint64Data() (amdinfer.InferenceRequestInput method)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.InferenceResponseOutput.getUint64Data">(amdinfer.InferenceResponseOutput method)</a>
+</li>
+      </ul></li>
+      <li><a href="python.html#amdinfer.InferenceRequestInput.getUint8Data">getUint8Data() (amdinfer.InferenceRequestInput method)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.InferenceResponseOutput.getUint8Data">(amdinfer.InferenceResponseOutput method)</a>
+</li>
+      </ul></li>
+      <li><a href="python.html#amdinfer.GrpcClient">GrpcClient (class in amdinfer)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="H">H</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python.html#amdinfer.ParameterMap.has">has() (amdinfer.ParameterMap method)</a>
+</li>
+      <li><a href="python.html#amdinfer.GrpcClient.hasHardware">hasHardware() (amdinfer.GrpcClient method)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.HttpClient.hasHardware">(amdinfer.HttpClient method)</a>
+</li>
+        <li><a href="python.html#amdinfer.NativeClient.hasHardware">(amdinfer.NativeClient method)</a>
+</li>
+        <li><a href="python.html#amdinfer.WebSocketClient.hasHardware">(amdinfer.WebSocketClient method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python.html#amdinfer.HttpClient">HttpClient (class in amdinfer)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="I">I</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python.html#amdinfer.InferenceRequest.id">id (amdinfer.InferenceRequest property)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.InferenceResponse.id">(amdinfer.InferenceResponse property)</a>
+</li>
+      </ul></li>
+      <li><a href="glossary.html#term-Image-Docker"><strong>Image (Docker)</strong></a>
+</li>
+      <li><a href="python.html#amdinfer.ImageInferenceRequest">ImageInferenceRequest() (in module amdinfer)</a>
+</li>
+      <li><a href="python.html#amdinfer.inferAsyncOrdered">inferAsyncOrdered() (in module amdinfer)</a>
+</li>
+      <li><a href="python.html#amdinfer.inferAsyncOrderedBatched">inferAsyncOrderedBatched() (in module amdinfer)</a>
+</li>
+      <li><a href="python.html#amdinfer.inference_request_to_dict">inference_request_to_dict() (in module amdinfer)</a>
+</li>
+      <li><a href="python.html#amdinfer.InferenceRequest">InferenceRequest (class in amdinfer)</a>
+</li>
+      <li><a href="python.html#amdinfer.InferenceRequestInput">InferenceRequestInput (class in amdinfer)</a>
+</li>
+      <li><a href="python.html#amdinfer.InferenceRequestOutput">InferenceRequestOutput (class in amdinfer)</a>
+</li>
+      <li><a href="python.html#amdinfer.InferenceResponse">InferenceResponse (class in amdinfer)</a>
+</li>
+      <li><a href="python.html#amdinfer.InferenceResponseOutput">InferenceResponseOutput (class in amdinfer)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python.html#amdinfer.InferenceTensor">InferenceTensor (class in amdinfer)</a>
+</li>
+      <li><a href="python.html#amdinfer.DataType.INT16">INT16 (amdinfer.DataType attribute)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.DataType.Value.INT16">(amdinfer.DataType.Value attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="python.html#amdinfer.DataType.INT32">INT32 (amdinfer.DataType attribute)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.DataType.Value.INT32">(amdinfer.DataType.Value attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="python.html#amdinfer.DataType.INT64">INT64 (amdinfer.DataType attribute)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.DataType.Value.INT64">(amdinfer.DataType.Value attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="python.html#amdinfer.DataType.INT8">INT8 (amdinfer.DataType attribute)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.DataType.Value.INT8">(amdinfer.DataType.Value attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="python.html#amdinfer.InvalidArgumentError">InvalidArgumentError</a>
+</li>
+      <li><a href="python.html#amdinfer.InferenceResponse.isError">isError() (amdinfer.InferenceResponse method)</a>
+</li>
+      <li><a href="python.html#amdinfer.ModelMetadata.isReady">isReady() (amdinfer.ModelMetadata method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="L">L</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python.html#amdinfer.loadEnsemble">loadEnsemble() (in module amdinfer)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="M">M</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python.html#amdinfer.InferenceResponse.model">model (amdinfer.InferenceResponse property)</a>
+</li>
+      <li><a href="glossary.html#term-Model-repository"><strong>Model repository</strong></a>
+</li>
+      <li><a href="python.html#amdinfer.Client.modelInfer">modelInfer() (amdinfer.Client method)</a>
+</li>
+      <li><a href="python.html#amdinfer.WebSocketClient.modelInferWs">modelInferWs() (amdinfer.WebSocketClient method)</a>
+</li>
+      <li><a href="python.html#amdinfer.GrpcClient.modelList">modelList() (amdinfer.GrpcClient method)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.HttpClient.modelList">(amdinfer.HttpClient method)</a>
+</li>
+        <li><a href="python.html#amdinfer.NativeClient.modelList">(amdinfer.NativeClient method)</a>
+</li>
+        <li><a href="python.html#amdinfer.WebSocketClient.modelList">(amdinfer.WebSocketClient method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python.html#amdinfer.Client.modelLoad">modelLoad() (amdinfer.Client method)</a>
+</li>
+      <li><a href="python.html#amdinfer.ModelMetadata">ModelMetadata (class in amdinfer)</a>
+</li>
+      <li><a href="python.html#amdinfer.Client.modelMetadata">modelMetadata() (amdinfer.Client method)</a>
+</li>
+      <li><a href="python.html#amdinfer.Client.modelReady">modelReady() (amdinfer.Client method)</a>
+</li>
+      <li><a href="python.html#amdinfer.WebSocketClient.modelRecv">modelRecv() (amdinfer.WebSocketClient method)</a>
+</li>
+      <li><a href="python.html#amdinfer.Client.modelUnload">modelUnload() (amdinfer.Client method)</a>
+</li>
+      <li>
+    module
+
+      <ul>
+        <li><a href="python.html#module-amdinfer">amdinfer</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="N">N</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python.html#amdinfer.DataType.Value.name">name (amdinfer.DataType.Value property)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.InferenceRequestOutput.name">(amdinfer.InferenceRequestOutput property)</a>
+</li>
+        <li><a href="python.html#amdinfer.InferenceResponseOutput.name">(amdinfer.InferenceResponseOutput property)</a>
+</li>
+        <li><a href="python.html#amdinfer.ModelMetadata.name">(amdinfer.ModelMetadata property)</a>
+</li>
+        <li><a href="python.html#amdinfer.ServerMetadata.name">(amdinfer.ServerMetadata property)</a>
+</li>
+        <li><a href="python.html#amdinfer.Tensor.name">(amdinfer.Tensor property)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python.html#amdinfer.NativeClient">NativeClient (class in amdinfer)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="P">P</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python.html#amdinfer.parallel_infer">parallel_infer() (in module amdinfer)</a>
+</li>
+      <li><a href="python.html#amdinfer.ParameterMap">ParameterMap (class in amdinfer)</a>
+</li>
+      <li><a href="python.html#amdinfer.InferenceRequest.parameters">parameters (amdinfer.InferenceRequest property)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.InferenceRequestOutput.parameters">(amdinfer.InferenceRequestOutput property)</a>
+</li>
+        <li><a href="python.html#amdinfer.InferenceResponseOutput.parameters">(amdinfer.InferenceResponseOutput property)</a>
+</li>
+        <li><a href="python.html#amdinfer.InferenceTensor.parameters">(amdinfer.InferenceTensor property)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python.html#amdinfer.InferenceRequest.propagate">propagate() (amdinfer.InferenceRequest method)</a>
+</li>
+      <li><a href="python.html#amdinfer.ParameterMap.put">put() (amdinfer.ParameterMap method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="R">R</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python.html#amdinfer.RuntimeError">RuntimeError</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="S">S</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python.html#amdinfer.Server">Server (class in amdinfer)</a>
+</li>
+      <li><a href="python.html#amdinfer.serverHasExtension">serverHasExtension() (in module amdinfer)</a>
+</li>
+      <li><a href="python.html#amdinfer.GrpcClient.serverLive">serverLive() (amdinfer.GrpcClient method)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.HttpClient.serverLive">(amdinfer.HttpClient method)</a>
+</li>
+        <li><a href="python.html#amdinfer.NativeClient.serverLive">(amdinfer.NativeClient method)</a>
+</li>
+        <li><a href="python.html#amdinfer.WebSocketClient.serverLive">(amdinfer.WebSocketClient method)</a>
+</li>
+      </ul></li>
+      <li><a href="python.html#amdinfer.ServerMetadata">ServerMetadata (class in amdinfer)</a>
+</li>
+      <li><a href="python.html#amdinfer.GrpcClient.serverMetadata">serverMetadata() (amdinfer.GrpcClient method)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.HttpClient.serverMetadata">(amdinfer.HttpClient method)</a>
+</li>
+        <li><a href="python.html#amdinfer.NativeClient.serverMetadata">(amdinfer.NativeClient method)</a>
+</li>
+        <li><a href="python.html#amdinfer.WebSocketClient.serverMetadata">(amdinfer.WebSocketClient method)</a>
+</li>
+      </ul></li>
+      <li><a href="python.html#amdinfer.GrpcClient.serverReady">serverReady() (amdinfer.GrpcClient method)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.HttpClient.serverReady">(amdinfer.HttpClient method)</a>
+</li>
+        <li><a href="python.html#amdinfer.NativeClient.serverReady">(amdinfer.NativeClient method)</a>
+</li>
+        <li><a href="python.html#amdinfer.WebSocketClient.serverReady">(amdinfer.WebSocketClient method)</a>
+</li>
+      </ul></li>
+      <li><a href="python.html#amdinfer.InferenceRequestInput.setFp16Data">setFp16Data() (amdinfer.InferenceRequestInput method)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.InferenceResponseOutput.setFp16Data">(amdinfer.InferenceResponseOutput method)</a>
+</li>
+      </ul></li>
+      <li><a href="python.html#amdinfer.InferenceRequestInput.setFp32Data">setFp32Data() (amdinfer.InferenceRequestInput method)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.InferenceResponseOutput.setFp32Data">(amdinfer.InferenceResponseOutput method)</a>
+</li>
+      </ul></li>
+      <li><a href="python.html#amdinfer.InferenceRequestInput.setFp64Data">setFp64Data() (amdinfer.InferenceRequestInput method)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.InferenceResponseOutput.setFp64Data">(amdinfer.InferenceResponseOutput method)</a>
+</li>
+      </ul></li>
+      <li><a href="python.html#amdinfer.InferenceRequestInput.setInt16Data">setInt16Data() (amdinfer.InferenceRequestInput method)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.InferenceResponseOutput.setInt16Data">(amdinfer.InferenceResponseOutput method)</a>
+</li>
+      </ul></li>
+      <li><a href="python.html#amdinfer.InferenceRequestInput.setInt32Data">setInt32Data() (amdinfer.InferenceRequestInput method)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.InferenceResponseOutput.setInt32Data">(amdinfer.InferenceResponseOutput method)</a>
+</li>
+      </ul></li>
+      <li><a href="python.html#amdinfer.InferenceRequestInput.setInt64Data">setInt64Data() (amdinfer.InferenceRequestInput method)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.InferenceResponseOutput.setInt64Data">(amdinfer.InferenceResponseOutput method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python.html#amdinfer.InferenceRequestInput.setInt8Data">setInt8Data() (amdinfer.InferenceRequestInput method)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.InferenceResponseOutput.setInt8Data">(amdinfer.InferenceResponseOutput method)</a>
+</li>
+      </ul></li>
+      <li><a href="python.html#amdinfer.Server.setModelRepository">setModelRepository() (amdinfer.Server method)</a>
+</li>
+      <li><a href="python.html#amdinfer.ModelMetadata.setReady">setReady() (amdinfer.ModelMetadata method)</a>
+</li>
+      <li><a href="python.html#amdinfer.InferenceRequestInput.setStringData">setStringData() (amdinfer.InferenceRequestInput method)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.InferenceResponseOutput.setStringData">(amdinfer.InferenceResponseOutput method)</a>
+</li>
+      </ul></li>
+      <li><a href="python.html#amdinfer.InferenceRequestInput.setUint16Data">setUint16Data() (amdinfer.InferenceRequestInput method)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.InferenceResponseOutput.setUint16Data">(amdinfer.InferenceResponseOutput method)</a>
+</li>
+      </ul></li>
+      <li><a href="python.html#amdinfer.InferenceRequestInput.setUint32Data">setUint32Data() (amdinfer.InferenceRequestInput method)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.InferenceResponseOutput.setUint32Data">(amdinfer.InferenceResponseOutput method)</a>
+</li>
+      </ul></li>
+      <li><a href="python.html#amdinfer.InferenceRequestInput.setUint64Data">setUint64Data() (amdinfer.InferenceRequestInput method)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.InferenceResponseOutput.setUint64Data">(amdinfer.InferenceResponseOutput method)</a>
+</li>
+      </ul></li>
+      <li><a href="python.html#amdinfer.InferenceRequestInput.setUint8Data">setUint8Data() (amdinfer.InferenceRequestInput method)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.InferenceResponseOutput.setUint8Data">(amdinfer.InferenceResponseOutput method)</a>
+</li>
+      </ul></li>
+      <li><a href="python.html#amdinfer.InferenceResponseOutput.shape">shape (amdinfer.InferenceResponseOutput property)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.Tensor.shape">(amdinfer.Tensor property)</a>
+</li>
+      </ul></li>
+      <li><a href="python.html#amdinfer.DataType.size">size() (amdinfer.DataType method)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.ParameterMap.size">(amdinfer.ParameterMap method)</a>
+</li>
+      </ul></li>
+      <li><a href="python.html#amdinfer.start_http_client_server">start_http_client_server() (in module amdinfer)</a>
+</li>
+      <li><a href="python.html#amdinfer.Server.startGrpc">startGrpc() (amdinfer.Server method)</a>
+</li>
+      <li><a href="python.html#amdinfer.Server.startHttp">startHttp() (amdinfer.Server method)</a>
+</li>
+      <li><a href="python.html#amdinfer.Server.stopGrpc">stopGrpc() (amdinfer.Server method)</a>
+</li>
+      <li><a href="python.html#amdinfer.Server.stopHttp">stopHttp() (amdinfer.Server method)</a>
+</li>
+      <li><a href="python.html#amdinfer.DataType.str">str() (amdinfer.DataType method)</a>
+</li>
+      <li><a href="python.html#amdinfer.stringToArray">stringToArray() (in module amdinfer)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="T">T</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python.html#amdinfer.Tensor">Tensor (class in amdinfer)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="U">U</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python.html#amdinfer.DataType.UINT16">UINT16 (amdinfer.DataType attribute)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.DataType.Value.UINT16">(amdinfer.DataType.Value attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="python.html#amdinfer.DataType.UINT32">UINT32 (amdinfer.DataType attribute)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.DataType.Value.UINT32">(amdinfer.DataType.Value attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="python.html#amdinfer.DataType.UINT64">UINT64 (amdinfer.DataType attribute)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.DataType.Value.UINT64">(amdinfer.DataType.Value attribute)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python.html#amdinfer.DataType.UINT8">UINT8 (amdinfer.DataType attribute)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.DataType.Value.UINT8">(amdinfer.DataType.Value attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="python.html#amdinfer.unloadModels">unloadModels() (in module amdinfer)</a>
+</li>
+      <li><a href="glossary.html#term-User"><strong>User</strong></a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="V">V</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python.html#amdinfer.DataType.Value.value">value (amdinfer.DataType.Value property)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="glossary.html#term-VART"><strong>VART</strong></a>
+</li>
+      <li><a href="python.html#amdinfer.ServerMetadata.version">version (amdinfer.ServerMetadata property)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="W">W</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python.html#amdinfer.waitUntilModelNotReady">waitUntilModelNotReady() (in module amdinfer)</a>
+</li>
+      <li><a href="python.html#amdinfer.waitUntilModelReady">waitUntilModelReady() (in module amdinfer)</a>
+</li>
+      <li><a href="python.html#amdinfer.waitUntilServerReady">waitUntilServerReady() (in module amdinfer)</a>
+</li>
+      <li><a href="python.html#amdinfer.WebSocketClient">WebSocketClient (class in amdinfer)</a>
+</li>
+      <li><a href="python.html#amdinfer.GrpcClient.workerLoad">workerLoad() (amdinfer.GrpcClient method)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.HttpClient.workerLoad">(amdinfer.HttpClient method)</a>
+</li>
+        <li><a href="python.html#amdinfer.NativeClient.workerLoad">(amdinfer.NativeClient method)</a>
+</li>
+        <li><a href="python.html#amdinfer.WebSocketClient.workerLoad">(amdinfer.WebSocketClient method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python.html#amdinfer.GrpcClient.workerUnload">workerUnload() (amdinfer.GrpcClient method)</a>
+
+      <ul>
+        <li><a href="python.html#amdinfer.HttpClient.workerUnload">(amdinfer.HttpClient method)</a>
+</li>
+        <li><a href="python.html#amdinfer.NativeClient.workerUnload">(amdinfer.NativeClient method)</a>
+</li>
+        <li><a href="python.html#amdinfer.WebSocketClient.workerUnload">(amdinfer.WebSocketClient method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="X">X</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="glossary.html#term-XRT"><strong>XRT</strong></a>
+</li>
+  </ul></td>
+</tr></table>
+
+
+
+           </div>
+          </div>
+          	  
+				  <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022 Advanced Micro Devices, Inc..
+      <span class="lastupdated">Last updated on September 07, 2023.
+      </span></p>
+  </div>
+
+
+
+										<div class="aem-Grid aem-Grid--16">
+											<div class="aem-GridColumn aem-GridColumn--xxxlarge--none aem-GridColumn--xsmall--16 aem-GridColumn--offset--xsmall--0 aem-GridColumn--xlarge--none aem-GridColumn--xxlarge--none aem-GridColumn--default--none aem-GridColumn--offset--large--1 aem-GridColumn--xlarge--12 aem-GridColumn--offset--default--0 aem-GridColumn--xxlarge--10 aem-GridColumn--offset--xlarge--2 aem-GridColumn--offset--xxlarge--3 aem-GridColumn--offset--xxxlarge--4 aem-GridColumn--xsmall--none aem-GridColumn--large--none aem-GridColumn aem-GridColumn--large--14 aem-GridColumn--xxxlarge--8 aem-GridColumn--default--16">
+												<div class="container-fluid sub-footer">
+
+													                    <div class="row">
+                        <div class="col-xs-24">
+                          <p><a target="_blank" href="https://www.amd.com/en/corporate/copyright">Terms and Conditions</a> | <a target="_blank" href="https://www.amd.com/en/corporate/privacy">Privacy</a> | <a target="_blank" href="https://www.amd.com/en/corporate/cookies">Cookie Policy</a> | <a target="_blank" href="https://www.amd.com/en/corporate/trademarks">Trademarks</a> | <a target="_blank" href="https://www.amd.com/system/files/documents/statement-human-trafficking-forced-labor.pdf">Statement on Forced Labor</a> | <a target="_blank" href="https://www.amd.com/en/corporate/competition">Fair and Open Competition</a> | <a target="_blank" href="https://www.amd.com/system/files/documents/amd-uk-tax-strategy.pdf">UK Tax Strategy</a> | <a target="_blank" href="https://docs.xilinx.com/v/u/9x6YvZKuWyhJId7y7RQQKA">Inclusive Terminology</a> | <a href="#cookiessettings" class="ot-sdk-show-settings">Cookies Settings</a></p>
+                        </div>
+                    </div>
+												</div>
+											</div>
+										</div>
+										
+</br>
+
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+
+  <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      <span class="fa fa-book"> Read the Docs</span>
+      v: 0.4.0
+      <span class="fa fa-caret-down"></span>
+    </span>
+    <div class="rst-other-versions">
+      
+      <dl>
+        <dt>Languages</dt>
+        
+           <strong> 
+          <dd><a href="/inference-server/0.4.0/">en</a></dd>
+           </strong> 
+        
+      </dl>
+      
+      
+      <dl>
+        <dt>Versions</dt>
+        
+          
+          <dd><a href="/inference-server/0.1.0/">0.1.0</a></dd>
+          
+        
+          
+          <dd><a href="/inference-server/0.2.0/">0.2.0</a></dd>
+          
+        
+          
+          <dd><a href="/inference-server/0.3.0/">0.3.0</a></dd>
+          
+        
+           <strong> 
+          <dd><a href="/inference-server/0.4.0/">0.4.0</a></dd>
+           </strong> 
+        
+          
+          <dd><a href="/inference-server/main/">main</a></dd>
+          
+        
+      </dl>
+      
+      
+       
+    </div>
+  </div>
+<script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(false);
+      });
+  </script> 
+
+</body>
+</html>
