@@ -606,6 +606,8 @@ def install_migraphx(manager: PackageManager, custom_backends):
                 # before installing migraphx
                 miopen-hip-dev \\
                 rocm-device-libs \\
+                # a runtime requirement for miopen that isn't automatically included
+                roctracer \\
                 rocblas-dev \\
                 libnuma1 \\
                 migraphx-dev \\
