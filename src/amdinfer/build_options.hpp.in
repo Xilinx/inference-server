@@ -44,6 +44,8 @@
 #cmakedefine AMDINFER_ENABLE_PTZENDNN
 /// Enables MIGraphXr
 #cmakedefine AMDINFER_ENABLE_MIGRAPHX
+/// Enables RocAL
+#cmakedefine AMDINFER_ENABLE_ROCAL
 
 /// Port used by the HTTP server by default
 constexpr auto kDefaultHttpPort = 8998;

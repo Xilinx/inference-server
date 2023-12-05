@@ -36,10 +36,19 @@ if(${AMDINFER_ENABLE_MIGRAPHX})
   endif()
 endif()
 
+if(${AMDINFER_ENABLE_ROCAL})
+  if(${AMDINFER_ENABLE_HTTP})
+    list(APPEND examples rocal)
+  endif()
+endif()
+
+list(APPEND examples rocal)
+link_directories(/opt/rocm/lib/)
+
 foreach(example ${examples})
   amdinfer_add_example(${example})
   amdinfer_get_example_target(target ${example})
   target_link_libraries(
-    ${target} PRIVATE opencv_imgcodecs opencv_imgproc opencv_core
+    ${target} PRIVATE opencv_imgcodecs opencv_imgproc opencv_core rocal
   )
 endforeach()
