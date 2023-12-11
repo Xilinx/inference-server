@@ -24,7 +24,7 @@ def get(args: argparse.Namespace):
     models = {}
     if args.migraphx:
         models["onnx_bert"] = File(
-            "https://github.com/onnx/models/raw/main/text/machine_comprehension/bert-squad/model/bertsquad-10.onnx",
+            "https://github.com/onnx/models/raw/5faef4c33eba0395177850e1e31c4a6a9e634c82/text/machine_comprehension/bert-squad/model/bertsquad-10.onnx",
             directory,
             "",
         )

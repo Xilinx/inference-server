@@ -21,8 +21,8 @@ The model file and test data is not in the git repo. and must be fetched with gi
     amdinfer get or wget
 
 Model source:
-https://github.com/onnx/models/blob/main/vision/classification/resnet/model/resnet50-v2-7.onnx
-https://github.com/onnx/models/blob/main/vision/classification/resnet/model/resnet50-v2-7.tar.gz
+https://github.com/onnx/models/blob/5faef4c33eba0395177850e1e31c4a6a9e634c82/vision/classification/resnet/model/resnet50-v2-7.onnx
+https://github.com/onnx/models/blob/5faef4c33eba0395177850e1e31c4a6a9e634c82/vision/classification/resnet/model/resnet50-v2-7.tar.gz
 
 Source of ground truth labels for validation set:
     ILSVRC2012_validation_ground_truth.txt
