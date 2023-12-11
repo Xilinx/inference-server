@@ -24,17 +24,17 @@ def get(args: argparse.Namespace):
     models = {}
     if args.migraphx:
         models["onnx_yolov4_anchors"] = File(
-            "https://github.com/onnx/models/raw/main/vision/object_detection_segmentation/yolov4/dependencies/yolov4_anchors.txt",
+            "https://github.com/onnx/models/raw/5faef4c33eba0395177850e1e31c4a6a9e634c82/vision/object_detection_segmentation/yolov4/dependencies/yolov4_anchors.txt",
             directory,
             "",
         )
         models["onnx_yolov4"] = File(
-            "https://github.com/onnx/models/raw/main/vision/object_detection_segmentation/yolov4/model/yolov4.onnx",
+            "https://github.com/onnx/models/raw/5faef4c33eba0395177850e1e31c4a6a9e634c82/vision/object_detection_segmentation/yolov4/model/yolov4.onnx",
             directory,
             "",
         )
         models["onnx_yolov4_coco"] = File(
-            "https://github.com/onnx/models/raw/main/vision/object_detection_segmentation/yolov4/dependencies/coco.names",
+            "https://github.com/onnx/models/raw/5faef4c33eba0395177850e1e31c4a6a9e634c82/vision/object_detection_segmentation/yolov4/dependencies/coco.names",
             directory,
             "",
         )

@@ -31,7 +31,7 @@ The output shapes are: (1, 52, 52, 3, 85) (1, 26, 26, 3, 85) (1, 13, 13, 3, 85).
 There are 3 output layers. For each layer, there are 255 outputs: 85 values per anchor, times 3 anchors.
 The 85 values of each anchor consists of 4 box coordinates describing the predicted bounding box (x, y, h, w), 1 object confidence, and 80 class confidences.
 
-For more information about this model, look at the `ONNX model <https://github.com/onnx/models/tree/main/vision/object_detection_segmentation/yolov4>`__ online.
+For more information about this model, look at the `ONNX model <https://github.com/onnx/models/tree/5faef4c33eba0395177850e1e31c4a6a9e634c82/vision/object_detection_segmentation/yolov4>`__ online.
 
 Files
 ^^^^^
