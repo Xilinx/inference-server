@@ -29,6 +29,10 @@ if(${AMDINFER_ENABLE_PTZENDNN})
   list(APPEND workers PtZendnn)
 endif()
 
+if(${AMDINFER_ENABLE_PYTORCH})
+  list(APPEND workers Pytorch)
+endif()
+
 if(${AMDINFER_ENABLE_MIGRAPHX})
   list(APPEND workers Migraphx)
 endif()
@@ -64,6 +68,7 @@ endforeach()
 target_link_libraries(
   workerInvertvideo PRIVATE base64 opencv_core opencv_imgcodecs opencv_videoio
 )
+
 if(${AMDINFER_ENABLE_VITIS})
   target_link_libraries(
     workerXmodel PRIVATE vart::runner target-factory::target-factory xir::xir
@@ -93,6 +98,11 @@ if(${AMDINFER_ENABLE_PTZENDNN})
     workerPtzendnn SYSTEM PRIVATE /usr/include/ptzendnn
   )
   target_link_libraries(workerPtzendnn PRIVATE torch torch_cpu c10)
+endif()
+
+if(${AMDINFER_ENABLE_PYTORCH})
+  target_link_libraries(workerPytorch PRIVATE torch torch_cpu c10)
+  target_include_directories(workerPytorch SYSTEM PRIVATE /usr/include/torch)
 endif()
 
 if(${AMDINFER_ENABLE_AKS})

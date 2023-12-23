@@ -44,6 +44,8 @@
 #cmakedefine AMDINFER_ENABLE_PTZENDNN
 /// Enables MIGraphXr
 #cmakedefine AMDINFER_ENABLE_MIGRAPHX
+/// Enables PyTorch Worker
+#cmakedefine AMDINFER_ENABLE_PYTORCH
 
 /// Port used by the HTTP server by default
 constexpr auto kDefaultHttpPort = 8998;

@@ -470,6 +470,22 @@ def build_ptzendnn():
     )
 
 
+def build_pytorch():
+    return textwrap.dedent(
+        """\
+        # Download libtorch with cxx11 abi.
+        RUN wget -O libtorch.zip  https://download.pytorch.org/libtorch/rocm5.4.2/libtorch-cxx11-abi-shared-with-deps-2.0.1%2Brocm5.4.2.zip \\
+            && unzip -q libtorch.zip \\
+            && cd libtorch \\
+            # Create subfolder and copy include files
+            && mkdir -p ${COPY_DIR}/usr/include/torch/ \\
+            && mkdir -p ${COPY_DIR}/usr/lib \\
+            # copy and list files that are copied
+            && cp -rv include/* ${COPY_DIR}/usr/include/torch | cut -d"'" -f 2 | sed 's/include/\/usr\/include\/torch/' > ${MANIFESTS_DIR}/pytorch.txt \\
+            && cp -rv lib/*.so* ${COPY_DIR}/usr/lib | cut -d"'" -f 2 | sed 's/lib/\/usr\/lib/' >> ${MANIFESTS_DIR}/pytorch.txt"""
+    )
+
+
 def install_dev_packages(manager: PackageManager, core):
     if manager.name == "apt":
         if not core:
@@ -877,6 +893,13 @@ def generate(args: argparse.Namespace):
         )
     else:
         dockerfile = dockerfile.replace("$[BUILD_PTZENDNN]", build_ptzendnn())
+
+    if args.custom_backends:
+        dockerfile = dockerfile.replace(
+            "$[BUILD_PYTORCH]", custom_backends.build_pytorch()
+        )
+    else:
+        dockerfile = dockerfile.replace("$[BUILD_PYTORCH]", build_pytorch())
 
     dockerfile = dockerfile.replace(
         "$[INSTALL_DEV_PACKAGES]", install_dev_packages(manager, args.core)

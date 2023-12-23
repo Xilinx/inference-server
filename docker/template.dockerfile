@@ -44,6 +44,7 @@ ARG TFZENDNN_PATH
 ARG ENABLE_PTZENDNN=${ENABLE_PTZENDNN:-no}
 ARG PTZENDNN_PATH
 ARG ENABLE_MIGRAPHX=${ENABLE_MIGRAPHX:-no}
+ARG ENABLE_PYTORCH=${ENABLE_PYTORCH:-no}
 
 ARG GIT_USER
 ARG GIT_TOKEN
@@ -224,6 +225,19 @@ RUN rm -rf ${COPY_DIR} && mkdir ${COPY_DIR} && mkdir -p ${MANIFESTS_DIR}
 
 $[BUILD_PTZENDNN]
 
+FROM common_builder AS pytorch_builder
+
+ARG COPY_DIR
+ARG MANIFESTS_DIR
+WORKDIR /tmp
+
+# delete any inherited artifacts and recreate
+RUN rm -rf ${COPY_DIR} && mkdir ${COPY_DIR} && mkdir -p ${MANIFESTS_DIR}
+
+$[BUILD_PYTORCH]
+
+
+
 FROM tfzendnn_installer_${ENABLE_TFZENDNN} AS ptzendnn_installer_no
 
 FROM tfzendnn_installer_${ENABLE_TFZENDNN} AS ptzendnn_installer_yes
@@ -241,6 +255,15 @@ ARG COPY_DIR
 ENV AMDINFER_ENABLE_MIGRAPHX=ON
 
 $[INSTALL_MIGRAPHX]
+
+FROM migraphx_installer_${ENABLE_MIGRAPHX} AS pytorch_installer_no
+
+FROM migraphx_installer_${ENABLE_MIGRAPHX} AS pytorch_installer_yes
+
+ARG COPY_DIR
+ENV AMDINFER_ENABLE_PYTORCH=ON
+COPY --from=pytorch_builder ${COPY_DIR} /
+
 
 FROM common_builder AS builder_dev
 
@@ -274,7 +297,7 @@ RUN if [[ ${ENABLE_VITIS} == "yes" ]]; then \
     && cp dist/fpga_util ${COPY_DIR}/usr/local/bin/fpga-util; \
     fi
 
-FROM migraphx_installer_${ENABLE_MIGRAPHX} AS vcpkg_builder
+FROM pytorch_installer_${ENABLE_PYTORCH} AS vcpkg_builder
 
 ARG ENABLE_VITIS
 ARG COPY_DIR
@@ -301,7 +324,7 @@ RUN mkdir /opt/vcpkg \
     && cd /tmp \
     && GIT_USER="${GIT_USER}" GIT_TOKEN="${GIT_TOKEN}" ./docker/install_vcpkg.sh --vitis ${ENABLE_VITIS}
 
-FROM migraphx_installer_${ENABLE_MIGRAPHX} AS dev
+FROM pytorch_installer_${ENABLE_PYTORCH} AS dev
 
 ARG COPY_DIR
 ARG AMDINFER_ROOT
@@ -431,6 +454,7 @@ ARG ENABLE_VITIS
 ARG ENABLE_TFZENDNN
 ARG ENABLE_PTZENDNN
 ARG ENABLE_MIGRAPHX
+ARG ENABLE_PYTORCH
 
 ARG UNAME
 ARG GNAME
@@ -457,3 +481,4 @@ LABEL vitis=${ENABLE_VITIS}
 LABEL tfzendnn=${ENABLE_TFZENDNN}
 LABEL ptzendnn=${ENABLE_PTZENDNN}
 LABEL migraphx=${ENABLE_MIGRAPHX}
+LABEL pytorch=${ENABLE_PYTORCH}

@@ -14,7 +14,7 @@
 
 /**
  * @file
- * @brief Implements the PtZendnn worker
+ * @brief Implements the PyTorch worker
  */
 
 #include <algorithm>   // for copy
@@ -51,17 +51,12 @@ namespace fs = std::filesystem;
 
 namespace amdinfer::workers {
 
-const int kResNetImageSize = 224;
-const int kResNetImageChannels = 3;
-const int kResNetOutputClasses = 1000;
-
 /**
- * @brief The PtZendnn worker is a simple worker that accepts a single uint32_t
- * argument and adds 1 to it and returns. It accepts multiple input tensors and
- * returns the corresponding number of output tensors.
+ * @brief The PyTorchWorker worker accepts the name of an PyTorch model file as
+ * an argument and compiles and evaluates it.
  *
  */
-class PtZendnn : public SingleThreadedWorker {
+class PyTorchWorker : public SingleThreadedWorker {
  public:
   using SingleThreadedWorker::SingleThreadedWorker;
   [[nodiscard]] std::vector<MemoryAllocators> getAllocators() const override;
@@ -85,45 +80,110 @@ class PtZendnn : public SingleThreadedWorker {
   torch::jit::script::Module model_;
 
   // Image properties
-  unsigned int image_width_ = kResNetImageSize;
-  unsigned int image_height_ = kResNetImageSize;
-  unsigned int image_channels_ = kResNetImageChannels;
-  unsigned int image_size_ = image_width_ * image_height_ * image_channels_;
-  unsigned int output_classes_ = kResNetOutputClasses;
+
+  std::vector<int32_t> input_shape;
+  std::vector<int32_t> batched_input_shape;
+  uint64_t input_dim = 1;
+  std::vector<int32_t> output_shape;
+  std::vector<int32_t> batched_output_shape;
+  uint64_t output_dim = 1;
+  std::string device = "CPU";
 
   DataType input_dt_ = DataType::FP32;
 };
 
-std::vector<MemoryAllocators> PtZendnn::getAllocators() const {
+std::vector<MemoryAllocators> PyTorchWorker::getAllocators() const {
   return {MemoryAllocators::Cpu};
 }
 
-void PtZendnn::doInit(ParameterMap* parameters) {
+std::vector<int32_t> parseShape(std::string shapeStr, uint64_t dim,
+                                std::string delimiter) {
+  size_t pos = 0;
+  std::string token;
+  std::vector<int32_t> shape;
+  while ((pos = shapeStr.find(delimiter)) != std::string::npos) {
+    token = shapeStr.substr(0, pos);
+    shape.push_back(std::stoi(token));
+    shapeStr.erase(0, pos + delimiter.length());
+  }
+  shape.push_back(std::stoi(shapeStr));
+  if (shape.size() != dim) {
+    throw invalid_argument("Shapes size does not equal the dim provided.");
+  }
+  return shape;
+}
+
+void PyTorchWorker::doInit(ParameterMap* parameters) {
   constexpr auto kBatchSize = 1;
 
   auto batch_size = kBatchSize;
   if (parameters->has("batch_size")) {
     batch_size = parameters->get<int32_t>("batch_size");
+    this->batched_input_shape.push_back(batch_size);
+    this->batched_output_shape.push_back(batch_size);
   }
   this->batch_size_ = batch_size;
 
-  if (parameters->has("input_size")) {
-    image_height_ = parameters->get<int32_t>("input_size");
-    image_width_ = parameters->get<int32_t>("input_size");
+  if (parameters->has("input_dim")) {
+    this->input_dim = parameters->get<int32_t>("input_dim");
+  } else {
+    throw invalid_argument(
+      "Num of dimensions of input tensors not provided in load-time "
+      "parameters");
   }
 
-  if (parameters->has("image_channels")) {
-    image_channels_ = parameters->get<int32_t>("image_channels_");
+  if (parameters->has("device")) {
+    this->device = parameters->get<std::string>("device");
+  } else {
+    throw invalid_argument(
+      "Target device [CPU ...] not provided in load-time parameters");
   }
 
-  image_size_ = image_height_ * image_width_ * image_channels_;
+  if (parameters->has("input_shape")) {
+    std::string shape_str = parameters->get<std::string>("input_shape");
+    this->input_shape = parseShape(shape_str, this->input_dim, ",");
+    this->batched_input_shape.insert(this->batched_input_shape.end(),
+                                     this->input_shape.begin(),
+                                     this->input_shape.end());
+  } else {
+    throw invalid_argument(
+      "Shapes of input tensors not provided in load-time parameters");
+  }
 
-  if (parameters->has("output_classes")) {
-    output_classes_ = parameters->get<int32_t>("output_classes");
+  if (parameters->has("input_dt")) {
+    auto dt = parameters->get<std::string>("input_dt");
+    if (dt == "FP32") {
+      this->input_dt_ = DataType::FP32;
+    } else {
+      throw invalid_argument(
+        "Unsupported data type provided in load-time parameters");
+    }
+  } else {
+    throw invalid_argument(
+      "Data type of input tensors not provided in load-time parameters");
+  }
+
+  if (parameters->has("output_dim")) {
+    this->output_dim = parameters->get<int32_t>("output_dim");
+  } else {
+    throw invalid_argument(
+      "Num of dimensions of input tensors not provided in load-time "
+      "parameters");
+  }
+
+  if (parameters->has("output_shape")) {
+    std::string shape_str = parameters->get<std::string>("output_shape");
+    this->output_shape = parseShape(shape_str, this->output_dim, ",");
+    this->batched_output_shape.insert(this->batched_output_shape.end(),
+                                      this->output_shape.begin(),
+                                      this->output_shape.end());
+  } else {
+    throw invalid_argument(
+      "Shapes of input tensors not provided in load-time parameters");
   }
 }
 
-void PtZendnn::doAcquire(ParameterMap* parameters) {
+void PyTorchWorker::doAcquire(ParameterMap* parameters) {
 #ifdef AMDINFER_ENABLE_LOGGING
   const auto& logger = this->getLogger();
 #endif
@@ -143,7 +203,13 @@ void PtZendnn::doAcquire(ParameterMap* parameters) {
   // Load the model
   torch::jit::Module torch_module;
   try {
-    torch_module = torch::jit::load(path, torch::kCPU);
+    c10::DeviceType deviceType;
+    if (this->device == "CPU") {
+      deviceType = torch::kCPU;
+    } else {
+      throw invalid_argument("Invalid target device: " + this->device);
+    }
+    torch_module = torch::jit::load(path, deviceType);
   } catch (const c10::Error& e) {
     AMDINFER_LOG_ERROR(logger, e.what());
     throw file_read_error("Could not load model with torch");
@@ -164,15 +230,13 @@ void PtZendnn::doAcquire(ParameterMap* parameters) {
   this->model_ = torch_module;
 
   // Adding metadata for input and output
-  this->metadata_.addInputTensor("input",
-                                 {static_cast<int64_t>(batch_size_),
-                                  image_channels_, image_height_, image_width_},
-                                 input_dt_);
-  this->metadata_.addOutputTensor("output", {0}, DataType::FP32);
-  this->metadata_.setName("PtZendnn");
+  this->metadata_.addInputTensor("input", this->batched_input_shape, input_dt_);
+  this->metadata_.addOutputTensor("output", this->batched_output_shape,
+                                  DataType::FP32);
+  this->metadata_.setName("PyTorchWorker");
 }
 
-BatchPtr PtZendnn::doRun(Batch* batch, const MemoryPool* pool) {
+BatchPtr PyTorchWorker::doRun(Batch* batch, const MemoryPool* pool) {
 #ifdef AMDINFER_ENABLE_LOGGING
   const auto& logger = this->getLogger();
 #endif
@@ -183,11 +247,13 @@ BatchPtr PtZendnn::doRun(Batch* batch, const MemoryPool* pool) {
 
   size_t input_size = 0;
   std::vector<torch::jit::IValue> input_vec;
-  auto tensors = static_cast<int>(batch->size());
+  auto tensors = static_cast<int64_t>(batch->size());
 
   // Initialize a PT tensor with required shape
-  torch::Tensor input_tensor = torch::empty(
-    {tensors, image_channels_, image_height_, image_width_}, torch::kF32);
+  std::vector<int64_t> new_input_shape = {tensors};
+  std::copy(this->input_shape.begin(), this->input_shape.end(),
+            std::back_inserter(new_input_shape));
+  torch::Tensor input_tensor = torch::empty(new_input_shape, torch::kF32);
 
 #ifdef AMDINFER_ENABLE_METRICS
   Metrics::getInstance().incrementCounter(
@@ -247,8 +313,12 @@ BatchPtr PtZendnn::doRun(Batch* batch, const MemoryPool* pool) {
   }
 
   // Copy the output from the model to the response object
-  size_t response_size = output_classes_;
-  std::vector<int64_t> new_shape = {static_cast<int64_t>(response_size)};
+  int64_t response_size = 1;
+  for (auto s : this->output_shape) {
+    int64_t size = static_cast<int64_t>(s);
+    response_size *= size;
+  }
+  std::vector<int64_t> new_shape = {response_size};
 
   auto new_batch = batch->propagate();
   std::vector<BufferPtr> input_buffers;
@@ -278,8 +348,8 @@ BatchPtr PtZendnn::doRun(Batch* batch, const MemoryPool* pool) {
   return new_batch;
 }
 
-void PtZendnn::doRelease() {}
-void PtZendnn::doDestroy() {}
+void PyTorchWorker::doRelease() {}
+void PyTorchWorker::doDestroy() {}
 
 }  // namespace amdinfer::workers
 
@@ -287,6 +357,7 @@ extern "C" {
 // using smart pointer here may cause problems inside shared object so managing
 // manually
 amdinfer::workers::Worker* getWorker() {
-  return new amdinfer::workers::PtZendnn("PtZendnn", "CPU", true);
+  return new amdinfer::workers::PyTorchWorker("PyTorchWorker", "Multiple",
+                                              true);
 }
 }  // extern C
