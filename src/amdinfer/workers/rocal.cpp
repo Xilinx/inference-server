@@ -74,6 +74,7 @@ RocalOperation getOperationType(const std::string& op) {
     if (op == "CropMirrorNormalize") return RocalOperation::CropMirrorNormalize;
     if (op == "CropFixed") return RocalOperation::CropFixed;
     if (op == "ResizeCropMirrorFixed") return RocalOperation::ResizeCropMirrorFixed;
+    std::cerr << "Unknown operation: " + op << std::endl;
     throw std::invalid_argument("Unknown operation: " + op);
 }
 
@@ -111,7 +112,7 @@ std::vector<MemoryAllocators> RocalWorker::getAllocators() const {
   return {MemoryAllocators::Cpu};
 }
 
-std::vector<float> parseVector(const rapidjson::Value& jsonArray) {
+std::vector<float> RocalWorker::parseVector(const rapidjson::Value& jsonArray) {
     std::vector<float> result;
     for (const auto& element : jsonArray.GetArray()) {
         result.push_back(element.GetFloat());
@@ -120,33 +121,60 @@ std::vector<float> parseVector(const rapidjson::Value& jsonArray) {
 }
 
 void RocalWorker::deserialize(const std::string& model_path) {
-  std::cout << "Deserializing start" << std::endl;
+  namespace fs = std::filesystem;
+  std::filesystem::path file_path = model_path;
+
+  // check if the json model exists
+  if (!std::filesystem::exists(file_path)) {
+      std::cerr << "Model does not exist: " << model_path << std::endl;
+      throw std::runtime_error("Model does not exist: " + model_path);
+  }
+
+  // check if the model format is json
+  if (file_path.extension() != ".json") {
+      std::cerr << "File is not in JSON format: " << model_path << std::endl;
+      throw std::runtime_error("File is not in JSON format: " + model_path);
+  }
+
   std::ifstream ifs(model_path);
+  if (!ifs) {
+      throw std::runtime_error("Unable to open file: " + model_path);
+  }
+  else {
+      std::cout << "Model loaded successfully" << std::endl;
+  }
+
   rapidjson::IStreamWrapper isw(ifs);
   rapidjson::Document doc;
-  std::cout << "parse stream start" << std::endl;
   doc.ParseStream(isw);
-  std::cout << "parse stream end" << std::endl;
-  if (!doc.IsObject()) {
-      throw std::invalid_argument("Unable to parse json file");
-  }
-  std::cout << "Deserializing jpeg start" << std::endl;
-  const int shard_count = 0;
-  const int width = 224, height = 224;
 
+  if (doc.HasParseError()) {
+      std::cerr << "JSON parsing error: " + std::to_string(doc.GetParseError()) + " at offset " + std::to_string(doc.GetErrorOffset()) << std::endl;
+      throw std::runtime_error("JSON parsing error: " + std::to_string(doc.GetParseError()) + " at offset " + std::to_string(doc.GetErrorOffset()));
+  }
+  else {
+      std::cout << "Model Parsing Complete" << std::endl;
+  }
+  
+  const int shard_count = 1;
   // to be replaced with external file source
-  RocalImage input = rocalJpegFileSource(handle_, folder_path_.c_str(), RocalImageColor::ROCAL_COLOR_RGB24, shard_count, false, false, false, ROCAL_USE_USER_GIVEN_SIZE, width, height);
+  folder_path_ = "/workspace/amdinfer/ImageNet500/";
+
+  [[maybe_unused]]RocalImage input = rocalJpegFileSource(this->handle_, folder_path_.c_str(), RocalImageColor::ROCAL_COLOR_RGB24, shard_count, false, true);
   if (rocalGetStatus(this->handle_) != ROCAL_OK) {
       std::string errorMessage = "JPEG source could not be initialized\n" + std::string(rocalGetErrorMessage(this->handle_)); 
       throw std::invalid_argument(errorMessage);
   }
-std::cout << "Deserializing jpeg end" << folder_path_.c_str() << std::endl;
+
   const rapidjson::Value& pipeline = doc["pipeline"];
   std::vector<RocalImage> images;
+  // [[maybe_unused]]RocalImage image1 = rocalResize(this->handle_, input, width, height, false);
+  // std::vector<float> mean =  {0.485, 0.456, 0.406};
+  // std::vector<float> std_dev = {0.229, 0.224, 0.225};
+  // [[maybe_unused]]RocalImage image2 = rocalCropMirrorNormalize(handle_, image1, 224, 224, 224, 0, 0, 0, mean, std_dev, true, rocalCreateIntParameter(0));
 
   for (const auto& node : pipeline.GetArray()) {
       RocalOperation operationType = getOperationType(node["operation"].GetString());
-      
       unsigned width = 0, height = 0, depth = 0;
       float x = 0, y = 0, z = 0;
       bool is_output = false;
@@ -157,7 +185,7 @@ std::cout << "Deserializing jpeg end" << folder_path_.c_str() << std::endl;
 
       RocalImage inputImage = (images.empty()) ? input : images.back();
       RocalImage outputImage;
-      
+
       switch (operationType) {
           case RocalOperation::Resize:
               width = node["dest_width"].GetUint();
@@ -221,20 +249,25 @@ std::cout << "Deserializing jpeg end" << folder_path_.c_str() << std::endl;
               break;
           default:
               std::string errorMessage = "Unrecognized operation";
+              std::cerr << errorMessage << std::endl;
               throw std::invalid_argument(errorMessage);
       }
+      std::cerr << "Pushing image" << std::endl;
       images.push_back(outputImage);
   }
 
-  if (rocalGetStatus(handle_) != ROCAL_OK) {
+  if (rocalGetStatus(this->handle_) != ROCAL_OK) {
       std::string errorMessage = "Error while adding the augmentation nodes\n" + std::string(rocalGetErrorMessage(this->handle_));
       throw std::invalid_argument(errorMessage);
   }
 
   // Calling the API to verify and build the augmentation graph
-  if (rocalVerify(handle_) != ROCAL_OK) {
+  if (rocalVerify(this->handle_) != ROCAL_OK) {
       std::string errorMessage = "Could not verify the rocAL pipeline\n" + std::string(rocalGetErrorMessage(this->handle_));
       throw std::invalid_argument(errorMessage);
+  }
+  else {
+      std::cout << "Rocal Graph Verified" << std::endl;
   }
 }
 
@@ -249,7 +282,6 @@ void RocalWorker::doInit(ParameterMap* parameters) {
   // stringstream used for formatting logger messages
   std::string msg;
   std::stringstream smsg(msg);
-  std::cout << "doINit" << std::endl;
   AMDINFER_LOG_INFO(logger, " RocalWorker::doInit \n");
 
   if (parameters->has("batch")) {
@@ -269,9 +301,8 @@ void RocalWorker::doInit(ParameterMap* parameters) {
     throw std::invalid_argument(
       "model file argument missing from model load request");
   }
-  std::cout << "model path: " << this->model_path_ << std::endl;
+  std::cout << "Model path: " << this->model_path_ << std::endl;
   this->handle_ = rocalCreate(batch_size_, RocalProcessMode::ROCAL_PROCESS_CPU, 0, 1);
-  std::cout << "rocal created" << std::endl;
   if (rocalGetStatus(this->handle_) != ROCAL_OK) {
     AMDINFER_LOG_ERROR(
       logger, "RocalWorker handle creation failed");
@@ -280,13 +311,9 @@ void RocalWorker::doInit(ParameterMap* parameters) {
     throw std::invalid_argument(
       "could not create rocAL context");
   }
-  std::cout << "Deserializing" << std::endl;
   deserialize(this->model_path_);
-  std::cout << "Deserializing done" << std::endl;
-  // Calling the API to verify and build the augmentation graph
-  if (rocalVerify(handle_) != ROCAL_OK) {
-    std::cout << "Could not verify the rocAL graph" << std::endl;
-  }
+
+  std::cout << "Rocal Worker Initialization Complete" << std::endl;
 }
 
 void RocalWorker::doAcquire(ParameterMap* parameters) { (void)parameters; }
