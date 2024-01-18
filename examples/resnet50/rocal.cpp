@@ -184,7 +184,7 @@ Args getArgs(int argc, char** argv) {
       // root / "external/artifacts/resnet50/resnet50-v2-7.onnx";
       "/workspace/amdinfer/examples/resnet50/model.json";
   }
-
+  args.path_to_image = "/workspace/amdinfer/ImageNet500/";
   return args;
 }
 

@@ -168,10 +168,6 @@ void RocalWorker::deserialize(const std::string& model_path) {
 
   const rapidjson::Value& pipeline = doc["pipeline"];
   std::vector<RocalImage> images;
-  // [[maybe_unused]]RocalImage image1 = rocalResize(this->handle_, input, width, height, false);
-  // std::vector<float> mean =  {0.485, 0.456, 0.406};
-  // std::vector<float> std_dev = {0.229, 0.224, 0.225};
-  // [[maybe_unused]]RocalImage image2 = rocalCropMirrorNormalize(handle_, image1, 224, 224, 224, 0, 0, 0, mean, std_dev, true, rocalCreateIntParameter(0));
 
   for (const auto& node : pipeline.GetArray()) {
       RocalOperation operationType = getOperationType(node["operation"].GetString());
@@ -318,11 +314,16 @@ void RocalWorker::doInit(ParameterMap* parameters) {
 
 void RocalWorker::doAcquire(ParameterMap* parameters) { (void)parameters; }
 
-BatchPtr RocalWorker::doRun(Batch* batch, [[maybe_unused]]const MemoryPool* pool) {
-// #ifdef AMDINFER_ENABLE_LOGGING
-//   const auto& logger = this->getLogger();
-// #endif
+BatchPtr RocalWorker::doRun(Batch* batch, const MemoryPool* pool) {
+#ifdef AMDINFER_ENABLE_LOGGING
+  const auto& logger = this->getLogger();
+#endif
 
+  if (rocalGetStatus(this->handle_) != ROCAL_OK) {
+      std::cerr << "Rocal graph not properly intialized" << std::endl;
+      return nullptr;
+  }
+  
   // stringstream used for formatting logger messages
   std::string msg;
   std::stringstream smsg(msg);
@@ -347,7 +348,19 @@ BatchPtr RocalWorker::doRun(Batch* batch, [[maybe_unused]]const MemoryPool* pool
   BatchPtr new_batch;
   std::vector<amdinfer::BufferPtr> input_buffers;
 
+  AMDINFER_LOG_INFO(logger, "Beginning rocalRun eval");
+  timer.add("eval_start");
   rocalRun(this->handle_);
+  timer.add("eval_end");
+  auto eval_duration_us = timer.count<std::micro>("eval_start", "eval_end");
+  [[maybe_unused]] auto eval_duration_s = eval_duration_us / std::mega::num;
+  AMDINFER_LOG_INFO(
+    logger,
+    std::string("Finished rocalRun eval; batch size: ") +
+      std::to_string(batch_size_) +
+      "  elapsed time: " + std::to_string(eval_duration_us) +
+      " us.  Images/sec: " + std::to_string(batch_size_ / (eval_duration_s)));
+
   // rocalCopyToOutput(this->handle_, mat_input.data, h*w*p);
 
   return new_batch;
