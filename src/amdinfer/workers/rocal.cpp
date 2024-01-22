@@ -163,18 +163,18 @@ void RocalWorker::deserialize(const std::string& model_path) {
       std::cout << "Model Parsing Complete" << std::endl;
   }
   
-  const int shard_count = 1;
-  // to be replaced with external file source
-  folder_path_ = "/workspace/amdinfer/ImageNet500/";
-
-  [[maybe_unused]]RocalImage input = rocalJpegFileSource(this->handle_, folder_path_.c_str(), RocalImageColor::ROCAL_COLOR_RGB24, shard_count, false, true);
+  int decode_width = 224, decode_height = 224;
+  // [[maybe_unused]]RocalImage input = rocalJpegFileSource(this->handle_, folder_path_.c_str(), RocalImageColor::ROCAL_COLOR_RGB24, shard_count, false, true);
+  [[maybe_unused]]RocalTensor input = rocalJpegExternalFileSource(this->handle_, RocalImageColor::ROCAL_COLOR_RGB24, false, 
+      false, false, ROCAL_USE_USER_GIVEN_SIZE, decode_width, decode_height, RocalDecoderType::ROCAL_DECODER_TJPEG, RocalExternalSourceMode(rocal_external_mode_));
+      
   if (rocalGetStatus(this->handle_) != ROCAL_OK) {
       std::string errorMessage = "JPEG source could not be initialized\n" + std::string(rocalGetErrorMessage(this->handle_)); 
       throw std::invalid_argument(errorMessage);
   }
 
   const rapidjson::Value& pipeline = doc["pipeline"];
-  std::vector<RocalImage> images;
+  std::vector<RocalTensor> images;
 
   for (const auto& node : pipeline.GetArray()) {
       RocalOperation operationType = getOperationType(node["operation"].GetString());
@@ -186,8 +186,8 @@ void RocalWorker::deserialize(const std::string& model_path) {
       RocalIntParam p_mirror;
       float area, aspect_ratio, x_center_drift, y_center_drift;
 
-      RocalImage inputImage = (images.empty()) ? input : images.back();
-      RocalImage outputImage;
+      RocalTensor inputImage = (images.empty()) ? input : images.back();
+      RocalTensor outputImage;
 
       switch (operationType) {
           case RocalOperation::Resize:
@@ -204,7 +204,8 @@ void RocalWorker::deserialize(const std::string& model_path) {
               is_output = node.HasMember("is_output") ? node["is_output"].GetBool() : false;
               mirror = node.HasMember("mirror") ? node["mirror"].GetBool() : false;
               p_mirror = rocalCreateIntParameter(mirror);
-              outputImage = rocalResizeMirrorNormalize(handle_, inputImage, width, height, mean, std_dev, is_output, p_mirror);
+              outputImage = rocalResizeMirrorNormalize(handle_, inputImage, width, height, mean, std_dev, is_output, ROCAL_SCALING_MODE_DEFAULT, 
+                                                        {}, 0, 0, ROCAL_LINEAR_INTERPOLATION, p_mirror);
               break;
           case RocalOperation::CropResizeFixed:
               width = node["dest_width"].GetUint();
@@ -217,18 +218,16 @@ void RocalWorker::deserialize(const std::string& model_path) {
               outputImage = rocalCropResizeFixed(handle_, inputImage, width, height, is_output, area, aspect_ratio, x_center_drift, y_center_drift);
               break;
           case RocalOperation::CropMirrorNormalize:
-              depth = node["crop_depth"].GetUint();
               height = node["crop_height"].GetUint();
               width = node["crop_width"].GetUint();
               x = node["start_x"].GetFloat();
               y = node["start_y"].GetFloat();
-              z = node["start_z"].GetFloat();
               mean = parseVector(node["mean"]);
               std_dev = parseVector(node["std_dev"]);
               is_output = node.HasMember("is_output") ? node["is_output"].GetBool() : false;
               mirror = node.HasMember("mirror") ? node["mirror"].GetBool() : false;
               p_mirror = rocalCreateIntParameter(mirror);
-              outputImage = rocalCropMirrorNormalize(handle_, inputImage, depth, height, width, x, y, z, mean, std_dev, is_output, p_mirror);
+              outputImage = rocalCropMirrorNormalize(handle_, inputImage, height, width, x, y, mean, std_dev, is_output, p_mirror);
               break;
           case RocalOperation::CropFixed:
               width = node["crop_width"].GetUint();
@@ -324,7 +323,7 @@ void RocalWorker::doInit(ParameterMap* parameters) {
 
 void RocalWorker::doAcquire(ParameterMap* parameters) { (void)parameters; }
 
-BatchPtr RocalWorker::doRun(Batch* batch, const MemoryPool* pool) {
+BatchPtr RocalWorker::doRun(Batch* batch, [[maybe_unused]]const MemoryPool* pool) {
 #ifdef AMDINFER_ENABLE_LOGGING
   const auto& logger = this->getLogger();
 #endif
@@ -347,16 +346,12 @@ BatchPtr RocalWorker::doRun(Batch* batch, const MemoryPool* pool) {
           continue;
       }
       const auto& input = inputs.at(0);
-      const auto& input_shape = input.getShape();
-      auto input_size = amdinfer::util::containerProduct(input_shape);
-
-      auto new_request = req->propagate();
-
-      const auto* input_data = static_cast<unsigned char*>(input.getData());
+      auto input_data = static_cast<unsigned char*>(input.getData());
       input_batch_buffer.push_back(input_data);
   }
 
-  rocalExternalSourceFeedInput(this->handle_, {}, false, input_batch_buffer, ROI_xywh_, max_width, max_height, channels, RocalExternalSourceMode(rocal_external_mode_), RocalTensorLayout(0), false);
+  rocalExternalSourceFeedInput(this->handle_, {}, false, input_batch_buffer, ROI_xywh_, 224, 224, 3, RocalExternalSourceMode(rocal_external_mode_), 
+                                RocalTensorLayout(1), false);
 
   AMDINFER_LOG_INFO(logger, "Beginning rocalRun eval");
   timer.add("eval_start");
@@ -375,29 +370,30 @@ BatchPtr RocalWorker::doRun(Batch* batch, const MemoryPool* pool) {
       "  elapsed time: " + std::to_string(eval_duration_us) +
       " us.  Images/sec: " + std::to_string(batch_size_ / (eval_duration_s)));
 
+
   BatchPtr new_batch = batch->propagate();
-  std::vector<amdinfer::BufferPtr> output_buffers;
+  std::vector<amdinfer::BufferPtr> input_buffers;
   
-  RocalTensorList output_tensor_list = rocalGetOutputTensors(handle_);
-  for (uint64_t idx = 0; idx < output_tensor_list->size(); idx++) {
-      size_t output_size = output_tensor_list->at(idx)->data_size();
+  // RocalTensorList output_tensor_list = rocalGetOutputTensors(handle_);
+  // for (uint64_t idx = 0; idx < output_tensor_list->size(); idx++) {
+  //     size_t output_size = output_tensor_list->at(idx)->data_size();
 
-      for (unsigned int j = 0; j < batch->size(); j++) {
-          const auto& req = batch->getRequest(j);
-          auto new_request = req->propagate();
+  //     for (unsigned int j = 0; j < batch->size(); j++) {
+  //         const auto& req = batch->getRequest(j);
+  //         auto new_request = req->propagate();
 
-          auto buffer = pool->get(next_allocators_, output_size);
-          output_buffers.push_back(buffer);
+  //         auto buffer = pool->get(next_allocators_, output_size);
+  //         output_buffers.push_back(buffer);
 
-          output_tensor_list->at(idx)->copy_data(buffer->data());
+  //         output_tensor_list->at(idx)->copy_data(buffer->data());
 
-          new_request->addOutputTensor(InferenceResponseOutput{buffer->data{}, output_size});
+  //         new_request->addOutputTensor(InferenceResponseOutput{buffer->data{}, output_size});
 
-          new_batch->addRequest(new_request);
-      }
-  }
+  //         new_batch->addRequest(new_request);
+  //     }
+  // }
 
-  new_batch->setBuffers(std::move(output_buffers), {});
+  // new_batch->setBuffers(std::move(output_buffers), {});
 
   timer.add("rocal_batch_end");
   [[maybe_unused]] auto duration = timer.count<std::micro>("rocal_batch_start", "rocal_batch_end");
