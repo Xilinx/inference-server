@@ -15,8 +15,7 @@
 
 include(GNUInstallDirs)
 
-set(workers InvertVideo CPlusPlus Responder Rocal)
-# set(workers InvertVideo CPlusPlus Responder)
+set(workers InvertVideo CPlusPlus Responder)
 
 if(${AMDINFER_ENABLE_VITIS})
   list(APPEND workers Xmodel)
@@ -35,7 +34,7 @@ if(${AMDINFER_ENABLE_MIGRAPHX})
 endif()
 
 if(${AMDINFER_ENABLE_ROCAL})
-  list(APPEND workers RocAL)
+  list(APPEND workers Rocal)
 endif()
 
 function(amdinfer_get_worker_target target filename worker)
@@ -84,13 +83,8 @@ if(${AMDINFER_ENABLE_MIGRAPHX})
   )
 endif()
 
-link_directories(/opt/rocm/lib/)
-target_link_libraries(
-    workerRocal PRIVATE rocal opencv_imgcodecs opencv_imgproc
-                           opencv_core
-)
-
 if(${AMDINFER_ENABLE_ROCAL})
+  link_directories(/opt/rocm/lib/)
   target_link_libraries(
     workerRocal PRIVATE rocal opencv_imgcodecs opencv_imgproc
                            opencv_core

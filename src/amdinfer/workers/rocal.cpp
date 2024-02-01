@@ -353,6 +353,7 @@ BatchPtr RocalWorker::doRun(Batch* batch, [[maybe_unused]]const MemoryPool* pool
   for (unsigned int j = 0; j < batch->size(); j++) {
       const auto& req = batch->getRequest(j);
       const auto& inputs = req->getInputs();
+  
       if (inputs.size() != 1) {
           req->runCallbackError("Only one input tensor should be present");
           continue;

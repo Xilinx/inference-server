@@ -469,6 +469,20 @@ def build_ptzendnn():
             && cp -rv lib/*.so* ${COPY_DIR}/usr/lib | cut -d"'" -f 2 | sed 's/lib/\/usr\/lib/' >> ${MANIFESTS_DIR}/ptzendnn.txt"""
     )
 
+def build_rocal():
+    return textwrap.dedent(
+        """\
+        RUN git clone https://github.com/ROCm/rocAL.git \\
+            && cd rocAL \\
+            # Install rocAL dependencies
+            && python rocAL-setup.py \\
+            && mkdir build-cpu \\
+            && cd build-cpu \\
+            && cmake ../ \\
+            && make -j8 \\
+            && sudo cmake --build . --target PyPackageInstall \\
+            && sudo make install"""
+    )
 
 def install_dev_packages(manager: PackageManager, core):
     if manager.name == "apt":
@@ -877,6 +891,13 @@ def generate(args: argparse.Namespace):
         )
     else:
         dockerfile = dockerfile.replace("$[BUILD_PTZENDNN]", build_ptzendnn())
+
+    if args.custom_backends:
+        dockerfile = dockerfile.replace(
+            "$[BUILD_ROCAL]", custom_backends.build_rocal()
+        )
+    else:
+        dockerfile = dockerfile.replace("$[BUILD_ROCAL]", build_rocal())
 
     dockerfile = dockerfile.replace(
         "$[INSTALL_DEV_PACKAGES]", install_dev_packages(manager, args.core)

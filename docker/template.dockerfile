@@ -225,6 +225,19 @@ RUN rm -rf ${COPY_DIR} && mkdir ${COPY_DIR} && mkdir -p ${MANIFESTS_DIR}
 
 $[BUILD_PTZENDNN]
 
+FROM common_builder AS rocal_builder
+
+ARG COPY_DIR
+ARG MANIFESTS_DIR
+WORKDIR /tmp
+
+# delete any inherited artifacts and recreate
+RUN rm -rf ${COPY_DIR} && mkdir ${COPY_DIR} && mkdir -p ${MANIFESTS_DIR}
+
+$[BUILD_ROCAL]
+
+
+
 FROM tfzendnn_installer_${ENABLE_TFZENDNN} AS ptzendnn_installer_no
 
 FROM tfzendnn_installer_${ENABLE_TFZENDNN} AS ptzendnn_installer_yes
@@ -242,6 +255,15 @@ ARG COPY_DIR
 ENV AMDINFER_ENABLE_MIGRAPHX=ON
 
 $[INSTALL_MIGRAPHX]
+
+FROM migraphx_installer_${ENABLE_MIGRAPHX} AS rocal_installer_no
+
+FROM migraphx_installer_${ENABLE_MIGRAPHX} AS rocal_installer_yes
+
+ARG COPY_DIR
+ENV AMDINFER_ENABLE_ROCAL=ON
+
+COPY --from=rocal_builder ${COPY_DIR} /
 
 FROM common_builder AS builder_dev
 
@@ -276,6 +298,7 @@ RUN if [[ ${ENABLE_VITIS} == "yes" ]]; then \
     fi
 
 FROM migraphx_installer_${ENABLE_MIGRAPHX} AS vcpkg_builder
+FROM rocal_installer_${ENABLE_ROCAL} AS vcpkg_builder
 
 ARG ENABLE_VITIS
 ARG COPY_DIR
@@ -303,6 +326,7 @@ RUN mkdir /opt/vcpkg \
     && GIT_USER="${GIT_USER}" GIT_TOKEN="${GIT_TOKEN}" ./docker/install_vcpkg.sh --vitis ${ENABLE_VITIS}
 
 FROM migraphx_installer_${ENABLE_MIGRAPHX} AS dev
+FROM rocal_installer_${ENABLE_ROCAL} AS dev
 
 ARG COPY_DIR
 ARG AMDINFER_ROOT
@@ -432,6 +456,7 @@ ARG ENABLE_VITIS
 ARG ENABLE_TFZENDNN
 ARG ENABLE_PTZENDNN
 ARG ENABLE_MIGRAPHX
+ARG ENABLE_ROCAL
 
 ARG UNAME
 ARG GNAME
