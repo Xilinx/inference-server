@@ -475,10 +475,10 @@ def build_rocal():
         RUN git clone https://github.com/ROCm/rocAL.git \\
             && cd rocAL \\
             # Install rocAL dependencies
-            && python rocAL-setup.py \\
+            && python rocAL-setup.py --backend=CPU \\
             && mkdir build-cpu \\
             && cd build-cpu \\
-            && cmake ../ \\
+            && cmake -DBACKEND=CPU ../ \\
             && make -j8 \\
             && sudo cmake --build . --target PyPackageInstall \\
             && sudo make install"""
