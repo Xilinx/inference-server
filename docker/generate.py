@@ -474,14 +474,14 @@ def build_rocal():
         """\
         RUN git clone https://github.com/ROCm/rocAL.git \\
             && cd rocAL \\
-            # Install rocAL dependencies
             && python rocAL-setup.py --backend=CPU \\
             && mkdir build-cpu \\
             && cd build-cpu \\
             && cmake -DBACKEND=CPU ../ \\
             && make -j8 \\
             && sudo cmake --build . --target PyPackageInstall \\
-            && sudo make install"""
+            && sudo make install \\
+            && cd ../ """
     )
 
 def install_dev_packages(manager: PackageManager, core):
@@ -641,6 +641,46 @@ def install_migraphx(manager: PackageManager, custom_backends):
                 rsync \\
             {code_indent(manager.clean, 12)}"""
     )
+
+def install_rocm(manager: PackageManager):
+    amdgpu_install_deb = "sudo apt install -y ./amdgpu-install_6.0.60002-1_all.deb"
+    amdgpu_install_rocm = "sudo amdgpu-install -y --usecase=graphics,rocm --no-32 --no-dkms" # no-dkms flag for intalling rocm inside docker
+
+    if manager.name != "apt":
+        raise ValueError("ROCm installation currently supports only apt package manager.")
+    
+    # Assuming the PackageManager class has methods for executing commands.
+    # If not, these commands should be formatted as part of a bash script or Docker RUN command.
+    return textwrap.dedent(
+        f"""\
+        RUN {manager.update} \\
+        && wget --quiet https://repo.radeon.com/amdgpu-install/6.0.2/ubuntu/focal/amdgpu-install_6.0.60002-1_all.deb" \\
+        && {amdgpu_install_deb} \\
+        && {amdgpu_install_rocm} \\
+        # Clean up downloaded files
+        && rm amdgpu-install_6.0.60002-1_all.deb \\
+        # Additional cleanup commands can be added here
+        """
+    )
+
+def install_rocal(manager: PackageManager, custom_backends):
+    rocal_apt_repo = 'echo "deb [arch=amd64 trusted=yes] http://repo.radeon.com/rocm/apt/5.6.1/ ubuntu main" > /etc/apt/sources.list.d/rocm.list'
+    migraphx_yum_repo = '"[ROCm]\\nname=ROCm\\nbaseurl=https://repo.radeon.com/rocm/yum/5.6.1/\\nenabled=1\\ngpgcheck=1\\ngpgkey=https://repo.radeon.com/rocm/rocm.gpg.key" > /etc/yum.repos.d/rocm.repo'
+
+    if manager.name == "apt":
+        add_repo = (
+            migraphx_apt_repo
+            if custom_backends is None
+            else custom_backends.migraphx_apt_repo
+        )
+    elif manager.name == "yum":
+        add_repo = (
+            migraphx_yum_repo
+            if custom_backends is None
+            else custom_backends.migraphx_yum_repo
+        )
+    else:
+        raise ValueError(f"Unknown base image type: {manager.name}")
 
 
 def install_python_packages():

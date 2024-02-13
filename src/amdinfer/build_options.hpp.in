@@ -42,7 +42,7 @@
 #cmakedefine AMDINFER_ENABLE_TFZENDNN
 /// Enables PT+ZenDNN
 #cmakedefine AMDINFER_ENABLE_PTZENDNN
-/// Enables MIGraphXr
+/// Enables MIGraphX
 #cmakedefine AMDINFER_ENABLE_MIGRAPHX
 /// Enables RocAL
 #cmakedefine AMDINFER_ENABLE_ROCAL
