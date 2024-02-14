@@ -634,16 +634,16 @@ def build_rocal(manager: PackageManager, custom_backends):
     return textwrap.dedent(
         f"""\
         RUN {manager.update} \\
-        && wget --quiet https://repo.radeon.com/amdgpu-install/6.0.2/ubuntu/focal/amdgpu-install_6.0.60002-1_all.deb" \\
+        && wget --quiet https://repo.radeon.com/amdgpu-install/6.0.2/ubuntu/focal/amdgpu-install_6.0.60002-1_all.deb \\
         && {amdgpu_install_deb} \\
         && {amdgpu_install_rocm} \\
         && {manager.install} \\
-            rpp
-            rpp-dev
-            liblmdb-dev
-            libturbojpeg
-            rapidjson-dev
-            libjpeg-dev
+            rpp \\
+            rpp-dev \\
+            liblmdb-dev \\
+            libturbojpeg \\
+            rapidjson-dev \\
+            libjpeg-dev \\
         #turbojpeg
         && git clone -b 3.0.1 https://github.com/libjpeg-turbo/libjpeg-turbo.git \\
         && cd libjpeg-turbo \\
