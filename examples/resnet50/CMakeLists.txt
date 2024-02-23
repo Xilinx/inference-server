@@ -42,9 +42,6 @@ if(${AMDINFER_ENABLE_ROCAL})
   endif()
 endif()
 
-list(APPEND examples rocal)
-link_directories(/opt/rocm/lib/)
-
 foreach(example ${examples})
   amdinfer_add_example(${example})
   amdinfer_get_example_target(target ${example})

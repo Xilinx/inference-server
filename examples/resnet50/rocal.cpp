@@ -14,7 +14,7 @@
 
 /**
  * @file
- * @brief This example demonstrates how you can use the MIGraphX backend to run
+ * @brief This example demonstrates how you can use the rocAL backend to run
  * inference on an AMD GPU with a ResNet50 ONNX model. Look at the documentation
  * online for discussion around this example.
  */
