@@ -639,79 +639,83 @@ def build_rocal(manager: PackageManager, custom_backends):
         && {amdgpu_install_rocm} \\
         && rm amdgpu-install_6.0.60002-1_all.deb \\
         && {manager.install} \\
-            rsync \\
+            clang \\
+            libomp-dev \\
+        #     rsync \\
             rpp-dev \\
-            liblmdb-dev \\
-            rapidjson-dev \\
-            libgtk2.0-dev libavcodec-dev libavformat-dev libswscale-dev python-dev python-numpy \\
-            libtbb2 libtbb-dev libjpeg-dev libpng-dev libtiff-dev libdc1394-22-dev \\
-        && git clone -b 3.0.1 https://github.com/libjpeg-turbo/libjpeg-turbo.git \\
-        && cd libjpeg-turbo \\
-        && mkdir build \\
-        && cd build \\
-        && cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=RELEASE -DENABLE_STATIC=FALSE -DCMAKE_INSTALL_DEFAULT_LIBDIR=lib -DWITH_JPEG8=TRUE .. \\
-        && make -j 4 \\
-        && sudo make install \\
-        && cd ../../ \\
-        && rm -rf libjpeg-turbo \\
-        && git clone https://github.com/ROCm/MIVisionX.git \\
-        && cd MIVisionX \\
-        && mkdir build \\
-        && cd build \\
-        && cmake -DNEURAL_NET=OFF -DROCAL=OFF -DROCAL_PYTHON=OFF -DLOOM=OFF -DMIGRAPHX=OFF -DBACKEND=CPU ../ \\
-        && make -j8 \\
-        && sudo make install \\
-        && cd ../../ \\
-        && rm -rf MIVisionX \\
-        && wget https://github.com/protocolbuffers/protobuf/archive/v3.12.4.zip \\
-        && unzip v3.12.4.zip \\
-        && cd protobuf-3.12.4 \\
-        && ./autogen.sh \\
-        && ./configure \\
-        && make -j8 \\
-        && make install \\
-        && ldconfig \\
-        && cd ../ \\
-        && rm v3.12.4.zip \\
-        && rm -rf protobuf-v3.12.4 \\
-        && git clone https://github.com/Tencent/rapidjson.git \\
-        && cd rapidjson \\
-        && mkdir build \\
-        && cd build \\
-        && cmake ../ \\
-        && make -j8 \\
-        && make install \\
-        && cd ../../ \\
-        && rm -rf rapidjson \\
-        && wget https://sourceforge.net/projects/half/files/half/1.12.0/half-1.12.0.zip \\
-        && unzip half-1.12.0.zip -d half-files \\
-        && mkdir -p /usr/local/include/half \\
-        && cp half-files/include/half.hpp /usr/local/include/half \\
-        && rm half-1.12.0.zip \\
-        && git clone -b develop https://github.com/ROCm/rocAL.git \\
-        && cd rocAL \\
-        && mkdir build \\
-        && cd build \\
-        && cmake -DBACKEND=CPU ../CMakeLists.txt \\
-        && make -j 8 \\ 
-        && sudo cmake --build . --target PyPackageInstall \\
-        && sudo make install \\
-        && cd ../../ \\
-        && rm -rf rocAL \\
-        # && echo "/opt/rocm/lib" > /etc/ld.so.conf.d/rocm.conf \\
-        # && echo "/opt/rocm/llvm/lib" > /etc/ld.so.conf.d/rocm-llvm.conf \\
+            libjpeg-dev \\
+        #     liblmdb-dev \\
+        #     rapidjson-dev \\
+            # libavfilter-dev libavformat-dev libavcodec-dev libswresample-dev libavutil-dev \\ 
+            # libgtk2.0-dev libavcodec-dev libavformat-dev libswscale-dev python-dev python-numpy \\
+            # libtbb2 libtbb-dev libjpeg-dev libpng-dev libtiff-dev libdc1394-22-dev \\
+        # && git clone -b 3.0.1 https://github.com/libjpeg-turbo/libjpeg-turbo.git \\
+        # && cd libjpeg-turbo \\
+        # && mkdir build \\
+        # && cd build \\
+        # && cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=RELEASE -DENABLE_STATIC=FALSE -DCMAKE_INSTALL_DEFAULT_LIBDIR=lib -DWITH_JPEG8=TRUE .. \\
+        # && make -j 4 \\
+        # && sudo make install \\
+        # && cd ../../ \\
+        # && rm -rf libjpeg-turbo \\
+        # && git clone https://github.com/ROCm/MIVisionX.git \\
+        # && cd MIVisionX \\
+        # && mkdir build \\
+        # && cd build \\
+        # && cmake -DNEURAL_NET=OFF -DROCAL=OFF -DROCAL_PYTHON=OFF -DLOOM=OFF -DMIGRAPHX=OFF -DBACKEND=CPU ../ \\
+        # && make -j8 \\
+        # && sudo make install \\
+        # && cd ../../ \\
+        # && rm -rf MIVisionX \\
+        # && wget https://github.com/protocolbuffers/protobuf/archive/v3.12.4.zip \\
+        # && unzip v3.12.4.zip \\
+        # && cd protobuf-3.12.4 \\
+        # && ./autogen.sh \\
+        # && ./configure \\
+        # && make -j8 \\
+        # && make install \\
         # && ldconfig \\
-        # having symlinks between rocm-* and rocm complicates building the production
-        # image so move files over to rocm/ but add a symlink for compatibility
-        # && dir=$(find /opt/ -maxdepth 1 -type d -name "rocm-*") \\
-        # && rm -rf /opt/rocm \\
-        # && mkdir /opt/rocm \\
-        # && rsync -a $dir/* /opt/rocm/ \\
-        # && rm -rf $dir \\
-        # && ln -s /opt/rocm $dir \\
-        && {manager.remove} \\
-            rsync \\
-        {code_indent(manager.clean, 12)}
+        # && cd ../ \\
+        # && rm v3.12.4.zip \\
+        # && rm -rf protobuf-v3.12.4 \\
+        # && git clone https://github.com/Tencent/rapidjson.git \\
+        # && cd rapidjson \\
+        # && mkdir build \\
+        # && cd build \\
+        # && cmake ../ \\
+        # && make -j8 \\
+        # && make install \\
+        # && cd ../../ \\
+        # && rm -rf rapidjson \\
+        # && wget https://sourceforge.net/projects/half/files/half/1.12.0/half-1.12.0.zip \\
+        # && unzip half-1.12.0.zip -d half-files \\
+        # && mkdir -p /usr/local/include/half \\
+        # && cp half-files/include/half.hpp /usr/local/include/half \\
+        # && rm half-1.12.0.zip \\
+        # && git clone -b develop https://github.com/ROCm/rocAL.git \\
+        # && cd rocAL \\
+        # && mkdir build \\
+        # && cd build \\
+        # && cmake -DBACKEND=CPU ../CMakeLists.txt \\
+        # && make -j 8 \\ 
+        # && sudo cmake --build . --target PyPackageInstall \\
+        # && sudo make install \\
+        # && cd ../../ \\
+        # && rm -rf rocAL \\
+        # # && echo "/opt/rocm/lib" > /etc/ld.so.conf.d/rocm.conf \\
+        # # && echo "/opt/rocm/llvm/lib" > /etc/ld.so.conf.d/rocm-llvm.conf \\
+        # # && ldconfig \\
+        # # having symlinks between rocm-* and rocm complicates building the production
+        # # image so move files over to rocm/ but add a symlink for compatibility
+        # # && dir=$(find /opt/ -maxdepth 1 -type d -name "rocm-*") \\
+        # # && rm -rf /opt/rocm \\
+        # # && mkdir /opt/rocm \\
+        # # && rsync -a $dir/* /opt/rocm/ \\
+        # # && rm -rf $dir \\
+        # # && ln -s /opt/rocm $dir \\
+        # && {manager.remove} \\
+        #     rsync \\
+        # {code_indent(manager.clean, 12)}
         """
     )
 

@@ -234,10 +234,6 @@ WORKDIR /tmp
 # delete any inherited artifacts and recreate
 RUN rm -rf ${COPY_DIR} && mkdir ${COPY_DIR} && mkdir -p ${MANIFESTS_DIR}
 
-$[BUILD_ROCAL]
-
-
-
 FROM tfzendnn_installer_${ENABLE_TFZENDNN} AS ptzendnn_installer_no
 
 FROM tfzendnn_installer_${ENABLE_TFZENDNN} AS ptzendnn_installer_yes
@@ -262,6 +258,8 @@ FROM migraphx_installer_${ENABLE_MIGRAPHX} AS rocal_installer_yes
 
 ARG COPY_DIR
 ENV AMDINFER_ENABLE_ROCAL=ON
+
+$[BUILD_ROCAL]
 
 COPY --from=rocal_builder ${COPY_DIR} /
 
@@ -324,7 +322,6 @@ RUN mkdir /opt/vcpkg \
     && rm /opt/vcpkg/2023.04.15.tar.gz \
     && cd /tmp \
     && GIT_USER="${GIT_USER}" GIT_TOKEN="${GIT_TOKEN}" ./docker/install_vcpkg.sh --vitis ${ENABLE_VITIS}
-
 FROM migraphx_installer_${ENABLE_MIGRAPHX} AS dev
 FROM rocal_installer_${ENABLE_ROCAL} AS dev
 
