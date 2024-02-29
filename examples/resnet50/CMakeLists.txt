@@ -46,6 +46,6 @@ foreach(example ${examples})
   amdinfer_add_example(${example})
   amdinfer_get_example_target(target ${example})
   target_link_libraries(
-    ${target} PRIVATE opencv_imgcodecs opencv_imgproc opencv_core rocal
+    ${target} PRIVATE opencv_imgcodecs opencv_imgproc opencv_core
   )
 endforeach()

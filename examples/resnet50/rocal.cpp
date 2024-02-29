@@ -15,7 +15,7 @@
 /**
  * @file
  * @brief This example demonstrates how you can use the rocAL backend to run
- * inference on an AMD GPU with a ResNet50 ONNX model. Look at the documentation
+ * image decoding & preprocessing. Look at the documentation
  * online for discussion around this example.
  */
 
@@ -44,74 +44,52 @@
 
 namespace fs = std::filesystem;
 
-using Images = std::vector<std::vector<float>>;
+using Images = std::vector<std::vector<unsigned char>>;
 
 /**
- * @brief Given a vector of paths to images, preprocess the images and return
- * them
- *
+ * @brief Given a vector of paths to images, load the images and return as raw compressed buffer
+ * 
  * @param paths paths to images to preprocess
- * @return Images
+ * @return Images : Raw encoded buffer
  */
-Images preprocess(const std::vector<std::string>& paths) {
-  const std::array<float, 3> mean{0.485F, 0.456F, 0.406F};
-  const std::array<float, 3> std{4.367F, 4.464F, 4.444F};
-  const auto image_size = 224;
-  const auto convert_scale = 1 / 255.0;
+Images loadImages(const std::vector<std::string>& paths) {
+  Images imageBuffer;
 
-  // this example uses a custom image preprocessing function. You may use any
-  // preprocessing logic or skip it entirely if your input data is already
-  // preprocessed.
-  amdinfer::pre_post::ImagePreprocessOptions<float, 3> options;
-  options.order = amdinfer::pre_post::ImageOrder::NCHW;
-  options.height = image_size;
-  options.width = image_size;
-  options.mean = mean;
-  options.std = std;
-  options.normalize = true;
-  options.convert_color = true;
-  options.color_code = cv::COLOR_BGR2RGB;
-  options.convert_type = true;
-  options.type = CV_32FC3;
-  options.convert_scale = convert_scale;
-  return amdinfer::pre_post::imagePreprocess(paths, options);
+  for (const auto& path : paths) {
+    std::ifstream file(path, std::ios::binary);
+    if (file) {
+      file.seekg(0, std::ios::end);
+      size_t size = file.tellg();
+      file.seekg(0, std::ios::beg);
+
+      std::vector<unsigned char> buffer(size);
+      if (!file.read(reinterpret_cast<char*>(buffer.data()), size)) {
+        throw std::runtime_error("Failed to read file: " + path);
+      }
+
+      imageBuffer.push_back(std::move(buffer));
+    } else {
+      std::cerr << "Could not open file at: " << path << std::endl;
+    }
+  }
+  return imageBuffer;
 }
 
 /**
- * @brief Postprocess the output data. For ResNet50, this includes performing a
- * softmax to determine the most probable classifications.
+ * @brief Construct requests for the inference server from the input buffers. 
  *
- * @param output the output from the inference server
- * @param k number of top categories to return
- * @return std::vector<int> the indices for the top k categories
- */
-std::vector<int> postprocess(const amdinfer::InferenceResponseOutput& output,
-                             int k) {
-  return amdinfer::pre_post::resnet50Postprocess(
-    static_cast<const float*>(output.getData()), output.getSize(), k);
-}
-
-/**
- * @brief Construct requests for the inference server from the input images. For
- * ResNet50, a valid request includes a single input tensor containing a square
- * image.
- *
- * @param images the input images
- * @param input_size size of the square image in pixels
+ * @param imageBuffer the input image buffer
  * @return std::vector<amdinfer::InferenceRequest>
  */
-std::vector<amdinfer::InferenceRequest> constructRequests(const Images& images,
-                                                          int64_t input_size) {
+std::vector<amdinfer::InferenceRequest> constructRequests(const Images& imageBuffer) {
   std::vector<amdinfer::InferenceRequest> requests;
-  requests.reserve(images.size());
+  requests.reserve(imageBuffer.size());
 
-  const std::initializer_list<int64_t> shape = {input_size, input_size, 3};
-
-  for (const auto& image : images) {
+  for (const auto& buffer : imageBuffer) {
     requests.emplace_back();
-    // NOLINTNEXTLINE(google-readability-casting)
-    requests.back().addInputTensor((void*)image.data(), shape,
-                                   amdinfer::DataType::Fp32);
+
+    const std::initializer_list<int64_t> shape = {static_cast<int64_t>(buffer.size())};
+    requests.back().addInputTensor((void*)buffer.data(), shape, amdinfer::DataType::Uint8);
   }
 
   return requests;
@@ -130,11 +108,11 @@ std::string load(const amdinfer::Client* client, const Args& args) {
   // a particular backend. This guard checks to make sure the server does
   // support the requested backend. If you already know it's supported, you can
   // skip this check.
-//   if (!serverHasExtension(client, "rocal")) {
-//     std::cerr << "rocAL is not enabled. Please recompile with it enabled to "
-//               << "run this example\n";
-//     exit(0);
-//   }
+  if (!serverHasExtension(client, "rocal")) {
+    std::cerr << "rocAL is not enabled. Please recompile with it enabled to "
+              << "run this example\n";
+    exit(0);
+  }
 
   // Load-time parameters are used to pass one-time information to the batcher
   // and worker as it starts up. Each worker can choose to define its own
@@ -153,7 +131,6 @@ std::string load(const amdinfer::Client* client, const Args& args) {
   parameters.put("batch", args.batch_size);
   // Optional: specifies how long the batcher should wait for more requests
   // before sending the batch on
-  parameters.put("folder", "");
   std::string endpoint = client->workerLoad("rocal", parameters);
   amdinfer::waitUntilModelReady(client, endpoint);
   // -load
@@ -181,10 +158,9 @@ Args getArgs(int argc, char** argv) {
     assert(root_str != nullptr);
     fs::path root{root_str};
     args.path_to_model =
-      // root / "external/artifacts/resnet50/resnet50-v2-7.onnx";
       "/workspace/amdinfer/examples/resnet50/model.json";
+    args.path_to_image = "/workspace/amdinfer/tests/assets/imagenet-dog.jpg";
   }
-  args.path_to_image = "/workspace/amdinfer/ImageNet500/";
   return args;
 }
 
@@ -230,15 +206,14 @@ int main(int argc, char* argv[]) {
     }
 
     std::vector<std::string> paths = resolveImagePaths(args.path_to_image);
-    Images images = preprocess(paths);
 
+    Images imageBuffer = loadImages(paths);
     std::vector<amdinfer::InferenceRequest> requests =
-      constructRequests(images, args.input_size);
-
+      constructRequests(imageBuffer);
     assert(paths.size() == requests.size());
     const auto num_requests = requests.size();
 
-    std::cout << "Making inference...\n";
+    std::cout << "Preprocessing image...\n";
     auto start = std::chrono::high_resolution_clock::now();
 
     // +validate:
@@ -253,10 +228,15 @@ int main(int argc, char* argv[]) {
 
       std::vector<amdinfer::InferenceResponseOutput> outputs =
         response.getOutputs();
-      // for resnet50, we expect a single output tensor
-      assert(outputs.size() == 1);
-      std::vector<int> top_indices = postprocess(outputs[0], args.top);
-      printLabel(top_indices, args.path_to_labels, paths[i]);
+      // for rocAL, we expect a output tensor size = num_requests
+      assert(outputs.size() == num_requests);
+      // auto output = outputs[0];
+      // int type = 1;
+      // if(type != -1) {
+      //     cv::Mat image(224, 224, CV_8UC3, static_cast<unsigned char*>(output.getData()));
+      //     cv::imwrite("decoded_image2.jpg", image);
+      //     // cv::waitKey(0);
+      // }
     }
     // -validate:
     auto stop = std::chrono::high_resolution_clock::now();

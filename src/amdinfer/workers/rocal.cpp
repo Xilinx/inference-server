@@ -17,10 +17,10 @@
  * @brief Implements the rocAL worker.
  */
 
-#include <opencv2/opencv.hpp>
-#include <rocal_api.h>            // for rocal
-#include "rapidjson/document.h"
-#include "rapidjson/istreamwrapper.h"
+#include <opencv2/opencv.hpp>     // for opencv
+#include "/opt/vcpkg/x64-linux-dynamic/include/rocal/rocal_api.h"            // for rocal
+#include "rapidjson/document.h"       // for rapidjson
+#include "rapidjson/istreamwrapper.h" // for rapidjson
 
 #include <algorithm>              // for max
 #include <cstddef>                // for byte, size_t
@@ -98,9 +98,6 @@ class RocalWorker : public SingleThreadedWorker {
   void deserialize(const std::string& model_path);
   std::vector<float> parseVector(const rapidjson::Value& jsonArray);
 
-  // the folder path to be loaded.
-  std::filesystem::path folder_path_;
-
   std::string model_path_;
 
   // The mode for rocalExternalSource reader
@@ -139,7 +136,7 @@ std::vector<float> RocalWorker::parseVector(const rapidjson::Value& jsonArray) {
 void RocalWorker::deserialize(const std::string& model_path) {
   namespace fs = std::filesystem;
   std::filesystem::path file_path = model_path;
-
+  
   // check if the json model exists
   if (!std::filesystem::exists(file_path)) {
       std::cerr << "Model does not exist: " << model_path << std::endl;
@@ -156,9 +153,6 @@ void RocalWorker::deserialize(const std::string& model_path) {
   if (!ifs) {
       throw std::runtime_error("Unable to open file: " + model_path);
   }
-  else {
-      std::cout << "Model loaded successfully" << std::endl;
-  }
 
   rapidjson::IStreamWrapper isw(ifs);
   rapidjson::Document doc;
@@ -169,10 +163,9 @@ void RocalWorker::deserialize(const std::string& model_path) {
       throw std::runtime_error("JSON parsing error: " + std::to_string(doc.GetParseError()) + " at offset " + std::to_string(doc.GetErrorOffset()));
   }
   else {
-      std::cout << "Model Parsing Complete" << std::endl;
+      std::cout << "rocAL Model Parsing Complete" << std::endl;
   }
-  
-  // [[maybe_unused]]RocalImage input = rocalJpegFileSource(this->handle_, folder_path_.c_str(), RocalImageColor::ROCAL_COLOR_RGB24, shard_count, false, true);
+
   [[maybe_unused]]RocalTensor input = rocalJpegExternalFileSource(handle_, RocalImageColor::ROCAL_COLOR_RGB24, false, 
       false, false, ROCAL_USE_USER_GIVEN_SIZE, decode_width_, decode_height_, RocalDecoderType::ROCAL_DECODER_TJPEG, RocalExternalSourceMode(rocal_external_mode_));
       
@@ -262,7 +255,6 @@ void RocalWorker::deserialize(const std::string& model_path) {
               std::cerr << errorMessage << std::endl;
               throw std::invalid_argument(errorMessage);
       }
-      std::cerr << "Pushing image" << std::endl;
       images.push_back(outputImage);
   }
 
@@ -275,9 +267,6 @@ void RocalWorker::deserialize(const std::string& model_path) {
   if (rocalVerify(this->handle_) != ROCAL_OK) {
       std::string errorMessage = "Could not verify the rocAL pipeline\n" + std::string(rocalGetErrorMessage(this->handle_));
       throw std::invalid_argument(errorMessage);
-  }
-  else {
-      std::cout << "Rocal Graph Verified" << std::endl;
   }
 }
 
@@ -296,28 +285,20 @@ void RocalWorker::doInit(ParameterMap* parameters) {
 
   if (parameters->has("batch")) {
     this->batch_size_ = parameters->get<int>("batch");
-  }
-  if (parameters->has("folder")) {
-    this->folder_path_ = parameters->get<std::string>("folder");
+    this->ROI_xywh_.resize(this->batch_size_);
   }
   if (parameters->has("model")) {
     this->model_path_ = parameters->get<std::string>("model");
   }
-  if (parameters->has("channels")) {
-    this->channels_ = parameters->get<int>("channels");
+  else {
+    AMDINFER_LOG_ERROR(
+      logger, "RocalWorker parameters required:  \"model\": \"<filepath>\"");
+    // Throwing an exception causes server to delete this worker instance.
+    // Client must try again.
+    throw std::invalid_argument(
+      "model file argument missing from model load request");
   }
-  // else {
-  //   AMDINFER_LOG_ERROR(
-  //     logger, "RocalWorker parameters required:  \"model\": \"<filepath>\"");
-  //   // Throwing an exception causes server to delete this worker instance.
-  //   // Client must try again.
-  //   throw std::invalid_argument(
-  //     "model file argument missing from model load request");
-  // }
-
-  this->ROI_xywh_.resize(this->batch_size_);
   
-  std::cout << "Model path: " << this->model_path_ << std::endl;
   this->handle_ = rocalCreate(batch_size_, RocalProcessMode::ROCAL_PROCESS_CPU, 0, 1);
   if (rocalGetStatus(this->handle_) != ROCAL_OK) {
     AMDINFER_LOG_ERROR(
@@ -328,14 +309,11 @@ void RocalWorker::doInit(ParameterMap* parameters) {
       "could not create rocAL context");
   }
   deserialize(this->model_path_);
-
-  std::cout << "Rocal Worker Initialization Complete" << std::endl;
 }
 
 void RocalWorker::doAcquire(ParameterMap* parameters) { (void)parameters; }
 
 BatchPtr RocalWorker::doRun(Batch* batch, [[maybe_unused]]const MemoryPool* pool) {
-  std::cout << "duRun" << std::endl;
 #ifdef AMDINFER_ENABLE_LOGGING
   const auto& logger = this->getLogger();
 #endif
@@ -344,7 +322,6 @@ BatchPtr RocalWorker::doRun(Batch* batch, [[maybe_unused]]const MemoryPool* pool
       std::cerr << "Rocal graph not properly intialized" << std::endl;
       return nullptr;
   }
-  std::cout << "duRun batch start" << std::endl;
   util::Timer timer;
   timer.add("rocal_batch_start");
 
@@ -359,24 +336,27 @@ BatchPtr RocalWorker::doRun(Batch* batch, [[maybe_unused]]const MemoryPool* pool
           continue;
       }
       const auto& input = inputs.at(0);
+      const auto& input_shape = input.getShape();
+
+      assert(input_shape.size() == 1); // compressed raw buffer should have shape length = 1
+      ROI_xywh_[j].h = input_shape[0];
       auto input_data = static_cast<unsigned char*>(input.getData());
       input_batch_buffer.push_back(input_data);
   }
-  std::cout << "duRun feeding input" << std::endl;
 
   bool eos = true; // eos value is always true since there will be only one input tensor 
   rocalExternalSourceFeedInput(handle_, {}, false, input_batch_buffer, ROI_xywh_, decode_width_, decode_height_, channels_, RocalExternalSourceMode(rocal_external_mode_), 
                                 RocalTensorLayout(0), eos);
 
-  std::cout << "rocal run function" << std::endl;
   AMDINFER_LOG_INFO(logger, "Beginning rocalRun eval");
+
   timer.add("eval_start");
   if (rocalRun(this->handle_) != ROCAL_OK) {
       AMDINFER_LOG_ERROR(logger, "rocalRun failed to run");
       throw std::runtime_error("rocalRun failed to run");
   }
   timer.add("eval_end");
-  std::cout << "rocal run done" << std::endl;
+
   auto eval_duration_us = timer.count<std::micro>("eval_start", "eval_end");
   [[maybe_unused]] auto eval_duration_s = eval_duration_us / std::mega::num;
   AMDINFER_LOG_INFO(
@@ -390,7 +370,6 @@ BatchPtr RocalWorker::doRun(Batch* batch, [[maybe_unused]]const MemoryPool* pool
   BatchPtr new_batch = batch->propagate();
   
   RocalTensorList output_tensor_list = rocalGetOutputTensors(handle_);
-  std::cout << "output tensor size: " << output_tensor_list->size() << std::endl;
   assert(output_tensor_list->size() == batch->size());
 
   // RocalTensor output_tensor = output_tensor_list->at(0);
@@ -419,12 +398,10 @@ BatchPtr RocalWorker::doRun(Batch* batch, [[maybe_unused]]const MemoryPool* pool
       new_batch->addRequest(new_request);
   }
 
-  std::cout << "Output buffer copy" << std::endl;
   std::vector<amdinfer::BufferPtr> input_buffers;
   input_buffers.emplace_back(std::make_unique<amdinfer::VectorBuffer>(
     max_decoded_size * batch_size_));
 
-  // std::cout << output_tensor_list->at(0)->data_type() << " " << output_tensor_list->at(0)->data_size() << std::endl;
   for (unsigned int k = 0; k < batch->size(); k++) {
       auto* data_ptr = input_buffers.at(0)->data(k * max_decoded_size);
       const auto& req = new_batch->getRequest(k);
@@ -437,21 +414,20 @@ BatchPtr RocalWorker::doRun(Batch* batch, [[maybe_unused]]const MemoryPool* pool
       
       new_batch->setModel(k, "RocalModel");
 
-      int height = output_tensor->dims().at(1);
-      int width = output_tensor->dims().at(2);
-      int channels = output_tensor->dims().at(3);
-      int type = (channels == 1) ? CV_8UC1 : ((channels == 3) ? CV_8UC3 : -1);
+      // int height = output_tensor->dims().at(1);
+      // int width = output_tensor->dims().at(2);
+      // int channels = output_tensor->dims().at(3);
+      // int type = (channels == 1) ? CV_8UC1 : ((channels == 3) ? CV_8UC3 : -1);
     
-      if(type != -1) {
-          std::cout << type << " " << channels << " " << height << " " << width << " " << std::endl;
-          cv::Mat image(height, width, type, static_cast<unsigned char*>(data));
-          cv::imshow("decoded image", image);
-          cv::waitKey(0);
-      }
+      // if(type != -1) {
+      //     std::cout << type << " " << channels << " " << height << " " << width << " " << std::endl;
+      //     cv::Mat image(height, width, type, static_cast<unsigned char*>(data));
+      //     cv::imwrite("decoded_image.jpg", image);
+      //     // cv::waitKey(0);
+      // }
   }
 
   new_batch->setBuffers(std::move(input_buffers), {});
-  std::cout << "Returning batch" << std::endl;
   
   timer.add("rocal_batch_end");
   auto duration = timer.count<std::micro>("rocal_batch_start", "rocal_batch_end");

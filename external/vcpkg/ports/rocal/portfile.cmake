@@ -16,30 +16,24 @@
 vcpkg_from_github(
   OUT_SOURCE_PATH SOURCE_PATH
   REPO ROCm/rocAL
-  REF 076b153daed5cf490292fc3ef59bc1ae4b237a42
-  SHA512 30bea82d2db407e9e6fb0bda96b96380d714e7bb0ca4d3e6e7dbe1e7c791c1ab482ffda54a97de4e75295844596457e460f7633985ab342147a80ee616f71825
+  REF 6efbed4807857b2b68a4ba90a043f8dd92f33c37
+  SHA512 9775088aa8e39efe10285d03c7050c16827bd3cf879e4b2cec61471e7660f7a55c22bd356060002e685dfe4de92fd476da4f9980a5afcd91dd8a7b9d39720df1
   HEAD_REF develop
 )
 
-# vcpkg_cmake_configure(
-#   SOURCE_PATH ${SOURCE_PATH}
-#   OPTIONS
-#     -DBACKEND=CPU
-#     -DBUILD_PYPACKAGE=OFF
-# )
+vcpkg_cmake_configure(
+  SOURCE_PATH ${SOURCE_PATH}
+  OPTIONS
+    -DBACKEND=CPU
+    -DBUILD_PYPACKAGE=OFF
+)
 # cmake-format: on
-# vcpkg_cmake_build()
 
-# vcpkg_cmake_build(
-#   TARGET PyPackageInstall
-# )
+vcpkg_cmake_install()
 
-# vcpkg_cmake_install()
+file(REMOVE_RECURSE "${CURRENT_PACKAGES_DIR}/debug/include")
+file(REMOVE_RECURSE "${CURRENT_PACKAGES_DIR}/debug/share")
 
-# vcpkg_cmake_config_fixup(CONFIG_PATH share/cmake/rocAL)
+vcpkg_copy_pdbs()
 
-# file(REMOVE_RECURSE "${CURRENT_PACKAGES_DIR}/debug/include")
-
-# vcpkg_copy_pdbs()
-
-# vcpkg_install_copyright(FILE_LIST "${SOURCE_PATH}/LICENSE")
+vcpkg_install_copyright(FILE_LIST "${SOURCE_PATH}/LICENSE.txt")

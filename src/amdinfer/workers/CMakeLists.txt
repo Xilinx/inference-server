@@ -60,7 +60,6 @@ foreach(worker ${workers})
 
   add_library(${target} SHARED ${filename}.cpp)
   target_include_directories(${target} PRIVATE ${AMDINFER_INCLUDE_DIRS})
-  target_include_directories(${target} PRIVATE "/opt/rocm/include/rocal")
   set_target_options(${target})
 
   list(APPEND WORKER_TARGETS ${target})
@@ -85,6 +84,7 @@ endif()
 
 if(${AMDINFER_ENABLE_ROCAL})
   link_directories(/opt/rocm/lib/)
+  link_directories(/opt/vcpkg/x64-linux-dynamic/lib/)
   target_link_libraries(
     workerRocal PRIVATE rocal opencv_imgcodecs opencv_imgproc
                            opencv_core

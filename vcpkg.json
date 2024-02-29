@@ -160,7 +160,8 @@
       "name": "trantor",
       "version": "1.5.11#2"
     },
-    { "name": "ffmpeg",
+    { 
+      "name": "ffmpeg",
       "version": "4.4"
     },
     {
