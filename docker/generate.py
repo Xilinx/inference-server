@@ -644,20 +644,6 @@ def build_rocal(manager: PackageManager, custom_backends):
             rsync \\
             rpp-dev \\
             libjpeg-dev \\
-        #     liblmdb-dev \\
-        #     rapidjson-dev \\
-            # libavfilter-dev libavformat-dev libavcodec-dev libswresample-dev libavutil-dev \\ 
-            # libgtk2.0-dev libavcodec-dev libavformat-dev libswscale-dev python-dev python-numpy \\
-            # libtbb2 libtbb-dev libjpeg-dev libpng-dev libtiff-dev libdc1394-22-dev \\
-        # && git clone -b 3.0.1 https://github.com/libjpeg-turbo/libjpeg-turbo.git \\
-        # && cd libjpeg-turbo \\
-        # && mkdir build \\
-        # && cd build \\
-        # && cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=RELEASE -DENABLE_STATIC=FALSE -DCMAKE_INSTALL_DEFAULT_LIBDIR=lib -DWITH_JPEG8=TRUE .. \\
-        # && make -j 4 \\
-        # && sudo make install \\
-        # && cd ../../ \\
-        # && rm -rf libjpeg-turbo \\
         && echo "/opt/rocm/lib" > /etc/ld.so.conf.d/rocm.conf \\
         && echo "/opt/rocm/llvm/lib" > /etc/ld.so.conf.d/rocm-llvm.conf \\
         && ldconfig \\
