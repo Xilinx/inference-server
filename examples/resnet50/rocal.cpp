@@ -231,12 +231,9 @@ int main(int argc, char* argv[]) {
       // for rocAL, we expect a output tensor size = num_requests
       assert(outputs.size() == num_requests);
       // auto output = outputs[0];
-      // int type = 1;
-      // if(type != -1) {
-      //     cv::Mat image(224, 224, CV_8UC3, static_cast<unsigned char*>(output.getData()));
-      //     cv::imwrite("decoded_image2.jpg", image);
-      //     // cv::waitKey(0);
-      // }
+      // cv::Mat image(224, 224, CV_8UC3, static_cast<unsigned char*>(output.getData()));
+      // cv::imshow("decoded_image", image);
+      // cv::waitKey(0);
     }
     // -validate:
     auto stop = std::chrono::high_resolution_clock::now();

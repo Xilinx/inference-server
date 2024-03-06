@@ -413,18 +413,6 @@ BatchPtr RocalWorker::doRun(Batch* batch, [[maybe_unused]]const MemoryPool* pool
                           decoded_size);
       
       new_batch->setModel(k, "RocalModel");
-
-      // int height = output_tensor->dims().at(1);
-      // int width = output_tensor->dims().at(2);
-      // int channels = output_tensor->dims().at(3);
-      // int type = (channels == 1) ? CV_8UC1 : ((channels == 3) ? CV_8UC3 : -1);
-    
-      // if(type != -1) {
-      //     std::cout << type << " " << channels << " " << height << " " << width << " " << std::endl;
-      //     cv::Mat image(height, width, type, static_cast<unsigned char*>(data));
-      //     cv::imwrite("decoded_image.jpg", image);
-      //     // cv::waitKey(0);
-      // }
   }
 
   new_batch->setBuffers(std::move(input_buffers), {});
