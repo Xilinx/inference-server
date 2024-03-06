@@ -83,10 +83,9 @@ if(${AMDINFER_ENABLE_MIGRAPHX})
 endif()
 
 if(${AMDINFER_ENABLE_ROCAL})
-  link_directories(/opt/rocm/lib/)
-  link_directories(/opt/vcpkg/x64-linux-dynamic/lib/)
+  target_include_directories(workerRocal PRIVATE ${ROCAL_INCLUDE_DIR})
   target_link_libraries(
-    workerRocal PRIVATE rocal opencv_imgcodecs opencv_imgproc
+    workerRocal PRIVATE ${ROCAL_LIBRARY} opencv_imgcodecs opencv_imgproc
                            opencv_core
   )
 endif()

@@ -261,8 +261,6 @@ ENV AMDINFER_ENABLE_ROCAL=ON
 
 $[BUILD_ROCAL]
 
-COPY --from=rocal_builder ${COPY_DIR} /
-
 FROM common_builder AS builder_dev
 
 ARG COPY_DIR
