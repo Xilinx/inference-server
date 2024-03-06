@@ -171,7 +171,7 @@ void ModelConfig::createModels() {
       parameters.put("worker", "xmodel");
     } else if (config.platform == "amdinfer_cpp") {
       parameters.put("worker", "cplusplus");
-    } else if (config.platform == "rocal_cpp") {
+    } else if (config.platform == "rocal_json") {
       parameters.put("worker", "rocal");
     } else {
       throw invalid_argument("Unknown platform: " + config.platform);
