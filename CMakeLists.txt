@@ -171,11 +171,6 @@ if(NOT HALF_INCLUDE_DIRS)
 endif()
 include_directories(SYSTEM ${HALF_INCLUDE_DIRS})
 
-# rocal (temporary)
-link_directories(/opt/rocm/lib/)
-include_directories(${ROCM_PATH}/${CMAKE_INSTALL_INCLUDEDIR})
-include_directories(${ROCM_PATH}/${CMAKE_INSTALL_INCLUDEDIR}/mivisionx ${ROCM_PATH}/${CMAKE_INSTALL_INCLUDEDIR}/mivisionx/rocal)
-
 find_package(xir QUIET)
 find_package(vart CONFIG COMPONENTS runner util QUIET)
 find_package(rt-engine QUIET)

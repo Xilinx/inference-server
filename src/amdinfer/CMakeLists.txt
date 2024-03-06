@@ -27,8 +27,6 @@ add_subdirectory(bindings)
 add_subdirectory(models)
 add_subdirectory(workers)
 
-link_directories(/opt/rocm/lib)
-
 add_library(amdinfer SHARED ${targets})
 target_link_libraries(amdinfer PRIVATE ${targets})
 
