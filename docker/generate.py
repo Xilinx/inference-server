@@ -469,7 +469,6 @@ def build_ptzendnn():
             && cp -rv lib/*.so* ${COPY_DIR}/usr/lib | cut -d"'" -f 2 | sed 's/lib/\/usr\/lib/' >> ${MANIFESTS_DIR}/ptzendnn.txt"""
     )
 
-
 def install_dev_packages(manager: PackageManager, core):
     if manager.name == "apt":
         if not core:
@@ -628,6 +627,43 @@ def install_migraphx(manager: PackageManager, custom_backends):
             {code_indent(manager.clean, 12)}"""
     )
 
+def install_rocal(manager: PackageManager, custom_backends):
+    if manager.name == "yum":
+        raise ValueError(f"rocAL installation not supported with : {manager.name}")
+    
+    amdgpu_install_deb = "apt install -y ./amdgpu-install_6.0.60002-1_all.deb"
+    # no-dkms flag for intalling rocm inside docker
+    amdgpu_install_rocm = "DEBIAN_FRONTEND=noninteractive amdgpu-install -y --usecase=graphics,rocm --no-32 --no-dkms"
+
+    return textwrap.dedent(
+        f"""\
+        RUN {manager.update} \\
+        && wget --quiet https://repo.radeon.com/amdgpu-install/6.0.2/ubuntu/focal/amdgpu-install_6.0.60002-1_all.deb \\
+        && {amdgpu_install_deb} \\
+        && {amdgpu_install_rocm} \\
+        && rm amdgpu-install_6.0.60002-1_all.deb \\
+        && {manager.install} \\
+            clang \\
+            libomp-dev \\
+            rsync \\
+            rpp-dev \\
+            libjpeg-dev \\
+        && echo "/opt/rocm/lib" > /etc/ld.so.conf.d/rocm.conf \\
+        && echo "/opt/rocm/llvm/lib" > /etc/ld.so.conf.d/rocm-llvm.conf \\
+        && ldconfig \\
+        # having symlinks between rocm-* and rocm complicates building the production
+        # image so move files over to rocm/ but add a symlink for compatibility
+        && dir=$(find /opt/ -maxdepth 1 -type d -name "rocm-*") \\
+        && rm -rf /opt/rocm \\
+        && mkdir /opt/rocm \\
+        && rsync -a $dir/* /opt/rocm/ \\
+        && rm -rf $dir \\
+        && ln -s /opt/rocm $dir \\
+        && {manager.remove} \\
+            rsync \\
+        {code_indent(manager.clean, 12)}
+        """
+    )
 
 def install_python_packages():
     # The versions are pinned to prevent package updates from breaking the
@@ -877,6 +913,15 @@ def generate(args: argparse.Namespace):
         )
     else:
         dockerfile = dockerfile.replace("$[BUILD_PTZENDNN]", build_ptzendnn())
+
+    if args.custom_backends:
+        dockerfile = dockerfile.replace(
+            "$[INSTALL_ROCAL]", install_rocal(manager, custom_backends)
+        )
+    else:
+        dockerfile = dockerfile.replace(
+            "$[INSTALL_ROCAL]", install_rocal(manager, None)
+        )
 
     dockerfile = dockerfile.replace(
         "$[INSTALL_DEV_PACKAGES]", install_dev_packages(manager, args.core)

@@ -1,0 +1,7 @@
+{
+  "pipeline": [
+    {"operation": "Resize", "dest_width": 224, "dest_height": 224, "is_output": false},
+    {"operation": "CropMirrorNormalize", "crop_depth": 224, "crop_height": 224, "crop_width": 224, "start_x": 0, "start_y": 0, "start_z": 0,
+    "mean": [0.485, 0.456, 0.406], "std_dev": [0.229, 0.224, 0.225], "is_output": true}
+  ]
+}

@@ -40,9 +40,11 @@
       "name": "opencv4",
       "default-features": false,
       "features": [
-        "ffmpeg",
         "jpeg"
       ]
+    },
+    { 
+      "name": "ffmpeg"
     },
     {
       "name": "tomlplusplus",
@@ -128,6 +130,15 @@
         {
           "name": "vart",
           "version>=": "3.0.0"
+        }
+      ]
+    },
+    "rocal": {
+      "description": "Enable rocAL backend",
+      "dependencies": [
+        { 
+          "name": "ffmpeg",
+          "version>=": "4.4"
         }
       ]
     },

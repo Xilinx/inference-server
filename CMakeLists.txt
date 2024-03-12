@@ -61,6 +61,7 @@ add_option("INSTALL" "Set when invoking installation" OFF)
 add_option_env("ENABLE_PTZENDNN" "Enable PT+ZenDNN backend" OFF)
 add_option_env("ENABLE_TFZENDNN" "Enable TF+ZenDNN backend" OFF)
 add_option_env("ENABLE_MIGRAPHX" "Enable migraphx backend" OFF)
+add_option_env("ENABLE_ROCAL" "Enable rocAL backend" OFF)
 add_option_env("ENABLE_AKS" "Enable AKS dependencies" OFF)
 add_option_env("ENABLE_VITIS" "Enable Vitis dependencies" OFF)
 
@@ -87,6 +88,10 @@ endif()
 
 if(AMDINFER_ENABLE_AKS OR AMDINFER_ENABLE_VITIS)
   list(APPEND VCPKG_MANIFEST_FEATURES "vitis")
+endif()
+
+if(AMDINFER_ENABLE_ROCAL)
+  list(APPEND VCPKG_MANIFEST_FEATURES "rocal")
 endif()
 
 list(APPEND VCPKG_MANIFEST_FEATURES "testing")
@@ -151,6 +156,7 @@ find_package(Threads REQUIRED)
 # rocm, the toolkit used by migraphx
 list(APPEND CMAKE_PREFIX_PATH /opt/rocm/hip /opt/rocm)
 find_package(migraphx QUIET)
+find_package(rocal QUIET)
 find_package(tfzendnn)
 find_package(ptzendnn)
 find_package(Protobuf CONFIG)

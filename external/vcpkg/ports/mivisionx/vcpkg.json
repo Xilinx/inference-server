@@ -1,0 +1,35 @@
+{
+    "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg-tool/main/docs/vcpkg.schema.json",
+    "name": "mivisionx",
+    "version": "2.5.0",
+    "port-version": 0,
+    "description": "MIVisionX toolkit is a set of comprehensive computer vision and machine intelligence libraries, utilities, and applications bundled into a single toolkit.",
+    "homepage": "https://github.com/ROCm/MIVisionX",
+    "license": "MIT",
+    "dependencies": [
+        {
+            "name": "half",
+            "version>=": "2.2.0"
+        },
+        {
+            "name": "protobuf",
+            "version>=": "3.19.4"
+        },
+        {
+            "name": "opencv4",
+            "default-features": false,
+            "features": [
+              "jpeg"
+            ]
+        },
+        {
+            "name": "vcpkg-cmake",
+            "host": true
+        },
+        {
+            "name": "vcpkg-cmake-config",
+            "host": true
+        }
+    ]
+}
+  

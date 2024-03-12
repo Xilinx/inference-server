@@ -33,6 +33,10 @@ if(${AMDINFER_ENABLE_MIGRAPHX})
   list(APPEND workers Migraphx)
 endif()
 
+if(${AMDINFER_ENABLE_ROCAL})
+  list(APPEND workers Rocal)
+endif()
+
 function(amdinfer_get_worker_target target filename worker)
   # convert name to file name: separate by capital letters, add underscores and
   # lowercase
@@ -74,6 +78,13 @@ endif()
 if(${AMDINFER_ENABLE_MIGRAPHX})
   target_link_libraries(
     workerMigraphx PRIVATE migraphx::c opencv_imgcodecs opencv_imgproc
+                           opencv_core
+  )
+endif()
+
+if(${AMDINFER_ENABLE_ROCAL})
+  target_link_libraries(
+    workerRocal PRIVATE ${ROCAL_LIBRARIES} opencv_imgcodecs opencv_imgproc
                            opencv_core
   )
 endif()
