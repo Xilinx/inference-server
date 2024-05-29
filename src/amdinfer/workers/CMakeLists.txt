@@ -83,7 +83,6 @@ if(${AMDINFER_ENABLE_MIGRAPHX})
 endif()
 
 if(${AMDINFER_ENABLE_ROCAL})
-  target_include_directories(workerRocal PRIVATE ${ROCAL_INCLUDE_DIR})
   target_link_libraries(
     workerRocal PRIVATE ${ROCAL_LIBRARIES} opencv_imgcodecs opencv_imgproc
                            opencv_core

@@ -90,6 +90,10 @@ if(AMDINFER_ENABLE_AKS OR AMDINFER_ENABLE_VITIS)
   list(APPEND VCPKG_MANIFEST_FEATURES "vitis")
 endif()
 
+if(AMDINFER_ENABLE_ROCAL)
+  list(APPEND VCPKG_MANIFEST_FEATURES "rocal")
+endif()
+
 list(APPEND VCPKG_MANIFEST_FEATURES "testing")
 
 # In CMake 3.27+, find_package uses <PACKAGE_NAME>_ROOT variables. We're using

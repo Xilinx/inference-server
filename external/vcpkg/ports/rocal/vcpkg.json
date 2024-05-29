@@ -36,7 +36,8 @@
             ]
         },
         {
-            "name": "mivisionx"
+            "name": "mivisionx",
+            "version>=": "2.5.0"
         },
         {
             "name": "vcpkg-cmake",

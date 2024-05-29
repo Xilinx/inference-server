@@ -64,7 +64,7 @@ Images loadImages(const std::vector<std::string>& paths) {
 
       std::vector<unsigned char> buffer(size);
       if (!file.read(reinterpret_cast<char*>(buffer.data()), size)) {
-        throw std::runtime_error("Failed to read file: " + path);
+        throw amdinfer::file_read_error("Failed to read file: " + path);
       }
 
       imageBuffer.push_back(std::move(buffer));
@@ -134,7 +134,6 @@ std::string load(const amdinfer::Client* client, const Args& args) {
   std::string endpoint = client->workerLoad("rocal", parameters);
   amdinfer::waitUntilModelReady(client, endpoint);
   // -load
-  std::cout << "worker ready for rocal" << std::endl;
   return endpoint;
 }
 
@@ -157,9 +156,8 @@ Args getArgs(int argc, char** argv) {
     const auto* root_str = std::getenv("AMDINFER_ROOT");
     assert(root_str != nullptr);
     fs::path root{root_str};
-    args.path_to_model =
-      "/workspace/amdinfer/examples/resnet50/model.json";
-    args.path_to_image = "/workspace/amdinfer/tests/assets/imagenet-dog.jpg";
+    args.path_to_model = root / "examples/resnet50/rocal_pipeline.json";
+    args.path_to_image = root / "tests/assets/imagenet-dog.jpg";
   }
   return args;
 }
