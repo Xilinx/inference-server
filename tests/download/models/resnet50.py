@@ -47,7 +47,7 @@ def get(args: argparse.Namespace):
         )
     if args.migraphx:
         models["onnx_resnet50"] = File(
-            "https://github.com/onnx/models/raw/main/vision/classification/resnet/model/resnet50-v2-7.onnx",
+            "https://github.com/onnx/models/raw/5faef4c33eba0395177850e1e31c4a6a9e634c82/vision/classification/resnet/model/resnet50-v2-7.onnx",
             directory,
             "",
         )

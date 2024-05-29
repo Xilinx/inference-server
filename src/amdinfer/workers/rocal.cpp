@@ -112,6 +112,9 @@ class RocalWorker : public SingleThreadedWorker {
   // ROI values for input image
   std::vector<ROIxywh> ROI_xywh_;
 
+  // Default input color format
+  RocalImageColor color_format_ = RocalImageColor::ROCAL_COLOR_RGB24;
+
   // Default channel value
   int channels_ = 3;
 
@@ -167,7 +170,7 @@ void RocalWorker::deserialize(const std::string& model_path) {
       std::cout << "rocAL Model Parsing Complete" << std::endl;
   }
 
-  [[maybe_unused]]RocalTensor input = rocalJpegExternalFileSource(handle_, RocalImageColor::ROCAL_COLOR_RGB24, false, 
+  [[maybe_unused]]RocalTensor input = rocalJpegExternalFileSource(handle_, color_format_, false, 
       false, false, ROCAL_USE_USER_GIVEN_SIZE, max_decode_width_, max_decode_height_, RocalDecoderType::ROCAL_DECODER_TJPEG, rocal_external_mode_);
       
   if (rocalGetStatus(this->handle_) != ROCAL_OK) {
@@ -287,6 +290,23 @@ void RocalWorker::doInit(ParameterMap* parameters) {
   if (parameters->has("batch")) {
     this->batch_size_ = parameters->get<int>("batch");
     this->ROI_xywh_.resize(this->batch_size_);
+  }
+  if (parameters->has("color_format")) {
+    auto input_color_format = parameters->get<std::string>("color_format");
+    if (input_color_format == "RGB24") {
+      this->color_format_ = RocalImageColor::ROCAL_COLOR_RGB24;
+    }
+    else if (input_color_format == "BGR24") {
+      this->color_format_ = RocalImageColor::ROCAL_COLOR_BGR24;
+    }
+    else if (input_color_format == "U8") {
+      this->color_format_ = RocalImageColor::ROCAL_COLOR_U8;
+    }
+    else {
+      std::string errorMessage = "Unrecognized color format";
+      std::cerr << errorMessage << std::endl;
+      throw invalid_argument(errorMessage);
+    }
   }
   if (parameters->has("model")) {
     this->model_path_ = parameters->get<std::string>("model");

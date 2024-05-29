@@ -83,8 +83,10 @@ if(${AMDINFER_ENABLE_MIGRAPHX})
 endif()
 
 if(${AMDINFER_ENABLE_ROCAL})
+  #TODO : Use find_package(rocal) instead of using the full path
+  find_library(ROCAL_LIBRARY NAMES rocal PATHS /opt/vcpkg/x64-linux-dynamic/lib NO_DEFAULT_PATH)
   target_link_libraries(
-    workerRocal PRIVATE ${ROCAL_LIBRARIES} opencv_imgcodecs opencv_imgproc
+    workerRocal PRIVATE ${ROCAL_LIBRARY} opencv_imgcodecs opencv_imgproc
                            opencv_core
   )
 endif()

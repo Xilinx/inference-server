@@ -631,22 +631,22 @@ def install_rocal(manager: PackageManager, custom_backends):
     if manager.name == "yum":
         raise ValueError(f"rocAL installation not supported with : {manager.name}")
 
-    amdgpu_install_deb = "apt install -y ./amdgpu-install_6.0.60002-1_all.deb"
+    amdgpu_install_wget = "wget --quiet https://repo.radeon.com/amdgpu-install/6.1/ubuntu/focal/amdgpu-install_6.1.60100-1_all.deb"
+    amdgpu_install_deb = "apt install -y ./amdgpu-install_6.1.60100-1_all.deb"
     # no-dkms flag for intalling rocm inside docker
-    amdgpu_install_rocm = "DEBIAN_FRONTEND=noninteractive amdgpu-install -y --usecase=graphics,rocm --no-32 --no-dkms"
-    
+    amdgpu_install_rocm = "DEBIAN_FRONTEND=noninteractive amdgpu-install -y --usecase=rocm --no-dkms"
+    amdgpu_install_rm = "rm amdgpu-install_6.1.60100-1_all.deb"
+
     return textwrap.dedent(
         f"""\
         RUN {manager.update} \\
-        && wget --quiet https://repo.radeon.com/amdgpu-install/6.0.2/ubuntu/focal/amdgpu-install_6.0.60002-1_all.deb \\
+        && {amdgpu_install_wget} \\
         && {amdgpu_install_deb} \\
         && {amdgpu_install_rocm} \\
-        && rm amdgpu-install_6.0.60002-1_all.deb \\
+        && {amdgpu_install_rm} \\
         && {manager.install} \\
-            clang \\
             libomp-dev \\
             rsync \\
-            rpp-dev \\
             libjpeg-dev \\
         && echo "/opt/rocm/lib" > /etc/ld.so.conf.d/rocm.conf \\
         && echo "/opt/rocm/llvm/lib" > /etc/ld.so.conf.d/rocm-llvm.conf \\

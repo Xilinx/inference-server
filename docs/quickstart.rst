@@ -75,7 +75,7 @@ The CPU version has no special hardware requirements to run so you can always ru
 
     .. code-tab:: console GPU
 
-        $ wget https://github.com/onnx/models/raw/main/vision/classification/resnet/model/resnet50-v2-7.onnx
+        $ wget https://github.com/onnx/models/raw/5faef4c33eba0395177850e1e31c4a6a9e634c82/vision/classification/resnet/model/resnet50-v2-7.onnx
         $ mkdir -p ./model_repository/resnet50/1
         $ mv ./resnet50-v2-7.onnx ./model_repository/resnet50/1/
 

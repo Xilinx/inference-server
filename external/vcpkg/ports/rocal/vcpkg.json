@@ -27,13 +27,7 @@
         },
         {
             "name": "ffmpeg",
-            "version>=": "4.4",
-            "features": [
-                "avcodec",
-                "avfilter",
-                "avformat",
-                "swresample"
-            ]
+            "version>=": "4.4"
         },
         {
             "name": "mivisionx",

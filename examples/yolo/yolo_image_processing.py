@@ -21,8 +21,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 #####################################################################################
-# All pre- and post-processing methods used below are borrowed from the ONNX MOdel Zoo
-# https://github.com/onnx/models/tree/master/vision/object_detection_segmentation/yolov4
+# All pre- and post-processing methods used below are borrowed from the ONNX Model Zoo
+# https://github.com/onnx/models/tree/5faef4c33eba0395177850e1e31c4a6a9e634c82/vision/object_detection_segmentation/yolov4
 
 """
 Custom pre-and post-processing of images for running Yolo object detection models.
