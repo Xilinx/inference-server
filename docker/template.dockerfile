@@ -189,6 +189,7 @@ FROM dev_base AS vitis_installer_yes
 ARG COPY_DIR
 ENV AMDINFER_ENABLE_VITIS=ON
 ENV AMDINFER_ENABLE_AKS=ON
+ENV AMDINFER_ENABLE_ROCAL=ON
 
 COPY --from=vitis_builder ${COPY_DIR} /
 
@@ -257,6 +258,7 @@ FROM common_builder AS builder_dev
 ARG COPY_DIR
 ARG AMDINFER_ROOT
 ARG ENABLE_VITIS
+ARG ENABLE_ROCAL
 SHELL ["/bin/bash", "-c"]
 
 # delete any inherited artifacts and recreate
@@ -284,9 +286,11 @@ RUN if [[ ${ENABLE_VITIS} == "yes" ]]; then \
     && cp dist/fpga_util ${COPY_DIR}/usr/local/bin/fpga-util; \
     fi
 
+FROM migraphx_installer_${ENABLE_MIGRAPHX} AS vcpkg_builder
 FROM rocal_installer_${ENABLE_ROCAL} AS vcpkg_builder
 
 ARG ENABLE_VITIS
+ARG ENABLE_ROCAL
 ARG COPY_DIR
 ARG GIT_USER
 ARG GIT_TOKEN
@@ -310,6 +314,7 @@ RUN mkdir /opt/vcpkg \
     && rm /opt/vcpkg/2023.04.15.tar.gz \
     && cd /tmp \
     && GIT_USER="${GIT_USER}" GIT_TOKEN="${GIT_TOKEN}" ./docker/install_vcpkg.sh --vitis ${ENABLE_VITIS} --rocal ${ENABLE_ROCAL}
+
 FROM migraphx_installer_${ENABLE_MIGRAPHX} AS dev
 FROM rocal_installer_${ENABLE_ROCAL} AS dev
 

@@ -646,6 +646,8 @@ def install_rocal(manager: PackageManager, custom_backends):
         && {amdgpu_install_rm} \\
         && {manager.install} \\
             libomp-dev \\
+            rpp \\
+            rpp-dev \\
             rsync \\
             libjpeg-dev \\
         && echo "/opt/rocm/lib" > /etc/ld.so.conf.d/rocm.conf \\

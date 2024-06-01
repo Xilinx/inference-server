@@ -135,13 +135,7 @@
       ]
     },
     "rocal": {
-      "description": "Enable rocAL backend",
-      "dependencies": [
-        {
-          "name": "rocal",
-          "version>=": "1.0.0"
-        }
-      ]
+      "description": "Enable rocAL backend"
     },
     "testing": {
       "description": "Enable testing",

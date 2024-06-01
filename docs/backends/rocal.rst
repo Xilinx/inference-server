@@ -48,13 +48,13 @@ example .json file that runs resize operation followed by crop, mirror, normaliz
 Hardware support
 ----------------
 
-For supported hardwards, please visit `ROCm supported hardward <https://github.com/ROCm/rocAL?tab=readme-ov-file#tested-configurations>`__.
+For supported hardwards, please visit `ROCm supported hardware <https://github.com/ROCm/rocAL?tab=readme-ov-file#tested-configurations>`__.
 rocAL has been tested and verified on `Tested Configurations <https://github.com/ROCm/rocAL?tab=readme-ov-file#tested-configurations>`__.
 
 Host setup
 ----------
 
-Follow the `ROCm installation instructions <https://rocm.docs.amd.com/projects/install-on-linux/en/latest/tutorial/quick-start.html`__ to install ROCm on your host machine.
+Follow the `ROCm installation instructions <https://rocm.docs.amd.com/projects/install-on-linux/en/latest/tutorial/quick-start.html>`__ to install ROCm on your host machine.
 Your ROCm version should ideally match the version installed in the inference server container but mismatching versions may work as well in some cases.
 Ensure you can detect the GPUs on your host machine with ``/opt/rocm/bin/rocminfo``.
 
@@ -145,6 +145,7 @@ You can provide the following backend-specific parameters at load-time:
 
     ``batch``,integer,Requested batch size for incoming batches. Defaults to 64.
     ``model``,string,Full path to the model file to load
+    ``color_format``,string,Should be one of "RGB24", "BGR24", "U8".
 
 Troubleshooting
 ---------------

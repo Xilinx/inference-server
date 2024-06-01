@@ -301,6 +301,7 @@ void RocalWorker::doInit(ParameterMap* parameters) {
     }
     else if (input_color_format == "U8") {
       this->color_format_ = RocalImageColor::ROCAL_COLOR_U8;
+      this->channels_ = 1;
     }
     else {
       std::string errorMessage = "Unrecognized color format";
@@ -362,7 +363,6 @@ BatchPtr RocalWorker::doRun(Batch* batch, [[maybe_unused]]const MemoryPool* pool
       assert(input_shape.size() == 1); // compressed raw buffer should have shape length = 1
       ROI_xywh_[j].h = input_shape[0];
       input_type = input.getDatatype();
-      std::cout << "data type is : " << input_type.str() << std::endl;
       if (input.getDatatype() != amdinfer::DataType::Uint8) {
           req->runCallbackError("The input tensor should be UINT8 data type");
           continue;
@@ -414,8 +414,6 @@ BatchPtr RocalWorker::doRun(Batch* batch, [[maybe_unused]]const MemoryPool* pool
       auto new_request = req->propagate();
       std::vector<int64_t> shape{h, w, c};
 
-      // new_request->addInputTensor(nullptr, shape, amdinfer::DataType::Uint8,
-      //                           "output");
       new_request->addInputTensor(nullptr, shape, input_type,
                                 "output");
       new_batch->addRequest(new_request);
