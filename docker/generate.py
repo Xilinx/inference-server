@@ -650,6 +650,7 @@ def install_rocal(manager: PackageManager, custom_backends):
             rpp-dev \\
             rsync \\
             libjpeg-dev \\
+            libssl-dev \\
         && echo "/opt/rocm/lib" > /etc/ld.so.conf.d/rocm.conf \\
         && echo "/opt/rocm/llvm/lib" > /etc/ld.so.conf.d/rocm-llvm.conf \\
         && ldconfig \\

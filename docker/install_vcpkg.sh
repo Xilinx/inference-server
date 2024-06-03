@@ -37,4 +37,4 @@ if [[ "$ROCAL" == "yes" ]]; then
   FEATURES="$FEATURES --x-feature=rocal"
 fi
 
-/opt/vcpkg/vcpkg/vcpkg install --x-install-root=/opt/vcpkg --triplet=x64-linux-dynamic --debug --clean-after-build $FEATURES
+/opt/vcpkg/vcpkg/vcpkg install --x-install-root=/opt/vcpkg --triplet=x64-linux-dynamic --clean-after-build $FEATURES
