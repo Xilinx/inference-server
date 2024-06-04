@@ -614,7 +614,7 @@ class Dockerize:
 
         if args.migraphx:
             build_args += f" --build-arg ENABLE_MIGRAPHX=yes"
-        
+
         if args.rocal:
             build_args += f" --build-arg ENABLE_ROCAL=yes"
 

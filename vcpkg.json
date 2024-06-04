@@ -43,7 +43,7 @@
         "jpeg"
       ]
     },
-    { 
+    {
       "name": "ffmpeg",
       "version>=": "4.4"
     },
@@ -170,7 +170,7 @@
       "name": "trantor",
       "version": "1.5.11#2"
     },
-    { 
+    {
       "name": "ffmpeg",
       "version": "4.4"
     },

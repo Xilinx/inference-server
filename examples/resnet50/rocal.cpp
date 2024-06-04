@@ -47,8 +47,9 @@ namespace fs = std::filesystem;
 using Images = std::vector<std::vector<unsigned char>>;
 
 /**
- * @brief Given a vector of paths to images, load the images and return as raw compressed buffer
- * 
+ * @brief Given a vector of paths to images, load the images and return as raw
+ * compressed buffer
+ *
  * @param paths paths to images to preprocess
  * @return Images : Raw encoded buffer
  */
@@ -76,20 +77,23 @@ Images loadImages(const std::vector<std::string>& paths) {
 }
 
 /**
- * @brief Construct requests for the inference server from the input buffers. 
+ * @brief Construct requests for the inference server from the input buffers.
  *
  * @param imageBuffer the input image buffer
  * @return std::vector<amdinfer::InferenceRequest>
  */
-std::vector<amdinfer::InferenceRequest> constructRequests(const Images& imageBuffer) {
+std::vector<amdinfer::InferenceRequest> constructRequests(
+  const Images& imageBuffer) {
   std::vector<amdinfer::InferenceRequest> requests;
   requests.reserve(imageBuffer.size());
 
   for (const auto& buffer : imageBuffer) {
     requests.emplace_back();
 
-    const std::initializer_list<int64_t> shape = {static_cast<int64_t>(buffer.size())};
-    requests.back().addInputTensor((void*)buffer.data(), shape, amdinfer::DataType::Uint8);
+    const std::initializer_list<int64_t> shape = {
+      static_cast<int64_t>(buffer.size())};
+    requests.back().addInputTensor((void*)buffer.data(), shape,
+                                   amdinfer::DataType::Uint8);
   }
 
   return requests;
@@ -229,8 +233,8 @@ int main(int argc, char* argv[]) {
       // for rocAL, we expect a output tensor size = num_requests
       assert(outputs.size() == num_requests);
       // auto output = outputs[0];
-      // cv::Mat image(224, 224, CV_8UC3, static_cast<unsigned char*>(output.getData()));
-      // cv::imshow("decoded_image", image);
+      // cv::Mat image(224, 224, CV_8UC3, static_cast<unsigned
+      // char*>(output.getData())); cv::imshow("decoded_image", image);
       // cv::waitKey(0);
     }
     // -validate:

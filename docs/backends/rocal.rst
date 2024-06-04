@@ -16,7 +16,7 @@
 rocAL
 ========
 
-The rocAL backend supports full processing pipeline for data_loading, meta-data loading, augmentations, 
+The rocAL backend supports full processing pipeline for data_loading, meta-data loading, augmentations,
 and data-format conversions for training and inference on CPU or AMD GPU.
 For more details about rocAL, please visit `rocAL <https://github.com/ROCm/rocAL/tree/develop/docs>`__.
 
@@ -38,7 +38,7 @@ example json file that runs resize operation followed by crop, mirror, normaliza
       "pipeline": [
         {"operation": "Resize", "dest_width": 224, "dest_height": 224, "is_output": false},
         {"operation": "CropMirrorNormalize", "crop_depth": 224, "crop_height": 224, "crop_width": 224, "start_x": 0, "start_y": 0, "start_z": 0,
-        "mean": [0.485, 0.456, 0.406], "std_dev": [0.229, 0.224, 0.225], "is_output": true} 
+        "mean": [0.485, 0.456, 0.406], "std_dev": [0.229, 0.224, 0.225], "is_output": true}
       ]
     }
 
