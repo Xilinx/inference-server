@@ -79,6 +79,23 @@ RocalOperation getOperationType(const std::string& op) {
     std::cerr << "Unknown operation: " + op << std::endl;
     throw invalid_argument("Unknown operation: " + op);
 }
+/**
+ * @brief A helper function to convert RocalTensorOutputType to amdinfer::DataType
+ */
+DataType toDataType(RocalTensorOutputType in_type) {
+  switch (in_type) {
+    case ROCAL_FP32:
+      return DataType::Fp32;
+    case ROCAL_FP16:
+      return DataType::Fp16;
+    case ROCAL_UINT8:
+      return DataType::Uint8;
+    case ROCAL_INT8:
+      return DataType::Int8;
+    default:
+      return DataType::Unknown;
+  }
+}
 
 /**
  * @brief The rocAL worker class
@@ -414,8 +431,8 @@ BatchPtr RocalWorker::doRun(Batch* batch, [[maybe_unused]]const MemoryPool* pool
       auto new_request = req->propagate();
       std::vector<int64_t> shape{h, w, c};
 
-      new_request->addInputTensor(nullptr, shape, input_type,
-                                "output");
+      new_request->addInputTensor(nullptr, shape, toDataType(output_tensor->data_type()),
+                                 "output");
       new_batch->addRequest(new_request);
   }
 
