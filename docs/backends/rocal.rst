@@ -28,7 +28,9 @@ Users can define their own pipeline using the following format:
 "pipeline": Defines a rocAL pipeline which consists of one or more operations to be executed.
 "operation": Defines a rocAL operation to be executed. Each operation has its own parameters. See rocAL Operation section for details.
 
-example .json file that runs resize operation followed by crop, mirror, normalization operations:
+Note that the last operation must have "is_output" parameter set to true.
+
+example json file that runs resize operation followed by crop, mirror, normalization operations:
 
 {
 {
@@ -101,15 +103,6 @@ A development container can be started with:
 
 This automatically adds the detected devices, publishes ports, and mounts some convenient directories, such as your SSH directory, and drops you into a terminal in the container.
 
-Get test assets
----------------
-
-You can download the assets and models used with this backend for tests and examples with:
-
-.. code-block:: console
-
-    $ ./amdinfer get --rocal --all-models
-
 Loading the backend
 -------------------
 
@@ -137,7 +130,6 @@ Loading the backend
 
 Parameters
 ^^^^^^^^^^
-
 You can provide the following backend-specific parameters at load-time:
 
 .. csv-table::
@@ -145,7 +137,7 @@ You can provide the following backend-specific parameters at load-time:
 
     ``batch``,integer,Requested batch size for incoming batches. Defaults to 64.
     ``model``,string,Full path to the model file to load
-    ``color_format``,string,Should be one of "RGB24", "BGR24", "U8".
+    ``color_format``,string,Input Color Format. Should be one of RGB24 / BGR24 / U8.
 
 Troubleshooting
 ---------------

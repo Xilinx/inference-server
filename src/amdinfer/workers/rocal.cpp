@@ -365,7 +365,6 @@ BatchPtr RocalWorker::doRun(Batch* batch, [[maybe_unused]]const MemoryPool* pool
   timer.add("rocal_batch_start");
 
   std::vector<unsigned char *> input_batch_buffer; 
-  amdinfer::DataType input_type;
   for (unsigned int j = 0; j < batch->size(); j++) {
       const auto& req = batch->getRequest(j);
       const auto& inputs = req->getInputs();
@@ -379,11 +378,7 @@ BatchPtr RocalWorker::doRun(Batch* batch, [[maybe_unused]]const MemoryPool* pool
 
       assert(input_shape.size() == 1); // compressed raw buffer should have shape length = 1
       ROI_xywh_[j].h = input_shape[0];
-      input_type = input.getDatatype();
-      if (input.getDatatype() != amdinfer::DataType::Uint8) {
-          req->runCallbackError("The input tensor should be UINT8 data type");
-          continue;
-      }
+
       auto input_data = static_cast<unsigned char*>(input.getData());
       input_batch_buffer.push_back(input_data);
   }
