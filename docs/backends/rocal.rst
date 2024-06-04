@@ -32,19 +32,15 @@ Note that the last operation must have "is_output" parameter set to true.
 
 example json file that runs resize operation followed by crop, mirror, normalization operations:
 
-{
-{
+.. code-block::json
 
-  "pipeline": [
-    {"operation": "Resize", "dest_width": 224, "dest_height": 224, "is_output": false},
-
-    {"operation": "CropMirrorNormalize", "crop_depth": 224, "crop_height": 224, "crop_width": 224, "start_x": 0, "start_y": 0, "start_z": 0,
-
-    "mean": [0.485, 0.456, 0.406], "std_dev": [0.229, 0.224, 0.225], "is_output": true}
-
-  ]
-
-}
+    {
+      "pipeline": [
+        {"operation": "Resize", "dest_width": 224, "dest_height": 224, "is_output": false},
+        {"operation": "CropMirrorNormalize", "crop_depth": 224, "crop_height": 224, "crop_width": 224, "start_x": 0, "start_y": 0, "start_z": 0,
+        "mean": [0.485, 0.456, 0.406], "std_dev": [0.229, 0.224, 0.225], "is_output": true} 
+      ]
+    }
 
 
 Hardware support
@@ -139,9 +135,9 @@ You can provide the following backend-specific parameters at load-time:
     ``model``,string,Full path to the model file to load
     ``color_format``,string,Input Color Format. Should be one of RGB24 / BGR24 / U8.
 
-Troubleshooting
----------------
+Technical support
+------------------
 
-If you run into problems, first check the :ref:`general troubleshooting guide <troubleshooting:Troubleshooting>` guide.
-Then continue on to this XModel specific troubleshooting guide.
-You will need access to the machine where the inference server is running to debug.
+Please email ``mivisionx.support@amd.com`` for questions, and feedback on rocAL.
+
+Please submit your feature requests, and bug reports on the `rocAL GitHub issues <https://github.com/ROCm/rocAL/issues>`__ page.
