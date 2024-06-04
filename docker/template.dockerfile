@@ -189,7 +189,6 @@ FROM dev_base AS vitis_installer_yes
 ARG COPY_DIR
 ENV AMDINFER_ENABLE_VITIS=ON
 ENV AMDINFER_ENABLE_AKS=ON
-ENV AMDINFER_ENABLE_ROCAL=ON
 
 COPY --from=vitis_builder ${COPY_DIR} /
 
@@ -258,7 +257,6 @@ FROM common_builder AS builder_dev
 ARG COPY_DIR
 ARG AMDINFER_ROOT
 ARG ENABLE_VITIS
-ARG ENABLE_ROCAL
 SHELL ["/bin/bash", "-c"]
 
 # delete any inherited artifacts and recreate
