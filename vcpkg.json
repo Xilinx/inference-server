@@ -40,9 +40,12 @@
       "name": "opencv4",
       "default-features": false,
       "features": [
-        "ffmpeg",
         "jpeg"
       ]
+    },
+    {
+      "name": "ffmpeg",
+      "version>=": "4.4"
     },
     {
       "name": "tomlplusplus",
@@ -131,6 +134,15 @@
         }
       ]
     },
+    "rocal": {
+      "description": "Enable rocAL backend",
+      "dependencies": [
+        {
+          "name": "rocal",
+          "version>=": "1.0.0"
+        }
+      ]
+    },
     "testing": {
       "description": "Enable testing",
       "dependencies": [
@@ -157,6 +169,10 @@
     {
       "name": "trantor",
       "version": "1.5.11#2"
+    },
+    {
+      "name": "ffmpeg",
+      "version": "4.4"
     },
     {
       "name": "vcpkg-tool-meson",

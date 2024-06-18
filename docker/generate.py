@@ -629,6 +629,50 @@ def install_migraphx(manager: PackageManager, custom_backends):
     )
 
 
+def install_rocal(manager: PackageManager, custom_backends):
+    if manager.name == "yum":
+        raise ValueError(f"rocAL installation not supported with : {manager.name}")
+
+    amdgpu_install_wget = "wget --quiet https://repo.radeon.com/amdgpu-install/6.1/ubuntu/focal/amdgpu-install_6.1.60100-1_all.deb"
+    amdgpu_install_deb = "apt install -y ./amdgpu-install_6.1.60100-1_all.deb"
+    # no-dkms flag for intalling rocm inside docker
+    amdgpu_install_rocm = (
+        "DEBIAN_FRONTEND=noninteractive amdgpu-install -y --usecase=rocm --no-dkms"
+    )
+    amdgpu_install_rm = "rm amdgpu-install_6.1.60100-1_all.deb"
+
+    return textwrap.dedent(
+        f"""\
+        RUN {manager.update} \\
+        && {amdgpu_install_wget} \\
+        && {amdgpu_install_deb} \\
+        && {amdgpu_install_rocm} \\
+        && {amdgpu_install_rm} \\
+        && {manager.install} \\
+            libomp-dev \\
+            rpp \\
+            rpp-dev \\
+            rsync \\
+            libjpeg-dev \\
+            libssl-dev \\
+        && echo "/opt/rocm/lib" > /etc/ld.so.conf.d/rocm.conf \\
+        && echo "/opt/rocm/llvm/lib" > /etc/ld.so.conf.d/rocm-llvm.conf \\
+        && ldconfig \\
+        # having symlinks between rocm-* and rocm complicates building the production
+        # image so move files over to rocm/ but add a symlink for compatibility
+        && dir=$(find /opt/ -maxdepth 1 -type d -name "rocm-*") \\
+        && rm -rf /opt/rocm \\
+        && mkdir /opt/rocm \\
+        && rsync -a $dir/* /opt/rocm/ \\
+        && rm -rf $dir \\
+        && ln -s /opt/rocm $dir \\
+        && {manager.remove} \\
+            rsync \\
+        {code_indent(manager.clean, 12)}
+        """
+    )
+
+
 def install_python_packages():
     # The versions are pinned to prevent package updates from breaking the
     # container. To update this list, install the packages we actually want:
@@ -877,6 +921,15 @@ def generate(args: argparse.Namespace):
         )
     else:
         dockerfile = dockerfile.replace("$[BUILD_PTZENDNN]", build_ptzendnn())
+
+    if args.custom_backends:
+        dockerfile = dockerfile.replace(
+            "$[INSTALL_ROCAL]", install_rocal(manager, custom_backends)
+        )
+    else:
+        dockerfile = dockerfile.replace(
+            "$[INSTALL_ROCAL]", install_rocal(manager, None)
+        )
 
     dockerfile = dockerfile.replace(
         "$[INSTALL_DEV_PACKAGES]", install_dev_packages(manager, args.core)

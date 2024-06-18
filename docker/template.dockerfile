@@ -44,6 +44,7 @@ ARG TFZENDNN_PATH
 ARG ENABLE_PTZENDNN=${ENABLE_PTZENDNN:-no}
 ARG PTZENDNN_PATH
 ARG ENABLE_MIGRAPHX=${ENABLE_MIGRAPHX:-no}
+ARG ENABLE_ROCAL=${ENABLE_ROCAL:-no}
 
 ARG GIT_USER
 ARG GIT_TOKEN
@@ -242,6 +243,15 @@ ENV AMDINFER_ENABLE_MIGRAPHX=ON
 
 $[INSTALL_MIGRAPHX]
 
+FROM migraphx_installer_${ENABLE_MIGRAPHX} AS rocal_installer_no
+
+FROM migraphx_installer_${ENABLE_MIGRAPHX} AS rocal_installer_yes
+
+ARG COPY_DIR
+ENV AMDINFER_ENABLE_ROCAL=ON
+
+$[INSTALL_ROCAL]
+
 FROM common_builder AS builder_dev
 
 ARG COPY_DIR
@@ -275,8 +285,10 @@ RUN if [[ ${ENABLE_VITIS} == "yes" ]]; then \
     fi
 
 FROM migraphx_installer_${ENABLE_MIGRAPHX} AS vcpkg_builder
+FROM rocal_installer_${ENABLE_ROCAL} AS vcpkg_builder
 
 ARG ENABLE_VITIS
+ARG ENABLE_ROCAL
 ARG COPY_DIR
 ARG GIT_USER
 ARG GIT_TOKEN
@@ -299,9 +311,10 @@ RUN mkdir /opt/vcpkg \
     && ./bootstrap-vcpkg.sh -disableMetrics \
     && rm /opt/vcpkg/2023.04.15.tar.gz \
     && cd /tmp \
-    && GIT_USER="${GIT_USER}" GIT_TOKEN="${GIT_TOKEN}" ./docker/install_vcpkg.sh --vitis ${ENABLE_VITIS}
+    && GIT_USER="${GIT_USER}" GIT_TOKEN="${GIT_TOKEN}" ./docker/install_vcpkg.sh --vitis ${ENABLE_VITIS} --rocal ${ENABLE_ROCAL}
 
 FROM migraphx_installer_${ENABLE_MIGRAPHX} AS dev
+FROM rocal_installer_${ENABLE_ROCAL} AS dev
 
 ARG COPY_DIR
 ARG AMDINFER_ROOT
@@ -337,6 +350,7 @@ ARG AMDINFER_ROOT
 ARG ENABLE_VITIS
 ARG ENABLE_MIGRAPHX
 ARG ENABLE_TFZENDNN
+ARG ENABLE_ROCAL
 
 COPY . $AMDINFER_ROOT
 
@@ -431,6 +445,7 @@ ARG ENABLE_VITIS
 ARG ENABLE_TFZENDNN
 ARG ENABLE_PTZENDNN
 ARG ENABLE_MIGRAPHX
+ARG ENABLE_ROCAL
 
 ARG UNAME
 ARG GNAME
@@ -457,3 +472,4 @@ LABEL vitis=${ENABLE_VITIS}
 LABEL tfzendnn=${ENABLE_TFZENDNN}
 LABEL ptzendnn=${ENABLE_PTZENDNN}
 LABEL migraphx=${ENABLE_MIGRAPHX}
+LABEL rocal=${ENABLE_ROCAL}

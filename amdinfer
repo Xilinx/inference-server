@@ -615,6 +615,9 @@ class Dockerize:
         if args.migraphx:
             build_args += f" --build-arg ENABLE_MIGRAPHX=yes"
 
+        if args.rocal:
+            build_args += f" --build-arg ENABLE_ROCAL=yes"
+
         try:
             git_branch = (
                 subprocess.check_output(shlex.split("git rev-parse --abbrev-ref HEAD"))
@@ -708,6 +711,12 @@ class Dockerize:
             "--migraphx",
             action="store_true",
             help="If provided, will build with Migraphx enabled",
+        )
+
+        command_group.add_argument(
+            "--rocal",
+            action="store_true",
+            help="If provided, will build with rocAL enabled",
         )
 
         command_group.add_argument(

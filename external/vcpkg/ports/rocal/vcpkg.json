@@ -1,0 +1,45 @@
+{
+  "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg-tool/main/docs/vcpkg.schema.json",
+  "name": "rocal",
+  "version": "1.0.0",
+  "port-version": 0,
+  "description": "The AMD rocAL is designed to efficiently decode and process images and videos from a variety of storage formats and modify them through a processing graph programmable by the user.",
+  "homepage": "https://github.com/ROCm/rocAL",
+  "license": "MIT",
+  "dependencies": [
+    {
+      "name": "half",
+      "version>=": "2.2.0"
+    },
+    {
+      "name": "protobuf",
+      "version>=": "3.19.4"
+    },
+    {
+      "name": "lmdb"
+    },
+    {
+      "name": "rapidjson"
+    },
+    {
+      "name": "libjpeg-turbo",
+      "version>=": "3.0.1"
+    },
+    {
+      "name": "ffmpeg",
+      "version>=": "4.4"
+    },
+    {
+      "name": "mivisionx",
+      "version>=": "2.5.0"
+    },
+    {
+      "name": "vcpkg-cmake",
+      "host": true
+    },
+    {
+      "name": "vcpkg-cmake-config",
+      "host": true
+    }
+  ]
+}

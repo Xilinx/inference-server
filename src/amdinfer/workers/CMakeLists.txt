@@ -33,6 +33,10 @@ if(${AMDINFER_ENABLE_MIGRAPHX})
   list(APPEND workers Migraphx)
 endif()
 
+if(${AMDINFER_ENABLE_ROCAL})
+  list(APPEND workers Rocal)
+endif()
+
 function(amdinfer_get_worker_target target filename worker)
   # convert name to file name: separate by capital letters, add underscores and
   # lowercase
@@ -75,6 +79,20 @@ if(${AMDINFER_ENABLE_MIGRAPHX})
   target_link_libraries(
     workerMigraphx PRIVATE migraphx::c opencv_imgcodecs opencv_imgproc
                            opencv_core
+  )
+endif()
+
+if(${AMDINFER_ENABLE_ROCAL})
+  #TODO : Use find_package(rocal) instead of using the full path
+  find_library(
+    ROCAL_LIBRARY
+    NAMES rocal
+    PATHS /opt/vcpkg/x64-linux-dynamic/lib
+    NO_DEFAULT_PATH
+  )
+  target_link_libraries(
+    workerRocal PRIVATE ${ROCAL_LIBRARY} opencv_imgcodecs opencv_imgproc
+                        opencv_core
   )
 endif()
 

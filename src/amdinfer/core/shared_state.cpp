@@ -69,6 +69,9 @@ ServerMetadata SharedState::serverMetadata() {
 #ifdef AMDINFER_ENABLE_MIGRAPHX
   metadata.extensions.emplace("migraphx");
 #endif
+#ifdef AMDINFER_ENABLE_ROCAL
+  metadata.extensions.emplace("rocal");
+#endif
   return metadata;
 }
 
